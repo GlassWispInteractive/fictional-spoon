@@ -148,11 +148,10 @@ public class Generator {
 			lvl.setValue(cur[0], cur[1], 1);
 
 			// set pixel in between, if last pixel is a neighbour
-			if ((cur[0] == old[0] && Math.abs(cur[1] - old[1]) < 2)
-					|| (cur[1] == old[1] && Math.abs(cur[0] - old[0]) < 2)) {
+			if ( (cur[0] == old[0] && Math.abs(cur[1] - old[1]) == 2) || (cur[1] == old[1] && Math.abs(cur[0] - old[0]) == 2)) {
 				lvl.setValue((cur[0] + old[0]) / 2, (cur[1] + old[1]) / 2, 1);
 			}
-
+			
 			// renew old reference
 			old = cur.clone();
 		}
