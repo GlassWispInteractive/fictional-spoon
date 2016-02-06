@@ -52,7 +52,7 @@ public class Bitmap extends JPanel {
 		super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
 
-//        room = automaton.cells;
+//      room = automaton.cells;
         
         if (room == null) {
 			JOptionPane.showMessageDialog(null, "broken.");

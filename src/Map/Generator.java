@@ -51,8 +51,8 @@ public class Generator {
 		}
 
 		// iteration limit exceeded
-		if ((xMax - xMin) * (yMax - yMin) < 50) {
-			lvl.fillSpace(xMin + 1, xMax - 1, yMin + 1, yMax - 1);
+		if ((xMax - xMin) * (yMax - yMin) < 40) {
+			lvl.fillSpace(xMin, xMax, yMin, yMax);
 			return;
 		}
 
@@ -62,11 +62,11 @@ public class Generator {
 		if (randBool.nextBoolean()) {
 			int split = (int) (xMin + splitRatio * (xMax - xMin));
 			splitSpace(xMin, split, yMin, yMax, iter - 1);
-			splitSpace(split, xMax, yMin, yMax, iter - 1);
+			splitSpace(split+1, xMax, yMin, yMax, iter - 1);
 		} else {
 			int split = (int) (yMin + splitRatio * (yMax - yMin));
 			splitSpace(xMin, xMax, yMin, split, iter - 1);
-			splitSpace(xMin, xMax, split, yMax, iter - 1);
+			splitSpace(xMin, xMax, split+1, yMax, iter - 1);
 
 		}
 
