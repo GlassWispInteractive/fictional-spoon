@@ -14,7 +14,7 @@ public class Bitmap extends JPanel {
 	private boolean[][] room;
 	
 	final int offsetX = 0, offsetY = 0;
-	int fieldSize = 6, padding = 1, rectSize = fieldSize - padding;
+	int fieldSize = 6, padding = 0, rectSize = fieldSize - padding;
 	
 	
 	

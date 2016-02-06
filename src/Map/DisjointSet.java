@@ -1,4 +1,6 @@
-package Map;
+
+// source: http://git.eclipse.org/c/platform/eclipse.platform.ui.git/plain/bundles/org.eclipse.ui.ide/src/org/eclipse/ui/internal/ide/misc/DisjointSet.java
+
 
 /*******************************************************************************
  * Copyright (c) 2015 IBM Corporation and others.
@@ -11,6 +13,8 @@ package Map;
  *     IBM Corporation - initial API and implementation
  *     Andrey Loskutov <loskutov@gmx.de> - generified interface, bug 462760
  ******************************************************************************/
+
+package Map;
 
 import java.util.HashMap;
 import java.util.Iterator;

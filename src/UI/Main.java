@@ -3,8 +3,6 @@ package UI;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,7 +21,8 @@ public class Main extends JFrame {
 
 	JList<String> itemList;
 
-	private Bitmap map = new Bitmap();
+	private Bitmap gui = new Bitmap();
+	private boolean[][] cells = {{true, true}};
 
 	private Boolean bToggle = false;
 	private double time = 2;
@@ -76,7 +75,7 @@ public class Main extends JFrame {
 
 	public Main() {
 		// initializing frame
-		super("JUST CELLURLAR AUTOMATON THINGS");
+		super("spoon may be not real");
 
 		// menu bar
 		JMenuBar menuBar = new JMenuBar();
@@ -114,8 +113,8 @@ public class Main extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 
-		contentPane.add(map, BorderLayout.CENTER);
-		map.setPreferredSize(new Dimension(1200, 800));
+		contentPane.add(gui, BorderLayout.CENTER);
+		gui.setPreferredSize(new Dimension(1200, 800));
 
 		// turn on animation
 		TimerTask task = new TimerTask() {
@@ -124,6 +123,7 @@ public class Main extends JFrame {
 			}
 		};
 		
+		gui.setRoom(cells);
 		animate = new Timer();
 		animate.scheduleAtFixedRate(task, 100, (long) (time * 1000));
 	}
@@ -153,9 +153,9 @@ public class Main extends JFrame {
 	private void tick() {
 		// System.out.println("tick");
 		// automaton.print();
-//		map.setRoom(automaton.cells);
-		map.revalidate();
-		map.repaint();
+		gui.setRoom(cells);
+		gui.revalidate();
+		gui.repaint();
 
 //		automaton.tick();
 
