@@ -58,6 +58,8 @@ public class Generator {
 
 		// spliting line
 		double splitRatio = 0.5 + randGauss.nextGaussian() / 6;
+		splitRatio = Math.max(splitRatio, 0);
+		splitRatio = Math.min(splitRatio, 1);
 
 		if (randBool.nextBoolean()) {
 			int split = (int) (xMin + splitRatio * (xMax - xMin));
