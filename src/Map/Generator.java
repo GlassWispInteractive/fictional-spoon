@@ -2,6 +2,12 @@ package Map;
 
 import java.util.Random;
 
+/**
+ * class to generate level maps
+ * source: http://journal.stuffwithstuff.com/2014/12/21/rooms-and-mazes/
+ * @author Danny
+ *
+ */
 public class Generator {
 	private int n, m;
 	private Level lvl;
@@ -17,9 +23,7 @@ public class Generator {
 		this.m = m;
 
 		// init pseudorandom generators
-		// randBool.setSeed(42);
 		rand = new Random();
-		// randGauss.setSeed(1337);
 	}
 
 	/**
@@ -29,7 +33,12 @@ public class Generator {
 	 */
 	public Level newLevel() {
 		lvl = new Level(n, m);
-		placeRooms(0, n, 0, m);
+		
+//		4 general steps to level generation 
+		placeRooms();
+		placeMaze();
+		connectRooms();
+		removeDeadends();
 
 		return lvl;
 	}
@@ -42,7 +51,7 @@ public class Generator {
 	 * @param yMin
 	 * @param yMax
 	 */
-	private void placeRooms(int xMin, int xMax, int yMin, int yMax) {
+	private void placeRooms() {
 		// declare vars
 		int xLen, yLen, xStart, yStart;
 
@@ -97,6 +106,27 @@ public class Generator {
 
 		// no collision -> valid placement
 		return true;
+	}
+
+	/**
+	 * internal function to generate a maze around the rooms
+	 */
+	private void placeMaze() {
+
+	}
+
+	/**
+	 * internal function to connect the rooms through the maze
+	 */
+	private void connectRooms() {
+
+	}
+
+	/**
+	 * internal function to remove the dead ends of the maze
+	 */
+	private void removeDeadends() {
+
 	}
 
 }
