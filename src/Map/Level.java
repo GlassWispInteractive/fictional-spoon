@@ -32,6 +32,10 @@ public class Level {
 	}
 
 	public int getValue(int i, int j) {
+		if (i < 0 || i >= n || j < 0 || j >= m) {
+			return -1;
+		}
+		
 		return map[i][j].getValue();
 	}
 	

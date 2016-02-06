@@ -6,8 +6,7 @@ public class Generator {
 	private int n, m;
 	private Level lvl;
 
-	private Random randBool;
-	private Random randGauss;
+	private Random rand;
 
 	/**
 	 * constructor for generate levels with some fixed size
@@ -18,9 +17,8 @@ public class Generator {
 		this.m = m;
 
 		// init pseudorandom generators
-		randBool = new Random();
 		// randBool.setSeed(42);
-		randGauss = new Random();
+		rand = new Random();
 		// randGauss.setSeed(1337);
 	}
 
@@ -31,49 +29,61 @@ public class Generator {
 	 */
 	public Level newLevel() {
 		lvl = new Level(n, m);
-		splitSpace(0, n, 0, m, 10);
+		placeRooms(0, n, 0, m);
 
 		return lvl;
 	}
 
-	private void splitSpace(int xMin, int xMax, int yMin, int yMax, int iter) {
-		// System.out.print(xMin);
-		// System.out.print(" - ");
-		// System.out.print(xMax);
-		// System.out.print(" - ");
-		// System.out.print(yMin);
-		// System.out.print(" - ");
-		// System.out.println(yMax);
+	private void placeRooms(int xMin, int xMax, int yMin, int yMax) {
+		// declare vars
+		int xLen, yLen, xStart, yStart;
 
-		// leave as space when too small
-		if (xMax - xMin < 4 || yMax - yMin < 4) {
-			return;
+		// try to put up a new room
+		for (int i = 0; i < 500; i++) {
+			do {
+				xLen = (int) (8 + 2.5 * rand.nextGaussian());
+				yLen = (int) (8 + 2.5 * rand.nextGaussian());
+			} while (xLen < 4 || yLen < 4);
+
+			xStart = rand.nextInt(n - xLen);
+			yStart = rand.nextInt(m - yLen);
+
+			if (!checkRoom(xStart, yStart, xLen, yLen)) {
+				continue;
+			}
+
+			System.out.print(xLen);
+			System.out.print(" - ");
+			System.out.println(yLen);
+			lvl.fillSpace(xStart, xStart + xLen, yStart, yStart + yLen);
 		}
 
-		// iteration limit exceeded
-		if ((xMax - xMin) * (yMax - yMin) < 40) {
-			lvl.fillSpace(xMin, xMax, yMin, yMax);
-			return;
-		}
-
-		// spliting line
-		double splitRatio = 0.5 + randGauss.nextGaussian() / 6;
-		splitRatio = Math.max(splitRatio, 0);
-		splitRatio = Math.min(splitRatio, 1);
-
-		if (randBool.nextBoolean()) {
-			int split = (int) (xMin + splitRatio * (xMax - xMin));
-			splitSpace(xMin, split, yMin, yMax, iter - 1);
-			splitSpace(split+1, xMax, yMin, yMax, iter - 1);
-		} else {
-			int split = (int) (yMin + splitRatio * (yMax - yMin));
-			splitSpace(xMin, xMax, yMin, split, iter - 1);
-			splitSpace(xMin, xMax, split+1, yMax, iter - 1);
-
-		}
+		// if (randBool.nextBoolean()) {
+		// int split = (int) (xMin + splitRatio * (xMax - xMin));
+		// splitSpace(xMin, split, yMin, yMax, iter - 1);
+		// splitSpace(split+1, xMax, yMin, yMax, iter - 1);
+		// } else {
+		// int split = (int) (yMin + splitRatio * (yMax - yMin));
+		// splitSpace(xMin, xMax, yMin, split, iter - 1);
+		// splitSpace(xMin, xMax, split+1, yMax, iter - 1);
+		// }
 
 		// create random object
 
+	}
+
+	private boolean checkRoom(int xStart, int yStart, int xLen, int yLen) {
+		for (int i = -1; i <= xLen; i++) {
+			for (int j = -1; j <= yLen; j++) {
+
+				if (lvl.getValue(xStart + i, yStart + j) != 0) {
+					return false;
+				}
+			}
+		}
+
+		// no collision -> valid placement
+		return true;
 	}
 
 }
