@@ -19,61 +19,16 @@ import Map.Level;
 public class Main extends JFrame {
 	private static final long serialVersionUID = 0L;
 	private JPanel contentPane;
-	private JScrollPane scrollPane;
 
-	JList<String> itemList;
 
 	private Bitmap gui = new Bitmap();
-	private Level cells = new Level(5, 10);
+	private Level cells = new Level(50, 100);
 
-	private Boolean bToggle = false;
-	private double time = 2;
 
-	public double getTime() {
-		return time;
-	}
-
-	public void setTime(double time) {
-		this.time = time;
-	}
 
 	private Timer animate = new Timer("Animate");
+	private double time = 0.2;
 
-	public void updateButtons() {
-
-	}
-
-	/**
-	 * @param itemList
-	 *            the itemList to set
-	 */
-	public void setItemList(Double[] w, Double[] p, int[] l) {
-		DefaultListModel<String> listModel = new DefaultListModel<String>();
-
-		for (int i = 0; i < w.length; i++) {
-			String s = String.format("%d. weight %.2f; profit %.2f; len %d", (i + 1), w[i], p[i], l[i]);
-			listModel.addElement(s);
-		}
-
-		itemList = new JList<String>(listModel);
-		itemList.setEnabled(false);
-		itemList.setSelectedIndex(0);
-		itemList.setFixedCellHeight(20);
-
-		// center alignment
-		((DefaultListCellRenderer) itemList.getCellRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-
-		scrollPane.setViewportView(itemList);
-	}
-
-	public void setListHighlight(int i) {
-		// check for viable index
-		if (i < 0) {
-			return;
-		}
-
-		itemList.setSelectedIndex(i);
-	}
 
 	public Main() {
 		// initializing frame
@@ -84,7 +39,8 @@ public class Main extends JFrame {
 		JMenu menuCtrl = new JMenu("Control"), menuManipulate = new JMenu("Manipulate");
 		menuBar.add(menuCtrl);
 		menuBar.add(menuManipulate);
-		setJMenuBar(menuBar);
+//		JMenu invisible
+//		setJMenuBar(menuBar);
 
 		// first menu
 		JMenuItem ctrlToggle = new JMenuItem("Toggle playing");
@@ -128,28 +84,6 @@ public class Main extends JFrame {
 		gui.setRoom(cells);
 		animate = new Timer();
 		animate.scheduleAtFixedRate(task, 100, (long) (time * 1000));
-	}
-
-	/**
-	 * function toggle the animation hint: calling it twice results in an
-	 * updated animation timer
-	 */
-	public void toggle() {
-		TimerTask task = new TimerTask() {
-			public void run() {
-				tick();
-			}
-		};
-
-		if (bToggle) {
-			animate.cancel();
-		} else {
-			animate = new Timer();
-			animate.scheduleAtFixedRate(task, 100, (long) (time * 1000));
-			// System.out.println((long) (time*1000));
-		}
-
-		bToggle = !bToggle;
 	}
 
 	private void tick() {

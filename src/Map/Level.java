@@ -10,13 +10,11 @@ public class Level {
 		
 		map = new Pixel[n][m];
 		for(int i = 0; i < n; i++) {
-			map[i] = new Pixel[m];
 			for (int j = 0; j < m; j++) {
 				map[i][j] = new Pixel(i, j);
-				if (j == 0) {
+				if (i + j <= 12) {
 					map[i][j].setValue(1);
 				}
-//				System.out.println(map[i][j].getValue());
 			}
 		}
 	}
