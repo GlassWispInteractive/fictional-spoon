@@ -12,18 +12,35 @@ public class Level {
 		for(int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				map[i][j] = new Pixel(i, j);
-				if (i + j <= 12) {
-					map[i][j].setValue(1);
-				}
+				map[i][j].setValue(0);
+				
+				
+//				if (i + j <= 40) {
+//					map[i][j].setValue(1);
+//				}
+//				
+//
+//				if (i - j > 120) {
+//					map[i][j].setValue(2);
+//				}
+//				
+//				if (j- i > 100) {
+//					map[i][j].setValue(3);
+//				}
 			}
 		}
 	}
 
 	public int getValue(int i, int j) {
-		// TODO Auto-generated method stub
-		return map[j][i].getValue();
+		return map[i][j].getValue();
 	}
 	
-	
+	public void fillSpace(int xMin, int xMax, int yMin, int yMax) {
+		for (int i = xMin; i < xMax; i++) {
+			for (int j = yMin; j < yMax; j++) {
+				map[i][j].setValue(1);
+			}
+		}
+	}
 
 }

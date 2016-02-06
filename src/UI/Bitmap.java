@@ -20,10 +20,10 @@ public class Bitmap extends JPanel {
 	
 	
 	
-	private Color[] color = {	Color.decode("#FFFFFF"),
-								Color.decode("#FFFF00"),
-								Color.decode("#FF00FF"),
-								Color.decode("#FF0000"),
+	private Color[] color = {	Color.decode("#90C3D4"),
+								Color.decode("#A1D490"),
+								Color.decode("#C390D4"),
+								Color.decode("#D4A190"),
 								Color.decode("#C0C0C0"),
 								Color.decode("#808080"),
 								Color.decode("#808000"),
@@ -59,10 +59,10 @@ public class Bitmap extends JPanel {
 			return;
 		}
         
-        for (int j = 0; j < room.n; j++) {
-			int y = offsetY + j * fieldSize;
-			for (int i = 0; i < room.m; i++) {
-				int x = offsetX + i * fieldSize;
+        for (int i = 0; i < room.n; i++) {
+			int x = offsetY + i * fieldSize;
+			for (int j = 0; j < room.m; j++) {
+				int y = offsetX + j * fieldSize;
 //				System.out.print(room.getValue(i, j));
 //				System.out.print(" - ");
 //				System.out.println(color[room.getValue(i, j)]);

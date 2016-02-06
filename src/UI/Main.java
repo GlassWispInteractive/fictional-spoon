@@ -22,7 +22,7 @@ public class Main extends JFrame {
 	private JPanel contentPane;
 
 	private Bitmap gui = new Bitmap();
-	private Generator gen = new Generator(50, 100);
+	private Generator gen = new Generator(270, 170);
 	private Level cells = gen.newLevel();
 
 	private Timer animate = new Timer("Animate");
@@ -76,7 +76,8 @@ public class Main extends JFrame {
 
 
 		contentPane.add(gui, BorderLayout.CENTER);
-		gui.setPreferredSize(new Dimension(1200, 800));
+		gui.setPreferredSize(new Dimension(1400, 900));
+		
 
 		// turn on animation
 		TimerTask task = new TimerTask() {
@@ -96,6 +97,8 @@ public class Main extends JFrame {
 		gui.setRoom(cells);
 		gui.revalidate();
 		gui.repaint();
+		
+		
 
 		// automaton.tick();
 
@@ -122,7 +125,7 @@ public class Main extends JFrame {
 					// initialize MainFrame
 					JFrame frame = new Main();
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					frame.setSize(1200, 800);
+					frame.setSize(1400, 900);
 					frame.setResizable(false);
 					frame.setVisible(true);
 				} catch (Exception e) {
