@@ -29,24 +29,22 @@ public class Main extends JFrame {
 	private double time = 0.2;
 
 	public Main() {
-//		initializing frame
+		// initializing frame
 		super("a fictional spoon - and its bloodless");
 
-//		basic layout with panes
+		// basic layout with panes
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(150, 50, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(2, 2, 2, 2));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
-//		set pane for graphics 
+
+		// set pane for graphics
 		contentPane.add(gui, BorderLayout.CENTER);
 		gui.setPreferredSize(new Dimension(1400, 900));
-		
-		
 
-//		turn on animation
+		// turn on animation
 		TimerTask task = new TimerTask() {
 			public void run() {
 				tick();
@@ -59,23 +57,23 @@ public class Main extends JFrame {
 	}
 
 	private void tick() {
-//		System.out.println("tick");
+		// System.out.println("tick");
 		gui.setRoom(cells);
 		gui.revalidate();
 		gui.repaint();
-		
-//		System.out.println(gui.getSize());
 
-//		automaton.tick();
+		// System.out.println(gui.getSize());
+
+		// automaton.tick();
 
 	}
 
 	public static void main(String[] args) {
-//		EventQueue - like the pros
+		// EventQueue - like the pros
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					native look is cute
+					// native look is cute
 					try {
 						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 					} catch (ClassNotFoundException e) {
@@ -88,7 +86,7 @@ public class Main extends JFrame {
 						e.printStackTrace();
 					}
 
-//					initialize MainFrame
+					// initialize MainFrame
 					JFrame frame = new Main();
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 					frame.setSize(1400, 900);
