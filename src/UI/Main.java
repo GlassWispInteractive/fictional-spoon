@@ -9,6 +9,8 @@ import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import Map.Level;
+
 /**
  * 
  * @author Danny Rademacher
@@ -22,7 +24,7 @@ public class Main extends JFrame {
 	JList<String> itemList;
 
 	private Bitmap gui = new Bitmap();
-	private boolean[][] cells = {{true, true}};
+	private Level cells = new Level(5, 10);
 
 	private Boolean bToggle = false;
 	private double time = 2;

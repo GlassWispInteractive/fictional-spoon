@@ -1,11 +1,28 @@
 package Map;
 
 public class Pixel {
+	private int value;
+	
+	/**
+	 * @return the value
+	 */
+	public int getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public void setValue(int value) {
+		this.value = value;
+	}
+
 	private int x, y;
 	
 	public Pixel(int x, int y) {
 		this.x = x;
 		this.y = y;
+		this.value = 0;
 	}
 
 	/**
@@ -36,5 +53,7 @@ public class Pixel {
 		this.y = y;
 	}
 	
-	
+	public boolean dead_end() {
+		return false;
+	}
 }
