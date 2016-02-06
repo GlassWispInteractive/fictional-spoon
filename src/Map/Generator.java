@@ -1,6 +1,5 @@
 package Map;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
@@ -115,70 +114,76 @@ public class Generator {
 	 * internal function to generate a maze around the rooms this is done by a
 	 * floodfill algorithm instead of some overengineering with MST
 	 */
-	private void placeMaze() {		
-//		declarations
+	private void placeMaze() {
+		// declarations
 		Stack<int[]> s = new Stack<int[]>();
 		int[] cur, old, perm;
-//		int value;
-		
+		// int value;
+
 		// push every tile on stack
 		for (int i = 1; i < n; i += 2) {
 			for (int j = 1; j < m; j += 2) {
-				s.push(new int[]{i, j});
+				s.push(new int[] { i, j });
 			}
 		}
-		
+
 		old = s.peek();
 		while (!s.isEmpty()) {
 			cur = s.pop();
-			
+
 			if (lvl.getValue(cur[0], cur[1]) != 0) {
 				continue;
 			}
-			
+
 			// randomly push all four neighbours on the stack
 			perm = fourPermutation();
-			int[][] neigh = new int[][]
-					{{cur[0]+2, cur[1]},
-					{cur[0]-2, cur[1]},
-					{cur[0], cur[1]+2},
-					{cur[0], cur[1]-2}};
-			
+			int[][] neigh = new int[][] { { cur[0] + 2, cur[1] }, { cur[0] - 2, cur[1] }, { cur[0], cur[1] + 2 },
+					{ cur[0], cur[1] - 2 } };
+
 			for (int i = 0; i < 4; i++) {
-				s.push(new int[]{neigh[perm[i]][0], neigh[perm[i]][1]});
+				s.push(new int[] { neigh[perm[i]][0], neigh[perm[i]][1] });
 			}
-			
-			// set map pixels
+
+			// set current pixels
 			lvl.setValue(cur[0], cur[1], 1);
-			lvl.setValue((cur[0]+old[0])/2, (cur[1]+old[1])/2, 1);
-						
+
+			// set pixel in between, if last pixel is a neighbour
+			if ((cur[0] == old[0] && Math.abs(cur[1] - old[1]) < 2)
+					|| (cur[1] == old[1] && Math.abs(cur[0] - old[0]) < 2)) {
+				lvl.setValue((cur[0] + old[0]) / 2, (cur[1] + old[1]) / 2, 1);
+			}
+
+			// renew old reference
 			old = cur.clone();
 		}
 	}
-	
+
 	/**
 	 * helper function for the algorithm of place maze
+	 * 
 	 * @return permutation of array [1, 2, 3, 4]
 	 */
 	private int[] fourPermutation() {
 		int[] perm = { 0, 1, 2, 3 };
 		int r, t;
-		
+
 		for (int i = 3; i > -1; i--) {
-			r = rand.nextInt(i+1);
+			r = rand.nextInt(i + 1);
 			t = perm[r];
 			perm[r] = perm[i];
 			perm[i] = t;
 		}
-		
+
 		return perm;
 	}
 
-	@SuppressWarnings("unused")
 	/**
-	 * reimplementation of fourPermutation (slightly different since list is 1, 2, 3, 4)
+	 * reimplementation of fourPermutation (slightly different since list is 1,
+	 * 2, 3, 4)
+	 * 
 	 * @return permutation of 4 values
 	 */
+	@SuppressWarnings("unused")
 	private int[] fourBrainfuck() {
 		int[] perm = new int[4];
 		int n = rand.nextInt(24);
@@ -200,7 +205,7 @@ public class Generator {
 		} else {
 			perm[2] = 1;
 		}
-		
+
 		// swap pos 3 and 4 based on "first" bit
 		if (n / 12 == 0) {
 			perm[3] = perm[2];

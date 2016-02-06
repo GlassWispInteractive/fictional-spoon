@@ -50,7 +50,7 @@ public class Level {
 	public void fillSpace(int xMin, int xMax, int yMin, int yMax) {
 		for (int i = xMin; i < xMax; i++) {
 			for (int j = yMin; j < yMax; j++) {
-				map[i][j].setValue(1);
+				map[i][j].setValue(2);
 			}
 		}
 	}

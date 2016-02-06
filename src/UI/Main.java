@@ -22,7 +22,7 @@ public class Main extends JFrame {
 	private JPanel contentPane;
 
 	private Bitmap gui = new Bitmap();
-	private Generator gen = new Generator(278, 173);
+	private Generator gen = new Generator(277, 173);
 	private Level cells = gen.newLevel();
 
 	private Timer animate = new Timer("Animate");
