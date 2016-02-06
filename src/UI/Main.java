@@ -9,6 +9,7 @@ import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import Map.Generator;
 import Map.Level;
 
 /**
@@ -20,48 +21,46 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 0L;
 	private JPanel contentPane;
 
-
 	private Bitmap gui = new Bitmap();
-	private Level cells = new Level(50, 100);
-
-
+	private Generator gen = new Generator(50, 100);
+	private Level cells = gen.newLevel();
 
 	private Timer animate = new Timer("Animate");
 	private double time = 0.2;
 
-
 	public Main() {
 		// initializing frame
-		super("spoon may be not real");
+		super("a fictional spoon - and its bloodless");
 
-		// menu bar
-		JMenuBar menuBar = new JMenuBar();
-		JMenu menuCtrl = new JMenu("Control"), menuManipulate = new JMenu("Manipulate");
-		menuBar.add(menuCtrl);
-		menuBar.add(menuManipulate);
-//		JMenu invisible
-//		setJMenuBar(menuBar);
-
-		// first menu
-		JMenuItem ctrlToggle = new JMenuItem("Toggle playing");
-		JMenuItem ctrlTime = new JMenuItem("Change update time");
-		JMenuItem ctrlResize = new JMenuItem("Resize grid");
-
-		menuCtrl.add(ctrlToggle);
-		menuCtrl.add(ctrlTime);
-		menuCtrl.add(ctrlResize);
-
-		// second menu
-		JMenuItem manipRandom = new JMenuItem("Load random");
-		JMenuItem manipLoad = new JMenuItem("Load file");
-		JMenuItem manipEdit = new JMenuItem("Edit current");
-		JMenuItem manipSave = new JMenuItem("Save state into file");
-
-		menuManipulate.add(manipRandom);
-		menuManipulate.add(manipLoad);
-		menuManipulate.add(manipEdit);
-		menuManipulate.add(new JSeparator());
-		menuManipulate.add(manipSave);
+		// // menu bar
+		// JMenuBar menuBar = new JMenuBar();
+		// JMenu menuCtrl = new JMenu("Control"), menuManipulate = new
+		// JMenu("Manipulate");
+		// menuBar.add(menuCtrl);
+		// menuBar.add(menuManipulate);
+		//// JMenu invisible
+		//// setJMenuBar(menuBar);
+		//
+		// // first menu
+		// JMenuItem ctrlToggle = new JMenuItem("Toggle playing");
+		// JMenuItem ctrlTime = new JMenuItem("Change update time");
+		// JMenuItem ctrlResize = new JMenuItem("Resize grid");
+		//
+		// menuCtrl.add(ctrlToggle);
+		// menuCtrl.add(ctrlTime);
+		// menuCtrl.add(ctrlResize);
+		//
+		// // second menu
+		// JMenuItem manipRandom = new JMenuItem("Load random");
+		// JMenuItem manipLoad = new JMenuItem("Load file");
+		// JMenuItem manipEdit = new JMenuItem("Edit current");
+		// JMenuItem manipSave = new JMenuItem("Save state into file");
+		//
+		// menuManipulate.add(manipRandom);
+		// menuManipulate.add(manipLoad);
+		// menuManipulate.add(manipEdit);
+		// menuManipulate.add(new JSeparator());
+		// menuManipulate.add(manipSave);
 
 		// basic layout
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,6 +69,11 @@ public class Main extends JFrame {
 		contentPane.setBorder(new EmptyBorder(2, 2, 2, 2));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+
+		
+
+		// check next Gaussian value
+
 
 		contentPane.add(gui, BorderLayout.CENTER);
 		gui.setPreferredSize(new Dimension(1200, 800));
@@ -80,7 +84,7 @@ public class Main extends JFrame {
 				tick();
 			}
 		};
-		
+
 		gui.setRoom(cells);
 		animate = new Timer();
 		animate.scheduleAtFixedRate(task, 100, (long) (time * 1000));
@@ -93,7 +97,7 @@ public class Main extends JFrame {
 		gui.revalidate();
 		gui.repaint();
 
-//		automaton.tick();
+		// automaton.tick();
 
 	}
 
