@@ -39,18 +39,18 @@ public class Level {
 		return map[i][j].getValue();
 	}
 	
-	public void setValue(int i, int j, int value) {
+	public void setValue(int i, int j, int val) {
 		if (i < 0 || i >= n || j < 0 || j >= m) {
 			return;
 		}
 		
-		map[i][j].setValue(value);
+		map[i][j].setValue(val);
 	}
 	
-	public void fillSpace(int xMin, int xMax, int yMin, int yMax) {
+	public void fillSpace(int xMin, int xMax, int yMin, int yMax, int val) {
 		for (int i = xMin; i < xMax; i++) {
 			for (int j = yMin; j < yMax; j++) {
-				map[i][j].setValue(2);
+				map[i][j].setValue(val);
 			}
 		}
 	}
