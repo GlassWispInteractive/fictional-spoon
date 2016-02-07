@@ -1,5 +1,6 @@
 package Map;
 
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
@@ -11,10 +12,11 @@ import java.util.Stack;
  *
  */
 public class Generator {
-	private int n, m;
 	private Level lvl;
+	private int n, m;
 
 	private Random rand;
+	private Stack<int[]> rooms;
 
 	/**
 	 * constructor for generate levels with some fixed size
@@ -26,6 +28,8 @@ public class Generator {
 
 		// init pseudorandom generators
 		rand = new Random();
+
+		this.rooms = new Stack<int[]>();
 	}
 
 	/**
@@ -82,6 +86,9 @@ public class Generator {
 
 			// place room
 			lvl.fillSpace(xStart, xStart + xLen, yStart, yStart + yLen);
+
+			// push coords onto stack
+			rooms.push(new int[] { xStart, xLen, yStart, yLen });
 		}
 
 	}
@@ -137,8 +144,7 @@ public class Generator {
 
 			// randomly push all four neighbours on the stack
 			perm = fourPermutation();
-			int[][] neigh = new int[][] { { cur[0] + 2, cur[1] }, { cur[0] - 2, cur[1] }, { cur[0], cur[1] + 2 },
-					{ cur[0], cur[1] - 2 } };
+			int[][] neigh = oddNeighbours(cur[0], cur[1]);
 
 			for (int i = 0; i < 4; i++) {
 				s.push(new int[] { neigh[perm[i]][0], neigh[perm[i]][1] });
@@ -148,13 +154,32 @@ public class Generator {
 			lvl.setValue(cur[0], cur[1], 1);
 
 			// set pixel in between, if last pixel is a neighbour
-			if ( (cur[0] == old[0] && Math.abs(cur[1] - old[1]) == 2) || (cur[1] == old[1] && Math.abs(cur[0] - old[0]) == 2)) {
+			if ((cur[0] == old[0] && Math.abs(cur[1] - old[1]) == 2)
+					|| (cur[1] == old[1] && Math.abs(cur[0] - old[0]) == 2)) {
 				lvl.setValue((cur[0] + old[0]) / 2, (cur[1] + old[1]) / 2, 1);
 			}
-			
+
 			// renew old reference
 			old = cur.clone();
 		}
+	}
+
+	/**
+	 * helper function to determine the neighbours of odd cells
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	private int[][] oddNeighbours(int x, int y) {
+		int[][] neigh = new int[][] { { x + 2, y }, { x - 2, y }, { x, y + 2 }, { x, y - 2 } };
+		return neigh;
+	}
+	
+	
+	private int[][] allNeighbours(int x, int y) {
+		int[][] neigh = new int[][] { { x + 1, y }, { x - 1, y }, { x, y + 1 }, { x, y - 1 } };
+		return neigh;
 	}
 
 	/**
@@ -220,7 +245,17 @@ public class Generator {
 	 * internal function to connect the rooms through the maze
 	 */
 	private void connectRooms() {
+		int[] cur;
 
+		while (!rooms.isEmpty()) {
+			cur = rooms.pop();
+			
+			
+		}
+	}
+	
+	private int[][] bordersRoom(int xStart, int yStart, int xLen, int yLen) {
+		return null;
 	}
 
 	/**
