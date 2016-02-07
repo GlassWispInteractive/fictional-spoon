@@ -271,7 +271,7 @@ public class Generator {
 
 		for (int i = 0; i < n; i += 2) {
 			for (int j = 0; j < m; j += 2) {
-				if (lvl.getValue(i, j - 1) % 10 == lvl.getValue(i, j + 1)  % 10) {
+				if (lvl.getValue(i, j - 1) == lvl.getValue(i, j + 1)) {
 					System.out.println(lvl.getValue(i, j - 1));
 					if (lvl.getValue(i, j - 1) > 0)
 						lvl.setValue(i, j, lvl.getValue(i, j - 1));
