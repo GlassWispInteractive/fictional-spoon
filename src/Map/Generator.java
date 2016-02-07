@@ -1,6 +1,5 @@
 package Map;
 
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
@@ -175,8 +174,7 @@ public class Generator {
 		int[][] neigh = new int[][] { { x + 2, y }, { x - 2, y }, { x, y + 2 }, { x, y - 2 } };
 		return neigh;
 	}
-	
-	
+
 	private int[][] allNeighbours(int x, int y) {
 		int[][] neigh = new int[][] { { x + 1, y }, { x - 1, y }, { x, y + 1 }, { x, y - 1 } };
 		return neigh;
@@ -247,15 +245,39 @@ public class Generator {
 	private void connectRooms() {
 		int[] cur;
 
-		while (!rooms.isEmpty()) {
+		if (!rooms.isEmpty()) {
 			cur = rooms.pop();
-			
-			
+			connectRoom(cur[0], cur[1], cur[2], cur[3]);
 		}
 	}
-	
-	private int[][] bordersRoom(int xStart, int yStart, int xLen, int yLen) {
-		return null;
+
+	/**
+	 * returns the border cells of a room
+	 * 
+	 * @param xStart
+	 * @param yStart
+	 * @param xLen
+	 * @param yLen
+	 * @return
+	 */
+	private void connectRoom(int xStart, int xLen, int yStart, int yLen) {
+		// declarations
+		int k = 0, candidates[] = new int[(xLen + 2) * (yLen + 2)];
+		
+		
+
+		// horizontal borders
+		for (int i = -1; i < xLen + 1; i++) {
+			lvl.setValue(xStart + i, yStart - 1, 3);
+			lvl.setValue(xStart + i, yStart + yLen, 3);
+		}
+
+		// vertical borders
+		for (int i = -1; i < yLen + 1; i++) {
+			lvl.setValue(xStart - 1, yStart + i, 3);
+			lvl.setValue(xStart + xLen, yStart + i, 3);
+		}
+
 	}
 
 	/**

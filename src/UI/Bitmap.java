@@ -23,7 +23,7 @@ public class Bitmap extends JPanel {
 	private Color[] color = {	Color.decode("#A1D490"),
 								Color.decode("#D4A190"),
 								Color.decode("#C390D4"),
-								Color.decode("#90C3D4"),
+								Color.decode("#801B1B"),
 								Color.decode("#C0C0C0"),
 								Color.decode("#808080"),
 								Color.decode("#808000"),
