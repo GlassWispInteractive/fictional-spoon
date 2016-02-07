@@ -245,7 +245,7 @@ public class Generator {
 	private void connectRooms() {
 		int[] cur;
 
-		if (!rooms.isEmpty()) {
+		while (!rooms.isEmpty()) {
 			cur = rooms.pop();
 			connectRoom(cur[0], cur[1], cur[2], cur[3]);
 		}
@@ -262,22 +262,50 @@ public class Generator {
 	 */
 	private void connectRoom(int xStart, int xLen, int yStart, int yLen) {
 		// declarations
-		int k = 0, candidates[] = new int[(xLen + 2) * (yLen + 2)];
-		
-		
+		int k = 0, candidates[][] = new int[(xLen + 2) * (yLen + 2)][2];
 
-		// horizontal borders
-		for (int i = -1; i < xLen + 1; i++) {
-			lvl.setValue(xStart + i, yStart - 1, 3);
-			lvl.setValue(xStart + i, yStart + yLen, 3);
+		// connector from horizontal borders
+		for (int i = 0; i < xLen; i++) {
+			if (lvl.getValue(xStart + i, yStart - 2) == 1) {
+				candidates[k][0] = xStart + i;
+				candidates[k][1] = yStart - 1;
+				k++;
+			}
+
+			if (lvl.getValue(xStart + i, yStart + yLen + 1) == 1) {
+				candidates[k][0] = xStart + i;
+				candidates[k][1] = yStart + yLen;
+				k++;
+			}
+			// full debug vis
+			// lvl.setValue(xStart + i, yStart - 1, 3);
+			// lvl.setValue(xStart + i, yStart + yLen, 3);
 		}
 
-		// vertical borders
-		for (int i = -1; i < yLen + 1; i++) {
-			lvl.setValue(xStart - 1, yStart + i, 3);
-			lvl.setValue(xStart + xLen, yStart + i, 3);
+		// connector from vertical borders
+		for (int i = 0; i < yLen; i++) {
+			if (lvl.getValue(xStart - 2, yStart + i) == 1) {
+				candidates[k][0] = xStart - 1;
+				candidates[k][1] = yStart + i;
+				k++;
+			}
+
+			if (lvl.getValue(xStart + xLen + 1, yStart + i) == 1) {
+				candidates[k][0] = xStart + xLen;
+				candidates[k][1] = yStart + i;
+				k++;
+			}
+
+			// full debug vis
+			// lvl.setValue(xStart - 1 , yStart + i, 3);
+			// lvl.setValue(xStart + xLen, yStart + i, 3);
 		}
 
+		// create new connectors, at least 1 at most k
+		do {
+			int l = rand.nextInt(k);
+			lvl.setValue(candidates[l][0], candidates[l][1], 3);
+		} while (rand.nextDouble() < 0.2);
 	}
 
 	/**
