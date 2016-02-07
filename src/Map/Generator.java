@@ -15,7 +15,7 @@ public class Generator {
 	private int n, m;
 
 	private Random rand;
-	
+
 	final int ROOM_LIMIT = 500;
 	private int roomTable[][], roomNum = 0;
 
@@ -29,8 +29,8 @@ public class Generator {
 
 		// init pseudorandom generators
 		rand = new Random();
-		
-//		init room super array
+
+		// init room super array
 		roomTable = new int[ROOM_LIMIT][];
 	}
 
@@ -45,7 +45,7 @@ public class Generator {
 		// 4 general steps to level generation
 		placeRooms();
 		placeMaze();
-		connectRooms();
+		connectCells();
 		removeDeadends();
 
 		return lvl;
@@ -87,9 +87,9 @@ public class Generator {
 			}
 
 			// place room
-			lvl.fillSpace(xStart, xStart + xLen, yStart, yStart + yLen, 10*roomNum+2);
+			lvl.fillSpace(xStart, xStart + xLen, yStart, yStart + yLen, 10 * roomNum + 2);
 
-			// insert room 
+			// insert room
 			roomTable[roomNum] = new int[] { xStart, xLen, yStart, yLen };
 			roomNum++;
 		}
@@ -125,94 +125,59 @@ public class Generator {
 	 * floodfill algorithm instead of some overengineering with MST
 	 */
 	private void placeMaze() {
-		// declarations
-		
-		int[] cur, old, perm;
-		// int value;
-
 		// push every tile on stack
 		for (int i = 1; i < n; i += 2) {
 			for (int j = 1; j < m; j += 2) {
 				floodfill(i, j, 1);
-				
 			}
 		}
-//		Collections.shuffle(s);
-
-//		old = s.peek();
-//		while (!s.isEmpty()) {
-//			cur = s.pop();
-//
-//			if (lvl.getValue(cur[0], cur[1]) != 0) {
-//				continue;
-//			}
-//
-//			// randomly push all four neighbours on the stack
-//			perm = fourPermutation();
-//			int[][] neigh = oddNeighbours(cur[0], cur[1]);
-//
-//			
-//
-//			// set current pixels
-//			lvl.setValue(cur[0], cur[1], 1);
-//
-//			// set pixel in between, if last pixel is a neighbour
-//			if ((cur[0] == old[0] && Math.abs(cur[1] - old[1]) == 2)
-//					|| (cur[1] == old[1] && Math.abs(cur[0] - old[0]) == 2)) {
-//				lvl.setValue((cur[0] + old[0]) / 2, (cur[1] + old[1]) / 2, 1);
-//			}
-//
-//			// renew old reference
-//			old = cur.clone();
-//		}
 	}
-	
+
 	private void floodfill(int x, int y, int count) {
-//		fast break condition
+		// fast break condition
 		if (lvl.getValue(x, y) != 0) {
 			return;
 		}
-		
-//		here it begins
+
+		// here it begins
 		Stack<int[]> s = new Stack<int[]>();
-		
+
 		s.push(new int[] { x, y });
-		
+
 		while (!s.isEmpty()) {
-//			consider pixel (x, y)
+			// consider pixel (x, y)
 			x = s.peek()[0];
 			y = s.peek()[1];
 			s.pop();
-			
-//			skip if pixel is already set
+
+			// skip if pixel is already set
 			if (lvl.getValue(x, y) != 0) {
 				continue;
 			}
-			
+
 			// randomly push all four neighbours on the stack
 			int[] perm = fourPermutation();
 			int[][] neigh = oddNeighbours(x, y);
-			
+
 			int oldnum = 0;
 			for (int i = 0; i < 4; i++) {
-				if (lvl.getValue(neigh[perm[i]][0], neigh[perm[i]][1]) == 10*count + 1) {
+				if (lvl.getValue(neigh[perm[i]][0], neigh[perm[i]][1]) == 10 * count + 1) {
 					oldnum += 1;
 				}
 			}
 			if (oldnum > 1) {
 				continue;
 			}
-			
-			
+
 			for (int i = 0; i < 4; i++) {
 				s.push(new int[] { neigh[perm[i]][0], neigh[perm[i]][1] });
 			}
-			
-			lvl.setValue(x, y, 10*count + 1);
+
+			lvl.setValue(x, y, 10 * count + 1);
 		}
-		
-//		s.pop();
-		
+
+		// s.pop();
+
 	}
 
 	/**
@@ -234,6 +199,7 @@ public class Generator {
 	 * @param y
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private int[][] allNeighbours(int x, int y) {
 		int[][] neigh = new int[][] { { x + 1, y }, { x - 1, y }, { x, y + 1 }, { x, y - 1 } };
 		return neigh;
@@ -301,27 +267,34 @@ public class Generator {
 	/**
 	 * internal function to connect the rooms through the maze
 	 */
-	private void connectRooms() {
-		Stack<int[]> s = new Stack<int[]>();
-		
+	private void connectCells() {
+
 		for (int i = 0; i < n; i += 2) {
 			for (int j = 0; j < m; j += 2) {
-				if (lvl.getValue(i, j) == 1) {
-					s.push(new int[] { i, j });
+				if (lvl.getValue(i, j - 1) % 10 == lvl.getValue(i, j + 1)  % 10) {
+					System.out.println(lvl.getValue(i, j - 1));
+					if (lvl.getValue(i, j - 1) > 0)
+						lvl.setValue(i, j, lvl.getValue(i, j - 1));
 				}
 			}
 		}
-		
-		
-		
-		
-		
-//		int[] cur;
-//		
-//		for (int i = 0; i < roomNum; i++) {
-//			cur = roomTable[i];
-//			connectRoom(cur[0], cur[1], cur[2], cur[3]);
-//		}
+
+		// Stack<int[]> s = new Stack<int[]>();
+
+		// for (int i = 0; i < n; i += 2) {
+		// for (int j = 0; j < m; j += 2) {
+		// if (lvl.getValue(i, j) == 1) {
+		// s.push(new int[] { i, j });
+		// }
+		// }
+		// }
+
+		// int[] cur;
+		//
+		// for (int i = 0; i < roomNum; i++) {
+		// cur = roomTable[i];
+		// connectRoom(cur[0], cur[1], cur[2], cur[3]);
+		// }
 
 	}
 
@@ -334,7 +307,8 @@ public class Generator {
 	 * @param yLen
 	 * @return
 	 */
-	private void connectRoom(int xStart, int xLen, int yStart, int yLen) {
+	@SuppressWarnings("unused")
+	private void OLD_CONNECT_PROCEDURE(int xStart, int xLen, int yStart, int yLen) {
 		// declarations
 		int k = 0, candidates[][] = new int[(xLen + 2) * (yLen + 2)][2];
 
@@ -388,8 +362,8 @@ public class Generator {
 	private void removeDeadends() {
 		// declarations
 		Stack<int[]> s = new Stack<int[]>();
-//		int[] cur, old, perm;
-//		int[][] neigh;
+		// int[] cur, old, perm;
+		// int[][] neigh;
 		// int value;
 
 		// push every odd tile on stack
@@ -404,10 +378,10 @@ public class Generator {
 
 		// remove if dead end and push the neighbour on stack which might be a
 		// dead end now
-//		while (!s.isEmpty()) {
-//			cur = s.pop();
-//			neigh = allNeighbours(cur[0], cur[1]);
-//		}
+		// while (!s.isEmpty()) {
+		// cur = s.pop();
+		// neigh = allNeighbours(cur[0], cur[1]);
+		// }
 
 	}
 
