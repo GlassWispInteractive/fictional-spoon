@@ -144,7 +144,7 @@ public class Generator {
 		s.push(new int[] { x, y });
 
 		while (!s.isEmpty()) {
-			// consider pixel (x, y)
+			// consider coordinate (x, y)
 			x = s.peek()[0];
 			y = s.peek()[1];
 			s.pop();
@@ -180,7 +180,8 @@ public class Generator {
 	}
 
 	/**
-	 * helper function to determine the neighbours of odd cells
+	 * helper function for floodfill
+	 * determines the neighbours of odd cells
 	 * 
 	 * @param x
 	 * @param y
@@ -192,19 +193,8 @@ public class Generator {
 	}
 
 	/**
-	 * helper function to determine the neighbours of cells (even counted in)
-	 * 
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	private int[][] allNeighbours(int x, int y) {
-		int[][] neigh = new int[][] { { x + 1, y }, { x - 1, y }, { x, y + 1 }, { x, y - 1 } };
-		return neigh;
-	}
-
-	/**
-	 * helper function for the algorithm of place maze
+	 * helper function for floodfill
+	 * the algorithm of place maze
 	 * 
 	 * @return permutation of array [1, 2, 3, 4]
 	 */
@@ -276,7 +266,7 @@ public class Generator {
 			}
 		}
 
-		// // fill in vertical connectors
+		// fill in vertical connectors
 		for (int i = 1; i < n; i += 2) {
 			for (int j = 0; j < m; j += 2) {
 				if (lvl.getValue(i, j - 1) == lvl.getValue(i, j + 1)) {
@@ -285,31 +275,15 @@ public class Generator {
 			}
 		}
 
+		// fill in room to maze connectors
 		for (int i = 0; i < roomNum; i++) {
 			connectRoom(roomTable[i][0], roomTable[i][1], roomTable[i][2], roomTable[i][3]);
 		}
-
-		// Stack<int[]> s = new Stack<int[]>();
-
-		// for (int i = 0; i < n; i += 2) {
-		// for (int j = 0; j < m; j += 2) {
-		// if (lvl.getValue(i, j) == 1) {
-		// s.push(new int[] { i, j });
-		// }
-		// }
-		// }
-
-		// int[] cur;
-		//
-		// for (int i = 0; i < roomNum; i++) {
-		// cur = roomTable[i];
-		// connectRoom(cur[0], cur[1], cur[2], cur[3]);
-		// }
-
 	}
 
 	/**
-	 * connects border cells of a room with the maze
+	 * helper function for connectCells 
+	 * connects room cells with maze cells
 	 * 
 	 * @param xStart
 	 * @param yStart
@@ -376,12 +350,10 @@ public class Generator {
 	private void removeDeadends(int iter) {
 		// declarations
 		Queue<int[]> q = new ArrayDeque<int[]>();
-		int[] cur, perm;
-		int[][] neigh;
-		// int value;
+
+		int x, y, perm[] = null, neigh[][];
 
 		// push every cell on stack
-		// because connectors cannot be a dead end
 		for (int i = 0; i < n; i += 1) {
 			for (int j = 0; j < m; j += 1) {
 				if (lvl.getValue(i, j) > 1) {
@@ -394,11 +366,44 @@ public class Generator {
 		// remove if dead end and push the neighbour on stack which might be a
 		// dead end now
 		while (!q.isEmpty()) {
-			cur = q.poll();
-			neigh = allNeighbours(cur[0], cur[1]);
+			// retrieve new point from queue
+			x = q.peek()[0];
+			y = q.peek()[1];
+			q.poll();
+
+			// fast end
+			
+
+			if (x == -1 && y == -1) {
+				if (iter == 1) {
+					break;
+				}
+
+				iter--;
+				q.add(new int[] { x, y });
+			}
+
+			// add neighbours to queue, because only neighbours can be dead ends
+			// now
+			neigh = allNeighbours(x, y);
 
 		}
 
 	}
+	
+
+	/**
+	 * helper function for deadend
+	 * determines the neighbours of cells (even counted in)
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	private int[][] allNeighbours(int x, int y) {
+		int[][] neigh = new int[][] { { x + 1, y }, { x - 1, y }, { x, y + 1 }, { x, y - 1 } };
+		return neigh;
+	}
+
 
 }
