@@ -30,7 +30,7 @@ public class Main extends JFrame {
 
 	public Main() {
 		// initializing frame
-		super("a fictional spoon - and its bloodless");
+		super("in my mind - there is a spoon");
 
 		// basic layout with panes
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
