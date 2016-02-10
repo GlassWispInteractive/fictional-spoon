@@ -1,4 +1,4 @@
-package UI;
+package display;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -9,8 +9,8 @@ import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import Map.Generator;
-import Map.Level;
+import dungeon.Generator;
+import dungeon.Level;
 
 /**
  * 

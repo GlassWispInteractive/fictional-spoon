@@ -1,6 +1,6 @@
-package Map;
+package dungeon;
 
-public class Pixel {
+class Pixel {
 	private int value;
 	
 	/**

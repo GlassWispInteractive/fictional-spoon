@@ -1,4 +1,4 @@
-package UI;
+package display;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import Map.Level;
+import dungeon.Level;
 
 @SuppressWarnings("serial")
 public class Bitmap extends JPanel {

@@ -1,7 +1,6 @@
-package Map;
+package dungeon;
 
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * class to generate level maps source:
@@ -46,7 +45,7 @@ public class Generator {
 		placeRooms();
 		placeMaze();
 		connectCells();
-		removeDeadends();
+		removeDeadends(5);
 
 		return lvl;
 	}
@@ -199,7 +198,6 @@ public class Generator {
 	 * @param y
 	 * @return
 	 */
-	@SuppressWarnings("unused")
 	private int[][] allNeighbours(int x, int y) {
 		int[][] neigh = new int[][] { { x + 1, y }, { x - 1, y }, { x, y + 1 }, { x, y - 1 } };
 		return neigh;
@@ -271,19 +269,24 @@ public class Generator {
 		// fill in horizontal connectors
 		for (int i = 0; i < n; i += 2) {
 			for (int j = 1; j < m; j += 2) {
-				if (lvl.getValue(i - 1, j) == lvl.getValue(i + 1, j) && lvl.getValue(i - 1, j) > 0) {
+				if (lvl.getValue(i - 1, j) == lvl.getValue(i + 1, j)) {
 					lvl.setValue(i, j, lvl.getValue(i - 1, j));
 				}
+
 			}
 		}
-		
+
 		// // fill in vertical connectors
 		for (int i = 1; i < n; i += 2) {
 			for (int j = 0; j < m; j += 2) {
-				if (lvl.getValue(i, j - 1) == lvl.getValue(i, j + 1) && lvl.getValue(i, j - 1) > 0) {
+				if (lvl.getValue(i, j - 1) == lvl.getValue(i, j + 1)) {
 					lvl.setValue(i, j, lvl.getValue(i, j - 1));
 				}
 			}
+		}
+
+		for (int i = 0; i < roomNum; i++) {
+			connectRoom(roomTable[i][0], roomTable[i][1], roomTable[i][2], roomTable[i][3]);
 		}
 
 		// Stack<int[]> s = new Stack<int[]>();
@@ -306,7 +309,7 @@ public class Generator {
 	}
 
 	/**
-	 * returns the border cells of a room
+	 * connects border cells of a room with the maze
 	 * 
 	 * @param xStart
 	 * @param yStart
@@ -314,81 +317,87 @@ public class Generator {
 	 * @param yLen
 	 * @return
 	 */
-	@SuppressWarnings("unused")
-	private void OLD_CONNECT_PROCEDURE(int xStart, int xLen, int yStart, int yLen) {
+	private void connectRoom(int xStart, int xLen, int yStart, int yLen) {
 		// declarations
 		int k = 0, candidates[][] = new int[(xLen + 2) * (yLen + 2)][2];
 
 		// connector from horizontal borders
 		for (int i = 0; i < xLen; i++) {
-			if (lvl.getValue(xStart + i, yStart - 2) == 1) {
+			if (lvl.isFloor(xStart + i, yStart - 2)) {
 				candidates[k][0] = xStart + i;
 				candidates[k][1] = yStart - 1;
 				k++;
 			}
 
-			if (lvl.getValue(xStart + i, yStart + yLen + 1) == 1) {
+			if (lvl.isFloor(xStart + i, yStart + yLen + 1)) {
 				candidates[k][0] = xStart + i;
 				candidates[k][1] = yStart + yLen;
 				k++;
 			}
-			// full debug vis
+			// debug vis
 			// lvl.setValue(xStart + i, yStart - 1, 3);
 			// lvl.setValue(xStart + i, yStart + yLen, 3);
 		}
 
 		// connector from vertical borders
 		for (int i = 0; i < yLen; i++) {
-			if (lvl.getValue(xStart - 2, yStart + i) == 1) {
+			if (lvl.isFloor(xStart - 2, yStart + i)) {
 				candidates[k][0] = xStart - 1;
 				candidates[k][1] = yStart + i;
 				k++;
 			}
 
-			if (lvl.getValue(xStart + xLen + 1, yStart + i) == 1) {
+			if (lvl.isFloor(xStart + xLen + 1, yStart + i)) {
 				candidates[k][0] = xStart + xLen;
 				candidates[k][1] = yStart + i;
 				k++;
 			}
 
-			// full debug vis
+			// debug vis
 			// lvl.setValue(xStart - 1 , yStart + i, 3);
 			// lvl.setValue(xStart + xLen, yStart + i, 3);
 		}
 
-		// create new connectors, at least 1 at most k
+		// create new connectors
+		// 1 <= num <= k, expected value is around 1.3 per room
 		do {
+			if (k == 0) {
+				// System.out.println("fail");
+				break;
+			}
 			int l = rand.nextInt(k);
 			lvl.setValue(candidates[l][0], candidates[l][1], 3);
-		} while (rand.nextDouble() < 0.2);
+		} while (rand.nextDouble() < 0.3);
 	}
 
 	/**
 	 * internal function to remove the dead ends of the maze
 	 */
-	private void removeDeadends() {
+	private void removeDeadends(int iter) {
 		// declarations
-		Stack<int[]> s = new Stack<int[]>();
-		// int[] cur, old, perm;
-		// int[][] neigh;
+		Queue<int[]> q = new ArrayDeque<int[]>();
+		int[] cur, perm;
+		int[][] neigh;
 		// int value;
 
-		// push every odd tile on stack
+		// push every cell on stack
 		// because connectors cannot be a dead end
-		for (int i = 1; i < n; i += 2) {
-			for (int j = 1; j < m; j += 2) {
-				if (lvl.getValue(i, j) == 1) {
-					s.push(new int[] { i, j });
+		for (int i = 0; i < n; i += 1) {
+			for (int j = 0; j < m; j += 1) {
+				if (lvl.getValue(i, j) > 1) {
+					q.add(new int[] { i, j });
 				}
 			}
 		}
+		q.add(new int[] { -1, -1 });
 
 		// remove if dead end and push the neighbour on stack which might be a
 		// dead end now
-		// while (!s.isEmpty()) {
-		// cur = s.pop();
-		// neigh = allNeighbours(cur[0], cur[1]);
-		// }
+		while (!q.isEmpty()) {
+			cur = q.poll();
+			neigh = allNeighbours(cur[0], cur[1]);
+
+		}
 
 	}
 

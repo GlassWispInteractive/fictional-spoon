@@ -14,7 +14,7 @@
  *     Andrey Loskutov <loskutov@gmx.de> - generified interface, bug 462760
  ******************************************************************************/
 
-package Map;
+package dungeon;
 
 import java.util.HashMap;
 import java.util.Iterator;
