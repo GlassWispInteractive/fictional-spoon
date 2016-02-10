@@ -268,13 +268,20 @@ public class Generator {
 	 * internal function to connect the rooms through the maze
 	 */
 	private void connectCells() {
-
+		// fill in horizontal connectors
 		for (int i = 0; i < n; i += 2) {
+			for (int j = 1; j < m; j += 2) {
+				if (lvl.getValue(i - 1, j) == lvl.getValue(i + 1, j) && lvl.getValue(i - 1, j) > 0) {
+					lvl.setValue(i, j, lvl.getValue(i - 1, j));
+				}
+			}
+		}
+		
+		// // fill in vertical connectors
+		for (int i = 1; i < n; i += 2) {
 			for (int j = 0; j < m; j += 2) {
-				if (lvl.getValue(i, j - 1) == lvl.getValue(i, j + 1)) {
-					System.out.println(lvl.getValue(i, j - 1));
-					if (lvl.getValue(i, j - 1) > 0)
-						lvl.setValue(i, j, lvl.getValue(i, j - 1));
+				if (lvl.getValue(i, j - 1) == lvl.getValue(i, j + 1) && lvl.getValue(i, j - 1) > 0) {
+					lvl.setValue(i, j, lvl.getValue(i, j - 1));
 				}
 			}
 		}
