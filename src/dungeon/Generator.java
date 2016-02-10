@@ -273,7 +273,13 @@ public class Generator {
 					lvl.setValue(i, j, lvl.getValue(i - 1, j));
 				}
 
+<<<<<<< HEAD:src/dungeon/Generator.java
 			}
+=======
+		if (!rooms.isEmpty()) {
+			cur = rooms.pop();
+			connectRoom(cur[0], cur[1], cur[2], cur[3]);
+>>>>>>> parent of f385dde... gen now connects the room and the maze properly:src/Map/Generator.java
 		}
 
 		// // fill in vertical connectors
@@ -319,6 +325,7 @@ public class Generator {
 	 */
 	private void connectRoom(int xStart, int xLen, int yStart, int yLen) {
 		// declarations
+<<<<<<< HEAD:src/dungeon/Generator.java
 		int k = 0, candidates[][] = new int[(xLen + 2) * (yLen + 2)][2];
 
 		// connector from horizontal borders
@@ -368,6 +375,24 @@ public class Generator {
 			int l = rand.nextInt(k);
 			lvl.setValue(candidates[l][0], candidates[l][1], 3);
 		} while (rand.nextDouble() < 0.3);
+=======
+		int k = 0, candidates[] = new int[(xLen + 2) * (yLen + 2)];
+		
+		
+
+		// horizontal borders
+		for (int i = -1; i < xLen + 1; i++) {
+			lvl.setValue(xStart + i, yStart - 1, 3);
+			lvl.setValue(xStart + i, yStart + yLen, 3);
+		}
+
+		// vertical borders
+		for (int i = -1; i < yLen + 1; i++) {
+			lvl.setValue(xStart - 1, yStart + i, 3);
+			lvl.setValue(xStart + xLen, yStart + i, 3);
+		}
+
+>>>>>>> parent of f385dde... gen now connects the room and the maze properly:src/Map/Generator.java
 	}
 
 	/**
