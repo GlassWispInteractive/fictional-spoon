@@ -28,6 +28,11 @@ public class Level {
 	public boolean isWall(int x, int y) {
 		return getValue(x, y) == 0;
 	}
+	
+	public boolean isGround(int x, int y) {
+		return getValue(x, y) > 0;
+	}
+
 
 	public boolean isFloor(int x, int y) {
 		return getValue(x, y) % 10 == 1;

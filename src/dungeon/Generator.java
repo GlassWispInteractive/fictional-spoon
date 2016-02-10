@@ -44,7 +44,7 @@ public class Generator {
 		// 4 general steps to level generation
 		placeRooms();
 		placeMaze();
-		connectCells();
+		// connectCells();
 		removeDeadends(5);
 
 		return lvl;
@@ -124,24 +124,22 @@ public class Generator {
 	 * floodfill algorithm instead of some overengineering with MST
 	 */
 	private void placeMaze() {
+		Stack<int[]> s = new Stack<int[]>();
+		int x, y, w = -42, z = -42;
+
 		// push every tile on stack
 		for (int i = 1; i < n; i += 2) {
 			for (int j = 1; j < m; j += 2) {
-				floodfill(i, j, 1);
+				if (lvl.isWall(i, j)) {
+					lvl.setValue(i, j, 1);
+					s.push(new int[] { i, j });
+				}
 			}
 		}
-	}
+		Collections.shuffle(s);
+		
 
-	private void floodfill(int x, int y, int count) {
-		// fast break condition
-		if (lvl.getValue(x, y) != 0) {
-			return;
-		}
-
-		// here it begins
-		Stack<int[]> s = new Stack<int[]>();
-
-		s.push(new int[] { x, y });
+		// s.push(new int[] { x, y });
 
 		while (!s.isEmpty()) {
 			// consider pixel (x, y)
@@ -158,25 +156,22 @@ public class Generator {
 			int[] perm = fourPermutation();
 			int[][] neigh = oddNeighbours(x, y);
 
-			int oldnum = 0;
-			for (int i = 0; i < 4; i++) {
-				if (lvl.getValue(neigh[perm[i]][0], neigh[perm[i]][1]) == 10 * count + 1) {
-					oldnum += 1;
-				}
-			}
-			if (oldnum > 1) {
-				continue;
-			}
-
 			for (int i = 0; i < 4; i++) {
 				s.push(new int[] { neigh[perm[i]][0], neigh[perm[i]][1] });
 			}
 
-			lvl.setValue(x, y, 10 * count + 1);
+			
+
+			// set current pixels
+
+			// set pixel in between, if last pixel is a neighbour
+			if ((x == w && Math.abs(y - z) == 2) || (y == z && Math.abs(x - w) == 2)) {
+//				 lvl.setValue((x + w) / 2, (y + z) / 2, 1);
+			}
+
+			w = x;
+			z = y;
 		}
-
-		// s.pop();
-
 	}
 
 	/**
@@ -272,17 +267,10 @@ public class Generator {
 				if (lvl.getValue(i - 1, j) == lvl.getValue(i + 1, j)) {
 					lvl.setValue(i, j, lvl.getValue(i - 1, j));
 				}
-
-<<<<<<< HEAD:src/dungeon/Generator.java
 			}
-=======
-		if (!rooms.isEmpty()) {
-			cur = rooms.pop();
-			connectRoom(cur[0], cur[1], cur[2], cur[3]);
->>>>>>> parent of f385dde... gen now connects the room and the maze properly:src/Map/Generator.java
 		}
 
-		// // fill in vertical connectors
+		// fill in vertical connectors
 		for (int i = 1; i < n; i += 2) {
 			for (int j = 0; j < m; j += 2) {
 				if (lvl.getValue(i, j - 1) == lvl.getValue(i, j + 1)) {
@@ -291,27 +279,10 @@ public class Generator {
 			}
 		}
 
+		// fill in room connectors
 		for (int i = 0; i < roomNum; i++) {
 			connectRoom(roomTable[i][0], roomTable[i][1], roomTable[i][2], roomTable[i][3]);
 		}
-
-		// Stack<int[]> s = new Stack<int[]>();
-
-		// for (int i = 0; i < n; i += 2) {
-		// for (int j = 0; j < m; j += 2) {
-		// if (lvl.getValue(i, j) == 1) {
-		// s.push(new int[] { i, j });
-		// }
-		// }
-		// }
-
-		// int[] cur;
-		//
-		// for (int i = 0; i < roomNum; i++) {
-		// cur = roomTable[i];
-		// connectRoom(cur[0], cur[1], cur[2], cur[3]);
-		// }
-
 	}
 
 	/**
@@ -325,7 +296,6 @@ public class Generator {
 	 */
 	private void connectRoom(int xStart, int xLen, int yStart, int yLen) {
 		// declarations
-<<<<<<< HEAD:src/dungeon/Generator.java
 		int k = 0, candidates[][] = new int[(xLen + 2) * (yLen + 2)][2];
 
 		// connector from horizontal borders
@@ -375,24 +345,6 @@ public class Generator {
 			int l = rand.nextInt(k);
 			lvl.setValue(candidates[l][0], candidates[l][1], 3);
 		} while (rand.nextDouble() < 0.3);
-=======
-		int k = 0, candidates[] = new int[(xLen + 2) * (yLen + 2)];
-		
-		
-
-		// horizontal borders
-		for (int i = -1; i < xLen + 1; i++) {
-			lvl.setValue(xStart + i, yStart - 1, 3);
-			lvl.setValue(xStart + i, yStart + yLen, 3);
-		}
-
-		// vertical borders
-		for (int i = -1; i < yLen + 1; i++) {
-			lvl.setValue(xStart - 1, yStart + i, 3);
-			lvl.setValue(xStart + xLen, yStart + i, 3);
-		}
-
->>>>>>> parent of f385dde... gen now connects the room and the maze properly:src/Map/Generator.java
 	}
 
 	/**
