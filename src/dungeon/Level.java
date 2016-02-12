@@ -33,7 +33,6 @@ public class Level {
 		return getValue(x, y) > 0;
 	}
 
-
 	public boolean isFloor(int x, int y) {
 		return getValue(x, y) % 10 == 1;
 	}

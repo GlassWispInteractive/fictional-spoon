@@ -57,7 +57,6 @@ public class Main extends JFrame {
 	}
 
 	private void tick() {
-		// System.out.println("tick");
 		gui.setRoom(cells);
 		gui.revalidate();
 		gui.repaint();

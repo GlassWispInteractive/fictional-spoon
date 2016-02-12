@@ -43,6 +43,7 @@ public class Generator {
 	 */
 	public Level newLevel() {
 		lvl = new Level(n, m);
+		Map map = new Map(n, m);
 
 		// 4 general steps to level generation
 		placeRooms();
@@ -94,7 +95,7 @@ public class Generator {
 			// cc.makeSet();
 			for (int x = 0; x < xLen; x += 2) {
 				for (int y = 2; y < yLen; y += 2) {
-
+					
 				}
 			}
 
