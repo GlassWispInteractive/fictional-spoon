@@ -20,43 +20,76 @@ public class Map {
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
 				map[i][j] = new Cell(i, j);
-				map[i][j].set(WALL);
+				map[i][j].setGround(WALL);
 			}
 		}
 	}
-
+	
+	/**
+	 * getter method for length n
+	 * @return n
+	 */
 	public int getN() {
 		return n;
 	}
-
+	
+	/**
+	 * getter method for length m
+	 * @return m
+	 */
 	public int getM() {
 		return m;
 	}
 	
+	/**
+	 * setter method for cell
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @return
+	 */
 	public Cell getCell(int x, int y) {
 		return map[x][y];
 	}
-
+	
+	/**
+	 * getther method for ground state
+	 * @param x coordinate
+	 * @param y coordinate
+	 * @return
+	 */
 	public Ground getGround(int x, int y) {
 		if (x < 0 || x >= n || y < 0 || y >= m) {
 			return ERROR;
 		}
 
-		return map[x][y].get();
+		return map[x][y].getGround();
 	}
-
+	
+	/**
+	 * setter method for ground state
+	 * @param x
+	 * @param y
+	 * @param ground
+	 */
 	public void setGround(int x, int y, Ground ground) {
 		if (x < 0 || x >= n || y < 0 || y >= m) {
 			return;
 		}
 
-		map[x][y].set(ground);
+		map[x][y].setGround(ground);
 	}
-
-	public void newRoom(int xStart, int xLen, int yStart, int yLen) {
+	
+	/**
+	 * setter method for a new room on the map object
+	 * @param xStart
+	 * @param xLen
+	 * @param yStart
+	 * @param yLen
+	 */
+	public void setNewRoom(int xStart, int xLen, int yStart, int yLen) {
 		for (int x = xStart; x < xStart + xLen; x++) {
 			for (int y = yStart; y < yStart + yLen; y++) {
-				map[x][y].set(ROOM);
+				map[x][y].setGround(ROOM);
 			}
 		}
 	}

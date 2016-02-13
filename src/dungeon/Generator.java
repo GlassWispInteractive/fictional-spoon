@@ -23,8 +23,8 @@ public class Generator {
 	// constants
 
 	final int ROOM_LIMIT = 300;
-	final int[][] neighsAll = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, 1 } };
-	final int[][] neighsOdd = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, 2 } };
+	final int[][] neighsAll = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+	final int[][] neighsOdd = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
 
 	/**
 	 * constructor for generate levels with some fixed size
@@ -53,7 +53,8 @@ public class Generator {
 		// 4 general steps to level generation
 		placeRooms();
 		placeMaze();
-		removeDeadends(5);
+		removeDeadends();
+		plazeLoops();
 
 		return map;
 	}
@@ -94,7 +95,7 @@ public class Generator {
 			}
 
 			// place room
-			map.newRoom(xStart, xLen, yStart, yLen);
+			map.setNewRoom(xStart, xLen, yStart, yLen);
 
 			// insert room into memory
 			roomTable[roomNum] = new int[] { xStart, xLen, yStart, yLen };
@@ -235,37 +236,56 @@ public class Generator {
 				break;
 			}
 			int l = rand.nextInt(k);
-			map.setGround(candidates[l][0], candidates[l][1], CONNECTOR);
+			map.setGround(candidates[l][0], candidates[l][1], FLOOR);
 		} while (rand.nextDouble() < 0.3);
 	}
 
 	/**
 	 * internal function to remove the dead ends of the maze
 	 */
-	@SuppressWarnings("unused")
-	private void removeDeadends(int iter) {
-		// declarations
-		Queue<int[]> q = new ArrayDeque<int[]>();
-		int cur[], perm[], neigh[][];
+	private void removeDeadends() {
+		int count;
+		boolean repeat = true, deadend[][];
 
-		// push every cell on stack
-		// because connectors cannot be a dead end
-		for (int i = 0; i < n; i += 1) {
-			for (int j = 0; j < m; j += 1) {
-				if (map.getGround(i, j) != WALL) {
-					q.add(new int[] { i, j });
+		while (repeat) {
+			// fresh inits for single execution of elemination
+			deadend = new boolean[n][m];
+			repeat = false;
+
+			// dead end iff 3 neighbours are walls
+			for (int x = 0; x < n; x++) {
+				for (int y = 0; y < m; y++) {
+					if (map.getGround(x, y) == WALL) {
+						continue;
+					}
+
+					count = 0;
+					for (int j = 0; j < 4; j++) {
+						if (map.getGround(x + neighsAll[j][0], y + neighsAll[j][1]) == WALL)
+							count++;
+					}
+
+					if (count == 3) {
+						deadend[x][y] = true;
+						repeat = true;
+					}
+				}
+			}
+
+			// remove dead ends
+			for (int x = 0; x < n; x++) {
+				for (int y = 0; y < m; y++) {
+					if (deadend[x][y])
+						map.setGround(x, y, WALL);
 				}
 			}
 		}
-		q.add(new int[] { -1, -1 });
-
-		// remove if dead end and push the neighbour on stack which might be a
-		// dead end now
-		while (!q.isEmpty()) {
-			cur = q.poll();
-
-		}
-
 	}
 
+	/**
+	 * internal function to create loops inside the map
+	 */
+	private void plazeLoops() {
+
+	}
 }

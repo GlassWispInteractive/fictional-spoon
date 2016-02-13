@@ -17,7 +17,8 @@ public class Bitmap extends JPanel {
 	final int offsetX = 0, offsetY = 0;
 	int fieldSize = 5, padding = 0, rectSize = fieldSize - padding;
 
-	private Color[] color = { Color.decode("#A1D490"), Color.decode("#D4B790"), Color.decode("#801B1B"),
+	private Color[] color = { Color.decode("#454545"), Color.decode("#A1D490"), Color.decode("#D4B790"),
+			Color.decode("#B39B7B"), Color.decode("#801B1B"), Color.decode("#000000") };
 
 	public void setRoom(Map map) {
 		this.map = map;
