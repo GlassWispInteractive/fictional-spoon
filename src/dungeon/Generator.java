@@ -146,98 +146,37 @@ public class Generator {
 	private void placeMaze() {
 		ArrayList<int[]> q = new ArrayList<>();
 
-		// fill in fixed cells on odd / odd coordinates
 		for (int i = 1; i < n; i += 2) {
 			for (int j = 1; j < m; j += 2) {
+				// fill in fixed cells on odd / odd coordinates
 				if (map.getGround(i, j) == WALL) {
 					map.setGround(i, j, FLOOR);
 					cc.makeSet(map.getCell(i, j));
-
-					// neighbours
-					if (i + 2 < n)
-						q.add(new int[] { i, j, i + 2, j });
-					if (j + 2 < m)
-						q.add(new int[] { i, j, i, j + 2 });
 				}
+
+				// queue neighbours when one corner is not a room
+				if (i + 2 < n && map.getGround(i + 1, j) != ROOM)
+					q.add(new int[] { i, j, i + 2, j });
+				if (j + 2 < m && map.getGround(i, j + 1) != ROOM)
+					q.add(new int[] { i, j, i, j + 2 });
 			}
 		}
 
+		// choose connector in a random order
 		Collections.shuffle(q);
 
-		// try every cell if it would connect two components into one
 		for (int[] e : q) {
 			// rename array
 			final int x1 = e[0], y1 = e[1], x2 = e[2], y2 = e[3];
 
+			// check if two cells are already connected
 			if (cc.findSet(map.getCell(x1, y1)) == cc.findSet(map.getCell(x2, y2)))
 				continue;
 
+			// merge two components by adding a connector
 			cc.union(map.getCell(x1, y1), map.getCell(x2, y2));
 			map.setGround((x1 + x2) / 2, (y1 + y2) / 2, FLOOR);
 		}
-	}
-
-	/**
-	 * connects border cells of a room with the maze
-	 * 
-	 * @param xStart
-	 * @param yStart
-	 * @param xLen
-	 * @param yLen
-	 * @return
-	 */
-	@SuppressWarnings("unused")
-	private void connectRoom(int xStart, int xLen, int yStart, int yLen) {
-		// declarations
-		int k = 0, candidates[][] = new int[(xLen + 2) * (yLen + 2)][2];
-
-		// connector from horizontal borders
-		for (int i = 0; i < xLen; i++) {
-			if (map.getGround(xStart + i, yStart - 2) == FLOOR) {
-				candidates[k][0] = xStart + i;
-				candidates[k][1] = yStart - 1;
-				k++;
-			}
-
-			if (map.getGround(xStart + i, yStart + yLen + 1) == FLOOR) {
-				candidates[k][0] = xStart + i;
-				candidates[k][1] = yStart + yLen;
-				k++;
-			}
-			// debug vis
-			// lvl.setValue(xStart + i, yStart - 1, 3);
-			// lvl.setValue(xStart + i, yStart + yLen, 3);
-		}
-
-		// connector from vertical borders
-		for (int i = 0; i < yLen; i++) {
-			if (map.getGround(xStart - 2, yStart + i) == FLOOR) {
-				candidates[k][0] = xStart - 1;
-				candidates[k][1] = yStart + i;
-				k++;
-			}
-
-			if (map.getGround(xStart + xLen + 1, yStart + i) == FLOOR) {
-				candidates[k][0] = xStart + xLen;
-				candidates[k][1] = yStart + i;
-				k++;
-			}
-
-			// debug vis
-			// lvl.setValue(xStart - 1 , yStart + i, 3);
-			// lvl.setValue(xStart + xLen, yStart + i, 3);
-		}
-
-		// create new connectors
-		// 1 <= num <= k, expected value is around 1.3 per room
-		do {
-			if (k == 0) {
-				// System.out.println("fail");
-				break;
-			}
-			int l = rand.nextInt(k);
-			map.setGround(candidates[l][0], candidates[l][1], FLOOR);
-		} while (rand.nextDouble() < 0.3);
 	}
 
 	/**
