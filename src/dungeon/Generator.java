@@ -1,5 +1,7 @@
 package dungeon;
 
+import static dungeon.Ground.*;
+
 import java.util.*;
 
 /**
@@ -10,16 +12,19 @@ import java.util.*;
  *
  */
 public class Generator {
-	private Level lvl;
-	private int n, m;
+	// class variables
 
 	private Random rand;
-	private DisjointSet<Coordinates> cc = new DisjointSet<Coordinates>();
-
-	final int ROOM_LIMIT = 500;
-	final int[][] neighs = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, 2 } };
-
+	private DisjointSet<Cell> cc;
+	private Map map;
+	private int n, m;
 	private int roomTable[][], roomNum = 0;
+
+	// constants
+
+	final int ROOM_LIMIT = 300;
+	final int[][] neighsAll = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, 1 } };
+	final int[][] neighsOdd = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, 2 } };
 
 	/**
 	 * constructor for generate levels with some fixed size
@@ -41,17 +46,16 @@ public class Generator {
 	 * 
 	 * @return random level
 	 */
-	public Level newLevel() {
-		lvl = new Level(n, m);
-		Map map = new Map(n, m);
+	public Map newLevel() {
+		cc = new DisjointSet<>();
+		map = new Map(n, m);
 
 		// 4 general steps to level generation
 		placeRooms();
 		placeMaze();
-//		connectCells();
 		removeDeadends(5);
-		
-		return lvl;
+
+		return map;
 	}
 
 	/**
@@ -67,7 +71,7 @@ public class Generator {
 		int xLen, yLen, xStart, yStart;
 
 		// try to put up a new room in each iteration
-		for (int i = 0; i < 500; i++) {
+		for (int i = 0; i < ROOM_LIMIT; i++) {
 			// make sure to have valid room sizes
 			// random num n transforms into 2n+1 -> odd
 			do {
@@ -90,19 +94,22 @@ public class Generator {
 			}
 
 			// place room
-			lvl.fillSpace(xStart, xStart + xLen, yStart, yStart + yLen, 10 * roomNum + 2);
+			map.newRoom(xStart, xLen, yStart, yLen);
 
-			// cc.makeSet();
-			for (int x = 0; x < xLen; x += 2) {
-				for (int y = 2; y < yLen; y += 2) {
-					
-				}
-			}
-
-			// insert room
+			// insert room into memory
 			roomTable[roomNum] = new int[] { xStart, xLen, yStart, yLen };
 			roomNum++;
 
+			cc.makeSet(map.getCell(xStart, yStart));
+			for (int x = xStart; x < xStart + xLen; x += 2) {
+				for (int y = yStart; y < yStart + yLen; y += 2) {
+					if (x == xStart && y == yStart)
+						continue;
+
+					cc.makeSet(map.getCell(x, y));
+					cc.union(map.getCell(xStart, yStart), map.getCell(x, y));
+				}
+			}
 		}
 
 	}
@@ -121,7 +128,7 @@ public class Generator {
 		for (int i = 0; i <= xLen; i += 2) {
 			for (int j = 0; j <= yLen; j += 2) {
 
-				if (lvl.getValue(xStart + i, yStart + j) != 0) {
+				if (map.getGround(xStart + i, yStart + j) != WALL) {
 					return false;
 				}
 			}
@@ -137,216 +144,36 @@ public class Generator {
 	 */
 	private void placeMaze() {
 		ArrayList<int[]> q = new ArrayList<>();
-		int r;
 
-		// fill in cells on odd / odd coordinates
+		// fill in fixed cells on odd / odd coordinates
 		for (int i = 1; i < n; i += 2) {
 			for (int j = 1; j < m; j += 2) {
-				if (lvl.isWall(i, j)) {
-					lvl.setValue(i, j, 1);
-					cc.makeSet(new Coordinates(i, j));
+				if (map.getGround(i, j) == WALL) {
+					map.setGround(i, j, FLOOR);
+					cc.makeSet(map.getCell(i, j));
+
+					// neighbours
+					if (i + 2 < n)
+						q.add(new int[] { i, j, i + 2, j });
+					if (j + 2 < m)
+						q.add(new int[] { i, j, i, j + 2 });
 				}
 			}
 		}
-		
 
-		
-		// fill in horizontal connectors
-		for (int i = 0; i < n; i += 2) {
-			for (int j = 1; j < m; j += 2) {
-				q.add(new int[]{i-1, j, i+1, j});
-			}
-		}
-
-		// fill in vertical connectors
-		for (int i = 1; i < n; i += 2) {
-			for (int j = 0; j < m; j += 2) {
-				q.add(new int[]{i, j-1, i, j+1});
-			}
-		}
-		
-		
 		Collections.shuffle(q);
 
-		q.forEach((e) -> {
-//			final int a = a[0], b = a[1], c = a[2], d = a[3];
-//					+ neighs[coord.r][0], b = coord.y + neighs[coord.r][1];
-			
-//			if (lvl.isWall(a, b) && cc.findSet(coord) == cc.findSet(coord)) {
-//				lvl.setValue((coord.x+a)/2, (coord.y+b)/2, 1);
-//			}
-			
-		});
-		
+		// try every cell if it would connect two components into one
+		for (int[] e : q) {
+			// rename array
+			final int x1 = e[0], y1 = e[1], x2 = e[2], y2 = e[3];
 
-		
-		
-		
-		
-		
-		
-		
-//		Stack<int[]> s = new Stack<int[]>();
-//		int x, y, w = -42, z = -42;
-//
-//		// push every tile on stack
-//		for (int i = 1; i < n; i += 2) {
-//			for (int j = 1; j < m; j += 2) {
-//				if (lvl.isWall(i, j)) {
-//					lvl.setValue(i, j, 1);
-//					s.push(new int[] { i, j });
-//				}
-//			}
-//		}
-//		Collections.shuffle(s);
-//
-//		// new stuff
-//
-//		// s.push(new int[] { x, y });
-//
-//		while (!s.isEmpty()) {
-//			// consider pixel (x, y)
-//			x = s.peek()[0];
-//			y = s.peek()[1];
-//			s.pop();
-//
-//			// skip if pixel is already set
-//			if (lvl.getValue(x, y) != 0) {
-//				continue;
-//			}
-//
-//			// randomly push all four neighbours on the stack
-//			int[] perm = fourPermutation();
-//
-//			for (int i = 0; i < 4; i++) {
-//				s.push(new int[] { x + neighs[perm[i]][0], y + neighs[perm[i]][1] });
-//			}
-//
-//			// set current pixels
-//
-//			// set pixel in between, if last pixel is a neighbour
-//			if ((x == w && Math.abs(y - z) == 2) || (y == z && Math.abs(x - w) == 2)) {
-//				// lvl.setValue((x + w) / 2, (y + z) / 2, 1);
-//			}
-//
-//			w = x;
-//			z = y;
-//		}
-	}
+			if (cc.findSet(map.getCell(x1, y1)) == cc.findSet(map.getCell(x2, y2)))
+				continue;
 
-	/**
-	 * helper function to determine the neighbours of cells (even counted in)
-	 * 
-	 * @param x
-	 * @param y
-	 * @return
-	 */
-	private int[][] allNeighbours(int x, int y) {
-		int[][] neigh = new int[][] { { x + 1, y }, { x - 1, y }, { x, y + 1 }, { x, y - 1 } };
-		return neigh;
-	}
-
-	/**
-	 * helper function for the algorithm of place maze
-	 * 
-	 * @return permutation of array [1, 2, 3, 4]
-	 */
-	@SuppressWarnings("unused")
-	private int[] fourPermutation() {
-		int[] perm = { 0, 1, 2, 3 };
-		int r, t;
-
-		for (int i = 3; i > -1; i--) {
-			r = rand.nextInt(i + 1);
-			t = perm[r];
-			perm[r] = perm[i];
-			perm[i] = t;
+			cc.union(map.getCell(x1, y1), map.getCell(x2, y2));
+			map.setGround((x1 + x2) / 2, (y1 + y2) / 2, FLOOR);
 		}
-
-		return perm;
-	}
-
-	/**
-	 * reimplementation of fourPermutation (slightly different since list is 1,
-	 * 2, 3, 4)
-	 * 
-	 * @return permutation of 4 values
-	 */
-	@SuppressWarnings("unused")
-	private int[] fourBrainfuck() {
-		int[] perm = new int[4];
-		int n = rand.nextInt(24);
-
-		// trivial case
-		perm[0] = (n % 4) + 1;
-
-		// almost trival
-		perm[1] = (n % 3) + 1;
-		if (perm[1] >= perm[0])
-			perm[1]++;
-
-		// total nontrivial
-		perm[2] = 10 - perm[0] - perm[1];
-		if (perm[2] == 5) {
-			perm[2] = 2 + (2 & perm[0]);
-		} else if (perm[2] > 5) {
-			perm[2] = 4;
-		} else {
-			perm[2] = 1;
-		}
-
-		// swap pos 3 and 4 based on "first" bit
-		if (n / 12 == 0) {
-			perm[3] = perm[2];
-			perm[2] = 10 - perm[0] - perm[1] - perm[3];
-		} else {
-			perm[3] = 10 - perm[0] - perm[1] - perm[2];
-		}
-
-		return perm;
-	}
-
-	/**
-	 * internal function to connect the rooms through the maze
-	 */
-	@SuppressWarnings("unused")
-	private void connectCells() {
-		ArrayList<Coordinates> q = new ArrayList<Coordinates>();
-		Coordinates cell;
-
-		// fill in horizontal connectors
-//		for (int i = 1; i < n; i += 2) {
-//			for (int j = 1; j < m; j += 2) {
-//				if (lvl.isWall(i, j)) {
-//					cell = new Coordinates(i, j);
-//					q.add(cell);
-//					cc.makeSet(cell);
-//				}
-//			}
-//		}
-//
-//		// fill in vertical connectors
-//		for (int i = 1; i < n; i += 2) {
-//			for (int j = 0; j < m; j += 2) {
-//				if (lvl.isFloor(i, j - 1) && lvl.isFloor(i, j + 1)) {
-//					q.add(new Coordinates(i, j));
-//				}
-//			}
-//		}
-		Collections.shuffle(q);
-
-		q.forEach((coord) -> {
-			if (true) {
-				lvl.setValue(coord.x, coord.y, 1);
-			}
-			lvl.setValue(coord.x, coord.y, 1);
-		});
-
-		// fill in room connectors
-		// for (int i = 0; i < roomNum; i++) {
-		// connectRoom(roomTable[i][0], roomTable[i][1], roomTable[i][2],
-		// roomTable[i][3]);
-		// }
 	}
 
 	/**
@@ -365,13 +192,13 @@ public class Generator {
 
 		// connector from horizontal borders
 		for (int i = 0; i < xLen; i++) {
-			if (lvl.isFloor(xStart + i, yStart - 2)) {
+			if (map.getGround(xStart + i, yStart - 2) == FLOOR) {
 				candidates[k][0] = xStart + i;
 				candidates[k][1] = yStart - 1;
 				k++;
 			}
 
-			if (lvl.isFloor(xStart + i, yStart + yLen + 1)) {
+			if (map.getGround(xStart + i, yStart + yLen + 1) == FLOOR) {
 				candidates[k][0] = xStart + i;
 				candidates[k][1] = yStart + yLen;
 				k++;
@@ -383,13 +210,13 @@ public class Generator {
 
 		// connector from vertical borders
 		for (int i = 0; i < yLen; i++) {
-			if (lvl.isFloor(xStart - 2, yStart + i)) {
+			if (map.getGround(xStart - 2, yStart + i) == FLOOR) {
 				candidates[k][0] = xStart - 1;
 				candidates[k][1] = yStart + i;
 				k++;
 			}
 
-			if (lvl.isFloor(xStart + xLen + 1, yStart + i)) {
+			if (map.getGround(xStart + xLen + 1, yStart + i) == FLOOR) {
 				candidates[k][0] = xStart + xLen;
 				candidates[k][1] = yStart + i;
 				k++;
@@ -408,7 +235,7 @@ public class Generator {
 				break;
 			}
 			int l = rand.nextInt(k);
-			lvl.setValue(candidates[l][0], candidates[l][1], 3);
+			map.setGround(candidates[l][0], candidates[l][1], CONNECTOR);
 		} while (rand.nextDouble() < 0.3);
 	}
 
@@ -425,7 +252,7 @@ public class Generator {
 		// because connectors cannot be a dead end
 		for (int i = 0; i < n; i += 1) {
 			for (int j = 0; j < m; j += 1) {
-				if (lvl.getValue(i, j) > 1) {
+				if (map.getGround(i, j) != WALL) {
 					q.add(new int[] { i, j });
 				}
 			}
@@ -436,7 +263,6 @@ public class Generator {
 		// dead end now
 		while (!q.isEmpty()) {
 			cur = q.poll();
-			neigh = allNeighbours(cur[0], cur[1]);
 
 		}
 

@@ -9,8 +9,7 @@ import java.util.TimerTask;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import dungeon.Generator;
-import dungeon.Level;
+import dungeon.*;
 
 /**
  * 
@@ -23,7 +22,7 @@ public class Main extends JFrame {
 
 	private Bitmap gui = new Bitmap();
 	private Generator gen = new Generator(277, 173);
-	private Level cells = gen.newLevel();
+	private Map cells = gen.newLevel();
 
 	private Timer animate = new Timer("Animate");
 	private double time = 0.2;

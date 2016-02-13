@@ -1,6 +1,7 @@
 package dungeon;
 
 public class Cell {
+	@SuppressWarnings("unused")
 	private int x, y;
 	private Ground ground;
 	
