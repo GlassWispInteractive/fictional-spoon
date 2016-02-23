@@ -15,7 +15,7 @@ public class Generator {
 	// class variables
 
 	private Random rand;
-	private DisjointSet<Cell> cc;
+	private DisjointSet<Cell> cc; // connected components
 	private Map map;
 	private int n, m;
 	private int roomTable[][], roomNum = 0;
@@ -47,13 +47,19 @@ public class Generator {
 	 * @return random level
 	 */
 	public Map newLevel() {
-		cc = new DisjointSet<>();
 		map = new Map(n, m);
+		
 
 		// 4 general steps to level generation
+		cc = new DisjointSet<>();
 		placeRooms();
+		ccOfRooms();
 		placeMaze();
+		
+		cc = new DisjointSet<>();
+		ccOfRooms();
 		removeDeadends();
+		// placeMaze();
 		plazeLoops();
 
 		return map;
@@ -100,19 +106,7 @@ public class Generator {
 			// insert room into memory
 			roomTable[roomNum] = new int[] { xStart, xLen, yStart, yLen };
 			roomNum++;
-
-			cc.makeSet(map.getCell(xStart, yStart));
-			for (int x = xStart; x < xStart + xLen; x += 2) {
-				for (int y = yStart; y < yStart + yLen; y += 2) {
-					if (x == xStart && y == yStart)
-						continue;
-
-					cc.makeSet(map.getCell(x, y));
-					cc.union(map.getCell(xStart, yStart), map.getCell(x, y));
-				}
-			}
 		}
-
 	}
 
 	/**
@@ -137,6 +131,26 @@ public class Generator {
 
 		// no collision -> valid placement
 		return true;
+	}
+
+	/**
+	 * internal function to create a connected component per room
+	 */
+	private void ccOfRooms() {
+		for (int i = 0; i < roomNum; i++) {
+			int xStart = roomTable[i][0], xLen = roomTable[i][1], yStart = roomTable[i][2], yLen = roomTable[i][3];
+
+			cc.makeSet(map.getCell(xStart, yStart));
+			for (int x = xStart; x < xStart + xLen; x += 2) {
+				for (int y = yStart; y < yStart + yLen; y += 2) {
+					if (x == xStart && y == yStart)
+						continue;
+
+					cc.makeSet(map.getCell(x, y));
+					cc.union(map.getCell(xStart, yStart), map.getCell(x, y));
+				}
+			}
+		}
 	}
 
 	/**
@@ -170,8 +184,9 @@ public class Generator {
 			final int x1 = e[0], y1 = e[1], x2 = e[2], y2 = e[3];
 
 			// check if two cells are already connected
-			if (cc.findSet(map.getCell(x1, y1)) == cc.findSet(map.getCell(x2, y2)))
+			if (cc.findSet(map.getCell(x1, y1)) == cc.findSet(map.getCell(x2, y2))) {
 				continue;
+			}
 
 			// merge two components by adding a connector
 			cc.union(map.getCell(x1, y1), map.getCell(x2, y2));
@@ -225,6 +240,6 @@ public class Generator {
 	 * internal function to create loops inside the map
 	 */
 	private void plazeLoops() {
-
+		// empty function for now
 	}
 }
