@@ -26,6 +26,13 @@ public class Main extends JFrame {
 
 	private Timer animate = new Timer("Animate");
 	private double time = 0.2;
+	
+	
+    public static final long secInNanosec = 1000000000L;
+    public static final long milisecInNanosec = 1000000L;
+    private final int GAME_FPS = 5;
+    private final long GAME_UPDATE_PERIOD = secInNanosec / GAME_FPS;
+    
 
 	public Main() {
 		// initializing frame
@@ -42,28 +49,47 @@ public class Main extends JFrame {
 		// set pane for graphics
 		contentPane.add(gui, BorderLayout.CENTER);
 		gui.setPreferredSize(new Dimension(1400, 900));
+		
 
 		// turn on animation
-		TimerTask task = new TimerTask() {
+		Thread task = new Thread() {
 			public void run() {
-				tick();
+				gameLoop();
 			}
 		};
 
-		gui.setRoom(cells);
-		animate = new Timer();
-		animate.scheduleAtFixedRate(task, 100, (long) (time * 1000));
+//		gui.setRoom(cells);
+		task.start();
+//		animate.scheduleAtFixedRate(task, 100, (long) (time * 1000));
 	}
 
-	private void tick() {
-		gui.setRoom(cells);
-		gui.revalidate();
-		gui.repaint();
-
-		// System.out.println(gui.getSize());
-
-		// automaton.tick();
-
+	private void gameLoop(){
+		
+		long beginTime, timeTaken, timeLeft;
+		while(true){
+			beginTime = System.nanoTime();
+			
+			System.out.println("here?");
+			
+			//repaint
+			gui.setRoom(cells);
+			gui.revalidate();
+			gui.repaint();
+			
+			
+			
+			timeTaken = System.nanoTime() - beginTime;
+            timeLeft = (GAME_UPDATE_PERIOD - timeTaken) / milisecInNanosec;
+            
+            if (timeLeft < 10) 
+                timeLeft = 10; //set a minimum
+            try {
+                 //Provides the necessary delay and also yields control so that other thread can do work.
+                 Thread.sleep(timeLeft);
+            } catch (InterruptedException ex) { }
+			
+		}
+		
 	}
 
 	public static void main(String[] args) {
