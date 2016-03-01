@@ -272,7 +272,7 @@ public class Generator {
 	 * internal function to create loops inside the map
 	 */
 	private void placeLoops() {
-		for (int i = 0; i < roomNum; i++) {
+		for (int i = 0; i < 20; i++) {
 			// declare variables
 			final int xStart = roomTable[i][0], xLen = roomTable[i][1], yStart = roomTable[i][2],
 					yLen = roomTable[i][3];
