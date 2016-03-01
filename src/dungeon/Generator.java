@@ -36,7 +36,6 @@ public class Generator {
 
 		// init pseudorandom generators
 		rand = new Random();
-		rand.setSeed(42);
 
 		// init room super array
 		roomTable = new int[ROOM_LIMIT][];
@@ -58,7 +57,7 @@ public class Generator {
 
 		cc = new DisjointSet<>();
 		placeLoops();
-//		placeMaze();
+		placeMaze2();
 		removeDeadends();
 
 		return map;
@@ -145,13 +144,6 @@ public class Generator {
 	}
 
 	/**
-	 * internal function to create a connected component per room
-	 */
-	private void ccOfRooms() {
-
-	}
-
-	/**
 	 * internal function to generate a maze around the rooms this is done by a
 	 * floodfill algorithm instead of some overengineering with MST
 	 */
@@ -175,8 +167,7 @@ public class Generator {
 		}
 
 		// choose connector in a random order
-//		Collections.shuffle(q);
-		noobShuffle(q);
+		Collections.shuffle(q);
 
 		for (int[] e : q) {
 			// rename array
@@ -193,16 +184,45 @@ public class Generator {
 		}
 	}
 
-	private void noobShuffle(ArrayList<int[]> q) {
-		int i = q.size(), j, temp[];
-		
-		while(i > 1) {
-			j = rand.nextInt(i);
-			i--;
+	private void placeMaze2() {
+		ArrayList<int[]> q = new ArrayList<>();
+
+		for (int i = 1; i < n; i += 2) {
+			for (int j = 1; j < m; j += 2) {
+				// fill in fixed cells on odd / odd coordinates
+				if (map.getGround(i, j) == WALL) {
+					map.setGround(i, j, DOOR);
+					cc.makeSet(map.getCell(i, j));
+				} else {
+					continue;
+				}
+
+				// queue neighbours when one corner is not a room
+				if (i + 2 < n && map.getGround(i + 1, j) != ROOM)
+					q.add(new int[] { i, j, i + 2, j });
+				if (j + 2 < m && map.getGround(i, j + 1) != ROOM)
+					q.add(new int[] { i, j, i, j + 2 });
+			}
+		}
+
+		// choose connector in a random order
+		Collections.shuffle(q);
+
+		for (int[] e : q) {
+			// rename array
+			final int x1 = e[0], y1 = e[1], x2 = e[2], y2 = e[3];
 			
-			temp = q.get(j);
-			q.set(j, q.get(i));
-			q.set(i, temp);
+			if (cc.findSet(map.getCell(x1, y1)) == null || cc.findSet(map.getCell(x2, y2)) == null)
+				continue;
+
+			// check if two cells are already connected
+			if (cc.findSet(map.getCell(x1, y1)) == cc.findSet(map.getCell(x2, y2))) {
+				continue;
+			}
+
+			// merge two components by adding a connector
+			cc.union(map.getCell(x1, y1), map.getCell(x2, y2));
+			map.setGround((x1 + x2) / 2, (y1 + y2) / 2, DOOR);
 		}
 	}
 
@@ -231,7 +251,7 @@ public class Generator {
 							count++;
 					}
 
-					if (count == 3) {
+					if (count >= 3) {
 						deadend[x][y] = true;
 						repeat = true;
 					}
@@ -252,8 +272,24 @@ public class Generator {
 	 * internal function to create loops inside the map
 	 */
 	private void placeLoops() {
-		// empty function for now
+		for (int i = 0; i < roomNum; i++) {
+			// declare variables
+			final int xStart = roomTable[i][0], xLen = roomTable[i][1], yStart = roomTable[i][2],
+					yLen = roomTable[i][3];
+
+			// create a connected component for each room
+			cc.makeSet(map.getCell(xStart, yStart));
+			for (int x = xStart; x < xStart + xLen; x += 2) {
+				for (int y = yStart; y < yStart + yLen; y += 2) {
+					if (x == xStart && y == yStart)
+						continue;
+
+					cc.makeSet(map.getCell(x, y));
+					cc.union(map.getCell(xStart, yStart), map.getCell(x, y));
+				}
+			}
+		}
+
 	}
-	
 
 }

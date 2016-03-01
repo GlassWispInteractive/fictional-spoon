@@ -1,8 +1,6 @@
 package dungeon;
 
 public class Cell {
-	@SuppressWarnings("unused")
-	private int x, y;
 	private Ground ground;
 	
 	/**
@@ -11,8 +9,6 @@ public class Cell {
 	 * @param y
 	 */
 	public Cell(int x, int y) {
-		this.x = x;
-		this.y = y;
 		this.ground = Ground.WALL;
 	}
 	
