@@ -87,7 +87,7 @@ public class Framework extends Canvas {
      */
     private void Initialize()
     {
-    	game = new Game();
+    	
     }
     
     /**

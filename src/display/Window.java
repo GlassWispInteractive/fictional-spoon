@@ -22,7 +22,7 @@ public class Window extends JFrame{
             // Disables decorations for this frame.
             this.setUndecorated(true);
             // Puts the frame to full screen.
-            this.setExtendedState(this.MAXIMIZED_BOTH);
+            this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         }
         else // Window mode
         {
