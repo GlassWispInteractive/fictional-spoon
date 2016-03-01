@@ -60,7 +60,7 @@ public class Generator {
 		ccOfRooms();
 		removeDeadends();
 		// placeMaze();
-		plazeLoops();
+		placeLoops();
 
 		return map;
 	}
@@ -239,7 +239,7 @@ public class Generator {
 	/**
 	 * internal function to create loops inside the map
 	 */
-	private void plazeLoops() {
+	private void placeLoops() {
 		// empty function for now
 	}
 }
