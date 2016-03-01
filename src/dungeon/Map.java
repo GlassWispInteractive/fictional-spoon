@@ -2,7 +2,18 @@ package dungeon;
 
 import static dungeon.Ground.*;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 public class Map {
+	
+	//drawing
+	final int offsetX = 0, offsetY = 0;
+	int fieldSize = 5, padding = 0, rectSize = fieldSize - padding;
+	private Color[] color = { Color.decode("#454545"), Color.decode("#A1D490"), Color.decode("#D4B790"),
+			Color.decode("#B39B7B"), Color.decode("#801B1B"), Color.decode("#000000") };
+	
+	
 	private Cell[][] map;
 	private int n, m;
 
@@ -90,6 +101,19 @@ public class Map {
 		for (int x = xStart; x < xStart + xLen; x++) {
 			for (int y = yStart; y < yStart + yLen; y++) {
 				map[x][y].setGround(ROOM);
+			}
+		}
+	}
+	
+	
+		
+	public void draw(Graphics2D g2){
+		for (int i = 0; i < this.getN(); i++) {
+			int x = offsetY + i * fieldSize;
+			for (int j = 0; j < this.getM(); j++) {
+				int y = offsetX + j * fieldSize;
+				g2.setColor(color[this.getGround(i, j).ordinal()]);
+				g2.fillRect(x, y, rectSize, rectSize);
 			}
 		}
 	}

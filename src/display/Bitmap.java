@@ -14,12 +14,7 @@ public class Bitmap extends JPanel {
 	// private CellularAutomaton automaton;
 	private Map map;
 
-	final int offsetX = 0, offsetY = 0;
-	int fieldSize = 5, padding = 0, rectSize = fieldSize - padding;
-
-	private Color[] color = { Color.decode("#454545"), Color.decode("#A1D490"), Color.decode("#D4B790"),
-			Color.decode("#B39B7B"), Color.decode("#801B1B"), Color.decode("#000000") };
-
+	
 	public void setRoom(Map map) {
 		this.map = map;
 	}
@@ -40,14 +35,7 @@ public class Bitmap extends JPanel {
 			return;
 		}
 
-		for (int i = 0; i < map.getN(); i++) {
-			int x = offsetY + i * fieldSize;
-			for (int j = 0; j < map.getM(); j++) {
-				int y = offsetX + j * fieldSize;
-				g2.setColor(color[map.getGround(i, j).ordinal()]);
-				g2.fillRect(x, y, rectSize, rectSize);
-			}
-		}
+		map.draw(g2);
 	}
 
 }
