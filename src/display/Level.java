@@ -13,7 +13,7 @@ public class Level {
 	//draw Map
 	private Map map;
 	
-	int offsetX = 65, offsetY = 30, viewSizeX = 139, viewSizeY = 86;
+	int offsetX = 0, offsetY = 30, viewSizeX = 139, viewSizeY = 86;
 	final int fieldSize = 10, padding = 0, rectSize = fieldSize - padding;
 	private Color[] color = { Color.decode("#454545"), Color.decode("#A1D490"), Color.decode("#D4B790"),
 			Color.decode("#B39B7B"), Color.decode("#801B1B"), Color.decode("#000000") };
@@ -45,11 +45,11 @@ public class Level {
 		if(this.offsetY < 0){
 			this.offsetY = 0;
 		}
-		if(this.offsetX >= map.getN()){
-			this.offsetX = map.getN() -1;
+		if(this.offsetX >= map.getN() - viewSizeX){
+			this.offsetX = map.getN() - viewSizeX;
 		}
-		if(this.offsetY >= map.getM()){
-			this.offsetY = map.getM() -1;
+		if(this.offsetY >= map.getM() - viewSizeY){
+			this.offsetY = map.getM() - viewSizeY;
 		}
 	}
 	
