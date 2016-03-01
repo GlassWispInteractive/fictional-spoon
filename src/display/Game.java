@@ -5,11 +5,6 @@ import java.awt.Graphics2D;
 import dungeon.Generator;
 import dungeon.Map;
 
-/**
- * Actual game.
- * 
- * @author www.gametutorial.net
- */
 
 public class Game {
 	
@@ -26,9 +21,9 @@ public class Game {
             @Override
             public void run(){
                 // Sets variables and objects for the game.
-                Initialize();
+                initialize();
                 // Load game files (images, sounds, ...)
-                LoadContent();
+                loadContent();
                 
                 Framework.gameState = Framework.GameState.PLAYING;
             }
@@ -40,7 +35,7 @@ public class Game {
    /**
      * Set variables and objects for the game.
      */
-    private void Initialize()
+    private void initialize()
     {
     	gen = new Generator(277, 173);
     	cells = gen.newLevel();
@@ -50,7 +45,7 @@ public class Game {
     /**
      * Load game files - images, sounds, ...
      */
-    private void LoadContent()
+    private void loadContent()
     {
     
     }    
@@ -59,7 +54,7 @@ public class Game {
     /**
      * Restart game - reset some variables.
      */
-    public void RestartGame()
+    public void restartGame()
     {
         
     }
@@ -70,7 +65,7 @@ public class Game {
      * 
      * @param gameTime gameTime of the game.
      */
-    public void UpdateGame(long gameTime)
+    public void updateGame(long gameTime)
     {
     	
     }
@@ -80,7 +75,7 @@ public class Game {
      * 
      * @param g2d Graphics2D
      */
-    public void Draw(Graphics2D g2d)
+    public void draw(Graphics2D g2d)
     {
 		if(level != null){
 			//level.drawCompleteMap(g2);

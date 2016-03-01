@@ -3,15 +3,12 @@ package display;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-/**
- * Creates frame and set its properties.
- * 
- * @author www.gametutorial.net
- */
 
 public class Window extends JFrame{
-        
-    private Window()
+	private static final long serialVersionUID = 1L;
+
+	@SuppressWarnings("unused")
+	private Window()
     {
         // Sets the title for this frame.
         this.setTitle("in my mind - there is a spoon");

@@ -11,11 +11,6 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
-/**
- * Create a JPanel on which we draw and listen for keyboard and mouse events.
- * 
- * @author www.gametutorial.net
- */
 
 public abstract class Canvas extends JPanel implements KeyListener{
 
@@ -25,7 +20,8 @@ public abstract class Canvas extends JPanel implements KeyListener{
     private static boolean[] keyboardState = new boolean[525];
         
 
-    public Canvas()
+    @SuppressWarnings("unused")
+	public Canvas()
     {
         // We use double buffer to draw on the screen.
         this.setDoubleBuffered(true);
@@ -47,14 +43,14 @@ public abstract class Canvas extends JPanel implements KeyListener{
     
     
     // This method is overridden in Framework.java and is used for drawing to the screen.
-    public abstract void Draw(Graphics2D g2d);
+    public abstract void draw(Graphics2D g2d);
     
     @Override
     public void paintComponent(Graphics g)
     {
         Graphics2D g2d = (Graphics2D)g;        
         super.paintComponent(g2d);        
-        Draw(g2d);
+        draw(g2d);
     }
        
     
