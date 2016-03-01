@@ -20,16 +20,15 @@ public class Main extends JFrame {
 	private static final long serialVersionUID = 0L;
 	private JPanel contentPane;
 
-	private Bitmap gui = new Bitmap();
+	private GameGui gui;
+	Level level;
 	private Generator gen = new Generator(277, 173);
 	private Map cells = gen.newLevel();
-
-	private Timer animate = new Timer("Animate");
-	private double time = 0.2;
 	
+	private static Dimension frameSize = new Dimension(1400, 900);
 	
-    public static final long secInNanosec = 1000000000L;
-    public static final long milisecInNanosec = 1000000L;
+    private static final long secInNanosec = 1000000000L;
+    private static final long milisecInNanosec = 1000000L;
     private final int GAME_FPS = 5;
     private final long GAME_UPDATE_PERIOD = secInNanosec / GAME_FPS;
     
@@ -37,6 +36,9 @@ public class Main extends JFrame {
 	public Main() {
 		// initializing frame
 		super("in my mind - there is a spoon");
+		
+		level = Level.getLevel(cells);
+		gui = new GameGui(level);
 
 		// basic layout with panes
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,7 +50,7 @@ public class Main extends JFrame {
 
 		// set pane for graphics
 		contentPane.add(gui, BorderLayout.CENTER);
-		gui.setPreferredSize(new Dimension(1400, 900));
+		gui.setPreferredSize(frameSize);
 		
 
 		// turn on animation
@@ -57,10 +59,7 @@ public class Main extends JFrame {
 				gameLoop();
 			}
 		};
-
-//		gui.setRoom(cells);
 		task.start();
-//		animate.scheduleAtFixedRate(task, 100, (long) (time * 1000));
 	}
 
 	private void gameLoop(){
@@ -69,14 +68,14 @@ public class Main extends JFrame {
 		while(true){
 			beginTime = System.nanoTime();
 			
-			System.out.println("here?");
+			
+			//update
+			
+			
 			
 			//repaint
-			gui.setRoom(cells);
 			gui.revalidate();
-			gui.repaint();
-			
-			
+			gui.repaint();			
 			
 			timeTaken = System.nanoTime() - beginTime;
             timeLeft = (GAME_UPDATE_PERIOD - timeTaken) / milisecInNanosec;
@@ -113,7 +112,7 @@ public class Main extends JFrame {
 					// initialize MainFrame
 					JFrame frame = new Main();
 					frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-					frame.setSize(1400, 900);
+					frame.setSize(frameSize);
 					frame.setResizable(false);
 					frame.setVisible(true);
 				} catch (Exception e) {
