@@ -67,7 +67,7 @@ public class Game {
      */
     public void updateGame(long gameTime)
     {
-    	
+    	level.changeCurrentView(1, 1);
     }
     
     /**
