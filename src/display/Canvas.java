@@ -1,14 +1,10 @@
 package display;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 
@@ -20,22 +16,12 @@ public abstract class Canvas extends JPanel implements KeyListener{
     private static boolean[] keyboardState = new boolean[525];
         
 
-    @SuppressWarnings("unused")
 	public Canvas()
     {
         // We use double buffer to draw on the screen.
         this.setDoubleBuffered(true);
         this.setFocusable(true);
         this.setBackground(Color.black);
-        
-        // If you will draw your own mouse cursor or if you just want that mouse cursor disapear, 
-        // insert "true" into if condition and mouse cursor will be removed.
-        if(false)
-        {
-            BufferedImage blankCursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-            Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(blankCursorImg, new Point(0, 0), null);
-            this.setCursor(blankCursor);
-        }
         
         // Adds the keyboard listener to JPanel to receive key events from this component.
         this.addKeyListener(this);

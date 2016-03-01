@@ -13,8 +13,9 @@ public class Level {
 	//draw Map
 	private Map map;
 	
-	int offsetX = 10, offsetY = 30, viewSizeX = 139, viewSizeY = 86;
-	final int fieldSize = 10, padding = 0, rectSize = fieldSize - padding;
+	final int fieldSize = 30, padding = 0, rectSize = fieldSize - padding;
+	int offsetX = 10, offsetY = 30, viewSizeX = 50, viewSizeY = 30;
+	
 	private Color[] color = { Color.decode("#454545"), Color.decode("#A1D490"), Color.decode("#D4B790"),
 			Color.decode("#B39B7B"), Color.decode("#801B1B"), Color.decode("#000000") };
 	
