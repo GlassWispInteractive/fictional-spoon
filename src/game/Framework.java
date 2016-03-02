@@ -1,4 +1,4 @@
-package display;
+package game;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -94,11 +94,6 @@ public class Framework extends Canvas {
 	 * updated and then the game is drawn on the screen.
 	 */
 	private void gameLoop() {
-		// This two variables are used in VISUALIZING state of the game. We used
-		// them to wait some time so that we get correct frame/window
-		// resolution.
-		long visualizingTime = 0, lastVisualizingTime = System.nanoTime();
-
 		// This variables are used for calculating the time that defines for how
 		// long we should put threat to sleep to meet the GAME_FPS.
 		long beginTime, timeTaken, timeLeft;
@@ -138,25 +133,12 @@ public class Framework extends Canvas {
 				newGame();
 				break;
 			case VISUALIZING:
-				// On Ubuntu OS (when I tested on my old computer)
-				// this.getWidth() method doesn't return the correct value
-				// immediately (eg. for frame that should be 800px width,
-				// returns 0 than 790 and at last 798px).
-				// So we wait one second for the window/frame to be set to its
-				// correct size. Just in case we
-				// also insert 'this.getWidth() > 1' condition in case when the
-				// window/frame size wasn't set in time,
-				// so that we although get approximately size.
-				if (this.getWidth() > 1 && visualizingTime > secInNanosec) {
-					frameWidth = this.getWidth();
-					frameHeight = this.getHeight();
+				frameWidth = this.getWidth();
+				frameHeight = this.getHeight();
 
-					// When we get size of frame we change status.
-					gameState = GameState.STARTING;
-				} else {
-					visualizingTime += System.nanoTime() - lastVisualizingTime;
-					lastVisualizingTime = System.nanoTime();
-				}
+				// When we get size of frame we change status.
+				gameState = GameState.STARTING;
+
 				break;
 			default:
 				System.out.println("ERROR");
