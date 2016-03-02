@@ -15,20 +15,20 @@ public class Game {
 
     public Game()
     {
-        Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
-        
-        Thread threadForInitGame = new Thread() {
-            @Override
-            public void run(){
-                // Sets variables and objects for the game.
-                initialize();
-                // Load game files (images, sounds, ...)
-                loadContent();
-                
-                Framework.gameState = Framework.GameState.PLAYING;
-            }
-        };
-        threadForInitGame.start();
+//        Framework.gameState = Framework.GameState.GAME_CONTENT_LOADING;
+//        
+//        Thread threadForInitGame = new Thread() {
+//            @Override
+//            public void run(){
+//                // Sets variables and objects for the game.
+//                initialize();
+//                // Load game files (images, sounds, ...)
+//                loadContent();
+//                
+//                Framework.gameState = Framework.GameState.PLAYING;
+//            }
+//        };
+//        threadForInitGame.start();
     }
     
     
