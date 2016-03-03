@@ -20,7 +20,7 @@ import static game.State.*;
 
 public class Window extends Application {
 	private Level level;
-	private State state = MAP;
+	private State state = MONEYBAD;
 	
 	
 	public static void main(String[] args) {
@@ -28,35 +28,29 @@ public class Window extends Application {
 	}
 
 	@Override
-	public void start(Stage theStage) {
+	public void start(Stage stage) {
     	level = Level.getLevel();
     	
-		theStage.setTitle("Fictional Spoon");
-		theStage.setResizable(false);
+		stage.setTitle("Fictional Spoon");
+		stage.setResizable(false);
 
 		Group root = new Group();
-		Scene theScene = new Scene(root);
-		theStage.setScene(theScene);
+		Scene scene = new Scene(root);
+		stage.setScene(scene);
 
 		Canvas canvas = new Canvas(1400, 900);
 		root.getChildren().add(canvas);
 
 		// key events
-		ArrayList<String> input = new ArrayList<String>();
-
-		theScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-				String code = e.getCode().toString();
-				if (!input.contains(code))
-					input.add(code);
+				Events.getEvents().addCode(e);
 			}
 		});
 
-		theScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-				String code = e.getCode().toString();
-				System.out.println(code);
-				input.remove(code);
+				Events.getEvents().removeCode(e);
 			}
 		});
 
@@ -83,31 +77,31 @@ public class Window extends Application {
 			moneybagList.add(moneybag);
 		}
 
-		new AnimationTimer() {
+		AnimationTimer gameloop = new AnimationTimer() {
 			private long lastNanoTime = System.nanoTime();
 			private int score = 0;
 
 			public void handle(long currentNanoTime) {
 				// calculate time since last update.
-				double elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
+				double elapsedTime = (currentNanoTime - lastNanoTime) / 1E9;
 				lastNanoTime = currentNanoTime;
 
 				// game logic
 
 				briefcase.setVelocity(0, 0);
-				if (input.contains("LEFT"))
+				Events e = Events.getEvents();
+				if (e.isLeft())
 					briefcase.addVelocity(-50, 0);
-				if (input.contains("RIGHT"))
+				if (e.isRight())
 					briefcase.addVelocity(50, 0);
-				if (input.contains("UP"))
+				if (e.isUp())
 					briefcase.addVelocity(0, -50);
-				if (input.contains("DOWN"))
+				if (e.isDown())
 					briefcase.addVelocity(0, 50);
 
 				briefcase.update(elapsedTime);
 
 				// collision detection
-
 				Iterator<Sprite> moneybagIter = moneybagList.iterator();
 				while (moneybagIter.hasNext()) {
 					Square moneybag = moneybagIter.next();
@@ -141,8 +135,9 @@ public class Window extends Application {
 					break;
 				}				
 			}
-		}.start();
-
-		theStage.show();
+		};
+		
+		gameloop.start();
+		stage.show();
 	}
 }
