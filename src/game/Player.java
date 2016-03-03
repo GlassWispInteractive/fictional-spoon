@@ -12,12 +12,10 @@ public class Player {
 	
 	private int currentPositionX = 0;
 	private int currentPositionY = 0;
-	private int speed = 2;
 	private Level level = Level.getLevel();
 	
 	private Image image;
-	private double width = 5;
-	private double height = 5;
+	private int fieldSizeMult = 5;
 	private int windowWidth = 1400;
 	private int windowHeight = 900;
 	
@@ -33,32 +31,32 @@ public class Player {
 		int newPositionY = currentPositionY;
 
 		if (e.isLeft()){
-			newPositionX -=speed;
+			newPositionX --;
 			if(newPositionX < 0){
 				newPositionX = 0;
 			}
 		}
 		if (e.isRight()){
-			newPositionX +=speed;
-			if(newPositionX > windowWidth - width){
-				newPositionX = (int) (windowWidth - width);
+			newPositionX ++;
+			if(newPositionX > windowWidth - fieldSizeMult){
+				newPositionX = (int) (windowWidth - fieldSizeMult);
 			}
 		}
 		if (e.isUp()){
-			newPositionY -=speed;
+			newPositionY --;
 			if(newPositionY < 0){
 				newPositionY = 0;
 			}
 		}
 		if (e.isDown()){
-			newPositionY +=speed;
-			if(newPositionY > windowHeight - height){
-				newPositionY = (int) (windowHeight - height);
+			newPositionY ++;
+			if(newPositionY > windowHeight - fieldSizeMult){
+				newPositionY = (int) (windowHeight - fieldSizeMult);
 			}
 		}
 		
 		Map map = level.getMap();
-		Ground newGround = map.getGround(newPositionX/5, newPositionY/5);
+		Ground newGround = map.getGround(newPositionX, newPositionY);
 		if(newGround == Ground.ROOM || newGround == Ground.FLOOR){
 			currentPositionX = newPositionX;
 			currentPositionY = newPositionY;
@@ -77,7 +75,7 @@ public class Player {
 	
 	public void render(GraphicsContext gc) {
 		gc.setFill(Color.RED);
-		gc.fillRect(currentPositionX, currentPositionY, width, height);
+		gc.fillRect(fieldSizeMult*currentPositionX, fieldSizeMult*currentPositionY, fieldSizeMult, fieldSizeMult);
 //		gc.drawImage(image, currentPositionX, currentPositionY);
 	}
 

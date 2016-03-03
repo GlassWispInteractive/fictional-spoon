@@ -15,7 +15,7 @@ public class Level {
 	final int padding = 0;
 	
 	final int fieldSizePlayerView = 10, rectSizePlayerView = fieldSizePlayerView - padding;
-	int offsetX = 65, offsetY = 30, viewSizeX = 140, viewSizeY = 90;
+	int offsetX = 5, offsetY = 5, viewSizeX = 140, viewSizeY = 90;
  
 
 

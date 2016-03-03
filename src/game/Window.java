@@ -61,7 +61,7 @@ public class Window extends Application {
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		player = new Player(70, 110);
+		player = new Player(15, 15);
 		
 		
 		gameloop = new AnimationTimer() {
