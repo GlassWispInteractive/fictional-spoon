@@ -1,7 +1,5 @@
 package game;
 
-import java.awt.Graphics2D;
-
 import dungeon.Generator;
 import dungeon.Map;
 import javafx.scene.canvas.GraphicsContext;
@@ -69,7 +67,7 @@ public class Level {
 		}
 	}
 
-	public void drawPlayerView(Graphics2D g2) {
+	public void renderPlayerView(GraphicsContext gc) {
 
 		for (int i = 0; i < viewSizeX; i++) {
 			int x = i * fieldSize;
@@ -79,9 +77,9 @@ public class Level {
 					System.out.println("ERROR, out of map   (in Level.drawPlayerView)");
 					return;
 				}
-				// g2.setColor(color[map.getGround(i + offsetX, j +
-				// offsetY).ordinal()]);
-				g2.fillRect(x, y, rectSize, rectSize);
+				
+				gc.setFill(color[map.getGround(i + offsetX, j + offsetY).ordinal()]);
+				gc.fillRect(x, y, rectSize, rectSize);
 			}
 		}
 	}

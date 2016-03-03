@@ -3,7 +3,6 @@ package game;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import dungeon.Generator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -17,8 +16,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import static game.State.*;
+
 public class Window extends Application {
 	private Level level;
+	private State state = MAP;
 	
 	
 	public static void main(String[] args) {
@@ -116,16 +118,26 @@ public class Window extends Application {
 				}
 
 				// render
-
 				gc.clearRect(0, 0, 1400, 900);
 				
-				level.renderMap(gc);
+				switch (state) {
+				case MENU:
+					break;
+				case MAP:
+					level.renderMap(gc);
+				case VIEW:
+					level.renderPlayerView(gc);
+					break;
+				}
+				
+//				level.renderMap(gc);
 //				briefcase.render(gc);
 //
 //				for (Square moneybag : moneybagList)
 //					moneybag.render(gc);
 
 				String pointsText = "Cash: $" + (100 * score);
+				gc.setFill(Color.ALICEBLUE);
 				gc.fillText(pointsText, 560, 36);
 				gc.strokeText(pointsText, 560, 36);
 			}
@@ -133,37 +145,4 @@ public class Window extends Application {
 
 		theStage.show();
 	}
-
-	// @SuppressWarnings("unused")
-	// private Window() {
-	// // Sets the title for this frame.
-	// this.setTitle("in my mind - there is a spoon");
-	//
-	// // Sets size of the frame.
-	// if (false) // Full screen mode
-	// {
-	// // Disables decorations for this frame.
-	// this.setUndecorated(true);
-	// // Puts the frame to full screen.
-	// this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-	// } else // Window mode
-	// {
-	// // Size of the frame.
-	// this.setSize(1400, 900);
-	// // Puts frame to center of the screen.
-	// this.setLocationRelativeTo(null);
-	// // So that frame cannot be resizable by the user.
-	// this.setResizable(false);
-	// }
-	//
-	// // Exit the application when user close frame.
-	// this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	//
-	// // Creates the instance of the Framework.java that extends the
-	// // Canvas.java and puts it on the frame.
-	// this.setContentPane(new Framework());
-	//
-	// this.setVisible(true);
-	// }
-
 }
