@@ -11,9 +11,16 @@ public class Level {
 	private static Level instance;
 
 	private Map map;
+	
+	final int padding = 0;
+	
+	final int fieldSizePlayerView = 10, rectSizePlayerView = fieldSizePlayerView - padding;
+	int offsetX = 65, offsetY = 30, viewSizeX = 140, viewSizeY = 90;
+ 
 
-	final int fieldSize = 5, padding = 0, rectSize = fieldSize - padding;
-	int offsetX = 10, offsetY = 30, viewSizeX = 50, viewSizeY = 30;
+
+	final int fieldSizeMapView = 5,  rectSizeMapView = fieldSizeMapView - padding;
+//	int offsetX = 10, offsetY = 30, viewSizeX = 50, viewSizeY = 30;
 
 	private Paint[] color = { Paint.valueOf("#454545"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
 			Paint.valueOf("#B39B7B"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
@@ -37,6 +44,9 @@ public class Level {
 	public void updateMap(Map newMap) {
 		this.map = newMap;
 	}
+	public Map getMap(){
+		return this.map;
+	}
 
 	public void changeCurrentView(int offsetChangeX, int offsetChangeY) {
 		this.offsetX += offsetChangeX;
@@ -58,12 +68,12 @@ public class Level {
 
 	public void renderMap(GraphicsContext gc) {
 		for (int i = 0; i < map.getN(); i++) {
-			int x = i * fieldSize;
+			int x = i * fieldSizeMapView;
 			for (int j = 0; j < map.getM(); j++) {
-				int y = j * fieldSize;
+				int y = j * fieldSizeMapView;
 
 				gc.setFill(color[map.getGround(i, j).ordinal()]);
-				gc.fillRect(x, y, rectSize, rectSize);
+				gc.fillRect(x, y, rectSizeMapView, rectSizeMapView);
 			}
 		}
 	}
@@ -71,16 +81,16 @@ public class Level {
 	public void renderPlayerView(GraphicsContext gc) {
 
 		for (int i = 0; i < viewSizeX; i++) {
-			int x = i * fieldSize;
+			int x = i * fieldSizePlayerView;
 			for (int j = 0; j < viewSizeY; j++) {
-				int y = j * fieldSize;
+				int y = j * fieldSizePlayerView;
 				if (i >= map.getN() || j >= map.getM()) {
 					System.out.println("ERROR, out of map   (in Level.drawPlayerView)");
 					return;
 				}
 
 				gc.setFill(color[map.getGround(i + offsetX, j + offsetY).ordinal()]);
-				gc.fillRect(x, y, rectSize, rectSize);
+				gc.fillRect(x, y, rectSizePlayerView, rectSizePlayerView);
 			}
 		}
 	}

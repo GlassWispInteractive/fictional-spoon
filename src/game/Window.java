@@ -71,6 +71,11 @@ public class Window extends Application {
 		Sprite briefcase = new Sprite();
 		briefcase.setImage("/resources/briefcase.png");
 		briefcase.setPosition(200, 0);
+		
+
+		Player player = new Player(70, 110);
+//		player.setImage("/resources/briefcase.png");
+		
 
 		ArrayList<Sprite> moneybagList = new ArrayList<Sprite>();
 
@@ -134,7 +139,9 @@ public class Window extends Application {
 					gc.strokeText(pointsText, 560, 36);
 					break;
 				case MAP:
+					player.updatePlayer(input);
 					level.renderMap(gc);
+					player.render(gc);
 					break;
 				case VIEW:
 					level.renderPlayerView(gc);
