@@ -31,8 +31,8 @@ public class Window extends Application {
 	public void start(Stage theStage) {
     	level = Level.getLevel();
     	
-    	
 		theStage.setTitle("Fictional Spoon");
+		theStage.setResizable(false);
 
 		Group root = new Group();
 		Scene theScene = new Scene(root);
