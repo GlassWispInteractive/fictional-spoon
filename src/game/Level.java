@@ -1,9 +1,10 @@
 package game;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 import dungeon.Map;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Paint;
 
 public class Level {
 	
@@ -13,11 +14,11 @@ public class Level {
 	//draw Map
 	private Map map;
 	
-	final int fieldSize = 30, padding = 0, rectSize = fieldSize - padding;
+	final int fieldSize = 5, padding = 0, rectSize = fieldSize - padding;
 	int offsetX = 10, offsetY = 30, viewSizeX = 50, viewSizeY = 30;
 	
-	private Color[] color = { Color.decode("#454545"), Color.decode("#A1D490"), Color.decode("#D4B790"),
-			Color.decode("#B39B7B"), Color.decode("#801B1B"), Color.decode("#000000") };
+	private Paint[] color = { Paint.valueOf("#454545"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
+			Paint.valueOf("#B39B7B"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
 	
 	
 	public static Level getLevel(Map initMap){
@@ -55,13 +56,14 @@ public class Level {
 	}
 	
 	
-	public void drawCompleteMap(Graphics2D g2){
+	public void renderMap(GraphicsContext gc){
 		for (int i = 0; i < map.getN(); i++) {
 			int x =  i * fieldSize;
 			for (int j = 0; j < map.getM(); j++) {
 				int y = j * fieldSize;
-				g2.setColor(color[map.getGround(i, j).ordinal()]);
-				g2.fillRect(x, y, rectSize, rectSize);
+				
+				gc.setFill(color[map.getGround(i, j).ordinal()]);
+				gc.fillRect(x, y, rectSize, rectSize);
 			}
 		}
 	}
@@ -76,7 +78,7 @@ public class Level {
 					System.out.println("ERROR, out of map   (in Level.drawPlayerView)");
 					return;
 				}
-				g2.setColor(color[map.getGround(i + offsetX, j + offsetY).ordinal()]);
+//				g2.setColor(color[map.getGround(i + offsetX, j + offsetY).ordinal()]);
 				g2.fillRect(x, y, rectSize, rectSize);
 			}
 		}

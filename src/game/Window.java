@@ -3,6 +3,8 @@ package game;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import dungeon.Generator;
+import dungeon.Map;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -17,12 +19,22 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class Window extends Application {
+	private Generator gen;
+	private Map cells;
+	private Level level;
+	
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	@Override
 	public void start(Stage theStage) {
+		gen = new Generator(277, 173);
+    	cells = gen.newLevel();
+    	level = Level.getLevel(cells);
+    	
+    	
 		theStage.setTitle("Fictional Spoon");
 
 		Group root = new Group();
@@ -111,10 +123,12 @@ public class Window extends Application {
 				// render
 
 				gc.clearRect(0, 0, 1400, 900);
-				briefcase.render(gc);
-
-				for (Square moneybag : moneybagList)
-					moneybag.render(gc);
+				
+				level.renderMap(gc);
+//				briefcase.render(gc);
+//
+//				for (Square moneybag : moneybagList)
+//					moneybag.render(gc);
 
 				String pointsText = "Cash: $" + (100 * score);
 				gc.fillText(pointsText, 560, 36);
