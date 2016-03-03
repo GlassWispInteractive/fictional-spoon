@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import dungeon.Generator;
-import dungeon.Map;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -19,8 +18,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class Window extends Application {
-	private Generator gen;
-	private Map cells;
 	private Level level;
 	
 	
@@ -30,9 +27,7 @@ public class Window extends Application {
 
 	@Override
 	public void start(Stage theStage) {
-		gen = new Generator(277, 173);
-    	cells = gen.newLevel();
-    	level = Level.getLevel(cells);
+    	level = Level.getLevel();
     	
     	
 		theStage.setTitle("Fictional Spoon");
