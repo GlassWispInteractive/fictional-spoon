@@ -1,6 +1,5 @@
 package game;
 
-import java.util.ArrayList;
 
 import dungeon.Ground;
 import dungeon.Map;
@@ -9,10 +8,11 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 public class Player {
+	private Events e = Events.getEvents();
 	
 	private int currentPositionX = 0;
 	private int currentPositionY = 0;
-	private int speed = 5;
+	private int speed = 2;
 	private Level level = Level.getLevel();
 	
 	private Image image;
@@ -27,30 +27,30 @@ public class Player {
 	}
 	
 	
-	public void updatePlayer(ArrayList<String> input){
+	public void tick(){
 		
 		int newPositionX = currentPositionX;
 		int newPositionY = currentPositionY;
 
-		if (input.contains("A")){
+		if (e.isLeft()){
 			newPositionX -=speed;
 			if(newPositionX < 0){
 				newPositionX = 0;
 			}
 		}
-		if (input.contains("D")){
+		if (e.isRight()){
 			newPositionX +=speed;
 			if(newPositionX > windowWidth - width){
 				newPositionX = (int) (windowWidth - width);
 			}
 		}
-		if (input.contains("W")){
+		if (e.isUp()){
 			newPositionY -=speed;
 			if(newPositionY < 0){
 				newPositionY = 0;
 			}
 		}
-		if (input.contains("S")){
+		if (e.isDown()){
 			newPositionY +=speed;
 			if(newPositionY > windowHeight - height){
 				newPositionY = (int) (windowHeight - height);
