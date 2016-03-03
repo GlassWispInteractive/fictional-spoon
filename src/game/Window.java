@@ -20,7 +20,7 @@ import static game.State.*;
 
 public class Window extends Application {
 	private Level level;
-	private State state = MONEYBAD;
+	private State state = MAP;
 	
 	
 	public static void main(String[] args) {
