@@ -29,18 +29,18 @@ public class Events {
 	}
 	
 	public boolean isLeft() {
-		return input.contains("LEFT");
+		return input.contains("LEFT") || input.contains("A");
 	}
 	
 	public boolean isRight() {
-		return input.contains("RIGHT");
+		return input.contains("RIGHT") || input.contains("D");
 	}
 	
 	public boolean isUp() {
-		return input.contains("UP");
+		return input.contains("UP") || input.contains("W");
 	}
 	
 	public boolean isDown() {
-		return input.contains("DOWN");
+		return input.contains("DOWN") || input.contains("S");
 	}
 }
