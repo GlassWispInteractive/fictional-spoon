@@ -8,16 +8,21 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import static game.State.*;
 
 public class Window extends Application {
+	// constants
+	private final int SIZE_X = 1400, SIZE_Y = 900;
+
+	// class members
 	private AnimationTimer gameloop;
 
-	private State state = MAP;
-	
+	private State state = VIEW;
+	private double blockTime = 0;
+
 	private Level level;
 	private Player player;
 
@@ -28,10 +33,11 @@ public class Window extends Application {
 	@Override
 	public void start(Stage stage) {
 		level = Level.getLevel();
+		player = new Player(15, 15);
 
 		// root objects
 		Group root = new Group();
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#454545"));
 
 		// main stage settings
 		stage.setScene(scene);
@@ -40,7 +46,8 @@ public class Window extends Application {
 
 		stage.setOnCloseRequest(event -> {
 			gameloop.stop();
-			System.out.println("game is saved");
+			// save game state here
+			// System.out.println("game is saved");
 		});
 
 		Canvas canvas = new Canvas(1400, 900);
@@ -61,30 +68,19 @@ public class Window extends Application {
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		player = new Player(15, 15);
-		
-		
 		gameloop = new AnimationTimer() {
-			final long tickDuration = 10;
-			
-			
 			private long lastNanoTime = System.nanoTime();
-			private long elapsedTime = tickDuration;
+			private double elapsedTime = 0;
 
 			public void handle(long currentNanoTime) {
-				
-				
 				// calculate time since last update.
-				elapsedTime += (currentNanoTime - lastNanoTime) / 1000000.0;
+				elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
 				lastNanoTime = currentNanoTime;
-				
-				if (elapsedTime < tickDuration) {
-					System.out.println(elapsedTime);
+
+				if (blockTime > 0) {
+					blockTime -= elapsedTime;
 					return;
 				}
-				
-				elapsedTime -= tickDuration;
-				
 
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
@@ -96,22 +92,24 @@ public class Window extends Application {
 					break;
 
 				case MAP:
-					
+
 					player.tick();
-					
+
 					level.renderMap(gc);
 					player.render(gc);
 					break;
 
 				case VIEW:
+					player.tick();
 					level.renderPlayerView(gc);
+					player.render(gc);
 					break;
 				}
-				
+
 				Events.getEvents().tick();
 			}
 		};
-		
+
 		stage.show();
 		gameloop.start();
 	}

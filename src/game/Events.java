@@ -29,6 +29,7 @@ public class Events {
 	public void removeCode(KeyEvent e) {
 		String code = e.getCode().toString();
 		delete.add(code);
+		input.remove(code); // remove later
 	}
 	
 	public void tick() {

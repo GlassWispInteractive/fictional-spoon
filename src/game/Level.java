@@ -15,11 +15,11 @@ public class Level {
 	final int padding = 0;
 	
 	final int fieldSizePlayerView = 10, rectSizePlayerView = fieldSizePlayerView - padding;
-	int offsetX = 5, offsetY = 5, viewSizeX = 140, viewSizeY = 90;
+	int offsetX = 10, offsetY = 10, viewSizeX = 140, viewSizeY = 90;
  
 
 
-	final int fieldSizeMapView = 5,  rectSizeMapView = fieldSizeMapView - padding;
+	final int fieldSizeMapView = 5;
 //	int offsetX = 10, offsetY = 30, viewSizeX = 50, viewSizeY = 30;
 
 	private Paint[] color = { Paint.valueOf("#454545"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
@@ -73,7 +73,7 @@ public class Level {
 				int y = j * fieldSizeMapView;
 
 				gc.setFill(color[map.getGround(i, j).ordinal()]);
-				gc.fillRect(x, y, rectSizeMapView, rectSizeMapView);
+				gc.fillRect(x, y, fieldSizeMapView, fieldSizeMapView);
 			}
 		}
 	}

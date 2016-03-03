@@ -45,13 +45,13 @@ public class Moneybag {
 		briefcase.setVelocity(0, 0);
 		Events e = Events.getEvents();
 		if (e.isLeft())
-			briefcase.addVelocity(-50, 0);
+			briefcase.setVelocity(-50, 0);
 		if (e.isRight())
-			briefcase.addVelocity(50, 0);
+			briefcase.setVelocity(50, 0);
 		if (e.isUp())
-			briefcase.addVelocity(0, -50);
+			briefcase.setVelocity(0, -50);
 		if (e.isDown())
-			briefcase.addVelocity(0, 50);
+			briefcase.setVelocity(0, 50);
 
 		briefcase.update(elapsedTime);
 
@@ -79,8 +79,8 @@ public class Moneybag {
 		for (Square moneybag : moneybagList)
 			moneybag.render(gc);
 
-		String pointsText = "Cash: $" + (100 * score);
 		gc.setFill(Color.ALICEBLUE);
+		String pointsText = "Cash: $" + (100 * score);
 		gc.fillText(pointsText, 560, 36);
 		gc.strokeText(pointsText, 560, 36);
 	}
