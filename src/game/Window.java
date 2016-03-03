@@ -1,6 +1,5 @@
 package game;
 
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
@@ -15,24 +14,32 @@ import javafx.stage.Stage;
 import static game.State.*;
 
 public class Window extends Application {
+	private AnimationTimer gameloop;
+
 	private Level level;
-	private State state = MONEYBAD;
-	
-	
+	private State state = MAP;
+
 	public static void main(String[] args) {
 		launch(args);
 	}
 
 	@Override
 	public void start(Stage stage) {
-    	level = Level.getLevel();
-    	
+		level = Level.getLevel();
+
+		// root objects
+		Group root = new Group();
+		Scene scene = new Scene(root);
+
+		// main stage settings
+		stage.setScene(scene);
 		stage.setTitle("Fictional Spoon");
 		stage.setResizable(false);
 
-		Group root = new Group();
-		Scene scene = new Scene(root);
-		stage.setScene(scene);
+		stage.setOnCloseRequest(event -> {
+			gameloop.stop();
+			System.out.println("game is saved");
+		});
 
 		Canvas canvas = new Canvas(1400, 900);
 		root.getChildren().add(canvas);
@@ -52,9 +59,7 @@ public class Window extends Application {
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		
-
-		AnimationTimer gameloop = new AnimationTimer() {
+		gameloop = new AnimationTimer() {
 			private long lastNanoTime = System.nanoTime();
 
 			public void handle(long currentNanoTime) {
@@ -64,25 +69,25 @@ public class Window extends Application {
 
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
-				
+
 				switch (state) {
 				case MONEYBAD:
 					Moneybag.getBag().tick(elapsedTime);
 					Moneybag.getBag().render(gc);
 					break;
-					
+
 				case MAP:
 					level.renderMap(gc);
 					break;
-					
+
 				case VIEW:
 					level.renderPlayerView(gc);
 					break;
-				}				
+				}
 			}
 		};
 		
-		gameloop.start();
 		stage.show();
+		gameloop.start();
 	}
 }
