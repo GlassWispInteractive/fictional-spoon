@@ -31,8 +31,8 @@ public class Generator {
 	 */
 	public Generator(int n, int m) {
 		// set size params
-		this.n = n;
-		this.m = m;
+		this.n = n - (n + 1) % 2;
+		this.m = m - (m + 1) % 2;
 
 		// init pseudorandom generators
 		rand = new Random();
