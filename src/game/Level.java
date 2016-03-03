@@ -12,7 +12,7 @@ public class Level {
 
 	private Map map;
 
-	final int fieldSize = 5, padding = 1, rectSize = fieldSize - padding;
+	final int fieldSize = 5, padding = 0, rectSize = fieldSize - padding;
 	int offsetX = 10, offsetY = 30, viewSizeX = 50, viewSizeY = 30;
 
 	private Paint[] color = { Paint.valueOf("#454545"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
