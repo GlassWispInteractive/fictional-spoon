@@ -135,6 +135,7 @@ public class Window extends Application {
 					break;
 				case MAP:
 					level.renderMap(gc);
+					break;
 				case VIEW:
 					level.renderPlayerView(gc);
 					break;
