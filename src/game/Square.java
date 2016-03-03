@@ -18,8 +18,8 @@ public class Square {
 		velocityY = 0;
 		
 		// constant size
-		width = 5;
-		height = 5;
+		width = 25;
+		height = 25;
 	}
 
 	public void setPosition(double x, double y) {

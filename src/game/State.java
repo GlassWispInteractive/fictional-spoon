@@ -1,7 +1,7 @@
 package game;
 
 public enum State {
-	MENU,
+	MONEYBAD,
 	MAP,
 	VIEW
 }

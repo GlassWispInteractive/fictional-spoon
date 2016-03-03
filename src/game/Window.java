@@ -20,7 +20,7 @@ import static game.State.*;
 
 public class Window extends Application {
 	private Level level;
-	private State state = MAP;
+	private State state = MONEYBAD;
 	
 	
 	public static void main(String[] args) {
@@ -72,11 +72,11 @@ public class Window extends Application {
 		briefcase.setImage("/resources/briefcase.png");
 		briefcase.setPosition(200, 0);
 
-		ArrayList<Square> moneybagList = new ArrayList<Square>();
+		ArrayList<Sprite> moneybagList = new ArrayList<Sprite>();
 
 		for (int i = 0; i < 15; i++) {
-			Square moneybag = new Square();
-//			moneybag.setImage("/resources/moneybag.png");
+			Sprite moneybag = new Sprite();
+			moneybag.setImage("/resources/moneybag.png");
 			double px = 350 * Math.random() + 50;
 			double py = 350 * Math.random() + 50;
 			moneybag.setPosition(px, py);
@@ -108,7 +108,7 @@ public class Window extends Application {
 
 				// collision detection
 
-				Iterator<Square> moneybagIter = moneybagList.iterator();
+				Iterator<Sprite> moneybagIter = moneybagList.iterator();
 				while (moneybagIter.hasNext()) {
 					Square moneybag = moneybagIter.next();
 					if (briefcase.intersects(moneybag)) {
@@ -121,25 +121,24 @@ public class Window extends Application {
 				gc.clearRect(0, 0, 1400, 900);
 				
 				switch (state) {
-				case MENU:
+				case MONEYBAD:
+					briefcase.render(gc);
+					
+					gc.setFill(Color.CADETBLUE);
+					for (Square moneybag : moneybagList)
+						moneybag.render(gc);
+					
+					String pointsText = "Cash: $" + (100 * score);
+					gc.setFill(Color.ALICEBLUE);
+					gc.fillText(pointsText, 560, 36);
+					gc.strokeText(pointsText, 560, 36);
 					break;
 				case MAP:
 					level.renderMap(gc);
 				case VIEW:
 					level.renderPlayerView(gc);
 					break;
-				}
-				
-//				level.renderMap(gc);
-//				briefcase.render(gc);
-//
-//				for (Square moneybag : moneybagList)
-//					moneybag.render(gc);
-
-				String pointsText = "Cash: $" + (100 * score);
-				gc.setFill(Color.ALICEBLUE);
-				gc.fillText(pointsText, 560, 36);
-				gc.strokeText(pointsText, 560, 36);
+				}				
 			}
 		}.start();
 
