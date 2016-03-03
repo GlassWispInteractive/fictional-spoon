@@ -65,12 +65,26 @@ public class Window extends Application {
 		
 		
 		gameloop = new AnimationTimer() {
+			final long tickDuration = 10;
+			
+			
 			private long lastNanoTime = System.nanoTime();
+			private long elapsedTime = tickDuration;
 
 			public void handle(long currentNanoTime) {
+				
+				
 				// calculate time since last update.
-				double elapsedTime = (currentNanoTime - lastNanoTime) / 1E9;
+				elapsedTime += (currentNanoTime - lastNanoTime) / 1000000.0;
 				lastNanoTime = currentNanoTime;
+				
+				if (elapsedTime < tickDuration) {
+					System.out.println(elapsedTime);
+					return;
+				}
+				
+				elapsedTime -= tickDuration;
+				
 
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
@@ -93,6 +107,8 @@ public class Window extends Application {
 					level.renderPlayerView(gc);
 					break;
 				}
+				
+				Events.getEvents().tick();
 			}
 		};
 		
