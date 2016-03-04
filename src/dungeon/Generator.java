@@ -31,11 +31,12 @@ public class Generator {
 	 */
 	public Generator(int n, int m) {
 		// set size params
-		this.n = n;
-		this.m = m;
+		this.n = n - (n + 1) % 2;
+		this.m = m - (m + 1) % 2;
 
 		// init pseudorandom generators
 		rand = new Random();
+		rand.setSeed(42);
 
 		// init room super array
 		roomTable = new int[ROOM_LIMIT][];
@@ -167,7 +168,7 @@ public class Generator {
 		}
 
 		// choose connector in a random order
-		Collections.shuffle(q);
+		noobShuffle(q);
 
 		for (int[] e : q) {
 			// rename array
@@ -257,7 +258,7 @@ public class Generator {
 				if (map.getGround(xStart + xLen, yStart + y) == FLOOR)
 					count++;
 			}
-			
+
 			if (count > 1) {
 				continue;
 			}
@@ -275,6 +276,19 @@ public class Generator {
 			}
 		}
 
+	}
+
+	private void noobShuffle(ArrayList<int[]> q) {
+		int i = q.size(), j, temp[];
+
+		while (i > 1) {
+			j = rand.nextInt(i);
+			i--;
+
+			temp = q.get(j);
+			q.set(j, q.get(i));
+			q.set(i, temp);
+		}
 	}
 
 }

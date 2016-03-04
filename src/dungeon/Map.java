@@ -24,37 +24,45 @@ public class Map {
 			}
 		}
 	}
-	
+
 	/**
 	 * getter method for length n
+	 * 
 	 * @return n
 	 */
 	public int getN() {
 		return n;
 	}
-	
+
 	/**
 	 * getter method for length m
+	 * 
 	 * @return m
 	 */
 	public int getM() {
 		return m;
 	}
-	
+
 	/**
 	 * setter method for cell
-	 * @param x coordinate
-	 * @param y coordinate
+	 * 
+	 * @param x
+	 *            coordinate
+	 * @param y
+	 *            coordinate
 	 * @return
 	 */
 	public Cell getCell(int x, int y) {
 		return map[x][y];
 	}
-	
+
 	/**
 	 * getther method for ground state
-	 * @param x coordinate
-	 * @param y coordinate
+	 * 
+	 * @param x
+	 *            coordinate
+	 * @param y
+	 *            coordinate
 	 * @return
 	 */
 	public Ground getGround(int x, int y) {
@@ -64,9 +72,10 @@ public class Map {
 
 		return map[x][y].getGround();
 	}
-	
+
 	/**
 	 * setter method for ground state
+	 * 
 	 * @param x
 	 * @param y
 	 * @param ground
@@ -78,9 +87,10 @@ public class Map {
 
 		map[x][y].setGround(ground);
 	}
-	
+
 	/**
 	 * setter method for a new room on the map object
+	 * 
 	 * @param xStart
 	 * @param xLen
 	 * @param yStart
@@ -92,6 +102,10 @@ public class Map {
 				map[x][y].setGround(ROOM);
 			}
 		}
+	}
+
+	public boolean isWalkable(int x, int y) {
+		return getGround(x, y) != WALL && getGround(x, y) != ERROR;
 	}
 
 }
