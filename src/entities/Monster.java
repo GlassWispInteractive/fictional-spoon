@@ -30,7 +30,6 @@ public class Monster extends Entity {
 				max = this.power[i];
 			}
 		}
-		System.out.println(name + "maxType"+maxType);
 	}
 
 	@Override
@@ -44,7 +43,11 @@ public class Monster extends Entity {
 
 	@Override
 	public void tick(double elapsedTime) {
-
+		//check intersection
+		EntityFactory fac = EntityFactory.getFactory();
+		if(x == fac.getPlayer().getX() && y == fac.getPlayer().getY()){
+			fac.deleteEntity(this);
+		}
 
 		
 	}

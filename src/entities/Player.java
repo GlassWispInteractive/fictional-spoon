@@ -70,21 +70,6 @@ public class Player extends Entity {
 			y = newY;
 			
 			World.getWorld().changeCurrentView(x, y);
-		}
-		
-		checkIntersect();
-		
+		}		
 	}
-	
-	private void checkIntersect(){
-		//intersects entities
-		EntityFactory fac = EntityFactory.getFactory();
-		for (Entity mob : fac.getMobs()) {
-			if(x == mob.getX() && y == mob.getY()){
-				fac.deleteEntity(mob);
-				break;
-			}
-		}
-	}
-
 }
