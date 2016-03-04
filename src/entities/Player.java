@@ -1,6 +1,7 @@
 package entities;
 
 import dungeon.Ground;
+import dungeon.Map;
 import game.Events;
 import game.World;
 import javafx.scene.canvas.GraphicsContext;
@@ -54,9 +55,9 @@ public class Player extends Entity {
 			moved = true;
 		}
 
-		Ground newGround = World.getWorld().getMap().getGround(newX, newY);
+		Map map = World.getWorld().getMap();
 
-		if (moved && (newGround == Ground.ROOM || newGround == Ground.FLOOR)) {
+		if (moved && map.isWalkable(newX, newY)) {
 						
 			x = newX;
 			y = newY;
