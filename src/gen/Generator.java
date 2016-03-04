@@ -5,8 +5,6 @@ import static gen.environment.Ground.*;
 import java.util.*;
 
 import entities.EntityFactory;
-import entities.Player;
-import game.World;
 import gen.environment.Cell;
 import gen.environment.DisjointSet;
 import gen.environment.Map;
@@ -28,7 +26,6 @@ public class Generator {
 	private int roomTable[][], roomNum = 0;
 
 	// constants
-
 	final int ROOM_LIMIT = 300;
 	final int[][] neighsAll = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 	final int[][] neighsOdd = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
@@ -310,9 +307,9 @@ public class Generator {
 		int x, y, room[] = roomTable[0];
 		x = room[0] + rand.nextInt(room[1]);
 		y = room[2] + rand.nextInt(room[3]);
-		
+
 		fac.makePlayer(x, y);
-		
+
 		// System.out.println("" + Arrays.toString(room) + " " + x + " " + y);
 		//
 		// for (int k = room[0]; k < room[0] + room[2]; k++) {

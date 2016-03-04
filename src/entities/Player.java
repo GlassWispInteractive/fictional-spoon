@@ -2,15 +2,14 @@ package entities;
 
 import game.Events;
 import game.World;
-import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Player extends Entity {
-	
+
 	private int blocked = 0;
-	
+
 	public Player(int x, int y) {
 		super(x, y);
 		// TODO Auto-generated constructor stub
@@ -39,8 +38,8 @@ public class Player extends Entity {
 		Events e = Events.getEvents();
 		int newX = x, newY = y;
 		boolean moved = false;
-		
-		if(blocked >= 0){
+
+		if (blocked >= 0) {
 			blocked--;
 		}
 
@@ -64,16 +63,15 @@ public class Player extends Entity {
 		Map map = World.getWorld().getMap();
 
 		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
-			
+
 			blocked = speed - 1;
-						
+
 			x = newX;
 			y = newY;
-			
+
 			World.getWorld().changeCurrentView(x, y);
 		}
-		
-		
+
 	}
 
 }

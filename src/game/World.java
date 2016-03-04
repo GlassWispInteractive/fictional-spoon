@@ -2,7 +2,6 @@ package game;
 
 import entities.Entity;
 import entities.EntityFactory;
-import entities.Player;
 import gen.Generator;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
@@ -61,7 +60,6 @@ public class World {
 	}
 
 	public void changeState(State state) {
-
 		this.state = state;
 
 		switch (this.state) {
