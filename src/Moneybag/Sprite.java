@@ -1,4 +1,4 @@
-package Moneybag;
+package moneybag;
 
 import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
