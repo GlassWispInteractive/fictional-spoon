@@ -40,7 +40,7 @@ public class Generator {
 
 		// init pseudorandom generators
 		rand = new Random();
-//		rand.setSeed(42);
+		// rand.setSeed(42);
 
 		// init room super array
 		roomTable = new int[ROOM_LIMIT][];
@@ -330,11 +330,14 @@ public class Generator {
 			// declare variables
 			final int xStart = roomTable[i][0], xLen = roomTable[i][1], yStart = roomTable[i][2],
 					yLen = roomTable[i][3];
+			
+//			generate possible 
+			int points[][] = new int[xLen * yLen][];
 
 			// create a monster
 			x = rand.nextInt(xLen);
 			y = rand.nextInt(yLen);
-			fac.makeMonster(xStart + x, yStart + y, 0, 0, new int[]{0, 0, 0, 0, 0}, "name");
+			fac.makeMonster(xStart + x, yStart + y, 0, 0, new int[] { 0, 0, 0, 0, 0 }, "name");
 
 			// create a chest every 3 rooms
 			if (i % 3 == 0) {
