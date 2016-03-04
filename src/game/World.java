@@ -41,8 +41,7 @@ public class World {
 		fac = EntityFactory.getFactory();
 
 		changeState(state);
-		Player player = fac.makePlayer(307, 10);
-		setCurrentView(player.getX(), player.getY());
+		setCurrentView(307, 10);
 		// setCurrentView(307, 10);
 	}
 

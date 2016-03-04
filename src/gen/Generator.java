@@ -5,6 +5,7 @@ import static gen.environment.Ground.*;
 import java.util.*;
 
 import entities.EntityFactory;
+import entities.Player;
 import game.World;
 import gen.environment.Cell;
 import gen.environment.DisjointSet;
@@ -309,6 +310,9 @@ public class Generator {
 		int x, y, room[] = roomTable[0];
 		x = room[0] + rand.nextInt(room[1]);
 		y = room[2] + rand.nextInt(room[3]);
+		
+		fac.makePlayer(x, y);
+		
 		// System.out.println("" + Arrays.toString(room) + " " + x + " " + y);
 		//
 		// for (int k = room[0]; k < room[0] + room[2]; k++) {
