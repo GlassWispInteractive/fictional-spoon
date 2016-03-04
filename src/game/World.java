@@ -89,13 +89,28 @@ public class World {
 		
 		checkOffset(this.offsetX, this.offsetY);
 	}
-
-	public void changeCurrentView(int offsetChangeX, int offsetChangeY) {
-		this.offsetX += offsetChangeX;
-		this.offsetY += offsetChangeY;
+	
+	public void changeCurrentView(int centerX, int centerY) {
+		
+		int viewPaddingX = viewSizeX / 5; //20%
+		int viewPaddingY = viewSizeY / 5;
+		
+		if(centerX - viewPaddingX < offsetX ){
+			this.offsetX = centerX - viewPaddingX;
+		}
+		if(centerX + viewPaddingX - viewSizeX > offsetX){
+			offsetX = centerX + viewPaddingX - viewSizeX;
+		}
+		if(centerY - viewPaddingY < offsetY ){
+			this.offsetY = centerY - viewPaddingY;
+		}
+		if(centerY + viewPaddingY - viewSizeY > offsetY){
+			offsetY = centerY + viewPaddingY - viewSizeY;
+		}
 		
 		checkOffset(this.offsetX, this.offsetY);
 	}
+
 	private void checkOffset(int offsetX, int offsetY){
 		if (this.offsetX < 0) {
 			this.offsetX = 0;

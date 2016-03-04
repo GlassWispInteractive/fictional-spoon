@@ -53,7 +53,7 @@ public class Player extends Entity {
 
 		if (newGround == Ground.ROOM || newGround == Ground.FLOOR) {
 			
-			World.getWorld().changeCurrentView(newX - x, newY - y);
+			World.getWorld().changeCurrentView(x, y);
 			
 			x = newX;
 			y = newY;
