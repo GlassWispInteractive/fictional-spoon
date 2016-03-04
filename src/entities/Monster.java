@@ -12,6 +12,7 @@ public class Monster extends Entity {
 			Paint.valueOf("GRAY"), Paint.valueOf("PINK")};
 	private int maxType = -1;
 	private String name;
+	private boolean monsterDead = false;
 
 	public Monster(int x, int y, int hp, int mp, int[]power, String name) {
 		super(x, y);
@@ -30,13 +31,18 @@ public class Monster extends Entity {
 				max = this.power[i];
 			}
 		}
-		System.out.println(name + "maxType"+maxType);
 	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		gc.setFill(Paint.valueOf("BLACK"));
-		gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size - 2);
+		
+		if(monsterDead){
+			gc.setFill(Paint.valueOf("BLACK"));
+			gc.fillOval((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size - 2);
+		}else{
+			gc.setFill(Paint.valueOf("BLACK"));
+			gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size - 2);
+		}
 		
 		gc.setFill(color[maxType]);
 		gc.fillRect((x - offsetX) * size +4, (y - offsetY) * size +4, size - 8, size - 8);
@@ -44,7 +50,11 @@ public class Monster extends Entity {
 
 	@Override
 	public void tick(double elapsedTime) {
-
+		//check intersection
+		EntityFactory fac = EntityFactory.getFactory();
+		if(x == fac.getPlayer().getX() && y == fac.getPlayer().getY()){
+			monsterDead = true;
+		}
 
 		
 	}

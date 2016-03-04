@@ -138,6 +138,7 @@ public class World {
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(el);
 		}
+		fac.smartDeletNow();
 	}
 
 	public void render(GraphicsContext gc) {

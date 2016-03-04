@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class EntityFactory {
 	private static EntityFactory singleton;
 	private ArrayList<Entity> ents;
+	private ArrayList<Entity> deletEnts;
 	private Entity player;
 
 	/**
@@ -18,6 +19,7 @@ public class EntityFactory {
 	 */
 	private EntityFactory() {
 		ents = new ArrayList<Entity>();
+		deletEnts = new ArrayList<Entity>();
 	}
 
 	/**
@@ -40,7 +42,13 @@ public class EntityFactory {
 		return player;
 	}
 	public void deleteEntity(Entity ent){
-		ents.remove(ent);
+		deletEnts.add(ent);
+	}
+	public void smartDeletNow(){
+		for(Entity ent : deletEnts){
+			ents.remove(ent);
+		}
+		deletEnts.clear();
 	}
 
 	public Player makePlayer(int x, int y) {
