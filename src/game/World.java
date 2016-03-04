@@ -96,33 +96,33 @@ public class World {
 		int viewPaddingY = viewSizeY / 5;
 		
 		if(centerX - viewPaddingX < offsetX ){
-			this.offsetX = centerX - viewPaddingX;
+			offsetX = centerX - viewPaddingX;
 		}
 		if(centerX + viewPaddingX - viewSizeX > offsetX){
 			offsetX = centerX + viewPaddingX - viewSizeX;
 		}
 		if(centerY - viewPaddingY < offsetY ){
-			this.offsetY = centerY - viewPaddingY;
+			offsetY = centerY - viewPaddingY;
 		}
 		if(centerY + viewPaddingY - viewSizeY > offsetY){
 			offsetY = centerY + viewPaddingY - viewSizeY;
 		}
 		
-		checkOffset(this.offsetX, this.offsetY);
+		checkOffset(offsetX, offsetY);
 	}
 
 	private void checkOffset(int offsetX, int offsetY){
-		if (this.offsetX < 0) {
-			this.offsetX = 0;
+		if (offsetX < 0) {
+			offsetX = 0;
 		}
-		if (this.offsetY < 0) {
-			this.offsetY = 0;
+		if (offsetY < 0) {
+			offsetY = 0;
 		}
-		if (this.offsetX >= map.getN() - viewSizeX) {
-			this.offsetX = map.getN() - viewSizeX;
+		if (offsetX >= map.getN() - viewSizeX) {
+			offsetX = map.getN() - viewSizeX;
 		}
-		if (this.offsetY >= map.getM() - viewSizeY) {
-			this.offsetY = map.getM() - viewSizeY;
+		if (offsetY >= map.getM() - viewSizeY) {
+			offsetY = map.getM() - viewSizeY;
 		}
 	}
 	

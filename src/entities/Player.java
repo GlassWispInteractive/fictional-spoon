@@ -35,28 +35,33 @@ public class Player extends Entity {
 	public void tick(double elapsedTime) {
 		Events e = Events.getEvents();
 		int newX = x, newY = y;
+		boolean moved = false;
 
 		if (e.isLeft()) {
 			newX--;
+			moved = true;
 		}
 		if (e.isRight()) {
 			newX++;
+			moved = true;
 		}
 		if (e.isUp()) {
 			newY--;
+			moved = true;
 		}
 		if (e.isDown()) {
 			newY++;
+			moved = true;
 		}
 
 		Ground newGround = World.getWorld().getMap().getGround(newX, newY);
 
-		if (newGround == Ground.ROOM || newGround == Ground.FLOOR) {
-			
-			World.getWorld().changeCurrentView(x, y);
-			
+		if (moved && (newGround == Ground.ROOM || newGround == Ground.FLOOR)) {
+						
 			x = newX;
 			y = newY;
+			
+			World.getWorld().changeCurrentView(x, y);
 		}
 	}
 
