@@ -5,11 +5,12 @@ import javafx.scene.input.KeyEvent;
 
 public class Events {
 	private static Events instance;
-	private ArrayList<String> input, delete;
+	private ArrayList<String> input;
+	// private ArrayList<String> delete;
 
 	private Events() {
 		input = new ArrayList<String>();
-		delete = new ArrayList<String>();
+		// delete = new ArrayList<String>();
 	}
 
 	public static Events getEvents() {
@@ -28,15 +29,19 @@ public class Events {
 
 	public void removeCode(KeyEvent e) {
 		String code = e.getCode().toString();
-		delete.add(code);
-		input.remove(code); // remove later
+		// delete.add(code); // remove later
+		input.remove(code);
 	}
 	
-	public void tick() {
-		for (String s : delete) {
-			input.remove(s);
-		}
+	public void clear() {
+		input.clear();
 	}
+
+	// public void tick() {
+	// for (String s : delete) {
+	// input.remove(s);
+	// }
+	// }
 
 	public boolean isLeft() {
 		return input.contains("LEFT") || input.contains("A");

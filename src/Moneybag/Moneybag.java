@@ -1,8 +1,9 @@
-package game;
+package Moneybag;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import game.Events;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;

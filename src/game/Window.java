@@ -13,6 +13,8 @@ import javafx.stage.Stage;
 
 import static game.State.*;
 
+import Moneybag.Moneybag;
+
 public class Window extends Application {
 	// constants
 	private final int SIZE_X = 1400, SIZE_Y = 900;
@@ -20,11 +22,12 @@ public class Window extends Application {
 	// class members
 	private AnimationTimer gameloop;
 
-	private State state = VIEW;
+	private State state = MENU;
+	
+	
 	private double blockTime = 0;
-
-	private Level level;
-	private Player player;
+	
+	private World lvl;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -32,8 +35,8 @@ public class Window extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		level = Level.getLevel();
-		player = new Player(15, 15);
+		lvl = World.getWorld();
+		Menu.getMenu().setList(new String[]{"Start", "Reset", "Help", "Credits", "Exit"});
 
 		// root objects
 		Group root = new Group();
@@ -86,27 +89,25 @@ public class Window extends Application {
 				gc.clearRect(0, 0, 1400, 900);
 
 				switch (state) {
-				case MONEYBAD:
+				case MENU:
+					Menu.getMenu().tick(elapsedTime);
+					Menu.getMenu().render(gc);
+					break;
+					
+				case MONEYBAG:
 					Moneybag.getBag().tick(elapsedTime);
 					Moneybag.getBag().render(gc);
 					break;
 
 				case MAP:
-
-					player.tick();
-
-					level.renderMap(gc);
-					player.render(gc);
+					lvl.tick(elapsedTime);
+					lvl.render(gc);
 					break;
 
 				case VIEW:
-					player.tick();
-					level.renderPlayerView(gc);
-					player.render(gc);
+					lvl.renderPlayerView(gc);
 					break;
 				}
-
-				Events.getEvents().tick();
 			}
 		};
 

@@ -1,9 +1,11 @@
-package game;
+package Moneybag;
 
-import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.geometry.Rectangle2D;
 
-public class Square {
+public class Sprite extends Square {
+	private Image image;
 	private double positionX;
 	private double positionY;
 	private double velocityX;
@@ -11,15 +13,22 @@ public class Square {
 	private double width;
 	private double height;
 
-	public Square() {
+	public Sprite() {
 		positionX = 0;
 		positionY = 0;
 		velocityX = 0;
 		velocityY = 0;
-		
-		// constant size
-		width = 25;
-		height = 25;
+	}
+
+	public void setImage(Image i) {
+		image = i;
+		width = i.getWidth();
+		height = i.getHeight();
+	}
+
+	public void setImage(String filename) {
+		Image i = new Image(filename);
+		setImage(i);
 	}
 
 	public void setPosition(double x, double y) {
@@ -43,18 +52,10 @@ public class Square {
 	}
 
 	public void render(GraphicsContext gc) {
-		gc.fillRect(positionX, positionY, width, height);
+		gc.drawImage(image, positionX, positionY);
 	}
 
 	public Rectangle2D getBoundary() {
 		return new Rectangle2D(positionX, positionY, width, height);
-	}
-
-	public boolean intersects(Square s) {
-		return s.getBoundary().intersects(this.getBoundary());
-	}
-
-	public String toString() {
-		return " Position: [" + positionX + "," + positionY + "]" + " Velocity: [" + velocityX + "," + velocityY + "]";
 	}
 }
