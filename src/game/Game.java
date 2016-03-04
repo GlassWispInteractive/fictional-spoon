@@ -2,9 +2,18 @@ package game;
 
 import static game.State.*;
 
+import gen.environment.Ground;
+import javafx.scene.paint.Paint;
+
 public class Game {
 	private static Game singleton;
+	
+//	game state
 	private State state;
+	
+//	static colors
+	private static Paint[] groundColor = { Paint.valueOf("#454545"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
+			Paint.valueOf("#B39B7B"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
 
 	private Game() {
 		state = MENU;
@@ -36,4 +45,10 @@ public class Game {
 	public boolean isMenu() {
 		return state == MENU;
 	}
+	
+	
+	public static Paint getColor(Ground ground) {
+	     return groundColor[ground.ordinal()];
+	}
+	
 }

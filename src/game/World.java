@@ -24,8 +24,7 @@ public class World {
 	private int size = 5;
 	private int offsetX, offsetY, viewSizeX, viewSizeY;
 
-	private Paint[] color = { Paint.valueOf("#454545"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
-			Paint.valueOf("#B39B7B"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
+
 
 	public static World getWorld() {
 		if (singleton == null) {
@@ -64,7 +63,7 @@ public class World {
 		// set color and render ground tile
 		for (int x = 0; x < viewSizeX; x++) {
 			for (int y = 0; y < viewSizeY; y++) {
-				gc.setFill(color[map.getGround(x + offsetX, y + offsetY).ordinal()]);
+				gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
 				gc.fillRect(x * size, y * size, size, size);
 			}
 		}
