@@ -46,6 +46,7 @@ public class World {
 		fac.makePlayer(80, 70);
 		fac.makeChest(81, 71);
 		fac.makeShrine(81, 65);
+		fac.makeMonster(79, 71);
 		setCurrentView(player.getX(), player.getY());
 	}
 
