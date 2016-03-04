@@ -87,7 +87,7 @@ public class World {
 		this.offsetX = centerX - viewSizeX/2;
 		this.offsetY = centerY - viewSizeY/2;
 		
-		checkOffset(this.offsetX, this.offsetY);
+		checkOffset();
 	}
 	
 	public void changeCurrentView(int centerX, int centerY) {
@@ -108,10 +108,10 @@ public class World {
 			offsetY = centerY + viewPaddingY - viewSizeY;
 		}
 		
-		checkOffset(offsetX, offsetY);
+		checkOffset();
 	}
 
-	private void checkOffset(int offsetX, int offsetY){
+	private void checkOffset(){
 		if (offsetX < 0) {
 			offsetX = 0;
 		}
