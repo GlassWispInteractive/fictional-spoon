@@ -10,7 +10,7 @@ public class Chest extends Entity {
 	}
 
 	@Override
-	public void render(GraphicsContext gc, int size) {
+	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 		// TODO Auto-generated method stub
 		
 	}

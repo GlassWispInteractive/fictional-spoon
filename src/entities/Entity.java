@@ -21,7 +21,7 @@ public abstract class Entity {
 	 * 
 	 * @param GraphicsContext
 	 */
-	public abstract void render(GraphicsContext gc, int size);
+	public abstract void render(GraphicsContext gc, int size, int offsetX, int offsetY);
 
 	/**
 	 * tick is called every tick

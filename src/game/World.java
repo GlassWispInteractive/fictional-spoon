@@ -1,5 +1,6 @@
 package game;
 
+import Moneybag.Moneybag;
 import dungeon.Generator;
 import dungeon.Map;
 import entities.Entity;
@@ -57,6 +58,29 @@ public class World {
 		this.size = size;
 
 	}
+	
+	public void changeState(State state){
+		switch (state) {
+		case MAP:
+			offsetX = 0;
+			offsetY = 0;
+			viewSizeX = map.getN();
+			viewSizeY = map.getM();
+			size = 5;
+			break;
+
+		case VIEW:
+			offsetX = 10;
+			offsetY = 10;
+			viewSizeX = 70; 			//140
+			viewSizeY = 45;				//90
+			size = 20;					//10
+			break;
+		
+		default:
+			throw new IllegalArgumentException("Unknown game state: " + state);
+		}		
+	}
 
 	public void changeCurrentView(int offsetChangeX, int offsetChangeY) {
 		this.offsetX += offsetChangeX;
@@ -85,34 +109,15 @@ public class World {
 
 	public void render(GraphicsContext gc) {
 		// set color and render ground tile
-		for (int x = 0; x < map.getN(); x++) {
-			for (int y = 0; y < map.getM(); y++) {
-				gc.setFill(color[map.getGround(x, y).ordinal()]);
+		for (int x = 0; x < viewSizeX; x++) {
+			for (int y = 0; y < viewSizeY; y++) {
+				gc.setFill(color[map.getGround(x + offsetX, y + offsetY).ordinal()]);
 				gc.fillRect(x * size, y * size, size, size);
 			}
 		}
 		
 		for (Entity mob : fac.getMobs()) {
-			mob.render(gc, size);
+			mob.render(gc, size, offsetX, offsetY);
 		}
 	}
-	
-
-	public void renderPlayerView(GraphicsContext gc) {
-		//
-		// for (int i = 0; i < viewSizeX; i++) {
-		// int x = i * fieldSizePlayer;
-		// for (int j = 0; j < viewSizeY; j++) {
-		// int y = j * fieldSizePlayer;
-		// if (i >= map.getN() || j >= map.getM()) {
-		// System.out.println("ERROR, out of map (in Level.drawPlayerView)");
-		// return;
-		// }
-		//
-		// gc.setFill(color[map.getGround(i + offsetX, j + offsetY).ordinal()]);
-		// gc.fillRect(x, y, fieldSizePlayer, fieldSizePlayer);
-		// }
-		// }
-	}
-
 }

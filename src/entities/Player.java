@@ -14,9 +14,9 @@ public class Player extends Entity {
 	}
 
 	@Override
-	public void render(GraphicsContext gc, int size) {
+	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 		gc.setFill(Color.RED);
-		gc.fillOval(x * size, y * size, size, size);
+		gc.fillOval((x - offsetX) * size, (y - offsetY) * size, size, size);
 
 	}
 

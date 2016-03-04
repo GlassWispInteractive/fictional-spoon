@@ -22,7 +22,7 @@ public class Window extends Application {
 	// class members
 	private AnimationTimer gameloop;
 
-	private State state = MAP;
+	private State state = VIEW;
 	
 	
 	private double blockTime = 0;
@@ -90,6 +90,7 @@ public class Window extends Application {
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
 
+				lvl.changeState(state);
 				switch (state) {
 				case MENU:
 					Menu.getMenu().tick(elapsedTime);
@@ -107,7 +108,8 @@ public class Window extends Application {
 					break;
 
 				case VIEW:
-					lvl.renderPlayerView(gc);
+					lvl.tick(elapsedTime);
+					lvl.render(gc);
 					break;
 				
 				default:
