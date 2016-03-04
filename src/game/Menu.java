@@ -74,7 +74,7 @@ public class Menu {
 		double w = gc.getCanvas().getWidth();
 
 		// render logo image
-		gc.drawImage(logo, (w-logo.getWidth())/2, 80);
+		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
 		Font font = Font.font("Helvetica", FontWeight.BOLD, 24);
@@ -93,11 +93,11 @@ public class Menu {
 
 			// render text on box
 			if (i == cur) {
-				gc.setFill(Color.DARKMAGENTA.deriveColor(0, 1.2, 1, 0.6));
-				gc.setStroke(Color.DARKMAGENTA);
+				gc.setFill(Color.DARKRED.deriveColor(0, 1.2, 1, 0.6));
+				gc.setStroke(Color.DARKRED);
 			} else {
-				gc.setFill(Color.DARKBLUE.deriveColor(0, 1.2, 1, 0.6));
-				gc.setStroke(Color.DARKBLUE);
+				gc.setFill(Color.RED.deriveColor(0, 1.2, 1, 0.6));
+				gc.setStroke(Color.RED);
 			}
 
 			gc.fillText(list.get(i), w / 2, 200 + 100 * (i + 1) + 30);

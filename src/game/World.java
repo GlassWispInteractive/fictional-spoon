@@ -2,10 +2,13 @@ package game;
 
 import entities.Entity;
 import entities.EntityFactory;
+import entities.Player;
 import gen.Generator;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
+
+import static game.State.*;
 
 public class World {
 
@@ -16,10 +19,6 @@ public class World {
 	private Generator gen;
 	private Map map;
 	private EntityFactory fac;
-
-	
-	/*do NOT change*/
-	private State state = State.VIEW;
 
 	// variables
 	private int size = 5;
@@ -40,17 +39,8 @@ public class World {
 		gen = new Generator(350, 225);
 		map = gen.newLevel();
 		fac = EntityFactory.getFactory();
-
-		changeState(state);
-//		setCurrentView(307, 10);
-		// setCurrentView(307, 10);
-
-	}
-
-	// we should delete this function - change the map would need effects in any
-	// other state as well!
-	public void updateMap(Map newMap) {
-		this.map = newMap;
+		
+		updateView();
 	}
 
 	public Map getMap() {
@@ -62,38 +52,50 @@ public class World {
 
 	}
 
-	public void changeState(State state) {
-		this.state = state;
-
-		switch (this.state) {
-		case MAP:
-			checkOffset();
-			viewSizeX = map.getN();
-			viewSizeY = map.getM();
-			size = 4;
-			break;
-
-		case VIEW:
-			size = 20; // 10
-			viewSizeX = 1400 / size; // 140
-			viewSizeY = 900 / size; // 90
-			break;
-
-		default:
-			break;
-
+	public void tick(double elapsedTime) {
+		fac.getPlayer().tick(elapsedTime);
+		for (Entity mob : fac.getMobs()) {
+			mob.tick(elapsedTime);
 		}
+		fac.smartDeletNow();
 	}
 
-	public void setCurrentView(int centerX, int centerY) {
+	public void render(GraphicsContext gc) {
+		// set color and render ground tile
+		for (int x = 0; x < viewSizeX; x++) {
+			for (int y = 0; y < viewSizeY; y++) {
+				gc.setFill(color[map.getGround(x + offsetX, y + offsetY).ordinal()]);
+				gc.fillRect(x * size, y * size, size, size);
+			}
+		}
+
+		for (Entity mob : fac.getMobs()) {
+			mob.render(gc, size, offsetX, offsetY);
+		}
+		fac.getPlayer().render(gc, size, offsetX, offsetY);
+	}
+	
+	public void updateView() {
+		// set size parameters
+		if (Game.getGame().getState() == MAP) {
+			size = 4;
+		} else {
+			size = 20;
+		}
+		viewSizeX = 1400 / size;
+		viewSizeY = 900 / size;
+		
+		checkOffset();
+	}
+
+	public void initView(int centerX, int centerY) {
 		this.offsetX = centerX - viewSizeX / 2;
 		this.offsetY = centerY - viewSizeY / 2;
 
 		checkOffset();
 	}
 
-	public void changeCurrentView(int centerX, int centerY) {
-
+	public void setView(int centerX, int centerY) {
 		int viewPaddingX = viewSizeX / 5; // 20%
 		int viewPaddingY = viewSizeY / 5;
 
@@ -126,28 +128,5 @@ public class World {
 		if (offsetY >= map.getM() - viewSizeY) {
 			offsetY = map.getM() - viewSizeY;
 		}
-	}
-
-	public void tick(double el) {
-		fac.getPlayer().tick(el);
-		for (Entity mob : fac.getMobs()) {
-			mob.tick(el);
-		}
-		fac.smartDeletNow();
-	}
-
-	public void render(GraphicsContext gc) {
-		// set color and render ground tile
-		for (int x = 0; x < viewSizeX; x++) {
-			for (int y = 0; y < viewSizeY; y++) {
-				gc.setFill(color[map.getGround(x + offsetX, y + offsetY).ordinal()]);
-				gc.fillRect(x * size, y * size, size, size);
-			}
-		}
-
-		for (Entity mob : fac.getMobs()) {
-			mob.render(gc, size, offsetX, offsetY);
-		}
-		fac.getPlayer().render(gc, size, offsetX, offsetY);
 	}
 }

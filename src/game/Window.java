@@ -10,8 +10,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import moneybag.Moneybag;
+
 import static game.State.*;
-import Moneybag.Moneybag;
+
+import entities.Entity;
+import entities.EntityFactory;
 
 public class Window extends Application {
 	// constants
@@ -20,11 +24,10 @@ public class Window extends Application {
 	// class members
 	private AnimationTimer gameloop;
 
-	private State state = MENU;
-	
-	
+	private Game game;
+
 	private double blockTime = 0;
-	
+
 	private World lvl;
 
 	public static void main(String[] args) {
@@ -33,9 +36,9 @@ public class Window extends Application {
 
 	@Override
 	public void start(Stage stage) {
+		game = Game.getGame();
 		lvl = World.getWorld();
-		lvl.changeState(state);
-		Menu.getMenu().setList(new String[]{"Start", "Reset", "Help", "Credits", "Exit"});
+		Menu.getMenu().setList(new String[] { "Start", "Reset", "Help", "Credits", "Exit" });
 
 		// root objects
 		Group root = new Group();
@@ -54,7 +57,7 @@ public class Window extends Application {
 
 		Canvas canvas = new Canvas(1400, 900);
 		canvas.setCache(true);
-//		canvas.setCacheShape(true);
+		// canvas.setCacheShape(true);
 		root.getChildren().add(canvas);
 
 		// key events
@@ -85,15 +88,20 @@ public class Window extends Application {
 					blockTime -= elapsedTime;
 					return;
 				}
-				
-				if(Events.getEvents().isESC()){
-					state = MENU;
+
+				if (Events.getEvents().isESC()) {
+					game.setState(MENU);
 				}
-				if(Events.getEvents().isM()){
-					if(state == MAP){
-						state = VIEW;
-					}else{
-						state = MAP;
+				if (Events.getEvents().isM()) {
+					if (game.getState() == MAP) {
+						Entity player = EntityFactory.getFactory().getPlayer();
+						
+						game.setState(VIEW);;
+						lvl.updateView();
+						lvl.initView(player.getX(), player.getY());
+					} else {
+						game.setState(MAP);
+						lvl.updateView();
 					}
 					Events.getEvents().clear();
 				}
@@ -101,16 +109,18 @@ public class Window extends Application {
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
 
-				
-				switch (state) {
+				switch (game.getState()) {
 				case MENU:
 					Menu.getMenu().tick(elapsedTime);
 					Menu.getMenu().render(gc);
-					if(Menu.getMenu().isStarted()){
-						state = VIEW;
+					if (Menu.getMenu().isStarted()) {
+						Entity player = EntityFactory.getFactory().getPlayer();
+						lvl.updateView();
+						lvl.initView(player.getX(), player.getY());
+						game.setState(VIEW);
 					}
 					break;
-					
+
 				case MONEYBAG:
 					Moneybag.getBag().tick(elapsedTime);
 					Moneybag.getBag().render(gc);
@@ -118,13 +128,12 @@ public class Window extends Application {
 
 				case MAP:
 				case VIEW:
-					lvl.changeState(state);
 					lvl.tick(elapsedTime);
 					lvl.render(gc);
 					break;
-				
+
 				default:
-					throw new IllegalArgumentException("Unknown game state: " + state);
+					throw new IllegalArgumentException("Unknown game state: " + game.getState());
 				}
 			}
 		};
