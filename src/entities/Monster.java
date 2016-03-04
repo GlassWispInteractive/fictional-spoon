@@ -1,6 +1,7 @@
 package entities;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Monster extends Entity {
 
@@ -11,8 +12,8 @@ public class Monster extends Entity {
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		// TODO Auto-generated method stub
-		
+		gc.setFill(Color.YELLOW);
+		gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size - 2);
 	}
 
 	@Override
