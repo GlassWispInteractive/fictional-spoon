@@ -15,6 +15,7 @@ public class Menu {
 
 	private ArrayList<String> list;
 	private int cur;
+	private boolean started = false;
 
 	private Menu() {
 		list = new ArrayList<>();
@@ -30,6 +31,8 @@ public class Menu {
 	}
 
 	public void tick(double elapsedTime) {
+		started = false;
+		
 		Events e = Events.getEvents();
 
 		if (e.isUp())
@@ -37,6 +40,26 @@ public class Menu {
 
 		if (e.isDown())
 			cur = (cur + 1) % list.size();
+		
+		if(e.isEnter()){
+			switch (cur) {
+			case 0:
+				started = true;
+				break;
+			case 1:
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				//TODO save?
+				System.exit(0);
+				break;
+			default:
+				break;
+			}
+		}
 
 		// no double key activation
 		Events.getEvents().clear();
@@ -80,4 +103,7 @@ public class Menu {
 		cur = 0;
 	}
 
+	public boolean isStarted(){
+		return started;
+	}
 }

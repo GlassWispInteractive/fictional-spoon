@@ -8,6 +8,10 @@ import javafx.scene.paint.Color;
 
 public class Player extends Entity {
 
+	private int hp = 100;
+	private int mana = 100;
+
+	// for speed
 	private int blocked = 0;
 
 	public Player(int x, int y) {
@@ -73,5 +77,4 @@ public class Player extends Entity {
 		}
 
 	}
-
 }

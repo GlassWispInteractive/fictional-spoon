@@ -11,12 +11,15 @@ import java.util.ArrayList;
 public class EntityFactory {
 	private static EntityFactory singleton;
 	private ArrayList<Entity> ents;
+	private ArrayList<Entity> deletEnts;
+	private Entity player;
 
 	/**
 	 * private constructor
 	 */
 	private EntityFactory() {
 		ents = new ArrayList<Entity>();
+		deletEnts = new ArrayList<Entity>();
 	}
 
 	/**
@@ -35,15 +38,27 @@ public class EntityFactory {
 	public ArrayList<Entity> getMobs() {
 		return ents;
 	}
+	public Entity getPlayer(){
+		return player;
+	}
+	public void deleteEntity(Entity ent){
+		deletEnts.add(ent);
+	}
+	public void smartDeletNow(){
+		for(Entity ent : deletEnts){
+			ents.remove(ent);
+		}
+		deletEnts.clear();
+	}
 
 	public Player makePlayer(int x, int y) {
 		Player player = new Player(x, y);
-		ents.add(player);
+		this.player = player;
 		return player;
 	}
 
-	public Monster makeMonster(int x, int y) {
-		Monster monster = new Monster(x, y);
+	public Monster makeMonster(int x, int y, int hp, int mp, int[]power, String name) {
+		Monster monster = new Monster(x, y, hp, mp, power, name);
 		ents.add(monster);
 		return monster;
 	}

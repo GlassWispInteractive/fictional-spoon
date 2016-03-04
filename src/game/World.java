@@ -17,6 +17,8 @@ public class World {
 	private Map map;
 	private EntityFactory fac;
 
+	
+	/*do NOT change*/
 	private State state = State.VIEW;
 
 	// variables
@@ -42,6 +44,7 @@ public class World {
 		changeState(state);
 		setCurrentView(307, 10);
 		// setCurrentView(307, 10);
+
 	}
 
 	// we should delete this function - change the map would need effects in any
@@ -126,9 +129,11 @@ public class World {
 	}
 
 	public void tick(double el) {
+		fac.getPlayer().tick(el);
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(el);
 		}
+		fac.smartDeletNow();
 	}
 
 	public void render(GraphicsContext gc) {
@@ -143,5 +148,6 @@ public class World {
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, offsetX, offsetY);
 		}
+		fac.getPlayer().render(gc, size, offsetX, offsetY);
 	}
 }

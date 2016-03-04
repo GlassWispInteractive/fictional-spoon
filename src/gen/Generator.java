@@ -324,7 +324,6 @@ public class Generator {
 		// fac.makeMonster(79, 71);
 
 		// fac.makePlayer(x, y);
-		System.out.println("" + x + " " + y);
 		// World.getWorld().setCurrentView(x, y);
 
 		for (int i = 1; i < roomNum; i++) {
@@ -335,7 +334,7 @@ public class Generator {
 			// create a monster
 			x = rand.nextInt(xLen);
 			y = rand.nextInt(yLen);
-			fac.makeMonster(xStart + x, yStart + y);
+			fac.makeMonster(xStart + x, yStart + y, 0, 0, new int[]{0, 0, 0, 0, 0}, "name");
 
 			// create a chest every 3 rooms
 			if (i % 3 == 0) {
