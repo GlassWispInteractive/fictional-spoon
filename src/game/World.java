@@ -79,9 +79,9 @@ public class World {
 			break;
 
 		case VIEW:
-			viewSizeX = 70; 			//140
-			viewSizeY = 45;				//90
 			size = 20;					//10
+			viewSizeX = 1400/size; 		//140
+			viewSizeY = 900/size;		//90
 			break;
 			
 		default:
