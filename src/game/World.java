@@ -72,7 +72,7 @@ public class World {
 		case MAP:
 			viewSizeX = map.getN();
 			viewSizeY = map.getM();
-			size = 5;
+			size = 4;
 			break;
 
 		case VIEW:
