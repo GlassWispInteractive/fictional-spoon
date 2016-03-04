@@ -58,4 +58,16 @@ public class Events {
 	public boolean isDown() {
 		return input.contains("DOWN") || input.contains("S");
 	}
+	
+	public boolean isEnter(){
+		return input.contains("ENTER");
+	}
+	
+	public boolean isESC(){
+		return input.contains("ESCAPE");
+	}
+	
+	public boolean isM(){
+		return input.contains("M");
+	}
 }

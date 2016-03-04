@@ -18,6 +18,7 @@ public class World {
 	private Map map;
 	private EntityFactory fac;
 	
+	/*do NOT change*/
 	private State state = State.VIEW;
 
 	// variables
@@ -150,9 +151,9 @@ public class World {
 			}
 		}
 		
-		fac.getPlayer().render(gc, size, offsetX, offsetY);
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, offsetX, offsetY);
 		}
+		fac.getPlayer().render(gc, size, offsetX, offsetY);
 	}
 }

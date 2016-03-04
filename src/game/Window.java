@@ -22,7 +22,7 @@ public class Window extends Application {
 	// class members
 	private AnimationTimer gameloop;
 
-	private State state = VIEW;
+	private State state = MENU;
 	
 	
 	private double blockTime = 0;
@@ -87,6 +87,17 @@ public class Window extends Application {
 					blockTime -= elapsedTime;
 					return;
 				}
+				
+				if(Events.getEvents().isESC()){
+					state = MENU;
+				}
+//				if(Events.getEvents().isM()){
+//					if(state == MAP){
+//						state = VIEW;
+//					}else{
+//						state = MAP;
+//					}
+//				}
 
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
@@ -96,6 +107,9 @@ public class Window extends Application {
 				case MENU:
 					Menu.getMenu().tick(elapsedTime);
 					Menu.getMenu().render(gc);
+					if(Menu.getMenu().isStarted()){
+						state = VIEW;
+					}
 					break;
 					
 				case MONEYBAG:
@@ -104,11 +118,6 @@ public class Window extends Application {
 					break;
 
 				case MAP:
-					lvl.changeState(state);
-					lvl.tick(elapsedTime);
-					lvl.render(gc);
-					break;
-
 				case VIEW:
 					lvl.changeState(state);
 					lvl.tick(elapsedTime);
