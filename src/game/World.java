@@ -43,6 +43,9 @@ public class World {
 //		player = fac.makePlayer(15, 15);
 		changeState(state);
 		Player player = fac.makePlayer(80, 70);
+		fac.makePlayer(80, 70);
+		fac.makeChest(81, 71);
+		fac.makeShrine(81, 65);
 		setCurrentView(player.getX(), player.getY());
 	}
 
