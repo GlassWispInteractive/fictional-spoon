@@ -43,10 +43,10 @@ public class World {
 //		player = fac.makePlayer(15, 15);
 		changeState(state);
 		Player player = fac.makePlayer(80, 70);
-		fac.makePlayer(80, 70);
 		fac.makeChest(81, 71);
 		fac.makeShrine(81, 65);
-		fac.makeMonster(79, 71);
+		fac.makeMonster(79, 71, 100, 50, new int[]{5, 2, 4, 1, 0}, "test1");
+		fac.makeMonster(78, 71, 100, 50, new int[]{2, 2, 4, 1, 0}, "test2");
 		setCurrentView(player.getX(), player.getY());
 	}
 
@@ -134,6 +134,7 @@ public class World {
 	
 	
 	public void tick(double el) {
+		fac.getPlayer().tick(el);
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(el);
 		}
@@ -148,6 +149,7 @@ public class World {
 			}
 		}
 		
+		fac.getPlayer().render(gc, size, offsetX, offsetY);
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, offsetX, offsetY);
 		}
