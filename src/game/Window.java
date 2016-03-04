@@ -54,6 +54,8 @@ public class Window extends Application {
 		});
 
 		Canvas canvas = new Canvas(1400, 900);
+		canvas.setCache(true);
+//		canvas.setCacheShape(true);
 		root.getChildren().add(canvas);
 
 		// key events
