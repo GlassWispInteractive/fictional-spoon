@@ -15,7 +15,10 @@ public class Combat {
 	private ArrayList<Souls> souls;
 	private ArrayList<Monster> monster;
 	
-	private int cur = 0;
+	private int curSoul = 0;
+
+	private enum CombatState{CHOOSE_SOUL, CHOOSE_ATTACK}
+	private CombatState combatState = CombatState.CHOOSE_SOUL;
 	
 	public static Combat startCombat(ArrayList<Souls> souls, ArrayList<Monster> monster){
 		if(singleton == null){
@@ -31,7 +34,7 @@ public class Combat {
 	}
 	
 	private Combat(){
-		cur = 0;
+		curSoul = 0;
 	}
 	
 	private static ArrayList<Monster> getHardCodedMonster(){
@@ -66,13 +69,29 @@ public class Combat {
 		
 		Events e = Events.getEvents();
 
-		if (e.isLeft()){
-			cur = (cur + souls.size() - 1) % souls.size();
-		}
+		switch (combatState) {
+		case CHOOSE_SOUL:
+			if (e.isLeft()){
+				curSoul = (curSoul + souls.size() - 1) % souls.size();
+			}
+			if (e.isRight()){
+				curSoul = (curSoul + 1) % souls.size();
+			}			
+			if(e.isEnter()){
+				combatState = CombatState.CHOOSE_ATTACK;
+			}			
+			break;
+			
+		case CHOOSE_ATTACK:
+			
+			break;
 
-		if (e.isRight()){
-			cur = (cur + 1) % souls.size();
+		default:
+			break;
 		}
+			
+
+			
 		
 		Events.getEvents().clear();
 		
@@ -88,16 +107,16 @@ public class Combat {
 		gc.setFill(Color.YELLOW);
 		gc.fillRect(0, 0, width, height);
 		
-		//souls at 70% height
+		//souls at 65% height
 		for(int i = 0; i < souls.size(); i++){
 			gc.setFill(Color.GREEN);
-			gc.fillText(souls.get(i).getName(), 50 + i*120, height * 0.7 -5, 80);
-			gc.fillRect(50 + i*120, height * 0.7, 80, 80);
+			gc.fillText(souls.get(i).getName(), 50 + i*120, height * 0.65 -5, 80);
+			gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 			
-			if(cur == i){
+			if(curSoul == i){
 				gc.setStroke(Color.BLACK);
 				gc.setLineWidth(4);
-				gc.strokeRect(50 + i*120, height * 0.7, 80, 80);
+				gc.strokeRect(50 + i*120, height * 0.65, 80, 80);
 			}
 		}
 		
@@ -107,6 +126,16 @@ public class Combat {
 			gc.fillText(monster.get(i).getName(), width - 150 - i*120, height * 0.1 -5, 80);
 			gc.fillRect(width - 150 - i*120, height * 0.1, 80, 80);
 		}
+		
+		
+		//textboxes
+		gc.setFill(Color.WHITE);
+		gc.fillRect(width - 620, height * 0.65, 250, 80);
+		gc.fillRect(width - 350, height * 0.65, 250, 80);
+		gc.fillRect(width - 620, height * 0.65 + 100, 250, 80);
+		gc.fillRect(width - 350, height * 0.65 + 100, 250, 80);
+		gc.fillRect(width - 350, height * 0.65 + 200, 250, 80);
+		
 	}
 
 }
