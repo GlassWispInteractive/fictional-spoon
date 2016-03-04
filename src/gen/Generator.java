@@ -330,27 +330,33 @@ public class Generator {
 			// declare variables
 			final int xStart = roomTable[i][0], xLen = roomTable[i][1], yStart = roomTable[i][2],
 					yLen = roomTable[i][3];
-			
-//			generate possible 
-			int points[][] = new int[xLen * yLen][];
 
-			// create a monster
-			x = rand.nextInt(xLen);
-			y = rand.nextInt(yLen);
-			fac.makeMonster(xStart + x, yStart + y, 0, 0, new int[] { 0, 0, 0, 0, 0 }, "name");
+			// generate possible points in room
+			ArrayList<int[]> q = new ArrayList<>();
+			for (int j = 0; j < xLen; j++)
+				for (int k = 0; k < yLen; k++)
+					q.add(new int[]{xStart + j, yStart + k});
+			noobShuffle(q);
+
+			// choose those for putting on an object
+			int p[];
+			p = q.get(0);
+			q.remove(0);
+
+			fac.makeMonster(p[0], p[1], 0, 0, new int[] { 0, 0, 0, 0, 0 }, "name");
 
 			// create a chest every 3 rooms
 			if (i % 3 == 0) {
-				x = rand.nextInt(xLen);
-				y = rand.nextInt(yLen);
-				fac.makeChest(xStart + x, yStart + y);
+				p = q.get(0);
+				q.remove(0);
+				fac.makeChest(p[0], p[1]);
 			}
 
 			// create a shrine every 10 rooms
 			if (i % 10 == 0) {
-				x = rand.nextInt(xLen);
-				y = rand.nextInt(yLen);
-				fac.makeShrine(xStart + x, yStart + y);
+				p = q.get(0);
+				q.remove(0);
+				fac.makeShrine(p[0], p[1]);
 			}
 		}
 	}

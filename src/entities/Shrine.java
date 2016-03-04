@@ -4,18 +4,17 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Shrine extends Entity {
-
-	private boolean shrineUsed = false;
+	private int blocked = 0;
 
 	public Shrine(int x, int y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
+		delayTicks = 1500;
 	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 
-		if (!shrineUsed) {
+		if (blocked == 0) {
 			gc.setFill(Color.YELLOW);
 			gc.fillOval((x - offsetX) * size + size / 4 - 2, (y - offsetY) * size + size / 4 - 2, size / 2 + 4,
 					size / 2 + 4);
@@ -30,10 +29,13 @@ public class Shrine extends Entity {
 	public void tick(double elapsedTime) {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
-		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-			shrineUsed = true;
+		
+		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY() && blocked == 0) {
+			blocked = delayTicks;
 		}
-
+		
+		if (blocked > 0)
+			blocked--;
 	}
 
 }
