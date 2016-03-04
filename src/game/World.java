@@ -17,7 +17,7 @@ public class World {
 	private Generator gen;
 	private Map map;
 	private EntityFactory fac;
-	
+
 	private State state = State.VIEW;
 
 	// variables
@@ -36,18 +36,14 @@ public class World {
 	}
 
 	private World() {
-		gen = new Generator(280, 180);
+		gen = new Generator(350, 225);
 		map = gen.newLevel();
 		fac = EntityFactory.getFactory();
-		
-//		player = fac.makePlayer(15, 15);
+
 		changeState(state);
-		Player player = fac.makePlayer(80, 70);
-		fac.makePlayer(80, 70);
-		fac.makeChest(81, 71);
-		fac.makeShrine(81, 65);
-		fac.makeMonster(79, 71);
+		Player player = fac.makePlayer(307, 10);
 		setCurrentView(player.getX(), player.getY());
+		// setCurrentView(307, 10);
 	}
 
 	// we should delete this function - change the map would need effects in any
@@ -64,11 +60,11 @@ public class World {
 		this.size = size;
 
 	}
-	
-	public void changeState(State state){
-		
+
+	public void changeState(State state) {
+
 		this.state = state;
-		
+
 		switch (this.state) {
 		case MAP:
 			checkOffset();
@@ -78,46 +74,46 @@ public class World {
 			break;
 
 		case VIEW:
-			size = 20;					//10
-			viewSizeX = 1400/size; 		//140
-			viewSizeY = 900/size;		//90
+			size = 20; // 10
+			viewSizeX = 1400 / size; // 140
+			viewSizeY = 900 / size; // 90
 			break;
-			
+
 		default:
 			break;
-		
-		}		
+
+		}
 	}
-	
-	public void setCurrentView(int centerX, int centerY){
-		this.offsetX = centerX - viewSizeX/2;
-		this.offsetY = centerY - viewSizeY/2;
-		
-		checkOffset();
-	}
-	
-	public void changeCurrentView(int centerX, int centerY) {
-		
-		int viewPaddingX = viewSizeX / 5; //20%
-		int viewPaddingY = viewSizeY / 5;
-		
-		if(centerX - viewPaddingX < offsetX ){
-			offsetX = centerX - viewPaddingX;
-		}
-		if(centerX + viewPaddingX - viewSizeX > offsetX){
-			offsetX = centerX + viewPaddingX - viewSizeX;
-		}
-		if(centerY - viewPaddingY < offsetY ){
-			offsetY = centerY - viewPaddingY;
-		}
-		if(centerY + viewPaddingY - viewSizeY > offsetY){
-			offsetY = centerY + viewPaddingY - viewSizeY;
-		}
-		
+
+	public void setCurrentView(int centerX, int centerY) {
+		this.offsetX = centerX - viewSizeX / 2;
+		this.offsetY = centerY - viewSizeY / 2;
+
 		checkOffset();
 	}
 
-	private void checkOffset(){
+	public void changeCurrentView(int centerX, int centerY) {
+
+		int viewPaddingX = viewSizeX / 5; // 20%
+		int viewPaddingY = viewSizeY / 5;
+
+		if (centerX - viewPaddingX < offsetX) {
+			offsetX = centerX - viewPaddingX;
+		}
+		if (centerX + viewPaddingX - viewSizeX > offsetX) {
+			offsetX = centerX + viewPaddingX - viewSizeX;
+		}
+		if (centerY - viewPaddingY < offsetY) {
+			offsetY = centerY - viewPaddingY;
+		}
+		if (centerY + viewPaddingY - viewSizeY > offsetY) {
+			offsetY = centerY + viewPaddingY - viewSizeY;
+		}
+
+		checkOffset();
+	}
+
+	private void checkOffset() {
 		if (offsetX < 0) {
 			offsetX = 0;
 		}
@@ -131,8 +127,7 @@ public class World {
 			offsetY = map.getM() - viewSizeY;
 		}
 	}
-	
-	
+
 	public void tick(double el) {
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(el);
@@ -147,7 +142,7 @@ public class World {
 				gc.fillRect(x * size, y * size, size, size);
 			}
 		}
-		
+
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, offsetX, offsetY);
 		}

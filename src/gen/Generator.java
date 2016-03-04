@@ -4,6 +4,8 @@ import static gen.environment.Ground.*;
 
 import java.util.*;
 
+import entities.EntityFactory;
+import game.World;
 import gen.environment.Cell;
 import gen.environment.DisjointSet;
 import gen.environment.Map;
@@ -54,16 +56,20 @@ public class Generator {
 	public Map newLevel() {
 		map = new Map(n, m);
 
-		// 4 general steps to level generation
+		// generate rooms and connecting floors between them
 		cc = new DisjointSet<>();
 		placeRooms();
 		placeMaze();
 		removeDeadends();
 
+		// generate new floors to connect dead end rooms
 		cc = new DisjointSet<>();
 		placeLoops();
 		placeMaze();
 		removeDeadends();
+
+		// create objects like the player, monster, chests and shrines
+		placeSpawn();
 
 		return map;
 	}
@@ -292,6 +298,57 @@ public class Generator {
 			temp = q.get(j);
 			q.set(j, q.get(i));
 			q.set(i, temp);
+		}
+	}
+
+	private void placeSpawn() {
+		// get factory
+		EntityFactory fac = EntityFactory.getFactory();
+
+		// init room
+		int x, y, room[] = roomTable[0];
+		x = room[0] + rand.nextInt(room[1]);
+		y = room[2] + rand.nextInt(room[3]);
+		// System.out.println("" + Arrays.toString(room) + " " + x + " " + y);
+		//
+		// for (int k = room[0]; k < room[0] + room[2]; k++) {
+		// for (int j = room[1]; j < room[1] + room[3]; j++) {
+		// map.setGround(k, j, DOOR);
+		// }
+		// }
+
+		//
+		// fac.makeChest(81, 71);
+		// fac.makeShrine(91, 65);
+		// fac.makeMonster(79, 71);
+
+		// fac.makePlayer(x, y);
+		System.out.println("" + x + " " + y);
+		// World.getWorld().setCurrentView(x, y);
+
+		for (int i = 1; i < roomNum; i++) {
+			// declare variables
+			final int xStart = roomTable[i][0], xLen = roomTable[i][1], yStart = roomTable[i][2],
+					yLen = roomTable[i][3];
+
+			// create a monster
+			x = rand.nextInt(xLen);
+			y = rand.nextInt(yLen);
+			fac.makeMonster(xStart + x, yStart + y);
+
+			// create a chest every 3 rooms
+			if (i % 3 == 0) {
+				x = rand.nextInt(xLen);
+				y = rand.nextInt(yLen);
+				fac.makeChest(xStart + x, yStart + y);
+			}
+
+			// create a shrine every 10 rooms
+			if (i % 10 == 0) {
+				x = rand.nextInt(xLen);
+				y = rand.nextInt(yLen);
+				fac.makeShrine(xStart + x, yStart + y);
+			}
 		}
 	}
 

@@ -22,7 +22,7 @@ public class Window extends Application {
 	// class members
 	private AnimationTimer gameloop;
 
-	private State state = VIEW;
+	private State state = MAP;
 	
 	
 	private double blockTime = 0;

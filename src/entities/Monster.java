@@ -12,7 +12,7 @@ public class Monster extends Entity {
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		gc.setFill(Color.YELLOW);
+		gc.setFill(Color.DARKBLUE);
 		gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size - 2);
 	}
 
