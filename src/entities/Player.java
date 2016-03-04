@@ -7,7 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Player extends Entity {
-
+	
 	public Player(int x, int y) {
 		super(x, y);
 		// TODO Auto-generated constructor stub
@@ -52,6 +52,9 @@ public class Player extends Entity {
 		Ground newGround = World.getWorld().getMap().getGround(newX, newY);
 
 		if (newGround == Ground.ROOM || newGround == Ground.FLOOR) {
+			
+			World.getWorld().changeCurrentView(newX - x, newY - y);
+			
 			x = newX;
 			y = newY;
 		}

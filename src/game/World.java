@@ -1,10 +1,10 @@
 package game;
 
-import Moneybag.Moneybag;
 import dungeon.Generator;
 import dungeon.Map;
 import entities.Entity;
 import entities.EntityFactory;
+import entities.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
@@ -17,12 +17,12 @@ public class World {
 	private Generator gen;
 	private Map map;
 	private EntityFactory fac;
+	
+	private State state = State.VIEW;
 
 	// variables
 	private int size = 5;
-
-	int offsetX = 10, offsetY = 10, viewSizeX = 140, viewSizeY = 90;
-	// int offsetX = 10, offsetY = 30, viewSizeX = 50, viewSizeY = 30;
+	private int offsetX, offsetY, viewSizeX, viewSizeY;
 
 	private Paint[] color = { Paint.valueOf("#454545"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
 			Paint.valueOf("#B39B7B"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
@@ -41,7 +41,9 @@ public class World {
 		fac = EntityFactory.getFactory();
 		
 //		player = fac.makePlayer(15, 15);
-		fac.makePlayer(15, 15);
+		changeState(state);
+		Player player = fac.makePlayer(80, 70);
+		setCurrentView(player.getX(), player.getY());
 	}
 
 	// we should delete this function - change the map would need effects in any
@@ -60,18 +62,17 @@ public class World {
 	}
 	
 	public void changeState(State state){
-		switch (state) {
+		
+		this.state = state;
+		
+		switch (this.state) {
 		case MAP:
-			offsetX = 0;
-			offsetY = 0;
 			viewSizeX = map.getN();
 			viewSizeY = map.getM();
 			size = 5;
 			break;
 
 		case VIEW:
-			offsetX = 10;
-			offsetY = 10;
 			viewSizeX = 70; 			//140
 			viewSizeY = 45;				//90
 			size = 20;					//10
@@ -81,11 +82,21 @@ public class World {
 			throw new IllegalArgumentException("Unknown game state: " + state);
 		}		
 	}
+	
+	public void setCurrentView(int centerX, int centerY){
+		this.offsetX = centerX - viewSizeX/2;
+		this.offsetY = centerY - viewSizeY/2;
+		
+		checkOffset(this.offsetX, this.offsetY);
+	}
 
 	public void changeCurrentView(int offsetChangeX, int offsetChangeY) {
 		this.offsetX += offsetChangeX;
 		this.offsetY += offsetChangeY;
-
+		
+		checkOffset(this.offsetX, this.offsetY);
+	}
+	private void checkOffset(int offsetX, int offsetY){
 		if (this.offsetX < 0) {
 			this.offsetX = 0;
 		}
