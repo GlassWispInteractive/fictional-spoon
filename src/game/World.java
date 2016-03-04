@@ -70,6 +70,7 @@ public class World {
 		
 		switch (this.state) {
 		case MAP:
+			checkOffset();
 			viewSizeX = map.getN();
 			viewSizeY = map.getM();
 			size = 4;
