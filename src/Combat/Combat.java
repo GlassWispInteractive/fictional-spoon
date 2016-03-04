@@ -7,6 +7,7 @@ import entities.Monster;
 import game.Events;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class Combat {
 	
@@ -104,7 +105,7 @@ public class Combat {
 		double height = gc.getCanvas().getHeight();
 		
 		//background
-		gc.setFill(Color.YELLOW);
+		gc.setFill(Paint.valueOf("#C0C0C0"));
 		gc.fillRect(0, 0, width, height);
 		
 		//souls at 65% height
