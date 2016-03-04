@@ -36,6 +36,7 @@ public class Window extends Application {
 	@Override
 	public void start(Stage stage) {
 		lvl = World.getWorld();
+		lvl.changeState(state);
 		Menu.getMenu().setList(new String[]{"Start", "Reset", "Help", "Credits", "Exit"});
 
 		// root objects
