@@ -27,8 +27,10 @@ public class Generator {
 
 	// constants
 	final int ROOM_LIMIT = 300;
-	final int[][] neighsAll = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
-	final int[][] neighsOdd = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
+	final int[][] NEIGHS_ALL = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+	final int[][] NEIGHS_ODD = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
+
+	final int POWER = 3;
 
 	/**
 	 * constructor for generate levels with some fixed size
@@ -219,7 +221,7 @@ public class Generator {
 
 					count = 0;
 					for (int j = 0; j < 4; j++) {
-						if (map.getGround(x + neighsAll[j][0], y + neighsAll[j][1]) == WALL)
+						if (map.getGround(x + NEIGHS_ALL[j][0], y + NEIGHS_ALL[j][1]) == WALL)
 							count++;
 					}
 
@@ -335,7 +337,7 @@ public class Generator {
 			ArrayList<int[]> q = new ArrayList<>();
 			for (int j = 0; j < xLen; j++)
 				for (int k = 0; k < yLen; k++)
-					q.add(new int[]{xStart + j, yStart + k});
+					q.add(new int[] { xStart + j, yStart + k });
 			noobShuffle(q);
 
 			// choose those for putting on an object
@@ -343,7 +345,16 @@ public class Generator {
 			p = q.get(0);
 			q.remove(0);
 
-			fac.makeMonster(p[0], p[1], 0, 0, new int[] { 0, 0, 0, 0, 0 }, "name");
+			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
+			// monsters can be of the given power or at most 2 points higher
+			used += rand.nextInt(3);
+
+			// create monster of random type
+			type = rand.nextInt(5);
+			powers[type] = used;
+			used -= used;
+
+			fac.makeMonster(p[0], p[1], 0, powers, "monster");
 
 			// create a chest every 3 rooms
 			if (i % 3 == 0) {
