@@ -10,9 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-
 import static game.State.*;
-
 import Moneybag.Moneybag;
 
 public class Window extends Application {
@@ -91,13 +89,14 @@ public class Window extends Application {
 				if(Events.getEvents().isESC()){
 					state = MENU;
 				}
-//				if(Events.getEvents().isM()){
-//					if(state == MAP){
-//						state = VIEW;
-//					}else{
-//						state = MAP;
-//					}
-//				}
+				if(Events.getEvents().isM()){
+					if(state == MAP){
+						state = VIEW;
+					}else{
+						state = MAP;
+					}
+					Events.getEvents().clear();
+				}
 
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
