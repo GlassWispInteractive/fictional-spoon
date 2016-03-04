@@ -42,7 +42,7 @@ public class World {
 		fac = EntityFactory.getFactory();
 
 		changeState(state);
-		setCurrentView(307, 10);
+//		setCurrentView(307, 10);
 		// setCurrentView(307, 10);
 
 	}

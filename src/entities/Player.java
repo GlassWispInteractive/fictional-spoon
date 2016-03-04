@@ -68,7 +68,7 @@ public class Player extends Entity {
 
 		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
 
-			blocked = speed - 1;
+			blocked = delayTicks - 1;
 
 			x = newX;
 			y = newY;
