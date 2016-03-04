@@ -1,4 +1,4 @@
-package dungeon;
+package gen.environment;
 
 public class Cell {
 	private Ground ground;

@@ -1,10 +1,10 @@
 package game;
 
-import dungeon.Generator;
-import dungeon.Map;
 import entities.Entity;
 import entities.EntityFactory;
 import entities.Player;
+import gen.Generator;
+import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 

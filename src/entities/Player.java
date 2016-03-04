@@ -1,9 +1,9 @@
 package entities;
 
-import dungeon.Ground;
-import dungeon.Map;
 import game.Events;
 import game.World;
+import gen.environment.Ground;
+import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 

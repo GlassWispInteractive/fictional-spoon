@@ -1,8 +1,12 @@
-package dungeon;
+package gen;
 
-import static dungeon.Ground.*;
+import static gen.environment.Ground.*;
 
 import java.util.*;
+
+import gen.environment.Cell;
+import gen.environment.DisjointSet;
+import gen.environment.Map;
 
 /**
  * class to generate level maps source:

@@ -1,4 +1,4 @@
-package dungeon;
+package gen.environment;
 
 public enum Ground {
 	WALL,
