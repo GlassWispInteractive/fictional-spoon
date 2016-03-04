@@ -10,7 +10,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import moneybag.Moneybag;
 
 import static game.State.*;
 
@@ -46,7 +45,7 @@ public class Window extends Application {
 
 		// main stage settings
 		stage.setScene(scene);
-		stage.setTitle("Fictional Spoon");
+		stage.setTitle("Soul Harvester");
 		stage.setResizable(false);
 
 		stage.setOnCloseRequest(event -> {
@@ -121,10 +120,6 @@ public class Window extends Application {
 					}
 					break;
 
-				case MONEYBAG:
-					Moneybag.getBag().tick(elapsedTime);
-					Moneybag.getBag().render(gc);
-					break;
 
 				case MAP:
 				case VIEW:
