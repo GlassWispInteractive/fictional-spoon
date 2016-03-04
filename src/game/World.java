@@ -4,7 +4,6 @@ import dungeon.Generator;
 import dungeon.Map;
 import entities.Entity;
 import entities.EntityFactory;
-import entities.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 
@@ -17,7 +16,6 @@ public class World {
 	private Generator gen;
 	private Map map;
 	private EntityFactory fac;
-	private Player player;
 
 	// variables
 	private int size = 5;
@@ -41,7 +39,8 @@ public class World {
 		map = gen.newLevel();
 		fac = EntityFactory.getFactory();
 		
-		player = fac.makePlayer(15, 15);
+//		player = fac.makePlayer(15, 15);
+		fac.makePlayer(15, 15);
 	}
 
 	// we should delete this function - change the map would need effects in any

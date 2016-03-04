@@ -22,7 +22,7 @@ public class Window extends Application {
 	// class members
 	private AnimationTimer gameloop;
 
-	private State state = MENU;
+	private State state = MAP;
 	
 	
 	private double blockTime = 0;
@@ -107,6 +107,9 @@ public class Window extends Application {
 				case VIEW:
 					lvl.renderPlayerView(gc);
 					break;
+				
+				default:
+					throw new IllegalArgumentException("Unknown game state: " + state);
 				}
 			}
 		};
