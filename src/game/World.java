@@ -77,9 +77,10 @@ public class World {
 			viewSizeY = 45;				//90
 			size = 20;					//10
 			break;
-		
+			
 		default:
-			throw new IllegalArgumentException("Unknown game state: " + state);
+			break;
+		
 		}		
 	}
 	
