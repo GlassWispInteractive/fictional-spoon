@@ -17,10 +17,11 @@ public class Combat {
 	private ArrayList<Monster> monster;
 	
 	private int curSoul = 0;
+	private int curFocus = 0;
 	private int curAttackRow = 0;
 	private int curAttackColum = 0;
 
-	private enum CombatState{CHOOSE_SOUL, CHOOSE_ATTACK}
+	private enum CombatState{CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS}
 	private CombatState combatState = CombatState.CHOOSE_SOUL;
 	
 	public static Combat startCombat(ArrayList<Soul> souls, ArrayList<Monster> monster){
@@ -36,6 +37,7 @@ public class Combat {
 	
 	private Combat(){
 		curSoul = 0;
+		curFocus = 0;
 		curAttackRow = 0;
 		curAttackColum = 0;
 	}
@@ -110,8 +112,24 @@ public class Combat {
 				if(curAttackRow == 2 && curAttackColum == 1){
 					//back buton
 					combatState = CombatState.CHOOSE_SOUL;
+				}else{
+					//choose attack focus
+					combatState = CombatState.CHOOSE_FOCUS;
 				}
 			}
+			break;
+			
+		case CHOOSE_FOCUS:
+			if (e.isLeft()){
+				curFocus = (curFocus + 1) % monster.size();
+			}
+			if (e.isRight()){
+				curFocus = (curFocus + monster.size() - 1) % monster.size();
+			}			
+			if(e.isEnter()){
+				//attack
+				//TODO attack monster
+			}			
 			break;
 
 		default:
@@ -153,6 +171,14 @@ public class Combat {
 			gc.setFill(Color.RED);
 			gc.fillText(monster.get(i).getName(), width - 150 - i*120, height * 0.1 -5, 80);
 			gc.fillRect(width - 150 - i*120, height * 0.1, 80, 80);
+			
+			if(combatState == CombatState.CHOOSE_FOCUS){
+				if(curFocus == i){
+					gc.setStroke(Color.BLACK);
+					gc.setLineWidth(4);
+					gc.strokeRect(width - 150 - i*120, height * 0.1, 80, 80);
+				}
+			}
 		}
 		
 		
