@@ -13,7 +13,7 @@ public class Combat {
 	
 	private static Combat singleton;
 	
-	private ArrayList<Souls> souls;
+	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
 	
 	private int curSoul = 0;
@@ -23,15 +23,13 @@ public class Combat {
 	private enum CombatState{CHOOSE_SOUL, CHOOSE_ATTACK}
 	private CombatState combatState = CombatState.CHOOSE_SOUL;
 	
-	public static Combat startCombat(ArrayList<Souls> souls, ArrayList<Monster> monster){
+	public static Combat startCombat(ArrayList<Soul> souls, ArrayList<Monster> monster){
 		if(singleton == null){
 			singleton = new Combat();
-		}
-//		singleton.setSouls(souls);
-//		singleton.setMonster(monster);
-		
-		singleton.setSouls(getHardCodedSouls());
-		singleton.setMonster(getHardCodedMonster());
+			
+			singleton.setSouls(getHardCodedSouls());
+			singleton.setMonster(getHardCodedMonster());
+		}		
 		
 		return singleton;
 	}
@@ -52,17 +50,17 @@ public class Combat {
 		return list;
 	}
 	
-	private static ArrayList<Souls> getHardCodedSouls(){
-		ArrayList<Souls> list = new ArrayList<Souls>();
+	private static ArrayList<Soul> getHardCodedSouls(){
+		ArrayList<Soul> list = new ArrayList<Soul>();
 		
-		list.add(new Souls("der beste"));
-		list.add(new Souls("dannysahne"));
-		list.add(new Souls("käse"));
+		list.add(new Soul("der beste"));
+		list.add(new Soul("dannysahne"));
+		list.add(new Soul("käse"));
 		
 		return list;
 	}
 	
-	private void setSouls(ArrayList<Souls> souls){
+	private void setSouls(ArrayList<Soul> souls){
 		this.souls = souls;
 	}
 	private void setMonster(ArrayList<Monster> monster){
@@ -160,16 +158,16 @@ public class Combat {
 		
 		int textboxWidth = 600;
 		int textboxHeight = 240;
-		renderTextboxes(gc, (int)(width-textboxWidth), (int)(height-textboxHeight), textboxWidth, textboxHeight);
+		renderTextboxes(gc, (int)(width-textboxWidth), (int)(height-textboxHeight), textboxWidth, textboxHeight, souls.get(curSoul));
 		
 	}
 	
-	private void renderTextboxes(GraphicsContext gc, int x, int y, int width, int height){
+	private void renderTextboxes(GraphicsContext gc, int x, int y, int width, int height, Soul currentSoul){
 				
 		int rowY = y;
 		int columX = x;
 		
-		Attacks[][] attacks = new Attacks[][]{{new Attacks(), new Attacks()},{new Attacks(), new Attacks()}};
+		Attacks[][] attacks = currentSoul.getAttacks();
 		
 		//attack fields
 		for(int i = 0; i < attacks.length; i++){
@@ -177,15 +175,20 @@ public class Combat {
 			columX = x;
 			
 			for(int j = 0; j < attacks[i].length; j++){
+				
+				int boxWidth = width/attacks.length;
+				int boxHeight = height/(attacks[i].length + 1);
 					
 				gc.setFill(Color.WHITE);
 				if(combatState == CombatState.CHOOSE_ATTACK && curAttackRow == i && curAttackColum == j){
 					gc.setFill(Color.GRAY);
 				}
-				gc.fillRect(columX, rowY, width/attacks.length, height/(attacks[i].length + 1));		
+				gc.fillRect(columX, rowY, boxWidth, boxHeight);		
 				
 				gc.setStroke(Color.BLACK);
-				gc.strokeRect(columX, rowY, width/attacks.length, height/(attacks[i].length + 1));
+				gc.strokeRect(columX, rowY, boxWidth, boxHeight);
+				gc.setFill(Color.BLACK);
+				gc.fillText(attacks[i][j].getName(), columX, rowY + boxHeight/2);
 				
 				columX += width/attacks.length;
 			}
@@ -201,9 +204,9 @@ public class Combat {
 		gc.fillRect(columX - width/attacks.length, rowY, width/attacks.length, height/(attacks[attacks.length-1].length + 1));		
 		
 		gc.setStroke(Color.BLACK);
-		gc.setFill(Color.BLACK);
 		gc.strokeRect(columX- width/attacks.length, rowY, width/attacks.length, height/(attacks[attacks.length-1].length + 1));
-		gc.fillText("BACK",columX - width/attacks.length + width/attacks.length/2, rowY + height/(attacks[attacks.length-1].length + 1)/2);
+		gc.setFill(Color.BLACK);
+		gc.fillText("BACK",columX - width/attacks.length, rowY + height/(attacks[attacks.length-1].length + 1)/2);
 	}
 
 }
