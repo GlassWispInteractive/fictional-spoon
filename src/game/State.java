@@ -6,4 +6,5 @@ public enum State {
 	VIEW,
 	INVENTORY,
 	COMBAT,
+	TILEVIEW
 }
