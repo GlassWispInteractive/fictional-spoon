@@ -22,8 +22,6 @@ public class World {
 	private int size = 5;
 	private int offsetX, offsetY, viewSizeX, viewSizeY;
 
-
-
 	public static World getWorld() {
 		if (singleton == null) {
 
@@ -37,7 +35,7 @@ public class World {
 		map = gen.newLevel();
 		fac = EntityFactory.getFactory();
 		game = Game.getGame();
-		
+
 		updateView();
 	}
 
@@ -56,15 +54,14 @@ public class World {
 			mob.tick(elapsedTime);
 		}
 		fac.smartDeletNow();
-		
-		
+
 		if (Events.getEvents().isESC()) {
 			game.setState(MENU);
 		}
 		if (Events.getEvents().isM()) {
 			if (game.getState() == MAP) {
 				Entity player = EntityFactory.getFactory().getPlayer();
-				
+
 				game.setState(VIEW);
 				updateView();
 				initView(player.getX(), player.getY());
@@ -78,14 +75,14 @@ public class World {
 
 	public void render(GraphicsContext gc) {
 		// set color and render ground tile
-//		if (Game.getGame().getState() != MAP)
+		// if (Game.getGame().getState() != MAP)
 		for (int x = 0; x < viewSizeX; x++) {
 			for (int y = 0; y < viewSizeY; y++) {
 				gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
 				gc.fillRect(x * size, y * size, size, size);
 			}
 		}
-		
+
 		System.out.println(offsetX);
 
 		for (Entity mob : fac.getMobs()) {
@@ -93,7 +90,7 @@ public class World {
 		}
 		fac.getPlayer().render(gc, size, offsetX, offsetY);
 	}
-	
+
 	public void updateView() {
 		// set size parameters
 		if (Game.getGame().getState() == MAP) {
@@ -101,9 +98,11 @@ public class World {
 		} else {
 			size = 20;
 		}
-		viewSizeX = 1400 / size;
-		viewSizeY = 900 / size;
-		
+
+		// set view size and be sure to be smaller than the map
+		viewSizeX = Math.min(1400 / size, map.getN());
+		viewSizeY = Math.min(900 / size, map.getM());
+
 		checkOffset();
 	}
 
@@ -141,6 +140,7 @@ public class World {
 		if (offsetY < 0) {
 			offsetY = 0;
 		}
+		
 		if (offsetX >= map.getN() - viewSizeX) {
 			offsetX = map.getN() - viewSizeX;
 		}
