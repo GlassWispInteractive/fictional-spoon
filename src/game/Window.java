@@ -75,25 +75,23 @@ public class Window extends Application {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
 		gameloop = new AnimationTimer() {
+			private int passedTicks = 0;
 			private long lastNanoTime = System.nanoTime();
-			private double elapsedTime = 0;
+			private double time = 0;
 
 			public void handle(long currentNanoTime) {
 				// calculate time since last update.
-				elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
+				time += (currentNanoTime - lastNanoTime) / 1000000000.0;
 				lastNanoTime = currentNanoTime;
-
-				if (blockTime > 0) {
-					blockTime -= elapsedTime;
-					return;
-				}
+				passedTicks = (int) Math.floor(time * 60.0);
+				time -= passedTicks / 60.0;
 
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
 
 				switch (game.getState()) {
 				case MENU:
-					Menu.getMenu().tick(elapsedTime);
+					Menu.getMenu().tick(passedTicks);
 					Menu.getMenu().render(gc);
 					if (Menu.getMenu().isStarted()) {
 						Entity player = EntityFactory.getFactory().getPlayer();
@@ -103,10 +101,9 @@ public class Window extends Application {
 					}
 					break;
 
-
 				case MAP:
 				case VIEW:
-					lvl.tick(elapsedTime);
+					lvl.tick(time);
 					lvl.render(gc);
 					break;
 

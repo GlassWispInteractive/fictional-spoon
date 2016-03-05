@@ -2,6 +2,7 @@ package game;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,17 +14,28 @@ import javafx.scene.text.TextAlignment;
 
 public class Menu {
 	private static Menu singleton;
+	private Random rand;
 	private Image logo;
 
 	private ArrayList<String> list;
 	private int cur;
+	private ArrayList<double[]> souls;
+	private int soulWait;
 	private boolean started = false;
 
 	private Menu() {
 		list = new ArrayList<>();
+		rand = new Random();
 		cur = 0;
 
 		logo = new Image("/resources/logo.png");
+
+		souls = new ArrayList<>();
+		for (int i = 0; i < 25; i++) {
+			int x = rand.nextInt(1200), y = rand.nextInt(700);
+			souls.add(new double[] { 100 + x, 100 + y });
+		}
+		// souls.add(new int[] { 20, 50 });
 	}
 
 	public static Menu getMenu() {
@@ -34,11 +46,34 @@ public class Menu {
 		return singleton;
 	}
 
-	public void tick(double elapsedTime) {
+	public void tick(int ticks) {
+		final double XMAX = 1400 - 50, YMAX = 900 - 50;
 		started = false;
 
 		Events e = Events.getEvents();
 
+		// soul computation
+		if (soulWait > 0) {
+			soulWait -= ticks;
+		} else {
+			soulWait = 15;
+
+			for (double[] soul : souls) {
+				soul[0] += (-1) + rand.nextInt(3);
+				if (soul[0] < 50)
+					soul[0] = 50;
+				if (soul[0] > XMAX)
+					soul[0] = XMAX;
+
+				soul[1] += (-1) + rand.nextInt(3);
+				if (soul[1] < 50)
+					soul[1] = 50;
+				if (soul[1] > YMAX)
+					soul[1] = YMAX;
+			}
+		}
+
+		// event handling
 		if (e.isUp())
 			cur = (cur + list.size() - 1) % list.size();
 
@@ -73,6 +108,12 @@ public class Menu {
 		// canvas settings
 		double w = gc.getCanvas().getWidth();
 
+		// render background souls
+		for (double[] soul : souls) {
+			gc.setFill(Color.DARKRED.deriveColor(2, 1.2, 1, 0.3));
+			gc.fillOval(soul[0], soul[1], 25, 25);
+		}
+
 		// render logo image
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
@@ -92,7 +133,7 @@ public class Menu {
 			// gc.strokeRect((w - 200) / 2, 200 + 100 * (i + 1), 200, 60);
 
 			// render text on box
-			if (i == cur) {
+			if (i != cur) {
 				gc.setFill(Color.DARKRED.deriveColor(0, 1.2, 1, 0.6));
 				gc.setStroke(Color.DARKRED);
 			} else {
@@ -104,11 +145,6 @@ public class Menu {
 			gc.strokeText(list.get(i), w / 2, 200 + 100 * (i + 1) + 30);
 		}
 
-		renderSoul(gc, new int[] { 10, 10 });
-	}
-
-	private void renderSoul(GraphicsContext gc, int[] p) {
-		
 	}
 
 	public void setList(String[] strings) {
