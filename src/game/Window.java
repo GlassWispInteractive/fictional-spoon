@@ -88,23 +88,6 @@ public class Window extends Application {
 					return;
 				}
 
-				if (Events.getEvents().isESC()) {
-					game.setState(MENU);
-				}
-				if (Events.getEvents().isM()) {
-					if (game.getState() == MAP) {
-						Entity player = EntityFactory.getFactory().getPlayer();
-						
-						game.setState(VIEW);;
-						lvl.updateView();
-						lvl.initView(player.getX(), player.getY());
-					} else {
-						game.setState(MAP);
-						lvl.updateView();
-					}
-					Events.getEvents().clear();
-				}
-
 				// compute a frame
 				gc.clearRect(0, 0, 1400, 900);
 

@@ -2,12 +2,9 @@ package game;
 
 import entities.Entity;
 import entities.EntityFactory;
-import entities.Player;
 import gen.Generator;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
-
 import static game.State.*;
 
 public class World {
@@ -19,6 +16,7 @@ public class World {
 	private Generator gen;
 	private Map map;
 	private EntityFactory fac;
+	private Game game;
 
 	// variables
 	private int size = 5;
@@ -38,6 +36,7 @@ public class World {
 		gen = new Generator(350, 225);
 		map = gen.newLevel();
 		fac = EntityFactory.getFactory();
+		game = Game.getGame();
 		
 		updateView();
 	}
@@ -57,6 +56,24 @@ public class World {
 			mob.tick(elapsedTime);
 		}
 		fac.smartDeletNow();
+		
+		
+		if (Events.getEvents().isESC()) {
+			game.setState(MENU);
+		}
+		if (Events.getEvents().isM()) {
+			if (game.getState() == MAP) {
+				Entity player = EntityFactory.getFactory().getPlayer();
+				
+				game.setState(VIEW);
+				updateView();
+				initView(player.getX(), player.getY());
+			} else {
+				game.setState(MAP);
+				updateView();
+			}
+			Events.getEvents().clear();
+		}
 	}
 
 	public void render(GraphicsContext gc) {
