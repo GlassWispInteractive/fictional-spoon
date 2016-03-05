@@ -25,8 +25,6 @@ public class Window extends Application {
 
 	private Game game;
 
-	private double blockTime = 0;
-
 	private World lvl;
 
 	public static void main(String[] args) {

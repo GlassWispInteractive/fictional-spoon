@@ -69,7 +69,7 @@ public class Generator {
 		removeDeadends();
 
 		// create objects like the player, monster, chests and shrines
-		placeSpawn();
+		placeEntities();
 
 		return map;
 	}
@@ -288,6 +288,12 @@ public class Generator {
 
 	}
 
+	/**
+	 * temporary shuffle algorithm depending on rand - so a fixed seed can be
+	 * used during development
+	 * 
+	 * @param q
+	 */
 	private void noobShuffle(ArrayList<int[]> q) {
 		int i = q.size(), j, temp[];
 
@@ -301,33 +307,18 @@ public class Generator {
 		}
 	}
 
-	private void placeSpawn() {
+	private void placeEntities() {
 		// get factory
 		EntityFactory fac = EntityFactory.getFactory();
 
-		// init room
+		// create player
 		int x, y, room[] = roomTable[0];
 		x = room[0] + rand.nextInt(room[1]);
 		y = room[2] + rand.nextInt(room[3]);
 
 		fac.makePlayer(x, y);
 
-		// System.out.println("" + Arrays.toString(room) + " " + x + " " + y);
-		//
-		// for (int k = room[0]; k < room[0] + room[2]; k++) {
-		// for (int j = room[1]; j < room[1] + room[3]; j++) {
-		// map.setGround(k, j, DOOR);
-		// }
-		// }
-
-		//
-		// fac.makeChest(81, 71);
-		// fac.makeShrine(91, 65);
-		// fac.makeMonster(79, 71);
-
-		// fac.makePlayer(x, y);
-		// World.getWorld().setCurrentView(x, y);
-
+		// create objects for every room
 		for (int i = 1; i < roomNum; i++) {
 			// declare variables
 			final int xStart = roomTable[i][0], xLen = roomTable[i][1], yStart = roomTable[i][2],
