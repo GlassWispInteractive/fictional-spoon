@@ -7,11 +7,13 @@ public class Monster extends Entity {
 	private Paint[] color = { Paint.valueOf("RED"), Paint.valueOf("BLUE"), Paint.valueOf("WHITE"),
 			Paint.valueOf("GRAY"), Paint.valueOf("PINK") };
 
+	@SuppressWarnings("unused")
 	private int hp;
 	// earth, fire, air, water, mystic #korra
 	private int[] power = new int[5];
 
 	private int maxType = -1;
+	@SuppressWarnings("unused")
 	private String name;
 	private boolean monsterDead = false;
 
