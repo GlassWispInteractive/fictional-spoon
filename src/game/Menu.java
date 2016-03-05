@@ -103,6 +103,12 @@ public class Menu {
 			gc.fillText(list.get(i), w / 2, 200 + 100 * (i + 1) + 30);
 			gc.strokeText(list.get(i), w / 2, 200 + 100 * (i + 1) + 30);
 		}
+
+		renderSoul(gc, new int[] { 10, 10 });
+	}
+
+	private void renderSoul(GraphicsContext gc, int[] p) {
+		
 	}
 
 	public void setList(String[] strings) {
