@@ -1,17 +1,22 @@
 package entities;
 
-import dungeon.Ground;
-import dungeon.Map;
 import game.Events;
 import game.World;
+import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Player extends Entity {
-	
+
+	private int hp = 100;
+	private int mana = 100;
+
+	// for speed
+	private int blocked = 0;
+
 	public Player(int x, int y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
+		delayTicks = 4;
 	}
 
 	@Override
@@ -38,6 +43,10 @@ public class Player extends Entity {
 		int newX = x, newY = y;
 		boolean moved = false;
 
+		if (blocked >= 0) {
+			blocked--;
+		}
+
 		if (e.isLeft()) {
 			newX--;
 			moved = true;
@@ -57,13 +66,15 @@ public class Player extends Entity {
 
 		Map map = World.getWorld().getMap();
 
-		if (moved && map.isWalkable(newX, newY)) {
-						
+		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
+
+			blocked = delayTicks - 1;
+
 			x = newX;
 			y = newY;
-			
-			World.getWorld().changeCurrentView(x, y);
-		}
-	}
 
+			World.getWorld().setView(x, y);
+		}
+
+	}
 }

@@ -1,6 +1,6 @@
-package dungeon;
+package gen.environment;
 
-import static dungeon.Ground.*;
+import static gen.environment.Ground.*;
 
 public class Map {
 	private Cell[][] map;

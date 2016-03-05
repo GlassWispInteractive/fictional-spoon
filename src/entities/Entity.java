@@ -10,6 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public abstract class Entity {
 	protected int x, y;
+	protected int delayTicks;
 	
 	public Entity(int x, int y) {
 		this.x = x;
