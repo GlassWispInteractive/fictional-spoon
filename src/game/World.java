@@ -78,12 +78,15 @@ public class World {
 
 	public void render(GraphicsContext gc) {
 		// set color and render ground tile
+//		if (Game.getGame().getState() != MAP)
 		for (int x = 0; x < viewSizeX; x++) {
 			for (int y = 0; y < viewSizeY; y++) {
 				gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
 				gc.fillRect(x * size, y * size, size, size);
 			}
 		}
+		
+		System.out.println(offsetX);
 
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, offsetX, offsetY);
