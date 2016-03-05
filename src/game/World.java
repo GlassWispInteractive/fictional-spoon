@@ -83,8 +83,6 @@ public class World {
 			}
 		}
 
-		System.out.println(offsetX);
-
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, offsetX, offsetY);
 		}
@@ -140,7 +138,7 @@ public class World {
 		if (offsetY < 0) {
 			offsetY = 0;
 		}
-		
+
 		if (offsetX >= map.getN() - viewSizeX) {
 			offsetX = map.getN() - viewSizeX;
 		}
