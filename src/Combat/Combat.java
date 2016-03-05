@@ -17,6 +17,8 @@ public class Combat {
 	private ArrayList<Monster> monster;
 	
 	private int curSoul = 0;
+	private int curAttackRow = 0;
+	private int curAttackColum = 0;
 
 	private enum CombatState{CHOOSE_SOUL, CHOOSE_ATTACK}
 	private CombatState combatState = CombatState.CHOOSE_SOUL;
@@ -36,6 +38,8 @@ public class Combat {
 	
 	private Combat(){
 		curSoul = 0;
+		curAttackRow = 0;
+		curAttackColum = 0;
 	}
 	
 	private static ArrayList<Monster> getHardCodedMonster(){
@@ -84,7 +88,32 @@ public class Combat {
 			break;
 			
 		case CHOOSE_ATTACK:
-			
+			if (e.isLeft()){
+				if(curAttackRow <= 1){
+					curAttackColum = Math.max(--curAttackColum, 0);
+				}else{
+					curAttackColum = Math.max(--curAttackColum, 1);
+				}
+			}
+			if (e.isRight()){
+				curAttackColum = Math.min(++curAttackColum, 1);
+			}	
+			if (e.isUp()){
+				curAttackRow = Math.max(--curAttackRow, 0);
+			}
+			if (e.isDown()){
+				if(curAttackColum == 0){
+					curAttackRow = Math.min(++curAttackRow, 1);
+				}else{
+					curAttackRow = Math.min(++curAttackRow, 2);
+				}
+			}
+			if(e.isEnter()){
+				if(curAttackRow == 2 && curAttackColum == 1){
+					//back buton
+					combatState = CombatState.CHOOSE_SOUL;
+				}
+			}
 			break;
 
 		default:
@@ -129,14 +158,52 @@ public class Combat {
 		}
 		
 		
-		//textboxes
-		gc.setFill(Color.WHITE);
-		gc.fillRect(width - 620, height * 0.65, 250, 80);
-		gc.fillRect(width - 350, height * 0.65, 250, 80);
-		gc.fillRect(width - 620, height * 0.65 + 100, 250, 80);
-		gc.fillRect(width - 350, height * 0.65 + 100, 250, 80);
-		gc.fillRect(width - 350, height * 0.65 + 200, 250, 80);
+		int textboxWidth = 600;
+		int textboxHeight = 240;
+		renderTextboxes(gc, (int)(width-textboxWidth), (int)(height-textboxHeight), textboxWidth, textboxHeight);
 		
+	}
+	
+	private void renderTextboxes(GraphicsContext gc, int x, int y, int width, int height){
+				
+		int rowY = y;
+		int columX = x;
+		
+		Attacks[][] attacks = new Attacks[][]{{new Attacks(), new Attacks()},{new Attacks(), new Attacks()}};
+		
+		//attack fields
+		for(int i = 0; i < attacks.length; i++){
+			
+			columX = x;
+			
+			for(int j = 0; j < attacks[i].length; j++){
+					
+				gc.setFill(Color.WHITE);
+				if(combatState == CombatState.CHOOSE_ATTACK && curAttackRow == i && curAttackColum == j){
+					gc.setFill(Color.GRAY);
+				}
+				gc.fillRect(columX, rowY, width/attacks.length, height/(attacks[i].length + 1));		
+				
+				gc.setStroke(Color.BLACK);
+				gc.strokeRect(columX, rowY, width/attacks.length, height/(attacks[i].length + 1));
+				
+				columX += width/attacks.length;
+			}
+			
+			rowY += height/(attacks[i].length + 1);
+		}
+		
+		//back button
+		gc.setFill(Color.WHITE);
+		if(combatState == CombatState.CHOOSE_ATTACK && curAttackRow == attacks.length && curAttackColum == attacks[attacks.length-1].length -1){
+			gc.setFill(Color.GRAY);
+		}
+		gc.fillRect(columX - width/attacks.length, rowY, width/attacks.length, height/(attacks[attacks.length-1].length + 1));		
+		
+		gc.setStroke(Color.BLACK);
+		gc.setFill(Color.BLACK);
+		gc.strokeRect(columX- width/attacks.length, rowY, width/attacks.length, height/(attacks[attacks.length-1].length + 1));
+		gc.fillText("BACK",columX - width/attacks.length + width/attacks.length/2, rowY + height/(attacks[attacks.length-1].length + 1)/2);
 	}
 
 }
