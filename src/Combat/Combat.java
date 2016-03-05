@@ -45,9 +45,9 @@ public class Combat {
 	private static ArrayList<Monster> getHardCodedMonster(){
 		ArrayList<Monster> list = new ArrayList<Monster>();
 		
-		list.add(EntityFactory.getFactory().makeMonster(13, 13, 0, 0, new int[]{1,2, 3, 4, 5},  "name"));
-		list.add(EntityFactory.getFactory().makeMonster(12, 23, 0, 0, new int[]{1,2, 3, 4, 5},  "test"));
-		list.add(EntityFactory.getFactory().makeMonster(14, 33, 0, 0, new int[]{1,2, 3, 4, 5},  "rudolf"));
+		list.add(EntityFactory.getFactory().makeMonster(13, 13, 0, new int[]{1,2, 3, 4, 5},  "name"));
+		list.add(EntityFactory.getFactory().makeMonster(12, 23, 0, new int[]{1,2, 3, 4, 5},  "test"));
+		list.add(EntityFactory.getFactory().makeMonster(14, 33, 0, new int[]{1,2, 3, 4, 5},  "rudolf"));
 		
 		return list;
 	}

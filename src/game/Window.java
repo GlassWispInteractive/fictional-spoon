@@ -10,9 +10,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+
 import static game.State.*;
 import Combat.Combat;
-import Moneybag.Moneybag;
+import entities.Entity;
+import entities.EntityFactory;
 
 public class Window extends Application {
 	// constants
@@ -21,11 +23,7 @@ public class Window extends Application {
 	// class members
 	private AnimationTimer gameloop;
 
-	private State state = COMBAT;
-	
-	
-	private double blockTime = 0;
-	
+	private Game game;
 	private World lvl;
 
 	public static void main(String[] args) {
@@ -34,9 +32,9 @@ public class Window extends Application {
 
 	@Override
 	public void start(Stage stage) {
+		game = Game.getGame();
 		lvl = World.getWorld();
-		lvl.changeState(state);
-		Menu.getMenu().setList(new String[]{"Start", "Reset", "Help", "Credits", "Exit"});
+		Menu.getMenu().setList(new String[] { "Start", "Map", "Help", "Credits", "Exit" });
 
 		// root objects
 		Group root = new Group();
@@ -44,7 +42,7 @@ public class Window extends Application {
 
 		// main stage settings
 		stage.setScene(scene);
-		stage.setTitle("Fictional Spoon");
+		stage.setTitle("Soul Harvester");
 		stage.setResizable(false);
 
 		stage.setOnCloseRequest(event -> {
@@ -55,7 +53,7 @@ public class Window extends Application {
 
 		Canvas canvas = new Canvas(SIZE_X, SIZE_Y);
 		canvas.setCache(true);
-//		canvas.setCacheShape(true);
+		// canvas.setCacheShape(true);
 		root.getChildren().add(canvas);
 
 		// key events
@@ -74,63 +72,45 @@ public class Window extends Application {
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 
 		gameloop = new AnimationTimer() {
+			private int passedTicks = 0;
 			private long lastNanoTime = System.nanoTime();
-			private double elapsedTime = 0;
+			private double time = 0;
 
 			public void handle(long currentNanoTime) {
 				// calculate time since last update.
-				elapsedTime = (currentNanoTime - lastNanoTime) / 1000000000.0;
+				time += (currentNanoTime - lastNanoTime) / 1000000000.0;
 				lastNanoTime = currentNanoTime;
-
-				if (blockTime > 0) {
-					blockTime -= elapsedTime;
-					return;
-				}
-				
-				if(Events.getEvents().isESC()){
-					state = MENU;
-				}
-				if(Events.getEvents().isM()){
-					if(state == MAP){
-						state = VIEW;
-					}else{
-						state = MAP;
-					}
-					Events.getEvents().clear();
-				}
+				passedTicks = (int) Math.floor(time * 60.0);
+				time -= passedTicks / 60.0;
 
 				// compute a frame
 				gc.clearRect(0, 0, SIZE_X, SIZE_Y);
 
-				
-				switch (state) {
+				switch (game.getState()) {
 				case MENU:
-					Menu.getMenu().tick(elapsedTime);
+					Menu.getMenu().tick(passedTicks);
 					Menu.getMenu().render(gc);
-					if(Menu.getMenu().isStarted()){
-						state = VIEW;
+					if (Menu.getMenu().isStarted()) {
+						Entity player = EntityFactory.getFactory().getPlayer();
+						lvl.updateView();
+						lvl.initView(player.getX(), player.getY());
+						game.setState(VIEW);
 					}
-					break;
-					
-				case MONEYBAG:
-					Moneybag.getBag().tick(elapsedTime);
-					Moneybag.getBag().render(gc);
 					break;
 
 				case MAP:
 				case VIEW:
-					lvl.changeState(state);
-					lvl.tick(elapsedTime);
+					lvl.tick(time);
 					lvl.render(gc);
 					break;
-				
+
 				case COMBAT:
 					Combat.startCombat(null, null).tick(currentNanoTime);
 					Combat.startCombat(null, null).render(gc);
 					break;
 					
 				default:
-					throw new IllegalArgumentException("Unknown game state: " + state);
+					throw new IllegalArgumentException("Unknown game state: " + game.getState());
 				}
 			}
 		};

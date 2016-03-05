@@ -27,8 +27,10 @@ public class Generator {
 
 	// constants
 	final int ROOM_LIMIT = 300;
-	final int[][] neighsAll = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
-	final int[][] neighsOdd = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
+	final int[][] NEIGHS_ALL = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+	final int[][] NEIGHS_ODD = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
+
+	final int POWER = 3;
 
 	/**
 	 * constructor for generate levels with some fixed size
@@ -40,7 +42,7 @@ public class Generator {
 
 		// init pseudorandom generators
 		rand = new Random();
-//		rand.setSeed(42);
+		// rand.setSeed(42);
 
 		// init room super array
 		roomTable = new int[ROOM_LIMIT][];
@@ -67,7 +69,7 @@ public class Generator {
 		removeDeadends();
 
 		// create objects like the player, monster, chests and shrines
-		placeSpawn();
+		placeEntities();
 
 		return map;
 	}
@@ -219,7 +221,7 @@ public class Generator {
 
 					count = 0;
 					for (int j = 0; j < 4; j++) {
-						if (map.getGround(x + neighsAll[j][0], y + neighsAll[j][1]) == WALL)
+						if (map.getGround(x + NEIGHS_ALL[j][0], y + NEIGHS_ALL[j][1]) == WALL)
 							count++;
 					}
 
@@ -286,6 +288,12 @@ public class Generator {
 
 	}
 
+	/**
+	 * temporary shuffle algorithm depending on rand - so a fixed seed can be
+	 * used during development
+	 * 
+	 * @param q
+	 */
 	private void noobShuffle(ArrayList<int[]> q) {
 		int i = q.size(), j, temp[];
 
@@ -299,55 +307,58 @@ public class Generator {
 		}
 	}
 
-	private void placeSpawn() {
+	private void placeEntities() {
 		// get factory
 		EntityFactory fac = EntityFactory.getFactory();
 
-		// init room
+		// create player
 		int x, y, room[] = roomTable[0];
 		x = room[0] + rand.nextInt(room[1]);
 		y = room[2] + rand.nextInt(room[3]);
 
 		fac.makePlayer(x, y);
 
-		// System.out.println("" + Arrays.toString(room) + " " + x + " " + y);
-		//
-		// for (int k = room[0]; k < room[0] + room[2]; k++) {
-		// for (int j = room[1]; j < room[1] + room[3]; j++) {
-		// map.setGround(k, j, DOOR);
-		// }
-		// }
-
-		//
-		// fac.makeChest(81, 71);
-		// fac.makeShrine(91, 65);
-		// fac.makeMonster(79, 71);
-
-		// fac.makePlayer(x, y);
-		// World.getWorld().setCurrentView(x, y);
-
+		// create objects for every room
 		for (int i = 1; i < roomNum; i++) {
 			// declare variables
 			final int xStart = roomTable[i][0], xLen = roomTable[i][1], yStart = roomTable[i][2],
 					yLen = roomTable[i][3];
 
-			// create a monster
-			x = rand.nextInt(xLen);
-			y = rand.nextInt(yLen);
-			fac.makeMonster(xStart + x, yStart + y, 0, 0, new int[]{0, 0, 0, 0, 0}, "name");
+			// generate possible points in room
+			ArrayList<int[]> q = new ArrayList<>();
+			for (int j = 0; j < xLen; j++)
+				for (int k = 0; k < yLen; k++)
+					q.add(new int[] { xStart + j, yStart + k });
+			noobShuffle(q);
+
+			// choose those for putting on an object
+			int p[];
+			p = q.get(0);
+			q.remove(0);
+
+			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
+			// monsters can be of the given power or at most 2 points higher
+			used += rand.nextInt(3);
+
+			// create monster of random type
+			type = rand.nextInt(5);
+			powers[type] = used;
+			used -= used;
+
+			fac.makeMonster(p[0], p[1], 0, powers, "monster");
 
 			// create a chest every 3 rooms
 			if (i % 3 == 0) {
-				x = rand.nextInt(xLen);
-				y = rand.nextInt(yLen);
-				fac.makeChest(xStart + x, yStart + y);
+				p = q.get(0);
+				q.remove(0);
+				fac.makeChest(p[0], p[1]);
 			}
 
 			// create a shrine every 10 rooms
 			if (i % 10 == 0) {
-				x = rand.nextInt(xLen);
-				y = rand.nextInt(yLen);
-				fac.makeShrine(xStart + x, yStart + y);
+				p = q.get(0);
+				q.remove(0);
+				fac.makeShrine(p[0], p[1]);
 			}
 		}
 	}

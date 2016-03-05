@@ -19,7 +19,7 @@ public class Chest extends Entity {
 		
 		if(!chestOpen){
 			gc.setFill(Color.BLACK);
-			gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size/2);
+			gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size / 2);
 		}
 	}
 

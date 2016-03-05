@@ -8,15 +8,15 @@ import javafx.scene.paint.Color;
 
 public class Player extends Entity {
 
+	@SuppressWarnings("unused")
 	private int hp = 100;
-	private int mana = 100;
 
 	// for speed
 	private int blocked = 0;
 
 	public Player(int x, int y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
+		delayTicks = 4;
 	}
 
 	@Override
@@ -68,12 +68,12 @@ public class Player extends Entity {
 
 		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
 
-			blocked = speed - 1;
+			blocked = delayTicks - 1;
 
 			x = newX;
 			y = newY;
 
-			World.getWorld().changeCurrentView(x, y);
+			World.getWorld().setView(x, y);
 		}
 
 	}
