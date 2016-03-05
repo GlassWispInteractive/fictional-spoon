@@ -86,6 +86,8 @@ public class Menu {
 				started = true;
 				break;
 			case 1:
+				started = true;
+				Game.getGame().setState(State.MAP);
 				break;
 			case 2:
 				break;
