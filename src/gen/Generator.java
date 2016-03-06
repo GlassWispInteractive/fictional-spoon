@@ -313,47 +313,47 @@ public class Generator {
 	private void placeTiles() {
 		// b_0 b_1 b_2 b_3 -> left right top bottom
 		// binary counting with 1 means that area is walkable
-		final int[][] tileNumber = new int[][] { new int[] { 9, 9 }, // fail
-				new int[] { 2, 0 }, // 0 0 0 1
-				new int[] { 0, 0 }, // 0 0 1 0
-				new int[] { 1, 0 }, // 0 0 1 1
-				new int[] { 0, 2 }, // 0 1 0 0
-				new int[] { 4, 1 }, // 0 1 0 1
-				new int[] { 3, 1 }, // 0 1 1 0
-				new int[] { 6, 0 }, // 0 1 1 1
-				new int[] { 0, 1 }, // 1 0 0 0
-				new int[] { 4, 0 }, // 1 0 0 1
-				new int[] { 3, 0 }, // 1 0 1 0
-				new int[] { 6, 1 }, // 1 0 1 1
-				new int[] { 2, 1 }, // 1 1 0 0
-				new int[] { 5, 1 }, // 1 1 0 1
-				new int[] { 5, 0 }, // 1 1 1 0
-				new int[] { 1, 1 }, // 1 1 1 1
+		final int[] tileNumber = new int[] { 9 + 57 * 9, // fail
+				2 + 57 * 0, // 0 0 0 1
+				0 + 57 * 0, // 0 0 1 0
+				1 + 57 * 0, // 0 0 1 1
+				0 + 57 * 2, // 0 1 0 0
+				4 + 57 * 1, // 0 1 0 1
+				3 + 57 * 1, // 0 1 1 0
+				6 + 57 * 0, // 0 1 1 1
+				0 + 57 * 1, // 1 0 0 0
+				4 + 57 * 0, // 1 0 0 1
+				3 + 57 * 0, // 1 0 1 0
+				6 + 57 * 1, // 1 0 1 1
+				2 + 57 * 1, // 1 1 0 0
+				5 + 57 * 1, // 1 1 0 1
+				5 + 57 * 0, // 1 1 1 0
+				1 + 57 * 1, // 1 1 1 1
 		};
 		
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < m; y++) {
-				int tile[], num = 0;
+				int tile = 0;
 
 				if (map.isWalkable(x-1, y))
-					num += 1;
+					tile += 1;
 				if (map.isWalkable(x+1, y))
-					num += 2;
+					tile += 2;
 				if (map.isWalkable(x, y-1))
-					num += 4;
+					tile += 4;
 				if (map.isWalkable(x, y+1))
-					num += 8;
+					tile += 8;
+//				
+//				tile = tileNumber[num].clone();
+//				if (map.getGround(x, y) == FLOOR) {
+//					tile[0] += 20;
+//					tile[1] += 12;
+//				} else if (map.getGround(x, y) == ROOM) {
+//					tile[0] += 34;
+//					tile[1] += 12;
+//				}
 				
-				tile = tileNumber[num].clone();
-				if (map.getGround(x, y) == FLOOR) {
-					tile[0] += 20;
-					tile[1] += 12;
-				} else if (map.getGround(x, y) == ROOM) {
-					tile[0] += 34;
-					tile[1] += 12;
-				}
-				
-				map.setTileNumber(x, y, tile);
+				map.setTileNumber(x, y, tileNumber[tile]);
 			}
 		}
 
