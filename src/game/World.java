@@ -121,11 +121,9 @@ public class World {
 
 	private void drawMapTile(GraphicsContext gc, int tile) {
 		final double cols = (MAP_TILES.getWidth() + 1) / 17;
-		
-		final double rows = (MAP_TILES.getHeight() + 1) / 17;
-		System.out.println(rows);
-		
-		
+		// final double rows = (MAP_TILES.getHeight() + 1) / 17;
+		System.out.println(cols);
+
 	}
 
 	public void initCamera(int centerX, int centerY) {
