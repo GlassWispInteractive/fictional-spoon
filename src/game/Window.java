@@ -35,7 +35,7 @@ public class Window extends Application {
 	public void start(Stage stage) {
 		game = Game.getGame();
 		lvl = World.getWorld();
-		Menu.getMenu().setList(new String[] { "Start", "Map", "Help", "Credits", "Exit" });
+		Menu.getMenu().setList(new String[] { "Start", "Help", "Credits", "Exit" });
 
 		// root objects
 		Group root = new Group();

@@ -7,10 +7,8 @@ import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 import static game.State.*;
-
 
 public class World {
 
@@ -27,12 +25,18 @@ public class World {
 	private int size;
 	private int cameraX, cameraY, viewSizeX, viewSizeY;
 
+	// load tile sets
 	private final Image MAP_TILES = new Image("/resources/roguelikeMap_transparent.png");
 	@SuppressWarnings("unused")
 	private final Image INDOOR_TILES = new Image("/resources/roguelikeIndoor_transparent.png");
 	@SuppressWarnings("unused")
 	private final Image CHAR_TILES = new Image("/resources/roguelikeChar_transparent.png");
 
+	/**
+	 * static method to get the singleton class object
+	 * 
+	 * @return
+	 */
 	public static World getWorld() {
 		if (singleton == null) {
 
@@ -52,7 +56,7 @@ public class World {
 		viewSizeX = Math.min(1400 / size, map.getN());
 		viewSizeY = Math.min(900 / size, map.getM());
 
-//		initView();
+		// initView();
 	}
 
 	public Map getMap() {
@@ -69,25 +73,25 @@ public class World {
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(elapsedTime);
 		}
-		fac.smartDeletNow();
+		fac.smartDelete();
 
 		if (Events.getEvents().isESC()) {
 			game.setState(MENU);
 		}
-		
-//		if (Events.getEvents().isM()) {
-//			if (game.getState() == MAP) {
-//				Entity player = EntityFactory.getFactory().getPlayer();
-//
-//				game.setState(VIEW);
-//				updateView();
-//				initCamera(player.getX(), player.getY());
-//			} else {
-//				game.setState(MAP);
-//				updateView();
-//			}
-//			Events.getEvents().clear();
-//		}
+
+		// if (Events.getEvents().isM()) {
+		// if (game.getState() == MAP) {
+		// Entity player = EntityFactory.getFactory().getPlayer();
+		//
+		// game.setState(VIEW);
+		// updateView();
+		// initCamera(player.getX(), player.getY());
+		// } else {
+		// game.setState(MAP);
+		// updateView();
+		// }
+		// Events.getEvents().clear();
+		// }
 	}
 
 	public void render(GraphicsContext gc) {
@@ -97,8 +101,8 @@ public class World {
 			for (int y = 0; y < viewSizeY; y++) {
 				if (map.getGround(x + cameraX, y + cameraY) != Ground.WALL) {
 					int[] tile = map.getTileNumber(x + cameraX, y + cameraY);
-					gc.drawImage(MAP_TILES, (16 + 1) * tile[0], (16 + 1) * tile[1], 16, 16, x * size,
-							y * size, size, size);
+					gc.drawImage(MAP_TILES, (16 + 1) * tile[0], (16 + 1) * tile[1], 16, 16, x * size, y * size, size,
+							size);
 				} else {
 					gc.setFill(Game.getColor(map.getGround(x + cameraX, y + cameraY)));
 					gc.fillRect(x * size, y * size, size, size);
@@ -111,6 +115,17 @@ public class World {
 			mob.render(gc, size, cameraX, cameraY);
 		}
 		fac.getPlayer().render(gc, size, cameraX, cameraY);
+
+		drawMapTile(gc, 0);
+	}
+
+	private void drawMapTile(GraphicsContext gc, int tile) {
+		final double cols = (MAP_TILES.getWidth() + 1) / 17;
+		
+		final double rows = (MAP_TILES.getHeight() + 1) / 17;
+		System.out.println(rows);
+		
+		
 	}
 
 	public void initCamera(int centerX, int centerY) {
