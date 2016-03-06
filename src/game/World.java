@@ -102,7 +102,7 @@ public class World {
 			for (int y = 0; y < viewSizeY; y++) {
 				if (map.getGround(x + cameraX, y + cameraY) != Ground.WALL) {
 
-					drawMapTile(gc, x, y, map.getTileNumber(x + cameraX, y + cameraY));
+					drawMapTile(gc, x, y, map.getGround(x + cameraX, y + cameraY), map.getTileNumber(x + cameraX, y + cameraY));
 
 				} else {
 					gc.setFill(Game.getColor(map.getGround(x + cameraX, y + cameraY)));
@@ -119,13 +119,16 @@ public class World {
 
 	}
 
-	private void drawMapTile(GraphicsContext gc, int x, int y, int tile) {
+	private void drawMapTile(GraphicsContext gc, int x, int y, Ground ground, int tile) {
 		// final double cols = (MAP_TILES.getWidth() + 1) / 17;
 		// final double rows = (MAP_TILES.getHeight() + 1) / 17;
 
 		// offset in tile set
-		tile += 20 + 57 * 12;
-
+		if (ground == Ground.FLOOR)
+			tile += 20 + 57 * 12;
+		if (ground == Ground.ROOM)
+			tile += 34 + 57 * 12;
+		
 		gc.drawImage(MAP_TILES, (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, x * size, y * size, size, size);
 
 	}
