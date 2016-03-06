@@ -346,7 +346,7 @@ public class Generator {
 				
 				tile = tileNumber[num].clone();
 				if (map.getGround(x, y) == FLOOR) {
-					tile[0] += 27;
+					tile[0] += 20;
 					tile[1] += 12;
 				} else if (map.getGround(x, y) == ROOM) {
 					tile[0] += 34;

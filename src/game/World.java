@@ -22,7 +22,7 @@ public class World {
 	private Game game;
 
 	// variables
-	private int size = 5;
+	private int size;
 	private int offsetX, offsetY, viewSizeX, viewSizeY;
 
 
@@ -39,7 +39,10 @@ public class World {
 		map = gen.newLevel();
 		fac = EntityFactory.getFactory();
 		game = Game.getGame();
-
+		
+		
+		size = 16;
+				
 		updateView();
 	}
 
