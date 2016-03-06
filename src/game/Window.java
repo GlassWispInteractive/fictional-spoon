@@ -93,8 +93,8 @@ public class Window extends Application {
 					Menu.getMenu().render(gc);
 					if (Menu.getMenu().isStarted()) {
 						Entity player = EntityFactory.getFactory().getPlayer();
-						lvl.updateView();
-						lvl.initView(player.getX(), player.getY());
+//						lvl.updateView();
+						lvl.initCamera(player.getX(), player.getY());
 						game.setState(VIEW);
 					}
 					break;
