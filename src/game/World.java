@@ -84,7 +84,7 @@ public class World {
 			for (int y = 0; y < viewSizeY; y++) {
 				if (map.getGround(x + offsetX, y + offsetY) != Ground.WALL) {
 					int[] tile = map.getTileNumber(x + offsetX, y + offsetY);
-					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * tile[0], (16 +1) * tile[1], 16, 16, x * size, y * size, 32, 32);
+					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * tile[0], (16 +1) * tile[1], 16, 16, x * size, y * size, size, size);
 				} else {
 					gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
 					gc.fillRect(x * size, y * size, size, size);
@@ -104,7 +104,7 @@ public class World {
 		if (Game.getGame().getState() == MAP) {
 			size = 4;
 		} else {
-			size = 32;
+			size = 16;
 		}
 
 		// set view size and be sure to be smaller than the map
