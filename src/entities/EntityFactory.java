@@ -44,7 +44,7 @@ public class EntityFactory {
 	public void deleteEntity(Entity ent){
 		deletEnts.add(ent);
 	}
-	public void smartDeletNow(){
+	public void smartDelete(){
 		for(Entity ent : deletEnts){
 			ents.remove(ent);
 		}

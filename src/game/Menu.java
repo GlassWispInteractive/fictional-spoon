@@ -81,19 +81,11 @@ public class Menu {
 			cur = (cur + 1) % list.size();
 
 		if (e.isEnter()) {
-			switch (cur) {
-			case 0:
+			switch (list.get(cur)) {
+			case "Start":
 				started = true;
 				break;
-			case 1:
-				started = true;
-				Game.getGame().setState(State.MAP);
-				break;
-			case 2:
-				break;
-			case 3:
-				break;
-			case 4:
+			case "Exit":
 				// TODO save?
 				System.exit(0);
 				break;

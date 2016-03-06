@@ -35,11 +35,11 @@ public class Window extends Application {
 	public void start(Stage stage) {
 		game = Game.getGame();
 		lvl = World.getWorld();
-		Menu.getMenu().setList(new String[] { "Start", "Map", "Help", "Credits", "Exit" });
+		Menu.getMenu().setList(new String[] { "Start", "Help", "Credits", "Exit" });
 
 		// root objects
 		Group root = new Group();
-		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#454545"));
+		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#212121"));
 
 		// main stage settings
 		stage.setScene(scene);
@@ -93,8 +93,8 @@ public class Window extends Application {
 					Menu.getMenu().render(gc);
 					if (Menu.getMenu().isStarted()) {
 						Entity player = EntityFactory.getFactory().getPlayer();
-						lvl.updateView();
-						lvl.initView(player.getX(), player.getY());
+//						lvl.updateView();
+						lvl.initCamera(player.getX(), player.getY());
 						game.setState(VIEW);
 					}
 					break;

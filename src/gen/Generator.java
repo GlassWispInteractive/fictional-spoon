@@ -42,7 +42,7 @@ public class Generator {
 
 		// init pseudorandom generators
 		rand = new Random();
-		// rand.setSeed(42);
+		rand.setSeed(42);
 
 		// init room super array
 		roomTable = new int[ROOM_LIMIT][];
@@ -67,6 +67,9 @@ public class Generator {
 		placeLoops();
 		placeMaze();
 		removeDeadends();
+
+		// get tiling numbers
+		placeTiles();
 
 		// create objects like the player, monster, chests and shrines
 		placeEntities();
@@ -305,6 +308,55 @@ public class Generator {
 			q.set(j, q.get(i));
 			q.set(i, temp);
 		}
+	}
+
+	private void placeTiles() {
+		// b_0 b_1 b_2 b_3 -> left right top bottom
+		// binary counting with 1 means that area is walkable
+		final int[] tileNumber = new int[] { 9 + 57 * 9, // fail
+				2 + 57 * 0, // 0 0 0 1
+				0 + 57 * 0, // 0 0 1 0
+				1 + 57 * 0, // 0 0 1 1
+				0 + 57 * 2, // 0 1 0 0
+				4 + 57 * 1, // 0 1 0 1
+				3 + 57 * 1, // 0 1 1 0
+				6 + 57 * 0, // 0 1 1 1
+				0 + 57 * 1, // 1 0 0 0
+				4 + 57 * 0, // 1 0 0 1
+				3 + 57 * 0, // 1 0 1 0
+				6 + 57 * 1, // 1 0 1 1
+				2 + 57 * 1, // 1 1 0 0
+				5 + 57 * 1, // 1 1 0 1
+				5 + 57 * 0, // 1 1 1 0
+				1 + 57 * 1, // 1 1 1 1
+		};
+		
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < m; y++) {
+				int tile = 0;
+
+				if (map.isWalkable(x-1, y))
+					tile += 1;
+				if (map.isWalkable(x+1, y))
+					tile += 2;
+				if (map.isWalkable(x, y-1))
+					tile += 4;
+				if (map.isWalkable(x, y+1))
+					tile += 8;
+//				
+//				tile = tileNumber[num].clone();
+//				if (map.getGround(x, y) == FLOOR) {
+//					tile[0] += 20;
+//					tile[1] += 12;
+//				} else if (map.getGround(x, y) == ROOM) {
+//					tile[0] += 34;
+//					tile[1] += 12;
+//				}
+				
+				map.setTileNumber(x, y, tileNumber[tile]);
+			}
+		}
+
 	}
 
 	private void placeEntities() {

@@ -3,8 +3,11 @@ package game;
 import entities.Entity;
 import entities.EntityFactory;
 import gen.Generator;
+import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+
 import static game.State.*;
 
 public class World {
@@ -19,9 +22,21 @@ public class World {
 	private Game game;
 
 	// variables
-	private int size = 5;
-	private int offsetX, offsetY, viewSizeX, viewSizeY;
+	private int size;
+	private int cameraX, cameraY, viewSizeX, viewSizeY;
 
+	// load tile sets
+	private final Image MAP_TILES = new Image("/resources/roguelikeMap_transparent.png");
+	@SuppressWarnings("unused")
+	private final Image INDOOR_TILES = new Image("/resources/roguelikeIndoor_transparent.png");
+	@SuppressWarnings("unused")
+	private final Image CHAR_TILES = new Image("/resources/roguelikeChar_transparent.png");
+
+	/**
+	 * static method to get the singleton class object
+	 * 
+	 * @return
+	 */
 	public static World getWorld() {
 		if (singleton == null) {
 
@@ -36,7 +51,12 @@ public class World {
 		fac = EntityFactory.getFactory();
 		game = Game.getGame();
 
-		updateView();
+		// set view size and be sure to be smaller than the map
+		size = 16;
+		viewSizeX = Math.min(1400 / size, map.getN());
+		viewSizeY = Math.min(900 / size, map.getM());
+
+		// initView();
 	}
 
 	public Map getMap() {
@@ -50,27 +70,29 @@ public class World {
 
 	public void tick(double elapsedTime) {
 		fac.getPlayer().tick(elapsedTime);
+		
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(elapsedTime);
 		}
-		fac.smartDeletNow();
+		fac.smartDelete();
 
 		if (Events.getEvents().isESC()) {
 			game.setState(MENU);
 		}
-		if (Events.getEvents().isM()) {
-			if (game.getState() == MAP) {
-				Entity player = EntityFactory.getFactory().getPlayer();
 
-				game.setState(VIEW);
-				updateView();
-				initView(player.getX(), player.getY());
-			} else {
-				game.setState(MAP);
-				updateView();
-			}
-			Events.getEvents().clear();
-		}
+		// if (Events.getEvents().isM()) {
+		// if (game.getState() == MAP) {
+		// Entity player = EntityFactory.getFactory().getPlayer();
+		//
+		// game.setState(VIEW);
+		// updateView();
+		// initCamera(player.getX(), player.getY());
+		// } else {
+		// game.setState(MAP);
+		// updateView();
+		// }
+		// Events.getEvents().clear();
+		// }
 	}
 
 	public void render(GraphicsContext gc) {
@@ -78,72 +100,79 @@ public class World {
 		// if (Game.getGame().getState() != MAP)
 		for (int x = 0; x < viewSizeX; x++) {
 			for (int y = 0; y < viewSizeY; y++) {
-				gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
-				gc.fillRect(x * size, y * size, size, size);
+				if (map.getGround(x + cameraX, y + cameraY) != Ground.WALL) {
+
+					drawMapTile(gc, x, y, map.getGround(x + cameraX, y + cameraY), map.getTileNumber(x + cameraX, y + cameraY));
+
+				} else {
+					gc.setFill(Game.getColor(map.getGround(x + cameraX, y + cameraY)));
+					gc.fillRect(x * size, y * size, size, size);
+
+				}
 			}
 		}
 
 		for (Entity mob : fac.getMobs()) {
-			mob.render(gc, size, offsetX, offsetY);
+			mob.render(gc, size, cameraX, cameraY);
 		}
-		fac.getPlayer().render(gc, size, offsetX, offsetY);
+		fac.getPlayer().render(gc, size, cameraX, cameraY);
+
 	}
 
-	public void updateView() {
-		// set size parameters
-		if (Game.getGame().getState() == MAP) {
-			size = 4;
-		} else {
-			size = 20;
-		}
+	private void drawMapTile(GraphicsContext gc, int x, int y, Ground ground, int tile) {
+		// final double cols = (MAP_TILES.getWidth() + 1) / 17;
+		// final double rows = (MAP_TILES.getHeight() + 1) / 17;
 
-		// set view size and be sure to be smaller than the map
-		viewSizeX = Math.min(1400 / size, map.getN());
-		viewSizeY = Math.min(900 / size, map.getM());
+		// offset in tile set
+		if (ground == Ground.FLOOR)
+			tile += 20 + 57 * 12;
+		if (ground == Ground.ROOM)
+			tile += 34 + 57 * 12;
+		
+		gc.drawImage(MAP_TILES, (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, x * size, y * size, size, size);
 
-		checkOffset();
 	}
 
-	public void initView(int centerX, int centerY) {
-		this.offsetX = centerX - viewSizeX / 2;
-		this.offsetY = centerY - viewSizeY / 2;
+	public void initCamera(int centerX, int centerY) {
+		this.cameraX = centerX - viewSizeX / 2;
+		this.cameraY = centerY - viewSizeY / 2;
 
-		checkOffset();
+		fixCamera();
 	}
 
-	public void setView(int centerX, int centerY) {
+	public void setCamera(int centerX, int centerY) {
 		int viewPaddingX = viewSizeX / 5; // 20%
 		int viewPaddingY = viewSizeY / 5;
 
-		if (centerX - viewPaddingX < offsetX) {
-			offsetX = centerX - viewPaddingX;
+		if (centerX - viewPaddingX < cameraX) {
+			cameraX = centerX - viewPaddingX;
 		}
-		if (centerX + viewPaddingX - viewSizeX > offsetX) {
-			offsetX = centerX + viewPaddingX - viewSizeX;
+		if (centerX + viewPaddingX - viewSizeX > cameraX) {
+			cameraX = centerX + viewPaddingX - viewSizeX;
 		}
-		if (centerY - viewPaddingY < offsetY) {
-			offsetY = centerY - viewPaddingY;
+		if (centerY - viewPaddingY < cameraY) {
+			cameraY = centerY - viewPaddingY;
 		}
-		if (centerY + viewPaddingY - viewSizeY > offsetY) {
-			offsetY = centerY + viewPaddingY - viewSizeY;
+		if (centerY + viewPaddingY - viewSizeY > cameraY) {
+			cameraY = centerY + viewPaddingY - viewSizeY;
 		}
 
-		checkOffset();
+		fixCamera();
 	}
 
-	private void checkOffset() {
-		if (offsetX < 0) {
-			offsetX = 0;
+	private void fixCamera() {
+		if (cameraX < 0) {
+			cameraX = 0;
 		}
-		if (offsetY < 0) {
-			offsetY = 0;
+		if (cameraY < 0) {
+			cameraY = 0;
 		}
 
-		if (offsetX >= map.getN() - viewSizeX) {
-			offsetX = map.getN() - viewSizeX;
+		if (cameraX >= map.getN() - viewSizeX) {
+			cameraX = map.getN() - viewSizeX;
 		}
-		if (offsetY >= map.getM() - viewSizeY) {
-			offsetY = map.getM() - viewSizeY;
+		if (cameraY >= map.getM() - viewSizeY) {
+			cameraY = map.getM() - viewSizeY;
 		}
 	}
 }

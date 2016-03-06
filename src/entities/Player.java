@@ -73,7 +73,7 @@ public class Player extends Entity {
 			x = newX;
 			y = newY;
 
-			World.getWorld().setView(x, y);
+			World.getWorld().setCamera(x, y);
 		}
 
 	}
