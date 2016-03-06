@@ -12,10 +12,14 @@ public class Game {
 	private State state;
 	
 //	static colors
-	private static Paint[] groundColor = { Paint.valueOf("#454545"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
-			Paint.valueOf("#B39B7B"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
+	private static Paint[] groundColor = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
+			Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
 
 	private Game() {
+//		Entity player = EntityFactory.getFactory().getPlayer();
+//		World lvl = World.getWorld();
+//		lvl.updateView();
+//		lvl.initView(player.getX(), player.getY());
 		state = VIEW;
 	}
 

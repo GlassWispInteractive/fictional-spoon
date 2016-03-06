@@ -39,7 +39,7 @@ public class Window extends Application {
 
 		// root objects
 		Group root = new Group();
-		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#454545"));
+		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#212121"));
 
 		// main stage settings
 		stage.setScene(scene);

@@ -3,9 +3,12 @@ package game;
 import entities.Entity;
 import entities.EntityFactory;
 import gen.Generator;
+import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 import static game.State.*;
+
+import engine.Tileset;
 
 public class World {
 
@@ -21,6 +24,26 @@ public class World {
 	// variables
 	private int size = 5;
 	private int offsetX, offsetY, viewSizeX, viewSizeY;
+
+	// b_0 b_1 b_2 b_3 -> left right top bottom
+	// binary counting with 1 means that area is walkable
+	private final int[][] tileNumber = new int[][] { new int[] { 9, 9 }, // fail
+			new int[] { 0, 0 }, // 0 0 0 1
+			new int[] { 2, 0 }, // 0 0 1 0
+			new int[] { 1, 0 }, // 0 0 1 1
+			new int[] { 0, 2 }, // 0 1 0 0
+			new int[] { 3, 1 }, // 0 1 0 1
+			new int[] { 3, 2 }, // 0 1 1 0
+			new int[] { 6, 0 }, // 0 1 1 1
+			new int[] { 0, 1 }, // 1 0 0 0
+			new int[] { 0, 3 }, // 1 0 0 1
+			new int[] { 4, 0 }, // 1 0 1 0
+			new int[] { 6, 1 }, // 1 0 1 1
+			new int[] { 2, 1 }, // 1 1 0 0
+			new int[] { 5, 0 }, // 1 1 0 1
+			new int[] { 5, 1 }, // 1 1 1 0
+			new int[] { 1, 1 }, // 1 1 1 1
+	};
 
 	public static World getWorld() {
 		if (singleton == null) {
@@ -78,15 +101,21 @@ public class World {
 		// if (Game.getGame().getState() != MAP)
 		for (int x = 0; x < viewSizeX; x++) {
 			for (int y = 0; y < viewSizeY; y++) {
-				gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
-				gc.fillRect(x * size, y * size, size, size);
+				if (map.getGround(x + offsetX, y + offsetY) != Ground.FLOOR) {
+					gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
+					gc.fillRect(x * size, y * size, size, size);
+				} else {
+					int tile = map.getTileNumber(x + offsetX, y + offsetY);
+//					System.out.println(tile);
+					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * (27 + tileNumber[tile][0]), (16 +1) * (12 + tileNumber[tile][1]), 16, 16, x * size, y * size, 32, 32);
+				}
 			}
 		}
 
-		for (Entity mob : fac.getMobs()) {
-			mob.render(gc, size, offsetX, offsetY);
-		}
-		fac.getPlayer().render(gc, size, offsetX, offsetY);
+		// for (Entity mob : fac.getMobs()) {
+		// mob.render(gc, size, offsetX, offsetY);
+		// }
+		// fac.getPlayer().render(gc, size, offsetX, offsetY);
 	}
 
 	public void updateView() {
@@ -94,7 +123,7 @@ public class World {
 		if (Game.getGame().getState() == MAP) {
 			size = 4;
 		} else {
-			size = 20;
+			size = 32;
 		}
 
 		// set view size and be sure to be smaller than the map
