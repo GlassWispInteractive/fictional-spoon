@@ -20,7 +20,7 @@ public class Game {
 //		World lvl = World.getWorld();
 //		lvl.updateView();
 //		lvl.initView(player.getX(), player.getY());
-		state = VIEW;
+		state = MENU;
 	}
 
 	public static Game getGame() {

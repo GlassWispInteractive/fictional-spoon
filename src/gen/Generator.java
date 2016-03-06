@@ -311,9 +311,6 @@ public class Generator {
 	}
 
 	private void placeTiles() {
-		// b_0 b_1 b_2 b_3 -> left right top bottom
-		// binary counting with 1 means that area is walkable
-
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < m; y++) {
 				int tile = 0;

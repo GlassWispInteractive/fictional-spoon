@@ -32,16 +32,16 @@ public class World {
 			new int[] { 2, 0 }, // 0 0 1 0
 			new int[] { 1, 0 }, // 0 0 1 1
 			new int[] { 0, 2 }, // 0 1 0 0
-			new int[] { 3, 1 }, // 0 1 0 1
-			new int[] { 3, 2 }, // 0 1 1 0
+			new int[] { 4, 1 }, // 0 1 0 1
+			new int[] { 3, 1 }, // 0 1 1 0
 			new int[] { 6, 0 }, // 0 1 1 1
 			new int[] { 0, 1 }, // 1 0 0 0
-			new int[] { 0, 3 }, // 1 0 0 1
-			new int[] { 4, 0 }, // 1 0 1 0
+			new int[] { 4, 0 }, // 1 0 0 1
+			new int[] { 3, 0 }, // 1 0 1 0
 			new int[] { 6, 1 }, // 1 0 1 1
 			new int[] { 2, 1 }, // 1 1 0 0
-			new int[] { 5, 0 }, // 1 1 0 1
-			new int[] { 5, 1 }, // 1 1 1 0
+			new int[] { 5, 1 }, // 1 1 0 1
+			new int[] { 5, 0 }, // 1 1 1 0
 			new int[] { 1, 1 }, // 1 1 1 1
 	};
 
@@ -101,21 +101,26 @@ public class World {
 		// if (Game.getGame().getState() != MAP)
 		for (int x = 0; x < viewSizeX; x++) {
 			for (int y = 0; y < viewSizeY; y++) {
-				if (map.getGround(x + offsetX, y + offsetY) != Ground.FLOOR) {
+				if (map.getGround(x + offsetX, y + offsetY) == Ground.FLOOR) {
+					final int tileX = 27, tileY = 12;
+					int tile = map.getTileNumber(x + offsetX, y + offsetY);
+					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * (tileX + tileNumber[tile][0]), (16 +1) * (tileY + tileNumber[tile][1]), 16, 16, x * size, y * size, 32, 32);
+				} else if (map.getGround(x + offsetX, y + offsetY) == Ground.DOOR) {
+					final int tileX = 34, tileY = 12;
+					int tile = map.getTileNumber(x + offsetX, y + offsetY);
+					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * (tileX + tileNumber[tile][0]), (16 +1) * (tileY + tileNumber[tile][1]), 16, 16, x * size, y * size, 32, 32);
+				} else {
 					gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
 					gc.fillRect(x * size, y * size, size, size);
-				} else {
-					int tile = map.getTileNumber(x + offsetX, y + offsetY);
-//					System.out.println(tile);
-					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * (27 + tileNumber[tile][0]), (16 +1) * (12 + tileNumber[tile][1]), 16, 16, x * size, y * size, 32, 32);
+					
 				}
 			}
 		}
 
-		// for (Entity mob : fac.getMobs()) {
-		// mob.render(gc, size, offsetX, offsetY);
-		// }
-		// fac.getPlayer().render(gc, size, offsetX, offsetY);
+		 for (Entity mob : fac.getMobs()) {
+		 mob.render(gc, size, offsetX, offsetY);
+		 }
+		 fac.getPlayer().render(gc, size, offsetX, offsetY);
 	}
 
 	public void updateView() {
