@@ -70,6 +70,7 @@ public class World {
 
 	public void tick(double elapsedTime) {
 		fac.getPlayer().tick(elapsedTime);
+		
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(elapsedTime);
 		}
