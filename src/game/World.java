@@ -6,6 +6,9 @@ import gen.Generator;
 import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import static game.State.*;
 
 import engine.Tileset;
@@ -24,6 +27,8 @@ public class World {
 	// variables
 	private int size;
 	private int offsetX, offsetY, viewSizeX, viewSizeY;
+	
+	private final Image MAP_TILES = new Image("/resources/roguelikeMap_transparent.png");
 
 
 	public static World getWorld() {
