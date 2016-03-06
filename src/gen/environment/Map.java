@@ -4,7 +4,7 @@ import static gen.environment.Ground.*;
 
 public class Map {
 	private Cell[][] map;
-	private int[][] tileNumber;
+	private int[][][] tileNumber;
 	private int n, m;
 
 	/**
@@ -17,14 +17,15 @@ public class Map {
 		this.n = n;
 		this.m = m;
 		map = new Cell[n][m];
-		tileNumber = new int[n][m];
+		tileNumber = new int[n][m][2];
 
 		for (int i = 0; i < n; i++) {
+			tileNumber[i] = new int[m][2];
 			for (int j = 0; j < m; j++) {
+//				tileNumber[i] = new int[m][n];
 				map[i][j] = new Cell(i, j);
 				map[i][j].setGround(WALL);
 			}
-			tileNumber[i] = new int[m];
 		}
 	}
 
@@ -94,9 +95,9 @@ public class Map {
 	/**
 	 * @return the tileNumber
 	 */
-	public int getTileNumber(int x, int y) {
+	public int[] getTileNumber(int x, int y) {
 		if (x < 0 || x >= n || y < 0 || y >= m) {
-			return -1;
+			return null;
 		}
 		
 		return tileNumber[x][y];
@@ -105,7 +106,7 @@ public class Map {
 	/**
 	 * @param tileNumber the tileNumber to set
 	 */
-	public void setTileNumber(int x, int y, int tile) {
+	public void setTileNumber(int x, int y, int[] tile) {
 		if (x < 0 || x >= n || y < 0 || y >= m) {
 			return;
 		}

@@ -311,18 +311,47 @@ public class Generator {
 	}
 
 	private void placeTiles() {
+		// b_0 b_1 b_2 b_3 -> left right top bottom
+		// binary counting with 1 means that area is walkable
+		final int[][] tileNumber = new int[][] { new int[] { 9, 9 }, // fail
+				new int[] { 2, 0 }, // 0 0 0 1
+				new int[] { 0, 0 }, // 0 0 1 0
+				new int[] { 1, 0 }, // 0 0 1 1
+				new int[] { 0, 2 }, // 0 1 0 0
+				new int[] { 4, 1 }, // 0 1 0 1
+				new int[] { 3, 1 }, // 0 1 1 0
+				new int[] { 6, 0 }, // 0 1 1 1
+				new int[] { 0, 1 }, // 1 0 0 0
+				new int[] { 4, 0 }, // 1 0 0 1
+				new int[] { 3, 0 }, // 1 0 1 0
+				new int[] { 6, 1 }, // 1 0 1 1
+				new int[] { 2, 1 }, // 1 1 0 0
+				new int[] { 5, 1 }, // 1 1 0 1
+				new int[] { 5, 0 }, // 1 1 1 0
+				new int[] { 1, 1 }, // 1 1 1 1
+		};
+		
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < m; y++) {
-				int tile = 0;
+				int tile[], num = 0;
 
 				if (map.isWalkable(x-1, y))
-					tile += 1;
+					num += 1;
 				if (map.isWalkable(x+1, y))
-					tile += 2;
+					num += 2;
 				if (map.isWalkable(x, y-1))
-					tile += 4;
+					num += 4;
 				if (map.isWalkable(x, y+1))
-					tile += 8;
+					num += 8;
+				
+				tile = tileNumber[num].clone();
+				if (map.getGround(x, y) == FLOOR) {
+					tile[0] += 27;
+					tile[1] += 12;
+				} else if (map.getGround(x, y) == ROOM) {
+					tile[0] += 34;
+					tile[1] += 12;
+				}
 				
 				map.setTileNumber(x, y, tile);
 			}

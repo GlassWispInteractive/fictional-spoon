@@ -25,25 +25,6 @@ public class World {
 	private int size = 5;
 	private int offsetX, offsetY, viewSizeX, viewSizeY;
 
-	// b_0 b_1 b_2 b_3 -> left right top bottom
-	// binary counting with 1 means that area is walkable
-	private final int[][] tileNumber = new int[][] { new int[] { 9, 9 }, // fail
-			new int[] { 0, 0 }, // 0 0 0 1
-			new int[] { 2, 0 }, // 0 0 1 0
-			new int[] { 1, 0 }, // 0 0 1 1
-			new int[] { 0, 2 }, // 0 1 0 0
-			new int[] { 4, 1 }, // 0 1 0 1
-			new int[] { 3, 1 }, // 0 1 1 0
-			new int[] { 6, 0 }, // 0 1 1 1
-			new int[] { 0, 1 }, // 1 0 0 0
-			new int[] { 4, 0 }, // 1 0 0 1
-			new int[] { 3, 0 }, // 1 0 1 0
-			new int[] { 6, 1 }, // 1 0 1 1
-			new int[] { 2, 1 }, // 1 1 0 0
-			new int[] { 5, 1 }, // 1 1 0 1
-			new int[] { 5, 0 }, // 1 1 1 0
-			new int[] { 1, 1 }, // 1 1 1 1
-	};
 
 	public static World getWorld() {
 		if (singleton == null) {
@@ -101,14 +82,9 @@ public class World {
 		// if (Game.getGame().getState() != MAP)
 		for (int x = 0; x < viewSizeX; x++) {
 			for (int y = 0; y < viewSizeY; y++) {
-				if (map.getGround(x + offsetX, y + offsetY) == Ground.FLOOR) {
-					final int tileX = 27, tileY = 12;
-					int tile = map.getTileNumber(x + offsetX, y + offsetY);
-					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * (tileX + tileNumber[tile][0]), (16 +1) * (tileY + tileNumber[tile][1]), 16, 16, x * size, y * size, 32, 32);
-				} else if (map.getGround(x + offsetX, y + offsetY) == Ground.DOOR) {
-					final int tileX = 34, tileY = 12;
-					int tile = map.getTileNumber(x + offsetX, y + offsetY);
-					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * (tileX + tileNumber[tile][0]), (16 +1) * (tileY + tileNumber[tile][1]), 16, 16, x * size, y * size, 32, 32);
+				if (map.getGround(x + offsetX, y + offsetY) != Ground.WALL) {
+					int[] tile = map.getTileNumber(x + offsetX, y + offsetY);
+					gc.drawImage(Tileset.getTileset().tileset, (16 + 1) * tile[0], (16 +1) * tile[1], 16, 16, x * size, y * size, 32, 32);
 				} else {
 					gc.setFill(Game.getColor(map.getGround(x + offsetX, y + offsetY)));
 					gc.fillRect(x * size, y * size, size, size);
