@@ -2,7 +2,7 @@ package entities;
 
 import game.Events;
 import game.TileSource;
-import game.TilesFactory;
+import game.TileFactory;
 import game.World;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,12 +14,12 @@ public class Player extends Entity {
 
 	// for speed
 	private int blocked = 0;
-	TilesFactory tileFac;
+	TileFactory tileFac;
 
 	public Player(int x, int y) {
 		super(x, y);
 		delayTicks = 4;
-		tileFac = TilesFactory.getTilesFactory();
+		tileFac = TileFactory.getTilesFactory();
 	}
 
 	@Override

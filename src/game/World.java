@@ -19,7 +19,7 @@ public class World {
 	private EntityFactory fac;
 	private Game game;
 	
-	TilesFactory tileFac = TilesFactory.getTilesFactory();
+	TileFactory tileFac = TileFactory.getTilesFactory();
 
 	// variables
 	private int size;
