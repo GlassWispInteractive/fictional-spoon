@@ -20,7 +20,7 @@ public class World {
 
 	// variables
 	private int size;
-	private int cameraX, cameraY, viewSizeX, viewSizeY;
+	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
 	// load tile sets
 	private final Image MAP_TILES = new Image("/resources/roguelikeMap_transparent.png");
@@ -49,9 +49,11 @@ public class World {
 
 		// set view size and be sure to be smaller than the map
 		size = 16;
-		viewSizeX = Math.min(Window.WINDOW_X / size, map.getN());
-		viewSizeY = Math.min(Window.WINDOW_Y / size, map.getM());
+		cameraSizeX = Math.min(Window.SIZE_X / size, map.getN());
+		cameraSizeY = Math.min(Window.WINDOW_Y / size, map.getM());
 
+		// System.out.println(cameraSizeX);
+		// System.out.println(Window.WINDOW_X / size);
 		// initView();
 	}
 
@@ -90,8 +92,8 @@ public class World {
 	public void render(GraphicsContext gc) {
 		// set color and render ground tile
 		// if (Game.getGame().getState() != MAP)
-		for (int x = 0; x < viewSizeX; x++) {
-			for (int y = 0; y < viewSizeY; y++) {
+		for (int x = 0; x < cameraSizeX; x++) {
+			for (int y = 0; y < cameraSizeY; y++) {
 				if (map.getGround(x + cameraX, y + cameraY) != Ground.WALL) {
 
 					drawMapTile(gc, x, y, map.getGround(x + cameraX, y + cameraY),
@@ -127,27 +129,27 @@ public class World {
 	}
 
 	public void initCamera(int centerX, int centerY) {
-		this.cameraX = centerX - viewSizeX / 2;
-		this.cameraY = centerY - viewSizeY / 2;
+		this.cameraX = centerX - cameraSizeX / 2;
+		this.cameraY = centerY - cameraSizeY / 2;
 
 		fixCamera();
 	}
 
 	public void setCamera(int centerX, int centerY) {
-		int viewPaddingX = viewSizeX / 5; // 20%
-		int viewPaddingY = viewSizeY / 5;
+		int viewPaddingX = cameraSizeX / 5; // 20%
+		int viewPaddingY = cameraSizeY / 5;
 
 		if (centerX - viewPaddingX < cameraX) {
 			cameraX = centerX - viewPaddingX;
 		}
-		if (centerX + viewPaddingX - viewSizeX > cameraX) {
-			cameraX = centerX + viewPaddingX - viewSizeX;
+		if (centerX + viewPaddingX - cameraSizeX > cameraX) {
+			cameraX = centerX + viewPaddingX - cameraSizeX;
 		}
 		if (centerY - viewPaddingY < cameraY) {
 			cameraY = centerY - viewPaddingY;
 		}
-		if (centerY + viewPaddingY - viewSizeY > cameraY) {
-			cameraY = centerY + viewPaddingY - viewSizeY;
+		if (centerY + viewPaddingY - cameraSizeY > cameraY) {
+			cameraY = centerY + viewPaddingY - cameraSizeY;
 		}
 
 		fixCamera();
@@ -161,11 +163,11 @@ public class World {
 			cameraY = 0;
 		}
 
-		if (cameraX >= map.getN() - viewSizeX) {
-			cameraX = map.getN() - viewSizeX;
+		if (cameraX >= map.getN() - cameraSizeX) {
+			cameraX = map.getN() - cameraSizeX;
 		}
-		if (cameraY >= map.getM() - viewSizeY) {
-			cameraY = map.getM() - viewSizeY;
+		if (cameraY >= map.getM() - cameraSizeY) {
+			cameraY = map.getM() - cameraSizeY;
 		}
 	}
 }

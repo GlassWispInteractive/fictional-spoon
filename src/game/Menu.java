@@ -32,7 +32,7 @@ public class Menu {
 
 		souls = new ArrayList<>();
 		for (int i = 0; i < 25; i++) {
-			int x = rand.nextInt(Window.WINDOW_X - 200), y = rand.nextInt(Window.WINDOW_Y - 200);
+			int x = rand.nextInt(Window.SIZE_X - 200), y = rand.nextInt(Window.WINDOW_Y - 200);
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
 		// souls.add(new int[] { 20, 50 });
@@ -61,8 +61,8 @@ public class Menu {
 				soul[0] += (-1) + rand.nextInt(3);
 				if (soul[0] < 50)
 					soul[0] = 50;
-				if (soul[0] > Window.WINDOW_X - 50)
-					soul[0] = Window.WINDOW_X - 50;
+				if (soul[0] > Window.SIZE_X - 50)
+					soul[0] = Window.SIZE_X - 50;
 
 				soul[1] += (-1) + rand.nextInt(3);
 				if (soul[1] < 50)

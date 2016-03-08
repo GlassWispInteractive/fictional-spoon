@@ -19,7 +19,7 @@ import entities.EntityFactory;
 
 public class Window extends Application {
 	// constants
-	public static final int WINDOW_X = 1400, WINDOW_Y = 900;
+	public static final int SIZE_X = 1392, WINDOW_Y = 896;
 
 	// class members
 	private AnimationTimer gameloop;
@@ -39,7 +39,7 @@ public class Window extends Application {
 
 		// root objects
 		Group root = new Group();
-		Scene scene = new Scene(root, WINDOW_X, WINDOW_Y, Paint.valueOf("#212121"));
+		Scene scene = new Scene(root, SIZE_X, WINDOW_Y, Paint.valueOf("#212121"));
 
 		// main stage settings
 		stage.setScene(scene);
@@ -52,7 +52,7 @@ public class Window extends Application {
 			// System.out.println("game is saved");
 		});
 
-		Canvas canvas = new Canvas(WINDOW_X, WINDOW_Y);
+		Canvas canvas = new Canvas(SIZE_X, WINDOW_Y);
 		canvas.setCache(true);
 		// canvas.setCacheShape(true);
 		root.getChildren().add(canvas);
@@ -71,6 +71,7 @@ public class Window extends Application {
 		});
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
+		System.out.println(stage.getHeight());
 
 		gameloop = new AnimationTimer() {
 			private int passedTicks = 0;
@@ -89,7 +90,7 @@ public class Window extends Application {
 				}
 
 				// compute a frame
-				gc.clearRect(0, 0, WINDOW_X, WINDOW_Y);
+				gc.clearRect(0, 0, SIZE_X, WINDOW_Y);
 
 				switch (game.getState()) {
 				case MENU:
@@ -119,8 +120,10 @@ public class Window extends Application {
 				}
 			}
 		};
-
+		
+		
 		stage.show();
+		System.out.println(canvas.getHeight());
 		gameloop.start();
 	}
 }

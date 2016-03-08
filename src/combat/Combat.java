@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import entities.EntityFactory;
 import entities.Monster;
 import game.Events;
+import game.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -167,17 +168,23 @@ public class Combat {
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.BASELINE);
 
-		// background
-		gc.setFill(Paint.valueOf("#C0C0C0"));
-		gc.fillRect(0, 0, width, height);
+//		// background
+//		gc.setFill(Paint.valueOf("#C0C0C0"));
+//		gc.fillRect(0, 0, width, height);
 
 		// fancy line at 40%
 		gc.setLineWidth(3);
-		gc.strokeRoundRect(100, height * 0.4, width - 200, 30, 40, 40);
+		gc.setFill(Color.ANTIQUEWHITE);
+		gc.fillRoundRect(100, height * 0.4, Window.SIZE_X - 200, 30, 30, 30);
+		gc.setStroke(Color.BLACK);
+		gc.strokeRoundRect(100, height * 0.4, Window.SIZE_X - 200, 30, 30, 30);
+		gc.strokePolyline(new double[]{120, 120}, new double[]{height * 0.4, height * 0.4 + 30},  2);
+		gc.strokePolyline(new double[]{Window.SIZE_X - 120, Window.SIZE_X - 120}, new double[]{height * 0.4, height * 0.4 + 30},  2);
+		
 
 		// souls at 65% height
 		for (int i = 0; i < souls.size(); i++) {
-			gc.setFill(Color.DARKGREEN);
+			gc.setFill(Color.ANTIQUEWHITE);
 			gc.fillText(souls.get(i).getName(), 80 + i * 180, height * 0.65 - 5, 80);
 
 			gc.drawImage(ELEMS[i], 50 + i * 180, height * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
@@ -185,7 +192,7 @@ public class Combat {
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
 			if (curSoul == i) {
-				gc.setStroke(Color.BLACK);
+				gc.setStroke(Color.ANTIQUEWHITE);
 				gc.setLineWidth(3);
 				gc.strokeRect(50 + i * 180, height * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 			}
@@ -206,10 +213,10 @@ public class Combat {
 			}
 		}
 
-		int textboxWidth = 600;
-		int textboxHeight = 240;
-		renderTextboxes(gc, (int) (width - textboxWidth), (int) (height - textboxHeight), textboxWidth, textboxHeight,
-				souls.get(curSoul));
+//		int textboxWidth = 600;
+//		int textboxHeight = 240;
+//		renderTextboxes(gc, (int) (width - textboxWidth), (int) (height - textboxHeight), textboxWidth, textboxHeight,
+//				souls.get(curSoul));
 
 	}
 
