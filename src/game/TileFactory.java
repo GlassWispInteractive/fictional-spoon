@@ -75,6 +75,18 @@ public class TileFactory {
 	    return scale(imgSource, (int)source.getWidth() * scaling, (int)source.getHeight() * scaling);
 	}
 	
+	public Image getImage(ImageSource imgSource) {
+		
+		Image source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
+		
+		if(source == null){
+			loadImageSource(imgSource);
+		}
+		
+		return subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
+		
+	}
+	
 	public Image scale(ImageSource imgSource, int newWidth, int newHeight) {
 		
 		Image source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
