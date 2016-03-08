@@ -1,17 +1,17 @@
 package entities;
 
-import game.TilesFactory;
+import game.TileFactory;
 import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chest extends Entity {
 	
 	private boolean chestOpen = false;
-	TilesFactory tileFac;
+	TileFactory tileFac;
 
 	public Chest(int x, int y) {
 		super(x, y);
-		tileFac = TilesFactory.getTilesFactory();
+		tileFac = TileFactory.getTilesFactory();
 	}
 
 	@Override

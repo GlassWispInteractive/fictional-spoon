@@ -6,9 +6,9 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import static game.TileSource.*;
 
-public class TilesFactory {
+public class TileFactory {
 
-	private static TilesFactory singleton;
+	private static TileFactory singleton;
 
 	// load tile sets
 	private final Image[] TILE_SETS = new Image[] { new Image("/resources/roguelikeMap_transparent.png"),
@@ -17,14 +17,14 @@ public class TilesFactory {
 	
 	private Image[][][] subTiles;
 
-	public static TilesFactory getTilesFactory() {
+	public static TileFactory getTilesFactory() {
 		if (singleton == null) {
-			singleton = new TilesFactory();
+			singleton = new TileFactory();
 		}
 		return singleton;
 	}
 
-	private TilesFactory() {
+	private TileFactory() {
 		
 		int sourceCount = TILE_SETS.length;
 		subTiles = new Image[sourceCount][][];

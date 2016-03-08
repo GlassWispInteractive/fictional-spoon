@@ -1,17 +1,17 @@
 package entities;
 
-import game.TilesFactory;
+import game.TileFactory;
 import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Shrine extends Entity {
 	private int blocked = 0;
-	TilesFactory tileFac;
+	TileFactory tileFac;
 
 	public Shrine(int x, int y) {
 		super(x, y);
 		delayTicks = 1500;
-		tileFac = TilesFactory.getTilesFactory();
+		tileFac = TileFactory.getTilesFactory();
 	}
 
 	@Override
