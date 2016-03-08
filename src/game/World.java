@@ -6,8 +6,6 @@ import gen.Generator;
 import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-
 import static game.State.*;
 
 public class World {
@@ -20,17 +18,12 @@ public class World {
 	private Map map;
 	private EntityFactory fac;
 	private Game game;
+	
+	TilesFactory tileFac = TilesFactory.getTilesFactory();
 
 	// variables
 	private int size;
 	private int cameraX, cameraY, viewSizeX, viewSizeY;
-
-	// load tile sets
-	private final Image MAP_TILES = new Image("/resources/roguelikeMap_transparent.png");
-	@SuppressWarnings("unused")
-	private final Image INDOOR_TILES = new Image("/resources/roguelikeIndoor_transparent.png");
-	@SuppressWarnings("unused")
-	private final Image CHAR_TILES = new Image("/resources/roguelikeChar_transparent.png");
 
 	/**
 	 * static method to get the singleton class object
@@ -120,17 +113,15 @@ public class World {
 	}
 
 	private void drawMapTile(GraphicsContext gc, int x, int y, Ground ground, int tile) {
-		// final double cols = (MAP_TILES.getWidth() + 1) / 17;
-		// final double rows = (MAP_TILES.getHeight() + 1) / 17;
 
 		// offset in tile set
 		if (ground == Ground.FLOOR)
 			tile += 20 + 57 * 12;
 		if (ground == Ground.ROOM)
-			tile += 34 + 57 * 12;
-		
-		gc.drawImage(MAP_TILES, (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, x * size, y * size, size, size);
+			tile += 20 + 57 * 12;//+-7
 
+//		tileFac.drawTile(gc, TileSource.MAP_TILES, x, y, size, tile);
+		gc.drawImage(TilesFactory.getTilesFactory().getMapTiles(), (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, x * size, y * size, size, size);
 	}
 
 	public void initCamera(int centerX, int centerY) {

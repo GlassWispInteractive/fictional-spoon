@@ -1,10 +1,11 @@
 package entities;
 
 import game.Events;
+import game.TileSource;
+import game.TilesFactory;
 import game.World;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class Player extends Entity {
 
@@ -13,29 +14,21 @@ public class Player extends Entity {
 
 	// for speed
 	private int blocked = 0;
+	TilesFactory tileFac;
 
 	public Player(int x, int y) {
 		super(x, y);
 		delayTicks = 4;
+		tileFac = TilesFactory.getTilesFactory();
 	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		gc.setFill(Color.RED);
-		gc.fillOval((x - offsetX) * size, (y - offsetY) * size, size, size);
-
+		
+		int tile = 0 + 54 * 8;
+//		tileFac.drawTile(gc, TileSource.CHAR_TILES, (x - offsetX), (y - offsetY), size, tile);
+		gc.drawImage(tileFac.getCharTiles(), (16 + 1) * (tile % 54), (16 + 1) * (tile / 54), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
 	}
-
-	// public void setImage(String filename) {
-	// Image i = new Image(filename);
-	// setImage(i);
-	// }
-
-	// public void setImage(Image i) {
-	// image = i;
-	// width = i.getWidth();
-	// height = i.getHeight();
-	// }
 
 	@Override
 	public void tick(double elapsedTime) {
