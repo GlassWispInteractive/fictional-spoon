@@ -195,13 +195,13 @@ public class Combat {
 			lowerBound = 0.5;
 			upperBound = 0.9;
 		} else if (level <= 4) {
-			lowerBound = 0.55;
-			upperBound = 0.85;
+			lowerBound = 0.6;
+			upperBound = 0.8;
 		} else if (level <= 7) {
-			lowerBound = 0.60;
-			upperBound = 0.80;
-		} else if (level <= 9) {
 			lowerBound = 0.65;
+			upperBound = 0.75;
+		} else if (level <= 9) {
+			lowerBound = 0.68;
 			upperBound = 0.75;
 		} else {
 			lowerBound = 0.70;
