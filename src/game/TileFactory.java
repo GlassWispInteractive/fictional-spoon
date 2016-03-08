@@ -68,12 +68,9 @@ public class TileFactory {
 	public void drawTile(GraphicsContext gc, TileSource tileSource, int x, int y, int size, int tileX, int tileY) {
 		
 		if(subTiles[tileSource.ordinal()][tileX][tileY] == null){
-			
-			int cols = (int) ((TILE_SETS[tileSource.ordinal()].getWidth() + 1) / 17);
-			int tile = tileX + cols * tileY;
-			
+						
 			PixelReader reader = TILE_SETS[tileSource.ordinal()].getPixelReader();
-			WritableImage newImage = new WritableImage(reader, (16 + 1) * (tile % cols), (16 + 1) * (tile / cols), 16, 16);
+			WritableImage newImage = new WritableImage(reader, (16 + 1) * tileX, (16 + 1) * tileY, 16, 16);
 			
 			subTiles[tileSource.ordinal()][tileX][tileY] = newImage;
 		}
