@@ -13,10 +13,14 @@ public class Player extends Entity {
 
 	// for speed
 	private int blocked = 0;
+	
+	private int souls[];
 
 	public Player(int x, int y) {
 		super(x, y);
 		delayTicks = 4;
+		
+		souls = new int[]{1, 1, 1, 1, 1};
 	}
 
 	@Override

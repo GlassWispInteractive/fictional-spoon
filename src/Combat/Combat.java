@@ -55,9 +55,10 @@ public class Combat {
 	private static ArrayList<Soul> getHardCodedSouls(){
 		ArrayList<Soul> list = new ArrayList<Soul>();
 		
-		list.add(new Soul("der beste"));
-		list.add(new Soul("dannysahne"));
-		list.add(new Soul("käse"));
+		list.add(new Soul("Earth"));
+		list.add(new Soul("Fire"));
+		list.add(new Soul("Air"));
+		list.add(new Soul("Water"));
 		
 		return list;
 	}
