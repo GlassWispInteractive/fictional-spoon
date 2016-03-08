@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import entities.EntityFactory;
 import entities.Monster;
 import game.Events;
+import game.TileFactory;
 import game.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -275,7 +276,10 @@ public class Combat {
 		for (int i = 0; i < monster.size(); i++) {
 			gc.setFill(Color.RED);
 			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1 - 5, 80);
-			gc.fillRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
+			
+			Image image = TileFactory.getTilesFactory().scale(monster.get(i).getImageSource(), 6);
+			gc.drawImage(image, Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1);
+//			gc.fillRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
 
 			if (curFocus % monster.size() == i) {
 				gc.setStroke(Color.BLACK);
