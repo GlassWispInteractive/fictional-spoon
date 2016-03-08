@@ -25,7 +25,10 @@ public class Combat {
 	private enum CombatState{CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS}
 	private CombatState combatState = CombatState.CHOOSE_SOUL;
 	
-	private final Image EARTH = new Image("/resources/elem/earth.png");
+	private final Image ELEMS[] = new Image[]{new Image("/resources/elem/earth.png"),new Image("/resources/elem/fire.png"),new Image("/resources/elem/wind.png"),new Image("/resources/elem/water.png") };
+//	private final Image FIRE = new Image("/resources/elem/fire.png");
+//	private final Image WIND = new Image("/resources/elem/wind.png");
+//	private final Image WATER = new Image("/resources/elem/water.png");
 	
 	public static Combat startCombat(ArrayList<Soul> souls, ArrayList<Monster> monster){
 		if(singleton == null){
@@ -157,19 +160,22 @@ public class Combat {
 		gc.setFill(Paint.valueOf("#C0C0C0"));
 		gc.fillRect(0, 0, width, height);
 		
-		gc.drawImage(EARTH, 0, 0);
-//		gc.drawImage(FIRE, 0, 0);
+		
 		
 		//souls at 65% height
 		for(int i = 0; i < souls.size(); i++){
 			gc.setFill(Color.GREEN);
 			gc.fillText(souls.get(i).getName(), 50 + i*120, height * 0.65 -5, 80);
-			gc.fillRect(50 + i*120, height * 0.65, 80, 80);
+			
+			
+			gc.drawImage(ELEMS[i], 50 + i*120, height * 0.65, ELEMS[i].getWidth()/5, ELEMS[i].getHeight()/5);
+			
+//			gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 			
 			if(curSoul == i){
 				gc.setStroke(Color.BLACK);
 				gc.setLineWidth(4);
-				gc.strokeRect(50 + i*120, height * 0.65, 80, 80);
+				gc.strokeRect(50 + i*120, height * 0.65, ELEMS[i].getWidth()/5, ELEMS[i].getHeight()/5);
 			}
 		}
 		
