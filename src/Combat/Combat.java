@@ -167,17 +167,17 @@ public class Combat {
 
 		// souls at 65% height
 		for (int i = 0; i < souls.size(); i++) {
-			gc.setFill(Color.GREEN);
-			gc.fillText(souls.get(i).getName(), 50 + i * 120, height * 0.65 - 5, 80);
+			gc.setFill(Color.DARKGREEN);
+			gc.fillText(souls.get(i).getName(), 80 + i * 180, height * 0.65 - 5, 80);
 
-			gc.drawImage(ELEMS[i], 50 + i * 120, height * 0.65, ELEMS[i].getWidth() / 5, ELEMS[i].getHeight() / 5);
+			gc.drawImage(ELEMS[i], 50 + i * 180, height * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
 			if (curSoul == i) {
 				gc.setStroke(Color.BLACK);
 				gc.setLineWidth(3);
-				gc.strokeRect(50 + i * 120, height * 0.65, ELEMS[i].getWidth() / 5, ELEMS[i].getHeight() / 5);
+				gc.strokeRect(50 + i * 180, height * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 			}
 		}
 
