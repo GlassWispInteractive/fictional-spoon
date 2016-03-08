@@ -34,7 +34,7 @@ public class Window extends Application {
 	public void start(Stage stage) {
 		game = Game.getGame();
 		lvl = World.getWorld();
-		Menu.getMenu().setList(new String[] { "Start", "Help", "Credits", "Exit" });
+		Menu.getMenu().setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
 
 		// root objects
 		Group root = new Group();
@@ -82,6 +82,10 @@ public class Window extends Application {
 				lastNanoTime = currentNanoTime;
 				passedTicks = (int) Math.floor(time * 60.0);
 				time -= passedTicks / 60.0;
+				
+				if (Events.getEvents().isESC()) {
+					game.setState(MENU);
+				}
 
 				// compute a frame
 				gc.clearRect(0, 0, SIZE_X, SIZE_Y);

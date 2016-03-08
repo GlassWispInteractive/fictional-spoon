@@ -85,6 +85,9 @@ public class Menu {
 			case "Start":
 				started = true;
 				break;
+			case "Combat":
+				Game.getGame().setState(State.COMBAT);
+				break;
 			case "Exit":
 				// TODO save?
 				System.exit(0);

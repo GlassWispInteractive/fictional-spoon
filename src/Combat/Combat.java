@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import entities.EntityFactory;
 import entities.Monster;
 import game.Events;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
 public class Combat {
 
@@ -66,10 +70,10 @@ public class Combat {
 	private static ArrayList<Soul> getHardCodedSouls() {
 		ArrayList<Soul> list = new ArrayList<Soul>();
 
-		list.add(new Soul("Earth"));
-		list.add(new Soul("Fire"));
-		list.add(new Soul("Air"));
-		list.add(new Soul("Water"));
+		list.add(new Soul("Earth (1)"));
+		list.add(new Soul("Fire (2)"));
+		list.add(new Soul("Air (3)"));
+		list.add(new Soul("Water (4)"));
 
 		return list;
 	}
@@ -153,9 +157,15 @@ public class Combat {
 	}
 
 	public void render(GraphicsContext gc) {
-
+		// vars
 		double width = gc.getCanvas().getWidth();
 		double height = gc.getCanvas().getHeight();
+
+		Font font = Font.font("Helvetica", FontWeight.NORMAL, 16);
+		gc.setFont(font);
+
+		gc.setTextAlign(TextAlignment.LEFT);
+		gc.setTextBaseline(VPos.BASELINE);
 
 		// background
 		gc.setFill(Paint.valueOf("#C0C0C0"));
@@ -163,7 +173,7 @@ public class Combat {
 
 		// fancy line at 40%
 		gc.setLineWidth(3);
-		gc.strokeRoundRect(100, height * 0.4, width-200, 30, 40, 40);
+		gc.strokeRoundRect(100, height * 0.4, width - 200, 30, 40, 40);
 
 		// souls at 65% height
 		for (int i = 0; i < souls.size(); i++) {

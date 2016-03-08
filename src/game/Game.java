@@ -16,7 +16,7 @@ public class Game {
 			Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
 
 	private Game() {
-		state = COMBAT;
+		state = MENU;
 	}
 
 	public static Game getGame() {

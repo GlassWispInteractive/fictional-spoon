@@ -76,10 +76,6 @@ public class World {
 		}
 		fac.smartDelete();
 
-		if (Events.getEvents().isESC()) {
-			game.setState(MENU);
-		}
-
 		// if (Events.getEvents().isM()) {
 		// if (game.getState() == MAP) {
 		// Entity player = EntityFactory.getFactory().getPlayer();
