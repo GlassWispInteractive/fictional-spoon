@@ -19,7 +19,7 @@ import entities.EntityFactory;
 
 public class Window extends Application {
 	// constants
-	public static final int SIZE_X = 1392, WINDOW_Y = 896;
+	public static final int SIZE_X = 1392, SIZE_Y = 896;
 
 	// class members
 	private AnimationTimer gameloop;
@@ -39,7 +39,7 @@ public class Window extends Application {
 
 		// root objects
 		Group root = new Group();
-		Scene scene = new Scene(root, SIZE_X, WINDOW_Y, Paint.valueOf("#212121"));
+		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#212121"));
 
 		// main stage settings
 		stage.setScene(scene);
@@ -52,7 +52,7 @@ public class Window extends Application {
 			// System.out.println("game is saved");
 		});
 
-		Canvas canvas = new Canvas(SIZE_X, WINDOW_Y);
+		Canvas canvas = new Canvas(SIZE_X, SIZE_Y);
 		canvas.setCache(true);
 		// canvas.setCacheShape(true);
 		root.getChildren().add(canvas);
@@ -90,7 +90,7 @@ public class Window extends Application {
 				}
 
 				// compute a frame
-				gc.clearRect(0, 0, SIZE_X, WINDOW_Y);
+				gc.clearRect(0, 0, SIZE_X, SIZE_Y);
 
 				switch (game.getState()) {
 				case MENU:

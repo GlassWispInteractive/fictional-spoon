@@ -158,71 +158,68 @@ public class Combat {
 	}
 
 	public void render(GraphicsContext gc) {
-		// vars
-		double width = gc.getCanvas().getWidth();
-		double height = gc.getCanvas().getHeight();
-
+		// font settings
 		Font font = Font.font("Helvetica", FontWeight.NORMAL, 16);
 		gc.setFont(font);
 
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.BASELINE);
 
-//		// background
-//		gc.setFill(Paint.valueOf("#C0C0C0"));
-//		gc.fillRect(0, 0, width, height);
+		// // background
+		// gc.setFill(Paint.valueOf("#C0C0C0"));
+		// gc.fillRect(0, 0, width, height);
 
 		// fancy line at 40%
 		gc.setLineWidth(3);
-		gc.setFill(Color.ANTIQUEWHITE);
-		gc.fillRoundRect(100, height * 0.4, Window.SIZE_X - 200, 30, 30, 30);
-		gc.setStroke(Color.BLACK);
-		gc.strokeRoundRect(100, height * 0.4, Window.SIZE_X - 200, 30, 30, 30);
-		gc.strokePolyline(new double[]{120, 120}, new double[]{height * 0.4, height * 0.4 + 30},  2);
-		gc.strokePolyline(new double[]{Window.SIZE_X - 120, Window.SIZE_X - 120}, new double[]{height * 0.4, height * 0.4 + 30},  2);
-		
-		final double status = 0.5;
+		// gc.setFill(Color.ANTIQUEWHITE);
+		// gc.fillRoundRect(100, height * 0.4, Window.SIZE_X - 200, 30, 30, 30);
+		gc.setStroke(Color.GREY);
+		gc.strokeRoundRect(100, Window.SIZE_Y * 0.4, Window.SIZE_X - 200, 30, 30, 30);
+		// gc.strokePolyline(new double[]{120, 120}, new double[]{height * 0.4,
+		// height * 0.4 + 30}, 2);
+		// gc.strokePolyline(new double[]{Window.SIZE_X - 120, Window.SIZE_X -
+		// 120}, new double[]{height * 0.4, height * 0.4 + 30}, 2);
+
+		final double status = 1;
 		gc.setFill(Color.ORANGE);
-		gc.fillRoundRect(100, height * 0.4, 100 + status * (Window.SIZE_X - 200), 30, 30, 30);
-		
-		
-		
+		gc.fillRoundRect(110, Window.SIZE_Y * 0.4 + 5, status * (Window.SIZE_X - 220), 20, 20, 20);
 
 		// souls at 65% height
 		for (int i = 0; i < souls.size(); i++) {
 			gc.setFill(Color.ANTIQUEWHITE);
-			gc.fillText(souls.get(i).getName(), 80 + i * 180, height * 0.65 - 5, 80);
+			gc.fillText(souls.get(i).getName(), 80 + i * 180, Window.SIZE_Y * 0.65 - 5, 80);
 
-			gc.drawImage(ELEMS[i], 50 + i * 180, height * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
+			gc.drawImage(ELEMS[i], 50 + i * 180, Window.SIZE_Y * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
 			if (curSoul == i) {
 				gc.setStroke(Color.ANTIQUEWHITE);
 				gc.setLineWidth(3);
-				gc.strokeRect(50 + i * 180, height * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
+				gc.strokeRect(50 + i * 180, Window.SIZE_Y * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 			}
 		}
 
 		// monster at 10% height
 		for (int i = 0; i < monster.size(); i++) {
 			gc.setFill(Color.RED);
-			gc.fillText(monster.get(i).getName(), width - 150 - i * 120, height * 0.1 - 5, 80);
-			gc.fillRect(width - 150 - i * 120, height * 0.1, 80, 80);
+			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1 - 5, 80);
+			gc.fillRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
 
 			if (combatState == CombatState.CHOOSE_FOCUS) {
 				if (curFocus == i) {
 					gc.setStroke(Color.BLACK);
 					gc.setLineWidth(4);
-					gc.strokeRect(width - 150 - i * 120, height * 0.1, 80, 80);
+					gc.strokeRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
 				}
 			}
 		}
 
-//		int textboxWidth = 600;
-//		int textboxHeight = 240;
-//		renderTextboxes(gc, (int) (width - textboxWidth), (int) (height - textboxHeight), textboxWidth, textboxHeight,
-//				souls.get(curSoul));
+		// int textboxWidth = 600;
+		// int textboxHeight = 240;
+		// renderTextboxes(gc, (int) (width - textboxWidth), (int) (height -
+		// textboxHeight), textboxWidth, textboxHeight,
+		// souls.get(curSoul));
 
 	}
 
