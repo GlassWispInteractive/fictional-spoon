@@ -69,8 +69,8 @@ public class Combat {
 		ArrayList<Monster> list = new ArrayList<Monster>();
 
 		list.add(EntityFactory.getFactory().makeMonster(13, 13, 0, new int[] { 1, 2, 3, 4, 5 }, "name"));
-		list.add(EntityFactory.getFactory().makeMonster(12, 23, 0, new int[] { 1, 2, 3, 4, 5 }, "test"));
-		list.add(EntityFactory.getFactory().makeMonster(14, 33, 0, new int[] { 1, 2, 3, 4, 5 }, "rudolf"));
+		list.add(EntityFactory.getFactory().makeMonster(12, 23, 0, new int[] { 1, 6, 3, 4, 5 }, "test"));
+		list.add(EntityFactory.getFactory().makeMonster(14, 33, 0, new int[] { 1, 2, 3, 4, 2 }, "rudolf"));
 
 		return list;
 	}
@@ -274,17 +274,19 @@ public class Combat {
 
 		// monster at 10% height
 		for (int i = 0; i < monster.size(); i++) {
-			gc.setFill(Color.RED);
-			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1 - 5, 80);
 			
-			Image image = TileFactory.getTilesFactory().scale(monster.get(i).getImageSource(), 6);
-			gc.drawImage(image, Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1);
+			Image image = TileFactory.getTilesFactory().scale(monster.get(i).getImageSource(), 130, 130);
+			
+			gc.setFill(Color.RED);
+			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 80 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1 - 5, 80);
+			
+			gc.drawImage(image, Window.SIZE_X - 80 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1);
 //			gc.fillRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
 
 			if (curFocus % monster.size() == i) {
-				gc.setStroke(Color.BLACK);
+				gc.setStroke(Color.RED);
 				gc.setLineWidth(4);
-				gc.strokeRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
+				gc.strokeRect(Window.SIZE_X - 80 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1, image.getWidth(), image.getHeight());
 			}
 		}
 
