@@ -1,5 +1,6 @@
 package entities;
 
+import game.ImageSource;
 import game.TileFactory;
 import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,13 +19,11 @@ public class Chest extends Entity {
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 		
 		if(chestOpen){
-			int tileX = 15;
-			int tileY = 7;
-			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 15, 7);
+			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
 		}else{
-			int tileX = 14;
-			int tileY = 6;
-			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 14, 6);
+			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
 		}
 	}
 

@@ -1,5 +1,6 @@
 package entities;
 
+import game.ImageSource;
 import game.TileFactory;
 import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,13 +19,11 @@ public class Shrine extends Entity {
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 		
 		if(blocked == 0){
-			int tileX = 43;
-			int tileY = 10;
-			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 43, 10);
+			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
 		}else{
-			int tileX = 41;
-			int tileY = 10;
-			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 41, 10);
+			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
 		}
 
 	}
