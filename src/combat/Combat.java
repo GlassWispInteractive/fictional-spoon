@@ -275,18 +275,18 @@ public class Combat {
 		// monster at 10% height
 		for (int i = 0; i < monster.size(); i++) {
 			
-			Image image = TileFactory.getTilesFactory().scale(monster.get(i).getImageSource(), 130, 130);
+			Image image = TileFactory.getTilesFactory().getImage(monster.get(i).getImageSource());
 			
 			gc.setFill(Color.RED);
-			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 80 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1 - 5, 80);
+			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1 - 5, 80);
 			
-			gc.drawImage(image, Window.SIZE_X - 80 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1);
+			gc.drawImage(image, Window.SIZE_X - 180 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1, 130, 130);
 //			gc.fillRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
 
 			if (curFocus % monster.size() == i) {
 				gc.setStroke(Color.RED);
 				gc.setLineWidth(4);
-				gc.strokeRect(Window.SIZE_X - 80 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1, image.getWidth(), image.getHeight());
+				gc.strokeRect(Window.SIZE_X - 180 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1, 130, 130);
 			}
 		}
 
