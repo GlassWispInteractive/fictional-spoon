@@ -13,7 +13,6 @@ public class Monster extends Entity {
 	private int[] power = new int[5];
 
 	private int maxType = -1;
-	@SuppressWarnings("unused")
 	private String name;
 	private boolean monsterDead = false;
 

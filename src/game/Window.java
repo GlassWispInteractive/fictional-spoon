@@ -12,13 +12,14 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import static game.State.*;
-import Combat.Combat;
+
+import combat.Combat;
 import entities.Entity;
 import entities.EntityFactory;
 
 public class Window extends Application {
 	// constants
-	private final int SIZE_X = 1400, SIZE_Y = 900;
+	public static final int WINDOW_X = 1400, WINDOW_Y = 900;
 
 	// class members
 	private AnimationTimer gameloop;
@@ -38,7 +39,7 @@ public class Window extends Application {
 
 		// root objects
 		Group root = new Group();
-		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#212121"));
+		Scene scene = new Scene(root, WINDOW_X, WINDOW_Y, Paint.valueOf("#212121"));
 
 		// main stage settings
 		stage.setScene(scene);
@@ -51,7 +52,7 @@ public class Window extends Application {
 			// System.out.println("game is saved");
 		});
 
-		Canvas canvas = new Canvas(SIZE_X, SIZE_Y);
+		Canvas canvas = new Canvas(WINDOW_X, WINDOW_Y);
 		canvas.setCache(true);
 		// canvas.setCacheShape(true);
 		root.getChildren().add(canvas);
@@ -88,7 +89,7 @@ public class Window extends Application {
 				}
 
 				// compute a frame
-				gc.clearRect(0, 0, SIZE_X, SIZE_Y);
+				gc.clearRect(0, 0, WINDOW_X, WINDOW_Y);
 
 				switch (game.getState()) {
 				case MENU:

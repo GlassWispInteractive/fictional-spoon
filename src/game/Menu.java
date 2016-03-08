@@ -32,7 +32,7 @@ public class Menu {
 
 		souls = new ArrayList<>();
 		for (int i = 0; i < 25; i++) {
-			int x = rand.nextInt(1200), y = rand.nextInt(700);
+			int x = rand.nextInt(Window.WINDOW_X - 200), y = rand.nextInt(Window.WINDOW_Y - 200);
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
 		// souls.add(new int[] { 20, 50 });
@@ -47,7 +47,6 @@ public class Menu {
 	}
 
 	public void tick(int ticks) {
-		final double XMAX = 1400 - 50, YMAX = 900 - 50;
 		started = false;
 
 		Events e = Events.getEvents();
@@ -62,14 +61,14 @@ public class Menu {
 				soul[0] += (-1) + rand.nextInt(3);
 				if (soul[0] < 50)
 					soul[0] = 50;
-				if (soul[0] > XMAX)
-					soul[0] = XMAX;
+				if (soul[0] > Window.WINDOW_X - 50)
+					soul[0] = Window.WINDOW_X - 50;
 
 				soul[1] += (-1) + rand.nextInt(3);
 				if (soul[1] < 50)
 					soul[1] = 50;
-				if (soul[1] > YMAX)
-					soul[1] = YMAX;
+				if (soul[1] > Window.WINDOW_Y - 50)
+					soul[1] = Window.WINDOW_Y - 50;
 			}
 		}
 

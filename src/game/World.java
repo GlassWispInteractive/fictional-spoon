@@ -8,8 +8,6 @@ import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import static game.State.*;
-
 public class World {
 
 	/** SINGELTON */
@@ -19,7 +17,6 @@ public class World {
 	private Generator gen;
 	private Map map;
 	private EntityFactory fac;
-	private Game game;
 
 	// variables
 	private int size;
@@ -49,12 +46,11 @@ public class World {
 		gen = new Generator(350, 225);
 		map = gen.newLevel();
 		fac = EntityFactory.getFactory();
-		game = Game.getGame();
 
 		// set view size and be sure to be smaller than the map
 		size = 16;
-		viewSizeX = Math.min(1400 / size, map.getN());
-		viewSizeY = Math.min(900 / size, map.getM());
+		viewSizeX = Math.min(Window.WINDOW_X / size, map.getN());
+		viewSizeY = Math.min(Window.WINDOW_Y / size, map.getM());
 
 		// initView();
 	}
@@ -70,7 +66,7 @@ public class World {
 
 	public void tick(double elapsedTime) {
 		fac.getPlayer().tick(elapsedTime);
-		
+
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(elapsedTime);
 		}
@@ -98,7 +94,8 @@ public class World {
 			for (int y = 0; y < viewSizeY; y++) {
 				if (map.getGround(x + cameraX, y + cameraY) != Ground.WALL) {
 
-					drawMapTile(gc, x, y, map.getGround(x + cameraX, y + cameraY), map.getTileNumber(x + cameraX, y + cameraY));
+					drawMapTile(gc, x, y, map.getGround(x + cameraX, y + cameraY),
+							map.getTileNumber(x + cameraX, y + cameraY));
 
 				} else {
 					gc.setFill(Game.getColor(map.getGround(x + cameraX, y + cameraY)));
@@ -124,7 +121,7 @@ public class World {
 			tile += 20 + 57 * 12;
 		if (ground == Ground.ROOM)
 			tile += 34 + 57 * 12;
-		
+
 		gc.drawImage(MAP_TILES, (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, x * size, y * size, size, size);
 
 	}
