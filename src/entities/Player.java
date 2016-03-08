@@ -28,7 +28,6 @@ public class Player extends Entity {
 		int tileX = 0;
 		int tileY = 8;
 		tileFac.drawTile(gc, TileSource.CHAR_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
-//		gc.drawImage(tileFac.getCharTiles(), (16 + 1) * (tile % 54), (16 + 1) * (tile / 54), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
 	}
 
 	@Override

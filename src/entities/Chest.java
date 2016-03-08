@@ -21,12 +21,10 @@ public class Chest extends Entity {
 			int tileX = 15;
 			int tileY = 7;
 			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
-//			gc.drawImage(tileFac.getMapTiles(), (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
 		}else{
 			int tileX = 14;
 			int tileY = 6;
 			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
-//			gc.drawImage(tileFac.getMapTiles(), (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
 		}
 	}
 
