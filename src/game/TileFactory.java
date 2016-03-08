@@ -4,7 +4,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
-import static game.TileSource.*;
 
 public class TileFactory {
 
@@ -41,19 +40,6 @@ public class TileFactory {
 			}
 		}
 	}
-
-	public Image getMapTiles() {
-		return TILE_SETS[MAP_TILES.ordinal()];
-	}
-
-	public Image getIndoorTiles() {
-		return TILE_SETS[INDOOR_TILES.ordinal()];
-	}
-
-	public Image getCharTiles() {
-		return TILE_SETS[CHAR_TILES.ordinal()];
-	}
-
 	
 	/**
 	 * 
