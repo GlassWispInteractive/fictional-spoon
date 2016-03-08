@@ -25,7 +25,7 @@ public class Combat {
 	private int curFocus = 0;
 	private int curAttackRow = 0;
 	private int curAttackColum = 0;
-	private double status;
+	private double status, lowerBound, upperBound;
 
 	private enum CombatState {
 		CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS
@@ -58,6 +58,8 @@ public class Combat {
 		curAttackColum = 0;
 
 		status = 0;
+		lowerBound = 0.6;
+		upperBound = 0.75;
 	}
 
 	private static ArrayList<Monster> getHardCodedMonster() {
@@ -95,83 +97,86 @@ public class Combat {
 
 		Events e = Events.getEvents();
 
-		switch (combatState) {
-		case CHOOSE_SOUL:
-			// if (e.isLeft()) {
-			// curSoul = (curSoul + souls.size() - 1) % souls.size();
-			// }
-			// if (e.isRight()) {
-			// curSoul = (curSoul + 1) % souls.size();
-			// }
-			// if (e.isEnter()) {
-			// combatState = CombatState.CHOOSE_ATTACK;
-			// }
-			if (e.isOne())
-				curSoul = 0;
-			if (e.isTwo())
-				curSoul = 1;
-			if (e.isThree())
-				curSoul = 2;
-			if (e.isFour())
-				curSoul = 3;
+		// if (e.isLeft()) {
+		// curSoul = (curSoul + souls.size() - 1) % souls.size();
+		// }
+		// if (e.isRight()) {
+		// curSoul = (curSoul + 1) % souls.size();
+		// }
+		//
 
-			if (e.isLeft()) {
-				curFocus = (curFocus + 1) % monster.size();
-			}
-			if (e.isRight()) {
-				curFocus = (curFocus + monster.size() - 1) % monster.size();
-			}
+		// number pressed
+		if (e.isOne())
+			curSoul = 0;
+		if (e.isTwo())
+			curSoul = 1;
+		if (e.isThree())
+			curSoul = 2;
+		if (e.isFour())
+			curSoul = 3;
 
-			break;
-
-		case CHOOSE_ATTACK:
-			if (e.isLeft()) {
-				if (curAttackRow <= 1) {
-					curAttackColum = Math.max(--curAttackColum, 0);
-				} else {
-					curAttackColum = Math.max(--curAttackColum, 1);
-				}
-			}
-			if (e.isRight()) {
-				curAttackColum = Math.min(++curAttackColum, 1);
-			}
-			if (e.isUp()) {
-				curAttackRow = Math.max(--curAttackRow, 0);
-			}
-			if (e.isDown()) {
-				if (curAttackColum == 0) {
-					curAttackRow = Math.min(++curAttackRow, 1);
-				} else {
-					curAttackRow = Math.min(++curAttackRow, 2);
-				}
-			}
-			if (e.isEnter()) {
-				if (curAttackRow == 2 && curAttackColum == 1) {
-					// back buton
-					combatState = CombatState.CHOOSE_SOUL;
-				} else {
-					// choose attack focus
-					combatState = CombatState.CHOOSE_FOCUS;
-				}
-			}
-			break;
-
-		case CHOOSE_FOCUS:
-			if (e.isLeft()) {
-				curFocus = (curFocus + 1) % monster.size();
-			}
-			if (e.isRight()) {
-				curFocus = (curFocus + monster.size() - 1) % monster.size();
-			}
-			if (e.isEnter()) {
-				// attack
-				// TODO attack monster
-			}
-			break;
-
-		default:
-			break;
+		// arrow pressed
+		if (e.isLeft()) {
+			curFocus = (curFocus + 1) % monster.size();
 		}
+		if (e.isRight()) {
+			curFocus = (curFocus + monster.size() - 1) % monster.size();
+		}
+
+		if (e.isEnter() || status == 1) {
+
+			if (status > lowerBound && status < upperBound) {
+				System.out.println("Bonus damage");
+			}
+
+			// reset bar progress
+			status = 0;
+		}
+
+		// case CHOOSE_ATTACK:
+		// if (e.isLeft()) {
+		// if (curAttackRow <= 1) {
+		// curAttackColum = Math.max(--curAttackColum, 0);
+		// } else {
+		// curAttackColum = Math.max(--curAttackColum, 1);
+		// }
+		// }
+		// if (e.isRight()) {
+		// curAttackColum = Math.min(++curAttackColum, 1);
+		// }
+		// if (e.isUp()) {
+		// curAttackRow = Math.max(--curAttackRow, 0);
+		// }
+		// if (e.isDown()) {
+		// if (curAttackColum == 0) {
+		// curAttackRow = Math.min(++curAttackRow, 1);
+		// } else {
+		// curAttackRow = Math.min(++curAttackRow, 2);
+		// }
+		// }
+		// if (e.isEnter()) {
+		// if (curAttackRow == 2 && curAttackColum == 1) {
+		// // back buton
+		// combatState = CombatState.CHOOSE_SOUL;
+		// } else {
+		// // choose attack focus
+		// combatState = CombatState.CHOOSE_FOCUS;
+		// }
+		// }
+		// break;
+		//
+		// case CHOOSE_FOCUS:
+		// if (e.isLeft()) {
+		// curFocus = (curFocus + 1) % monster.size();
+		// }
+		// if (e.isRight()) {
+		// curFocus = (curFocus + monster.size() - 1) % monster.size();
+		// }
+		// if (e.isEnter()) {
+		// // attack
+		// // TODO attack monster
+		// }
+		// break;
 
 		Events.getEvents().clear();
 
@@ -196,7 +201,6 @@ public class Combat {
 		gc.setStroke(Color.GREY);
 		gc.strokeRoundRect(100, Window.SIZE_Y * 0.4, Window.SIZE_X - 200, 30, 30, 30);
 
-		final double lower = 0.6, upper = 0.65;
 		// status = 0.5;
 		gc.setFill(Color.ORANGE);
 		gc.fillRoundRect(110, Window.SIZE_Y * 0.4 + 5, status * (Window.SIZE_X - 220), 20, 20, 20);
@@ -210,10 +214,12 @@ public class Combat {
 		// 110 },
 		// new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
 
-		gc.strokePolyline(new double[] { 110 + lower * (Window.SIZE_X - 220), 110 + lower * (Window.SIZE_X - 220) },
+		gc.strokePolyline(
+				new double[] { 110 + lowerBound * (Window.SIZE_X - 220), 110 + lowerBound * (Window.SIZE_X - 220) },
 				new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
 
-		gc.strokePolyline(new double[] { 110 + upper * (Window.SIZE_X - 220), 110 + upper * (Window.SIZE_X - 220) },
+		gc.strokePolyline(
+				new double[] { 110 + upperBound * (Window.SIZE_X - 220), 110 + upperBound * (Window.SIZE_X - 220) },
 				new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
 
 		// souls at 65% height
