@@ -1,25 +1,30 @@
 package entities;
 
+import game.TileFactory;
+import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class Chest extends Entity {
 	
 	private boolean chestOpen = false;
+	TileFactory tileFac;
 
 	public Chest(int x, int y) {
 		super(x, y);
-		// TODO Auto-generated constructor stub
+		tileFac = TileFactory.getTilesFactory();
 	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		gc.setFill(Color.BROWN);
-		gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size - 2);
 		
-		if(!chestOpen){
-			gc.setFill(Color.BLACK);
-			gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size / 2);
+		if(chestOpen){
+			int tileX = 15;
+			int tileY = 7;
+			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+		}else{
+			int tileX = 14;
+			int tileY = 6;
+			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
 		}
 	}
 
