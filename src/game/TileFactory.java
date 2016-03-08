@@ -71,11 +71,24 @@ public class TileFactory {
 		}
 		
 		source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
+	    
+	    return scale(imgSource, (int)source.getWidth() * scaling, (int)source.getHeight() * scaling);
+	}
+	
+	public Image scale(ImageSource imgSource, int newWidth, int newHeight) {
+		
+		Image source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
+		
+		if(source == null){
+			loadImageSource(imgSource);
+		}
+		
+		source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
 		
 	    ImageView imageView = new ImageView(source);
 	    imageView.setPreserveRatio(true);
-	    imageView.setFitWidth(source.getWidth()*scaling);
-	    imageView.setFitHeight(source.getHeight()*scaling);
+	    imageView.setFitWidth(newWidth);
+	    imageView.setFitHeight(newHeight);
 	    return imageView.snapshot(null, null);
 	}
 	
