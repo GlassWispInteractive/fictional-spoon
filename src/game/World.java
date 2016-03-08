@@ -120,8 +120,8 @@ public class World {
 		if (ground == Ground.ROOM)
 			tile += 20 + 57 * 12;//+-7
 
-//		tileFac.drawTile(gc, TileSource.MAP_TILES, x, y, size, tile);
-		gc.drawImage(TilesFactory.getTilesFactory().getMapTiles(), (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, x * size, y * size, size, size);
+		tileFac.drawTile(gc, TileSource.MAP_TILES, x, y, size, tile);
+//		gc.drawImage(TilesFactory.getTilesFactory().getMapTiles(), (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, x * size, y * size, size, size);
 	}
 
 	public void initCamera(int centerX, int centerY) {

@@ -18,13 +18,15 @@ public class Shrine extends Entity {
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 		
 		if(blocked == 0){
-			int tile = 43 + 54 * 10;
-//			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tile);
-			gc.drawImage(tileFac.getMapTiles(), (16 + 1) * (tile % 54), (16 + 1) * (tile / 54), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
+			int tileX = 43;
+			int tileY = 10;
+			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+//			gc.drawImage(tileFac.getMapTiles(), (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
 		}else{
-			int tile = 41 + 54 * 10;
-//			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tile);
-			gc.drawImage(tileFac.getMapTiles(), (16 + 1) * (tile % 54), (16 + 1) * (tile / 54), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
+			int tileX = 41;
+			int tileY = 10;
+			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+//			gc.drawImage(tileFac.getMapTiles(), (16 + 1) * (tile % 57), (16 + 1) * (tile / 57), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
 		}
 
 	}

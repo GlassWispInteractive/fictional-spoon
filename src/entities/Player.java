@@ -25,9 +25,10 @@ public class Player extends Entity {
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 		
-		int tile = 0 + 54 * 8;
-//		tileFac.drawTile(gc, TileSource.CHAR_TILES, (x - offsetX), (y - offsetY), size, tile);
-		gc.drawImage(tileFac.getCharTiles(), (16 + 1) * (tile % 54), (16 + 1) * (tile / 54), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
+		int tileX = 0;
+		int tileY = 8;
+		tileFac.drawTile(gc, TileSource.CHAR_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+//		gc.drawImage(tileFac.getCharTiles(), (16 + 1) * (tile % 54), (16 + 1) * (tile / 54), 16, 16, (x - offsetX) * size, (y - offsetY) * size, size, size);
 	}
 
 	@Override

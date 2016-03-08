@@ -41,34 +41,52 @@ public class TilesFactory {
 	 * *TO LAGGY !?*
 	 * 
 	 */
-	public void drawTile(GraphicsContext gc, TileSource tileSource,  int x, int y, int size, int tile) {
-		
-		Image image;
-		
+	public void drawTile(GraphicsContext gc, TileSource tileSource,  int x, int y, int size, int tileX, int tileY) {
+		int cols;
 		switch (tileSource) {
 		case MAP_TILES:
-			image = MAP_TILES;
+			cols = (int) ((MAP_TILES.getWidth() + 1) / 17);
 			break;
 			
 		case INDOOR_TILES:
-			image = INDOOR_TILES;
+			cols = (int) ((INDOOR_TILES.getWidth() + 1) / 17);
 			break;
 			
 		case CHAR_TILES:
-			image = CHAR_TILES;
+			cols = (int) ((CHAR_TILES.getWidth() + 1) / 17);
 			break;
 
 		default:
-			image = MAP_TILES;
+			cols = -1;
+			System.err.println("Wrong tileSource");
 			break;
-		}
+		}	
+		int tile = tileX + cols * tileY;
 		
+		drawTile(gc, tileSource, x, y, size, tile);
+	}
+	public void drawTile(GraphicsContext gc, TileSource tileSource,  int x, int y, int size, int tile) {
+		int cols;
 		
-		
-		int cols = (int) ((image.getWidth() + 1) / 17);
-//		int rows = (int) ((image.getHeight() + 1) / 17);
-		
-		gc.drawImage(image, (16 + 1) * (tile % cols), (16 + 1) * (tile / cols), 16, 16, x * size, y * size, size, size);		
+		switch (tileSource) {
+		case MAP_TILES:
+			cols = (int) ((MAP_TILES.getWidth() + 1) / 17);
+			gc.drawImage(MAP_TILES, (16 + 1) * (tile % cols), (16 + 1) * (tile / cols), 16, 16, x * size, y * size, size, size);	
+			break;
+			
+		case INDOOR_TILES:
+			cols = (int) ((INDOOR_TILES.getWidth() + 1) / 17);
+			gc.drawImage(INDOOR_TILES, (16 + 1) * (tile % cols), (16 + 1) * (tile / cols), 16, 16, x * size, y * size, size, size);	
+			break;
+			
+		case CHAR_TILES:
+			cols = (int) ((CHAR_TILES.getWidth() + 1) / 17);
+			gc.drawImage(CHAR_TILES, (16 + 1) * (tile % cols), (16 + 1) * (tile / cols), 16, 16, x * size, y * size, size, size);	
+			break;
+
+		default:
+			break;
+		}	
 	}
 
 }
