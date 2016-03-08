@@ -68,7 +68,7 @@ public class Events {
 		return input.contains("ESCAPE");
 	}
 	
-	public boolean isM(){
-		return input.contains("M");
+	public boolean isOne(){
+		return input.contains("DIGIT1") || input.contains("NUMPAD1");
 	}
 }
