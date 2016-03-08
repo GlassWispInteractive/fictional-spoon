@@ -1,6 +1,7 @@
 package entities;
 
 import game.Events;
+import game.ImageSource;
 import game.TileSource;
 import game.TileFactory;
 import game.World;
@@ -29,10 +30,9 @@ public class Player extends Entity {
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-
-		int tileX = 0;
-		int tileY = 8;
-		tileFac.drawTile(gc, TileSource.CHAR_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+		
+		ImageSource imgSource = new ImageSource(TileSource.CHAR_TILES, 0, 8);
+		tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
 	}
 
 	@Override

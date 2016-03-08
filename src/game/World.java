@@ -114,13 +114,11 @@ public class World {
 		if (ground == Ground.FLOOR)
 			tile += 20 + 57 * 12;
 		if (ground == Ground.ROOM)
-
-			tile += 20 + 57 * 12;// +-7
-
-		int tileX = tile % 57;
-		int tileY = tile / 57;
-
-		tileFac.drawTile(gc, TileSource.MAP_TILES, x, y, size, tileX, tileY);
+			tile += 20 + 57 * 12;//+-7
+		
+		ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, tile % 57, tile / 57);
+		
+		tileFac.drawTile(gc, imgsource, x, y, size);
 	}
 
 	public void initCamera(int centerX, int centerY) {

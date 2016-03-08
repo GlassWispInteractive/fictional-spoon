@@ -2,6 +2,7 @@ package game;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 
@@ -51,16 +52,37 @@ public class TileFactory {
 	 * @param tileX , choose tile with coordinate (starting at 0, 0)
 	 * @param tileY , choose tile with coordinate (starting at 0, 0)
 	 */
-	public void drawTile(GraphicsContext gc, TileSource tileSource, int x, int y, int size, int tileX, int tileY) {
+	public void drawTile(GraphicsContext gc, ImageSource imgSource, int x, int y, int size) {
 		
-		if(subTiles[tileSource.ordinal()][tileX][tileY] == null){
+		if(subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()] == null){
 						
-			PixelReader reader = TILE_SETS[tileSource.ordinal()].getPixelReader();
-			WritableImage newImage = new WritableImage(reader, (16 + 1) * tileX, (16 + 1) * tileY, 16, 16);
-			
-			subTiles[tileSource.ordinal()][tileX][tileY] = newImage;
+			loadImageSource(imgSource);
 		}
 		
-		gc.drawImage(subTiles[tileSource.ordinal()][tileX][tileY], x*size, y*size);
+		gc.drawImage(subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()], x*size, y*size);
+	}
+	
+	public Image scale(ImageSource imgSource, int scaling) {
+		
+		Image source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
+		
+		if(source == null){
+			loadImageSource(imgSource);
+		}
+		
+		source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
+		
+	    ImageView imageView = new ImageView(source);
+	    imageView.setPreserveRatio(true);
+	    imageView.setFitWidth(source.getWidth()*scaling);
+	    imageView.setFitHeight(source.getHeight()*scaling);
+	    return imageView.snapshot(null, null);
+	}
+	
+	private void loadImageSource(ImageSource imgSource){
+		PixelReader reader = TILE_SETS[imgSource.getTileSourceOrdinal()].getPixelReader();
+		WritableImage newImage = new WritableImage(reader, (16 + 1) * imgSource.getTileX(), (16 + 1) * imgSource.getTileY(), 16, 16);
+		
+		subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()] = newImage;
 	}
 }
