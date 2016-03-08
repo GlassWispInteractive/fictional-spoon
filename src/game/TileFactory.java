@@ -12,7 +12,7 @@ public class TileFactory {
 	// load tile sets
 	private final Image[] TILE_SETS = new Image[] { new Image("/resources/roguelikeMap_transparent.png"),
 			new Image("/resources/roguelikeIndoor_transparent.png"),
-			new Image("/resources/roguelikeChar_transparent.png") };
+			new Image("/resources/roguelikeChar_transparent.png"), new Image("/resources/roguelikecreatures.png") };
 	
 	private Image[][][] subTiles;
 
