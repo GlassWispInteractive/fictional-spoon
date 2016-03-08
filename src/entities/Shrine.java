@@ -1,27 +1,31 @@
 package entities;
 
+import game.TileFactory;
+import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class Shrine extends Entity {
 	private int blocked = 0;
+	TileFactory tileFac;
 
 	public Shrine(int x, int y) {
 		super(x, y);
 		delayTicks = 1500;
+		tileFac = TileFactory.getTilesFactory();
 	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-
-		if (blocked == 0) {
-			gc.setFill(Color.YELLOW);
-			gc.fillOval((x - offsetX) * size + size / 4 - 2, (y - offsetY) * size + size / 4 - 2, size / 2 + 4,
-					size / 2 + 4);
+		
+		if(blocked == 0){
+			int tileX = 43;
+			int tileY = 10;
+			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
+		}else{
+			int tileX = 41;
+			int tileY = 10;
+			tileFac.drawTile(gc, TileSource.MAP_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
 		}
-
-		gc.setFill(Color.BLACK);
-		gc.fillOval((x - offsetX) * size + size / 4, (y - offsetY) * size + size / 4, size / 2, size / 2);
 
 	}
 

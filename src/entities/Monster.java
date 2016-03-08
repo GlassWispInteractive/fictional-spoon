@@ -1,11 +1,14 @@
 package entities;
 
+import com.sun.javafx.geom.Point2D;
+
+import game.TileFactory;
+import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Paint;
 
 public class Monster extends Entity {
-	private Paint[] color = { Paint.valueOf("RED"), Paint.valueOf("BLUE"), Paint.valueOf("WHITE"),
-			Paint.valueOf("GRAY"), Paint.valueOf("PINK") };
+	
+	private Point2D[] tileType = {new Point2D(2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new Point2D(1,8)};
 
 	@SuppressWarnings("unused")
 	private int hp;
@@ -15,13 +18,14 @@ public class Monster extends Entity {
 	private int maxType = -1;
 	private String name;
 	private boolean monsterDead = false;
+	TileFactory tileFac;
 
 	public Monster(int x, int y, int hp, int[] power, String name) {
 		super(x, y);
 
 		this.hp = hp;
 		this.name = name;
-
+		this.tileFac = TileFactory.getTilesFactory();
 		this.power = power;
 
 		maxType = -1;
@@ -40,17 +44,19 @@ public class Monster extends Entity {
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-
+		
+		int tileX;
+		int tileY;
+		
 		if (monsterDead) {
-			gc.setFill(Paint.valueOf("BLACK"));
-			gc.fillOval((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size - 2);
-		} else {
-			gc.setFill(Paint.valueOf("BLACK"));
-			gc.fillRect((x - offsetX) * size + 1, (y - offsetY) * size + 1, size - 2, size - 2);
+			tileX = 0;
+			tileY = 7;
+		}else{
+			tileX = (int) tileType[maxType].x;
+			tileY = (int) tileType[maxType].y;
 		}
-
-		gc.setFill(color[maxType]);
-		gc.fillRect((x - offsetX) * size + 4, (y - offsetY) * size + 4, size - 8, size - 8);
+		
+		tileFac.drawTile(gc, TileSource.MONSTER_TILES, (x - offsetX), (y - offsetY), size, tileX, tileY);
 
 	}
 
