@@ -33,7 +33,7 @@ public class Events {
 		// delete.add(code); // remove later
 		input.remove(code);
 	}
-	
+
 	public void clear() {
 		input.clear();
 	}
@@ -59,16 +59,32 @@ public class Events {
 	public boolean isDown() {
 		return input.contains("DOWN") || input.contains("S");
 	}
-	
-	public boolean isEnter(){
+
+	public boolean isEnter() {
 		return input.contains("ENTER");
 	}
-	
-	public boolean isESC(){
+
+	public boolean isESC() {
 		return input.contains("ESCAPE");
 	}
-	
-	public boolean isOne(){
+
+	public boolean isOne() {
 		return input.contains("DIGIT1") || input.contains("NUMPAD1");
+	}
+
+	public boolean isTwo() {
+		return input.contains("DIGIT2") || input.contains("NUMPAD2");
+	}
+
+	public boolean isThree() {
+		return input.contains("DIGIT3") || input.contains("NUMPAD3");
+	}
+
+	public boolean isFour() {
+		return input.contains("DIGIT4") || input.contains("NUMPAD4");
+	}
+
+	public boolean isFive() {
+		return input.contains("DIGIT5") || input.contains("NUMPAD5");
 	}
 }
