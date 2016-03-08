@@ -34,6 +34,10 @@ public class Monster extends Entity {
 			}
 		}
 	}
+	
+	public String getName(){
+		return name;
+	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
@@ -58,7 +62,6 @@ public class Monster extends Entity {
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
 			monsterDead = true;
 		}
-
 	}
 
 }

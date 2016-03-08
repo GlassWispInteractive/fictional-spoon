@@ -12,7 +12,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 import static game.State.*;
-
+import Combat.Combat;
 import entities.Entity;
 import entities.EntityFactory;
 
@@ -24,7 +24,6 @@ public class Window extends Application {
 	private AnimationTimer gameloop;
 
 	private Game game;
-
 	private World lvl;
 
 	public static void main(String[] args) {
@@ -52,7 +51,7 @@ public class Window extends Application {
 			// System.out.println("game is saved");
 		});
 
-		Canvas canvas = new Canvas(1400, 900);
+		Canvas canvas = new Canvas(SIZE_X, SIZE_Y);
 		canvas.setCache(true);
 		// canvas.setCacheShape(true);
 		root.getChildren().add(canvas);
@@ -85,7 +84,7 @@ public class Window extends Application {
 				time -= passedTicks / 60.0;
 
 				// compute a frame
-				gc.clearRect(0, 0, 1400, 900);
+				gc.clearRect(0, 0, SIZE_X, SIZE_Y);
 
 				switch (game.getState()) {
 				case MENU:
@@ -105,6 +104,11 @@ public class Window extends Application {
 					lvl.render(gc);
 					break;
 
+				case COMBAT:
+					Combat.startCombat(null, null).tick(currentNanoTime);
+					Combat.startCombat(null, null).render(gc);
+					break;
+					
 				default:
 					throw new IllegalArgumentException("Unknown game state: " + game.getState());
 				}

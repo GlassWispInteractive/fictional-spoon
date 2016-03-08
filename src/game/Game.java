@@ -16,11 +16,7 @@ public class Game {
 			Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
 
 	private Game() {
-//		Entity player = EntityFactory.getFactory().getPlayer();
-//		World lvl = World.getWorld();
-//		lvl.updateView();
-//		lvl.initView(player.getX(), player.getY());
-		state = MENU;
+		state = COMBAT;
 	}
 
 	public static Game getGame() {
