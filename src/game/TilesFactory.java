@@ -80,13 +80,4 @@ public class TilesFactory {
 		
 		gc.drawImage(subTiles[tileSource.ordinal()][tileX][tileY], x*size, y*size);
 	}
-
-	public void drawTile(GraphicsContext gc, TileSource tileSource, int x, int y, int size, int tile) {
-		int cols;
-		
-		cols = (int) ((TILE_SETS[tileSource.ordinal()].getWidth() + 1) / 17);
-		gc.drawImage(TILE_SETS[tileSource.ordinal()], (16 + 1) * (tile % cols), (16 + 1) * (tile / cols), 16, 16, x * size, y * size,
-				size, size);
-	}
-
 }
