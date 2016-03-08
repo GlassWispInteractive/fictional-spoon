@@ -181,6 +181,12 @@ public class Combat {
 		gc.strokePolyline(new double[]{120, 120}, new double[]{height * 0.4, height * 0.4 + 30},  2);
 		gc.strokePolyline(new double[]{Window.SIZE_X - 120, Window.SIZE_X - 120}, new double[]{height * 0.4, height * 0.4 + 30},  2);
 		
+		final double status = 0.5;
+		gc.setFill(Color.ORANGE);
+		gc.fillRoundRect(100, height * 0.4, 100 + status * (Window.SIZE_X - 200), 30, 30, 30);
+		
+		
+		
 
 		// souls at 65% height
 		for (int i = 0; i < souls.size(); i++) {
