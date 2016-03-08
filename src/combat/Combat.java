@@ -26,6 +26,7 @@ public class Combat {
 	private int curFocus = 0;
 	private int curAttackRow = 0;
 	private int curAttackColum = 0;
+	private double status;
 
 	private enum CombatState {
 		CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS
@@ -56,6 +57,8 @@ public class Combat {
 		curFocus = 0;
 		curAttackRow = 0;
 		curAttackColum = 0;
+		
+		status = 0.2;
 	}
 
 	private static ArrayList<Monster> getHardCodedMonster() {
@@ -175,21 +178,33 @@ public class Combat {
 		// gc.fillRoundRect(100, height * 0.4, Window.SIZE_X - 200, 30, 30, 30);
 		gc.setStroke(Color.GREY);
 		gc.strokeRoundRect(100, Window.SIZE_Y * 0.4, Window.SIZE_X - 200, 30, 30, 30);
-		// gc.strokePolyline(new double[]{120, 120}, new double[]{height * 0.4,
-		// height * 0.4 + 30}, 2);
-		// gc.strokePolyline(new double[]{Window.SIZE_X - 120, Window.SIZE_X -
-		// 120}, new double[]{height * 0.4, height * 0.4 + 30}, 2);
 
-		final double status = 1;
+		final double lower = 0.6, upper = 0.65;
 		gc.setFill(Color.ORANGE);
 		gc.fillRoundRect(110, Window.SIZE_Y * 0.4 + 5, status * (Window.SIZE_X - 220), 20, 20, 20);
+
+		gc.setStroke(Color.GREY);
+
+		// draw two border delimter for inner box
+		// gc.strokePolyline(new double[] { 110, 110 }, new double[] {
+		// Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
+		// gc.strokePolyline(new double[] { Window.SIZE_X - 110, Window.SIZE_X -
+		// 110 },
+		// new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
+
+		gc.strokePolyline(new double[] { 110 + lower * (Window.SIZE_X - 220), 110 + lower * (Window.SIZE_X - 220) },
+				new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
+
+		gc.strokePolyline(new double[] { 110 + upper * (Window.SIZE_X - 220), 110 + upper * (Window.SIZE_X - 220) },
+				new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
 
 		// souls at 65% height
 		for (int i = 0; i < souls.size(); i++) {
 			gc.setFill(Color.ANTIQUEWHITE);
 			gc.fillText(souls.get(i).getName(), 80 + i * 180, Window.SIZE_Y * 0.65 - 5, 80);
 
-			gc.drawImage(ELEMS[i], 50 + i * 180, Window.SIZE_Y * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
+			gc.drawImage(ELEMS[i], 50 + i * 180, Window.SIZE_Y * 0.65, ELEMS[i].getWidth() / 3,
+					ELEMS[i].getHeight() / 3);
 
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
