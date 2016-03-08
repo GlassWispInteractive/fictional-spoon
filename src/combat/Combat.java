@@ -10,7 +10,6 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -57,8 +56,8 @@ public class Combat {
 		curFocus = 0;
 		curAttackRow = 0;
 		curAttackColum = 0;
-		
-		status = 0.2;
+
+		status = 0;
 	}
 
 	private static ArrayList<Monster> getHardCodedMonster() {
@@ -90,21 +89,39 @@ public class Combat {
 		this.monster = monster;
 	}
 
-	public void tick(double elapsedTime) {
+	public void tick(double ticks) {
+		// System.out.println(ticks);
+		status = Math.min(1, status + ticks / 120);
 
 		Events e = Events.getEvents();
 
 		switch (combatState) {
 		case CHOOSE_SOUL:
+			// if (e.isLeft()) {
+			// curSoul = (curSoul + souls.size() - 1) % souls.size();
+			// }
+			// if (e.isRight()) {
+			// curSoul = (curSoul + 1) % souls.size();
+			// }
+			// if (e.isEnter()) {
+			// combatState = CombatState.CHOOSE_ATTACK;
+			// }
+			if (e.isOne())
+				curSoul = 0;
+			if (e.isTwo())
+				curSoul = 1;
+			if (e.isThree())
+				curSoul = 2;
+			if (e.isFour())
+				curSoul = 3;
+
 			if (e.isLeft()) {
-				curSoul = (curSoul + souls.size() - 1) % souls.size();
+				curFocus = (curFocus + 1) % monster.size();
 			}
 			if (e.isRight()) {
-				curSoul = (curSoul + 1) % souls.size();
+				curFocus = (curFocus + monster.size() - 1) % monster.size();
 			}
-			if (e.isEnter()) {
-				combatState = CombatState.CHOOSE_ATTACK;
-			}
+
 			break;
 
 		case CHOOSE_ATTACK:
@@ -180,6 +197,7 @@ public class Combat {
 		gc.strokeRoundRect(100, Window.SIZE_Y * 0.4, Window.SIZE_X - 200, 30, 30, 30);
 
 		final double lower = 0.6, upper = 0.65;
+		// status = 0.5;
 		gc.setFill(Color.ORANGE);
 		gc.fillRoundRect(110, Window.SIZE_Y * 0.4 + 5, status * (Window.SIZE_X - 220), 20, 20, 20);
 
@@ -221,12 +239,10 @@ public class Combat {
 			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1 - 5, 80);
 			gc.fillRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
 
-			if (combatState == CombatState.CHOOSE_FOCUS) {
-				if (curFocus == i) {
-					gc.setStroke(Color.BLACK);
-					gc.setLineWidth(4);
-					gc.strokeRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
-				}
+			if (curFocus % monster.size() == i) {
+				gc.setStroke(Color.BLACK);
+				gc.setLineWidth(4);
+				gc.strokeRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1, 80, 80);
 			}
 		}
 
@@ -238,6 +254,7 @@ public class Combat {
 
 	}
 
+	@SuppressWarnings("unused")
 	private void renderTextboxes(GraphicsContext gc, int x, int y, int width, int height, Soul currentSoul) {
 
 		int rowY = y;

@@ -71,13 +71,12 @@ public class Window extends Application {
 		});
 
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		System.out.println(stage.getHeight());
 
 		gameloop = new AnimationTimer() {
 			private int passedTicks = 0;
-			private long lastNanoTime = System.nanoTime();
+			private double lastNanoTime = System.nanoTime();
 			private double time = 0;
-
+			
 			public void handle(long currentNanoTime) {
 				// calculate time since last update.
 				time += (currentNanoTime - lastNanoTime) / 1000000000.0;
@@ -111,7 +110,7 @@ public class Window extends Application {
 					break;
 
 				case COMBAT:
-					Combat.startCombat(null, null).tick(currentNanoTime);
+					Combat.startCombat(null, null).tick(passedTicks);
 					Combat.startCombat(null, null).render(gc);
 					break;
 					
@@ -123,7 +122,6 @@ public class Window extends Application {
 		
 		
 		stage.show();
-		System.out.println(canvas.getHeight());
 		gameloop.start();
 	}
 }
