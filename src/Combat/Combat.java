@@ -6,6 +6,7 @@ import entities.EntityFactory;
 import entities.Monster;
 import game.Events;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
@@ -23,6 +24,8 @@ public class Combat {
 
 	private enum CombatState{CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS}
 	private CombatState combatState = CombatState.CHOOSE_SOUL;
+	
+	private final Image EARTH = new Image("/resources/elem/earth.png");
 	
 	public static Combat startCombat(ArrayList<Soul> souls, ArrayList<Monster> monster){
 		if(singleton == null){
@@ -153,6 +156,9 @@ public class Combat {
 		//background
 		gc.setFill(Paint.valueOf("#C0C0C0"));
 		gc.fillRect(0, 0, width, height);
+		
+		gc.drawImage(EARTH, 0, 0);
+//		gc.drawImage(FIRE, 0, 0);
 		
 		//souls at 65% height
 		for(int i = 0; i < souls.size(); i++){
