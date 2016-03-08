@@ -26,6 +26,7 @@ public class Combat {
 	private int curAttackRow = 0;
 	private int curAttackColum = 0;
 	private double status, lowerBound, upperBound;
+	private int level;
 
 	private enum CombatState {
 		CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS
@@ -60,6 +61,7 @@ public class Combat {
 		status = 0;
 		lowerBound = 0.6;
 		upperBound = 0.75;
+		level = 0;
 	}
 
 	private static ArrayList<Monster> getHardCodedMonster() {
@@ -93,7 +95,7 @@ public class Combat {
 
 	public void tick(double ticks) {
 		// System.out.println(ticks);
-		status = Math.min(1, status + ticks / 120);
+		status = Math.min(1, status + ticks / 60);
 
 		Events e = Events.getEvents();
 
@@ -126,12 +128,17 @@ public class Combat {
 		if (e.isEnter() || status == 1) {
 
 			if (status > lowerBound && status < upperBound) {
+				level++;
 				System.out.println("Bonus damage");
+			} else {
+				level = 0;
 			}
 
 			// reset bar progress
 			status = 0;
 		}
+
+		setBounds();
 
 		// case CHOOSE_ATTACK:
 		// if (e.isLeft()) {
@@ -182,13 +189,38 @@ public class Combat {
 
 	}
 
+	public void setBounds() {
+		if (level <= 1) {
+			lowerBound = 0.5;
+			upperBound = 0.9;
+		} else if (level <= 4) {
+			lowerBound = 0.55;
+			upperBound = 0.85;
+		} else if (level <= 7) {
+			lowerBound = 0.60;
+			upperBound = 0.80;
+		} else if (level <= 9) {
+			lowerBound = 0.65;
+			upperBound = 0.75;
+		} else {
+			lowerBound = 0.70;
+			upperBound = 0.75;
+		}
+	}
+
 	public void render(GraphicsContext gc) {
 		// font settings
 		Font font = Font.font("Helvetica", FontWeight.NORMAL, 16);
 		gc.setFont(font);
-
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.BASELINE);
+
+		// print out current success
+		gc.setFill(Color.ORANGE);
+//		gc.setLineWidth(1);
+		String pointsText = "current hit streak: " + level;
+		gc.fillText(pointsText, 360, Window.SIZE_Y * 0.3);
+//		gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
 		// // background
 		// gc.setFill(Paint.valueOf("#C0C0C0"));
