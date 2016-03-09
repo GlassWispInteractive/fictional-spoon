@@ -6,7 +6,7 @@ import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chest extends Entity {
-	
+
 	private boolean chestOpen = false;
 	TileFactory tileFac;
 
@@ -17,11 +17,11 @@ public class Chest extends Entity {
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		
-		if(chestOpen){
+
+		if (chestOpen) {
 			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 15, 7);
 			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
-		}else{
+		} else {
 			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 14, 6);
 			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
 		}
@@ -31,7 +31,7 @@ public class Chest extends Entity {
 	public void tick(double elapsedTime) {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
-		if(x == fac.getPlayer().getX() && y == fac.getPlayer().getY()){
+		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
 			chestOpen = true;
 		}
 

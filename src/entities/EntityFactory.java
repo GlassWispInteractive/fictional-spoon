@@ -38,14 +38,17 @@ public class EntityFactory {
 	public ArrayList<Entity> getMobs() {
 		return ents;
 	}
-	public Entity getPlayer(){
+
+	public Entity getPlayer() {
 		return player;
 	}
-	public void deleteEntity(Entity ent){
+
+	public void deleteEntity(Entity ent) {
 		deletEnts.add(ent);
 	}
-	public void smartDelete(){
-		for(Entity ent : deletEnts){
+
+	public void smartDelete() {
+		for (Entity ent : deletEnts) {
 			ents.remove(ent);
 		}
 		deletEnts.clear();
@@ -57,7 +60,7 @@ public class EntityFactory {
 		return player;
 	}
 
-	public Monster makeMonster(int x, int y, int hp, int[]power, String name) {
+	public Monster makeMonster(int x, int y, int hp, int[] power, String name) {
 		Monster monster = new Monster(x, y, hp, power, name);
 		ents.add(monster);
 		return monster;
@@ -68,7 +71,7 @@ public class EntityFactory {
 		ents.add(chest);
 		return chest;
 	}
-	
+
 	public Shrine makeShrine(int x, int y) {
 		Shrine shrine = new Shrine(x, y);
 		ents.add(shrine);

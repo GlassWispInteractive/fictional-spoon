@@ -76,14 +76,14 @@ public class Window extends Application {
 			private int passedTicks = 0;
 			private double lastNanoTime = System.nanoTime();
 			private double time = 0;
-			
+
 			public void handle(long currentNanoTime) {
 				// calculate time since last update.
 				time += (currentNanoTime - lastNanoTime) / 1000000000.0;
 				lastNanoTime = currentNanoTime;
 				passedTicks = (int) Math.floor(time * 60.0);
 				time -= passedTicks / 60.0;
-				
+
 				if (Events.getEvents().isESC()) {
 					game.setState(MENU);
 				}
@@ -97,7 +97,7 @@ public class Window extends Application {
 					Menu.getMenu().render(gc);
 					if (Menu.getMenu().isStarted()) {
 						Entity player = EntityFactory.getFactory().getPlayer();
-//						lvl.updateView();
+						// lvl.updateView();
 						lvl.initCamera(player.getX(), player.getY());
 						game.setState(VIEW);
 					}
@@ -113,14 +113,13 @@ public class Window extends Application {
 					Combat.startCombat(null, null).tick(passedTicks);
 					Combat.startCombat(null, null).render(gc);
 					break;
-					
+
 				default:
 					throw new IllegalArgumentException("Unknown game state: " + game.getState());
 				}
 			}
 		};
-		
-		
+
 		stage.show();
 		gameloop.start();
 	}

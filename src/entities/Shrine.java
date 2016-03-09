@@ -17,11 +17,11 @@ public class Shrine extends Entity {
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		
-		if(blocked == 0){
+
+		if (blocked == 0) {
 			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 43, 10);
 			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
-		}else{
+		} else {
 			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 41, 10);
 			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
 		}
@@ -32,11 +32,11 @@ public class Shrine extends Entity {
 	public void tick(double elapsedTime) {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
-		
+
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY() && blocked == 0) {
 			blocked = delayTicks;
 		}
-		
+
 		if (blocked > 0)
 			blocked--;
 	}

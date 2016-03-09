@@ -6,13 +6,14 @@ import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Monster extends Entity {
-	
-	private ImageSource[] tileType = {new ImageSource(TileSource.MONSTER_TILES, 2, 5), 
-			new ImageSource(TileSource.MONSTER_TILES, 0, 5), new ImageSource(TileSource.MONSTER_TILES, 0, 1), 
+
+	private ImageSource[] tileType = { new ImageSource(TileSource.MONSTER_TILES, 2, 5),
+			new ImageSource(TileSource.MONSTER_TILES, 0, 5), new ImageSource(TileSource.MONSTER_TILES, 0, 1),
 			new ImageSource(TileSource.MONSTER_TILES, 5, 4), new ImageSource(TileSource.MONSTER_TILES, 1, 8),
-			new ImageSource(TileSource.MONSTER_TILES, 0, 7)};
-			
-//			2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new Point2D(1,8)};
+			new ImageSource(TileSource.MONSTER_TILES, 0, 7) };
+
+	// 2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new
+	// Point2D(1,8)};
 
 	@SuppressWarnings("unused")
 	private int hp;
@@ -41,21 +42,19 @@ public class Monster extends Entity {
 			}
 		}
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		
+
 		if (monsterDead) {
-			tileFac.drawTile(gc, tileType[tileType.length-1], (x - offsetX), (y - offsetY), size);
-		}else{
+			tileFac.drawTile(gc, tileType[tileType.length - 1], (x - offsetX), (y - offsetY), size);
+		} else {
 			tileFac.drawTile(gc, tileType[maxType], (x - offsetX), (y - offsetY), size);
 		}
-		
-		
 
 	}
 
@@ -67,8 +66,8 @@ public class Monster extends Entity {
 			monsterDead = true;
 		}
 	}
-	
-	public ImageSource getImageSource(){
+
+	public ImageSource getImageSource() {
 		return tileType[maxType];
 	}
 

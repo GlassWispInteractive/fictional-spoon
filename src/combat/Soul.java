@@ -1,19 +1,20 @@
 package combat;
 
 public class Soul {
-	
+
 	private String name;
 	private Attacks[][] attacks;
-	
-	public Soul(String name){
+
+	public Soul(String name) {
 		this.name = name;
-		attacks = new Attacks[][]{{new Attacks(), new Attacks()},{new Attacks(), new Attacks()}};
+		attacks = new Attacks[][] { { new Attacks(), new Attacks() }, { new Attacks(), new Attacks() } };
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return name;
 	}
-	public Attacks[][] getAttacks(){
+
+	public Attacks[][] getAttacks() {
 		return attacks;
 	}
 

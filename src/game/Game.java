@@ -7,11 +7,11 @@ import javafx.scene.paint.Paint;
 
 public class Game {
 	private static Game singleton;
-	
-//	game state
+
+	// game state
 	private State state;
-	
-//	static colors
+
+	// static colors
 	private static Paint[] groundColor = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
 			Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
 
@@ -45,10 +45,9 @@ public class Game {
 	public boolean isMenu() {
 		return state == MENU;
 	}
-	
-	
+
 	public static Paint getColor(Ground ground) {
-	     return groundColor[ground.ordinal()];
+		return groundColor[ground.ordinal()];
 	}
-	
+
 }

@@ -330,29 +330,29 @@ public class Generator {
 				5 + 57 * 0, // 1 1 1 0
 				1 + 57 * 1, // 1 1 1 1
 		};
-		
+
 		for (int x = 0; x < n; x++) {
 			for (int y = 0; y < m; y++) {
 				int tile = 0;
 
-				if (map.isWalkable(x-1, y))
+				if (map.isWalkable(x - 1, y))
 					tile += 1;
-				if (map.isWalkable(x+1, y))
+				if (map.isWalkable(x + 1, y))
 					tile += 2;
-				if (map.isWalkable(x, y-1))
+				if (map.isWalkable(x, y - 1))
 					tile += 4;
-				if (map.isWalkable(x, y+1))
+				if (map.isWalkable(x, y + 1))
 					tile += 8;
-//				
-//				tile = tileNumber[num].clone();
-//				if (map.getGround(x, y) == FLOOR) {
-//					tile[0] += 20;
-//					tile[1] += 12;
-//				} else if (map.getGround(x, y) == ROOM) {
-//					tile[0] += 34;
-//					tile[1] += 12;
-//				}
-				
+				//
+				// tile = tileNumber[num].clone();
+				// if (map.getGround(x, y) == FLOOR) {
+				// tile[0] += 20;
+				// tile[1] += 12;
+				// } else if (map.getGround(x, y) == ROOM) {
+				// tile[0] += 34;
+				// tile[1] += 12;
+				// }
+
 				map.setTileNumber(x, y, tileNumber[tile]);
 			}
 		}
