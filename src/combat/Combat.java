@@ -236,7 +236,7 @@ public class Combat {
 			streakCount = 0;
 
 			//
-			streak = new ArrayList<>();
+			streak.clear();
 			info = "miss";
 
 		}
@@ -247,15 +247,16 @@ public class Combat {
 		status = 0;
 	}
 
-	public void eval(Element[] streak) {
+	public void eval(Element[] streakElem) {
 		// System.out.println(Arrays.toString(combo));
-		
+
 		for (Combo combo : ComboFactory.getFac().getCombos()) {
-			if (Arrays.equals(streak, combo.getCombo())) {
-				System.out.println("success");
+			if (Arrays.equals(streakElem, combo.getCombo())) {
+				info = "Combo completed!";
+				streak.clear();
 			}
 		}
-		
+
 	}
 
 	public void render(GraphicsContext gc) {
@@ -278,24 +279,15 @@ public class Combat {
 
 		// fancy line at 40%
 		gc.setLineWidth(3);
-		// gc.setFill(Color.ANTIQUEWHITE);
-		// gc.fillRoundRect(100, height * 0.4, Window.SIZE_X - 200, 30, 30, 30);
 		gc.setStroke(Color.GREY);
 		gc.strokeRoundRect(100, Window.SIZE_Y * 0.4, Window.SIZE_X - 200, 30, 30, 30);
 
-		// status = 0.5;
+		// progress bar
 		gc.setFill(Color.ORANGE);
 		gc.fillRoundRect(110, Window.SIZE_Y * 0.4 + 5, status * (Window.SIZE_X - 220), 20, 20, 20);
 
+		// draw the delimters
 		gc.setStroke(Color.GREY);
-
-		// draw two border delimter for inner box
-		// gc.strokePolyline(new double[] { 110, 110 }, new double[] {
-		// Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
-		// gc.strokePolyline(new double[] { Window.SIZE_X - 110, Window.SIZE_X -
-		// 110 },
-		// new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
-
 		gc.strokePolyline(
 				new double[] { 110 + lowerBound * (Window.SIZE_X - 220), 110 + lowerBound * (Window.SIZE_X - 220) },
 				new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
