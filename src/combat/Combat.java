@@ -29,6 +29,7 @@ public class Combat {
 	private double status, lowerBound, upperBound;
 	private int level;
 	private ArrayList<Element> streak;
+	private String info;
 
 	private enum CombatState {
 		CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS
@@ -65,6 +66,7 @@ public class Combat {
 		upperBound = 0.75;
 		level = 0;
 		
+		info = "Use 1, 2, 3 or 4 to attack";
 		streak = new ArrayList<>();
 	}
 
@@ -219,10 +221,21 @@ public class Combat {
 		// check whether timing is fine
 		if (status > lowerBound && status < upperBound) {
 			level++;
-			System.out.println("Bonus damage");
+			
+			streak.add(Element.values()[curSoul]);
+			info = "current hit streak: " + streak.toString();
+			
+			
+			
+			
+//			System.out.println("Bonus damage");
 		} else {
-			streak = new ArrayList<>();
 			level = 0;
+			
+			streak = new ArrayList<>();
+			info = "miss";
+			
+			
 		}
 
 		// reset bar progress
@@ -239,8 +252,8 @@ public class Combat {
 		// print out current success
 		gc.setFill(Color.ORANGE);
 		// gc.setLineWidth(1);
-		String pointsText = "current hit streak: " + level;
-		gc.fillText(pointsText, 360, Window.SIZE_Y * 0.3);
+		
+		gc.fillText(info, 360, Window.SIZE_Y * 0.3);
 		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
 		// // background
