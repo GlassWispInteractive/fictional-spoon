@@ -1,5 +1,9 @@
 package entities;
 
+import java.awt.Point;
+
+import entities.WalkStrategies.HorizontalWalk;
+import entities.WalkStrategies.VerticalWalk;
 import game.ImageSource;
 import game.TileFactory;
 import game.TileSource;
@@ -14,6 +18,9 @@ public class Monster extends Entity {
 
 	// 2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new
 	// Point2D(1,8)};
+	
+	VerticalWalk walkStrategy;
+	
 
 	@SuppressWarnings("unused")
 	private int hp;
@@ -32,6 +39,8 @@ public class Monster extends Entity {
 		this.name = name;
 		this.tileFac = TileFactory.getTilesFactory();
 		this.power = power;
+		this.delayTicks = 10;
+		walkStrategy = new VerticalWalk();
 
 		maxType = -1;
 		int max = -1;
@@ -60,6 +69,16 @@ public class Monster extends Entity {
 
 	@Override
 	public void tick(double elapsedTime) {
+		
+		//monster walk
+		if(!monsterDead){
+			Point newPosition = walkStrategy.walk(x, y);
+
+			x = newPosition.x;
+			y = newPosition.y;
+		}
+
+		
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
