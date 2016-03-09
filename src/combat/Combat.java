@@ -28,6 +28,7 @@ public class Combat {
 	private int curAttackColum = 0;
 	private double status, lowerBound, upperBound;
 	private int level;
+	private ArrayList<Element> streak;
 
 	private enum CombatState {
 		CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS
@@ -63,6 +64,8 @@ public class Combat {
 		lowerBound = 0.6;
 		upperBound = 0.75;
 		level = 0;
+		
+		streak = new ArrayList<>();
 	}
 
 	private static ArrayList<Monster> getHardCodedMonster() {
@@ -108,16 +111,6 @@ public class Combat {
 		// }
 		//
 
-		// number pressed
-		if (e.isOne())
-			curSoul = 0;
-		if (e.isTwo())
-			curSoul = 1;
-		if (e.isThree())
-			curSoul = 2;
-		if (e.isFour())
-			curSoul = 3;
-
 		// arrow pressed
 		if (e.isLeft()) {
 			curFocus = (curFocus + 1) % monster.size();
@@ -126,17 +119,30 @@ public class Combat {
 			curFocus = (curFocus + monster.size() - 1) % monster.size();
 		}
 
-		if (e.isEnter() || status == 1) {
+		// number pressed
+		if (e.isOne()) {
+			curSoul = 0;
+			attack();
+		}
 
-			if (status > lowerBound && status < upperBound) {
-				level++;
-				System.out.println("Bonus damage");
-			} else {
-				level = 0;
-			}
+		if (e.isTwo()) {
+			curSoul = 1;
+			attack();
+		}
 
-			// reset bar progress
-			status = 0;
+		if (e.isThree()) {
+			curSoul = 2;
+			attack();
+		}
+
+		if (e.isFour()) {
+			curSoul = 3;
+			attack();
+		}
+
+		// nothing pressed
+		if (status == 1) {
+			attack();
 		}
 
 		setBounds();
@@ -190,7 +196,7 @@ public class Combat {
 
 	}
 
-	public void setBounds() {
+	private void setBounds() {
 		if (level <= 1) {
 			lowerBound = 0.5;
 			upperBound = 0.9;
@@ -207,6 +213,20 @@ public class Combat {
 			lowerBound = 0.70;
 			upperBound = 0.75;
 		}
+	}
+
+	private void attack() {
+		// check whether timing is fine
+		if (status > lowerBound && status < upperBound) {
+			level++;
+			System.out.println("Bonus damage");
+		} else {
+			streak = new ArrayList<>();
+			level = 0;
+		}
+
+		// reset bar progress
+		status = 0;
 	}
 
 	public void render(GraphicsContext gc) {
@@ -265,7 +285,7 @@ public class Combat {
 
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
-			if (curSoul == i) {
+			if (curSoul == i && level > 0) {
 				gc.setStroke(Color.ANTIQUEWHITE);
 				gc.setLineWidth(3);
 				gc.strokeRect(50 + i * 180, Window.SIZE_Y * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
