@@ -6,7 +6,6 @@ import gen.Generator;
 import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
-import static game.State.*;
 
 public class World {
 
@@ -17,13 +16,12 @@ public class World {
 	private Generator gen;
 	private Map map;
 	private EntityFactory fac;
-	private Game game;
-	
+
 	TileFactory tileFac = TileFactory.getTilesFactory();
 
 	// variables
 	private int size;
-	private int cameraX, cameraY, viewSizeX, viewSizeY;
+	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
 	/**
 	 * static method to get the singleton class object
@@ -42,13 +40,14 @@ public class World {
 		gen = new Generator(350, 225);
 		map = gen.newLevel();
 		fac = EntityFactory.getFactory();
-		game = Game.getGame();
 
 		// set view size and be sure to be smaller than the map
 		size = 16;
-		viewSizeX = Math.min(1400 / size, map.getN());
-		viewSizeY = Math.min(900 / size, map.getM());
+		cameraSizeX = Math.min(Window.SIZE_X / size, map.getN());
+		cameraSizeY = Math.min(Window.SIZE_Y / size, map.getM());
 
+		// System.out.println(cameraSizeX);
+		// System.out.println(Window.WINDOW_X / size);
 		// initView();
 	}
 
@@ -63,15 +62,11 @@ public class World {
 
 	public void tick(double elapsedTime) {
 		fac.getPlayer().tick(elapsedTime);
-		
+
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(elapsedTime);
 		}
 		fac.smartDelete();
-
-		if (Events.getEvents().isESC()) {
-			game.setState(MENU);
-		}
 
 		// if (Events.getEvents().isM()) {
 		// if (game.getState() == MAP) {
@@ -91,11 +86,12 @@ public class World {
 	public void render(GraphicsContext gc) {
 		// set color and render ground tile
 		// if (Game.getGame().getState() != MAP)
-		for (int x = 0; x < viewSizeX; x++) {
-			for (int y = 0; y < viewSizeY; y++) {
+		for (int x = 0; x < cameraSizeX; x++) {
+			for (int y = 0; y < cameraSizeY; y++) {
 				if (map.getGround(x + cameraX, y + cameraY) != Ground.WALL) {
 
-					drawMapTile(gc, x, y, map.getGround(x + cameraX, y + cameraY), map.getTileNumber(x + cameraX, y + cameraY));
+					drawMapTile(gc, x, y, map.getGround(x + cameraX, y + cameraY),
+							map.getTileNumber(x + cameraX, y + cameraY));
 
 				} else {
 					gc.setFill(Game.getColor(map.getGround(x + cameraX, y + cameraY)));
@@ -118,36 +114,35 @@ public class World {
 		if (ground == Ground.FLOOR)
 			tile += 20 + 57 * 12;
 		if (ground == Ground.ROOM)
-			tile += 20 + 57 * 12;//+-7
+			tile += 20 + 57 * 12;// +-7
 
-		int tileX = tile % 57;
-		int tileY = tile / 57;
-		
-		tileFac.drawTile(gc, TileSource.MAP_TILES, x, y, size, tileX, tileY);
+		ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, tile % 57, tile / 57);
+
+		tileFac.drawTile(gc, imgsource, x, y, size);
 	}
 
 	public void initCamera(int centerX, int centerY) {
-		this.cameraX = centerX - viewSizeX / 2;
-		this.cameraY = centerY - viewSizeY / 2;
+		this.cameraX = centerX - cameraSizeX / 2;
+		this.cameraY = centerY - cameraSizeY / 2;
 
 		fixCamera();
 	}
 
 	public void setCamera(int centerX, int centerY) {
-		int viewPaddingX = viewSizeX / 5; // 20%
-		int viewPaddingY = viewSizeY / 5;
+		int viewPaddingX = cameraSizeX / 5; // 20%
+		int viewPaddingY = cameraSizeY / 5;
 
 		if (centerX - viewPaddingX < cameraX) {
 			cameraX = centerX - viewPaddingX;
 		}
-		if (centerX + viewPaddingX - viewSizeX > cameraX) {
-			cameraX = centerX + viewPaddingX - viewSizeX;
+		if (centerX + viewPaddingX - cameraSizeX > cameraX) {
+			cameraX = centerX + viewPaddingX - cameraSizeX;
 		}
 		if (centerY - viewPaddingY < cameraY) {
 			cameraY = centerY - viewPaddingY;
 		}
-		if (centerY + viewPaddingY - viewSizeY > cameraY) {
-			cameraY = centerY + viewPaddingY - viewSizeY;
+		if (centerY + viewPaddingY - cameraSizeY > cameraY) {
+			cameraY = centerY + viewPaddingY - cameraSizeY;
 		}
 
 		fixCamera();
@@ -161,11 +156,11 @@ public class World {
 			cameraY = 0;
 		}
 
-		if (cameraX >= map.getN() - viewSizeX) {
-			cameraX = map.getN() - viewSizeX;
+		if (cameraX >= map.getN() - cameraSizeX) {
+			cameraX = map.getN() - cameraSizeX;
 		}
-		if (cameraY >= map.getM() - viewSizeY) {
-			cameraY = map.getM() - viewSizeY;
+		if (cameraY >= map.getM() - cameraSizeY) {
+			cameraY = map.getM() - cameraSizeY;
 		}
 	}
 }
