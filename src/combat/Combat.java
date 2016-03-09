@@ -29,7 +29,7 @@ public class Combat {
 	private int curAttackColum = 0;
 	private double status, lowerBound, upperBound;
 	private int streakCount;
-	private ArrayList<Element> streakType;
+	private ArrayList<Element> streak;
 	private String info;
 
 	private enum CombatState {
@@ -51,6 +51,10 @@ public class Combat {
 
 			singleton.setSouls(getHardCodedSouls());
 			singleton.setMonster(getHardCodedMonster());
+			ComboFactory.getFac().makeCombo(new Element[] { Element.EARTH, Element.FIRE });
+			ComboFactory.getFac().makeCombo(new Element[] { Element.WATER, Element.WATER, Element.AIR });
+			ComboFactory.getFac().makeCombo(
+					new Element[] { Element.EARTH, Element.FIRE, Element.AIR, Element.EARTH, Element.WATER });
 		}
 
 		return singleton;
@@ -68,7 +72,8 @@ public class Combat {
 		streakCount = 0;
 
 		info = "Use 1, 2, 3 or 4 to attack";
-		streakType = new ArrayList<>();
+		streak = new ArrayList<>();
+
 	}
 
 	private static ArrayList<Monster> getHardCodedMonster() {
@@ -101,7 +106,6 @@ public class Combat {
 	}
 
 	public void tick(double ticks) {
-		// System.out.println(ticks);
 		status = Math.min(1, status + ticks / 120);
 
 		Events e = Events.getEvents();
@@ -223,29 +227,34 @@ public class Combat {
 		if (status > lowerBound && status < upperBound) {
 			streakCount++;
 
-			streakType.add(Element.values()[curSoul]);
-			info = "current hit streak: " + streakType.toString();
+			streak.add(Element.values()[curSoul]);
+			info = "current hit streak: " + streak.toString();
 
 			// System.out.println("Bonus damage");
 		} else {
 			// adjust level
 			streakCount = 0;
 
-			// 
-			streakType = new ArrayList<>();
+			//
+			streak = new ArrayList<>();
 			info = "miss";
 
 		}
-		
-		eval(streakType.toArray(new Element[]{}));
+
+		eval(streak.toArray(new Element[] {}));
 
 		// reset bar progress
 		status = 0;
 	}
 
-	public void eval(Element[] combo) {
-		System.out.println(Arrays.toString(combo));
+	public void eval(Element[] streak) {
+		// System.out.println(Arrays.toString(combo));
 		
+		for (Combo combo : ComboFactory.getFac().getCombos()) {
+			if (Arrays.equals(streak, combo.getCombo())) {
+				System.out.println("success");
+			}
+		}
 		
 	}
 

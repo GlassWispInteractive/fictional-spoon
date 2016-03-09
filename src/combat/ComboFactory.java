@@ -1,6 +1,7 @@
 package combat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ComboFactory {
 	private static ComboFactory singleton;
@@ -25,6 +26,7 @@ public class ComboFactory {
 	
 	public Combo makeCombo(Element[] elements) {
 		Combo combo = new Combo(elements);
+		System.out.println(Arrays.toString(elements));
 		combos.add(combo);
 		return combo;
 	}
