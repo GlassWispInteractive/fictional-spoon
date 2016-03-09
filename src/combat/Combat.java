@@ -1,6 +1,7 @@
 package combat;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import entities.EntityFactory;
 import entities.Monster;
@@ -27,8 +28,8 @@ public class Combat {
 	private int curAttackRow = 0;
 	private int curAttackColum = 0;
 	private double status, lowerBound, upperBound;
-	private int level;
-	private ArrayList<Element> streak;
+	private int streakCount;
+	private ArrayList<Element> streakType;
 	private String info;
 
 	private enum CombatState {
@@ -64,10 +65,10 @@ public class Combat {
 		status = 0;
 		lowerBound = 0.6;
 		upperBound = 0.75;
-		level = 0;
-		
+		streakCount = 0;
+
 		info = "Use 1, 2, 3 or 4 to attack";
-		streak = new ArrayList<>();
+		streakType = new ArrayList<>();
 	}
 
 	private static ArrayList<Monster> getHardCodedMonster() {
@@ -101,7 +102,7 @@ public class Combat {
 
 	public void tick(double ticks) {
 		// System.out.println(ticks);
-		status = Math.min(1, status + ticks / 60);
+		status = Math.min(1, status + ticks / 120);
 
 		Events e = Events.getEvents();
 
@@ -199,16 +200,16 @@ public class Combat {
 	}
 
 	private void setBounds() {
-		if (level <= 1) {
+		if (streakCount <= 1) {
 			lowerBound = 0.5;
 			upperBound = 0.9;
-		} else if (level <= 4) {
+		} else if (streakCount <= 4) {
 			lowerBound = 0.6;
 			upperBound = 0.8;
-		} else if (level <= 7) {
+		} else if (streakCount <= 7) {
 			lowerBound = 0.65;
 			upperBound = 0.75;
-		} else if (level <= 9) {
+		} else if (streakCount <= 9) {
 			lowerBound = 0.68;
 			upperBound = 0.75;
 		} else {
@@ -220,26 +221,32 @@ public class Combat {
 	private void attack() {
 		// check whether timing is fine
 		if (status > lowerBound && status < upperBound) {
-			level++;
-			
-			streak.add(Element.values()[curSoul]);
-			info = "current hit streak: " + streak.toString();
-			
-			
-			
-			
-//			System.out.println("Bonus damage");
+			streakCount++;
+
+			streakType.add(Element.values()[curSoul]);
+			info = "current hit streak: " + streakType.toString();
+
+			// System.out.println("Bonus damage");
 		} else {
-			level = 0;
-			
-			streak = new ArrayList<>();
+			// adjust level
+			streakCount = 0;
+
+			// 
+			streakType = new ArrayList<>();
 			info = "miss";
-			
-			
+
 		}
+		
+		eval(streakType.toArray(new Element[]{}));
 
 		// reset bar progress
 		status = 0;
+	}
+
+	public void eval(Element[] combo) {
+		System.out.println(Arrays.toString(combo));
+		
+		
 	}
 
 	public void render(GraphicsContext gc) {
@@ -252,7 +259,7 @@ public class Combat {
 		// print out current success
 		gc.setFill(Color.ORANGE);
 		// gc.setLineWidth(1);
-		
+
 		gc.fillText(info, 360, Window.SIZE_Y * 0.3);
 		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
@@ -298,7 +305,7 @@ public class Combat {
 
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
-			if (curSoul == i && level > 0) {
+			if (curSoul == i && streakCount > 0) {
 				gc.setStroke(Color.ANTIQUEWHITE);
 				gc.setLineWidth(3);
 				gc.strokeRect(50 + i * 180, Window.SIZE_Y * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
