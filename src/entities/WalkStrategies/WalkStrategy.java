@@ -11,7 +11,7 @@ public abstract class WalkStrategy {
 	protected int blocked = 0;
 	protected int speedX = 1;
 	protected int speedY = 1;
-	protected int delayTicks = 10;
+	protected int delayTicks = 20;
 	protected Map map;
 	
 	public Point walk(int oldX, int oldY){
@@ -24,15 +24,18 @@ public abstract class WalkStrategy {
 			blocked--;
 		}
 		
-		if(map.isWalkable(newPoint.x, newPoint.y) && blocked <= 0){
-			
-			System.out.println("is walkable");
+		if(blocked <= 0){
 			
 			blocked = delayTicks - 1;
+			
+			if(!map.isWalkable(newPoint.x, oldY)){
+				newPoint.x = oldX;
+			}
+			if(!map.isWalkable(oldX, newPoint.y)){
+				newPoint.y = oldY;
+			}
 
 			return newPoint;
-		}else{
-			System.out.println("is not walkable");
 		}
 		
 		return new Point(oldX, oldY);

@@ -3,6 +3,11 @@ package entities.WalkStrategies;
 import java.awt.Point;
 
 public class HorizontalWalk extends WalkStrategy{
+	
+	public HorizontalWalk() {
+		super();
+		
+	}
 
 	@Override
 	public Point walkStrategy(int oldX, int oldY) {

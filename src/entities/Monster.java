@@ -1,9 +1,15 @@
 package entities;
 
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
+import entities.WalkStrategies.AggroWalk;
 import entities.WalkStrategies.HorizontalWalk;
+import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.VerticalWalk;
+import entities.WalkStrategies.WalkStrategy;
 import game.ImageSource;
 import game.TileFactory;
 import game.TileSource;
@@ -19,7 +25,9 @@ public class Monster extends Entity {
 	// 2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new
 	// Point2D(1,8)};
 	
-	VerticalWalk walkStrategy;
+	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(
+			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new AggroWalk()}));;
+	private WalkStrategy currentWalkStrategy;
 	
 
 	@SuppressWarnings("unused")
@@ -40,8 +48,10 @@ public class Monster extends Entity {
 		this.tileFac = TileFactory.getTilesFactory();
 		this.power = power;
 		this.delayTicks = 10;
-		walkStrategy = new VerticalWalk();
 
+		this.currentWalkStrategy = walkStrategies.get(new Random().nextInt(walkStrategies.size()));
+//		this.currentWalkStrategy = new AggroWalk();
+		
 		maxType = -1;
 		int max = -1;
 		for (int i = 0; i < this.power.length; i++) {
@@ -72,7 +82,7 @@ public class Monster extends Entity {
 		
 		//monster walk
 		if(!monsterDead){
-			Point newPosition = walkStrategy.walk(x, y);
+			Point newPosition = currentWalkStrategy.walk(x, y);
 
 			x = newPosition.x;
 			y = newPosition.y;

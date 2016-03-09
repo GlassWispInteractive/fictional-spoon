@@ -4,6 +4,11 @@ import java.awt.Point;
 
 public class VerticalWalk extends WalkStrategy {
 	
+	public VerticalWalk() {
+		super();
+		
+	}
+	
 	@Override
 	public Point walkStrategy(int oldX, int oldY) {
 		
