@@ -11,10 +11,11 @@ import java.util.Random;
 
 public abstract class WalkStrategy {
 	
-	protected Random rnd = new Random();
+	protected Map map;
+	
+	private Random rnd = new Random();
 	private int blocked = 0;
 	private int delayTicks = 20;
-	protected Map map;
 	
 	private boolean playerFarAway = true;
 	private int area = 8;
