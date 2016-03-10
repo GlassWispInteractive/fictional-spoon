@@ -23,6 +23,7 @@ public abstract class WalkStrategy {
 	
 	public WalkStrategy() {
 		this.canBeAggro = rnd.nextBoolean();
+//		this.canBeAggro = true;
 	}
 	public WalkStrategy(boolean canBeAggro) {
 		this.canBeAggro = canBeAggro;
@@ -43,14 +44,54 @@ public abstract class WalkStrategy {
 	}
 	
 	// make move
-	protected Point move(Point oldPoint, Direction direction) {
+	protected Point move(Point oldPoint, Direction dir) {
+		
+		if(dir == null){
+			return oldPoint;
+		}
 		
 		Point newPoint = new Point(oldPoint.x, oldPoint.y);
 		
-		newPoint.x += direction.getX();
-		newPoint.y += direction.getY();
+		newPoint.x += dir.getX();
+		newPoint.y += dir.getY();
 		
 		return newPoint;
+	}
+	protected Point move(Point oldPoint, Direction dir1, Direction dir2) {
+		
+		if(dir1 == null){
+			move(oldPoint, dir2);
+		}
+		if(dir2 == null){
+			move(oldPoint, dir1);
+		}
+		
+		//try to walk both direction together
+		Point newPoint = move(move(oldPoint, dir1), dir2);
+		
+		if(map.isWalkable(newPoint.x, newPoint.y)){
+			//both direction together is walkable
+			return newPoint;
+		}
+		
+		//calc both directions separately
+		Point newPoint1 = move(oldPoint, dir1);
+		Point newPoint2 = move(oldPoint, dir2);
+		
+		//try if one is not walkable
+		if(!map.isWalkable(newPoint1.x, newPoint1.y)){
+			return newPoint2;
+		}
+		if(!map.isWalkable(newPoint2.x, newPoint2.y)){
+			return newPoint1;
+		}
+		
+		//both are walkable and use one randomly
+		if(rnd.nextBoolean()){
+			return newPoint1;
+		}else{
+			return newPoint2;
+		}
 	}
 	
 	public Point walk(int oldX, int oldY){
@@ -74,7 +115,9 @@ public abstract class WalkStrategy {
 				newPoint.y = oldY;
 			}
 
-			return newPoint;
+			if(map.isWalkable(newPoint.x, newPoint.y)){
+				return newPoint;
+			}
 		}
 		
 		return new Point(oldX, oldY);
@@ -144,37 +187,33 @@ public abstract class WalkStrategy {
 		
 		Point newPoint = new Point(oldX, oldY);
 		
+		Direction dir1 = null;
+		Direction dir2 = null;
+		
 		if((playerX - oldX) != 0){
-			
-			Direction dir;
 			
 			if((playerX - oldX) > 0) {
 				// get direction
-				dir = Direction.values()[1];
+				dir1 = Direction.values()[1];
 			} else {
 				// get direction
-				dir = Direction.values()[3];
+				dir1 = Direction.values()[3];
 			}
-
-			// make move
-			newPoint = move(newPoint, dir);
 		}
 		
 		if((playerY - oldY) != 0){
 			
-			Direction dir;
-			
 			if((playerY - oldY) > 0) {
 				// get direction
-				dir = Direction.values()[2];
+				dir2 = Direction.values()[2];
 			} else {
 				// get direction
-				dir = Direction.values()[0];
+				dir2 = Direction.values()[0];
 			}
-
-			// make move
-			newPoint = move(newPoint, dir);
 		}
+		
+		// make move
+		newPoint = move(newPoint, dir1, dir2);
 		
 		return newPoint;
 	}
