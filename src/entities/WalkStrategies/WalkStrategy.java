@@ -1,18 +1,32 @@
 package entities.WalkStrategies;
 
+import entities.Entity;
+import entities.EntityFactory;
 import game.World;
 import gen.environment.Map;
 
 import java.awt.Point;
+import java.util.Random;
 
 
 public abstract class WalkStrategy {
 	
+	protected Random rnd = new Random();
 	private int blocked = 0;
-	protected int speedX = 1;
-	protected int speedY = 1;
 	private int delayTicks = 20;
 	protected Map map;
+	
+	private boolean playerFarAway = true;
+	private int area = 8;
+	private boolean aggro = false;
+	private boolean canBeAggro;
+	
+	public WalkStrategy() {
+		this.canBeAggro = rnd.nextBoolean();
+	}
+	public WalkStrategy(boolean canBeAggro) {
+		this.canBeAggro = canBeAggro;
+	}
 	
 	protected enum Direction {
 	    NORTH(0, -1), EAST(1, 0), SOUTH(0, 1), WEST(-1, 0);
@@ -43,7 +57,7 @@ public abstract class WalkStrategy {
 		
 		map = World.getWorld().getMap();
 
-		Point newPoint = walkStrategy(oldX, oldY);
+		Point newPoint = choseStrategy(oldX, oldY);
 		
 		if(blocked > 0){
 			blocked--;
@@ -66,6 +80,104 @@ public abstract class WalkStrategy {
 		return new Point(oldX, oldY);
 	}
 	
+	private Point choseStrategy(int oldX, int oldY) {
+		
+		if(!canBeAggro){
+			return walkStrategy(oldX, oldY);
+		}
+		
+		Entity player = EntityFactory.getFactory().getPlayer();
+		int playerX = player.getX();
+		int playerY = player.getY();
+		playerFarAway = Math.abs(oldX - playerX) > area || Math.abs(oldY - playerY) > area;
+		
+		if(!playerFarAway){
+			aggro = true;
+		}		
+		if(playerFarAway && map.isWalkableRoom(oldX, oldY)){
+			aggro = false;
+		}
+		
+		Point newPoint;
+		
+		if(!aggro){
+			newPoint = walkStrategy(oldX, oldY);
+		} else {
+			
+			if(playerFarAway){
+				newPoint = randomWalk(oldX, oldY);
+			} else {
+				newPoint = aggroWalk(oldX, oldY);
+			}
+		}
+		
+		return newPoint;
+	}
+	
+	protected Point randomWalk(int oldX, int oldY) {
+		
+		Point newPoint;
+		
+		do {
+			
+			//  calc a random direction
+			int directionIndex = rnd.nextInt(Direction.values().length);
+	
+			// get direction
+			Direction dir = Direction.values()[directionIndex];
+	
+			// make move
+			newPoint = move(new Point(oldX, oldY),dir);
+			
+		} while (!map.isWalkable(newPoint.x, newPoint.y));
+
+		
+		return newPoint;
+		
+	}
+	
+	protected Point aggroWalk(int oldX, int oldY) {
+		
+		Entity player = EntityFactory.getFactory().getPlayer();
+		int playerX = player.getX();
+		int playerY = player.getY();
+		
+		Point newPoint = new Point(oldX, oldY);
+		
+		if((playerX - oldX) != 0){
+			
+			Direction dir;
+			
+			if((playerX - oldX) > 0) {
+				// get direction
+				dir = Direction.values()[1];
+			} else {
+				// get direction
+				dir = Direction.values()[3];
+			}
+
+			// make move
+			newPoint = move(newPoint, dir);
+		}
+		
+		if((playerY - oldY) != 0){
+			
+			Direction dir;
+			
+			if((playerY - oldY) > 0) {
+				// get direction
+				dir = Direction.values()[2];
+			} else {
+				// get direction
+				dir = Direction.values()[0];
+			}
+
+			// make move
+			newPoint = move(newPoint, dir);
+		}
+		
+		return newPoint;
+	}
 	
 	
 	protected abstract Point walkStrategy(int oldX, int oldY);

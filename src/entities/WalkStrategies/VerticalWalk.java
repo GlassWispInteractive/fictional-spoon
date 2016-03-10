@@ -8,7 +8,9 @@ public class VerticalWalk extends WalkStrategy {
 	
 	public VerticalWalk() {
 		super();
-		
+	}
+	public VerticalWalk(boolean canBeAggro) {
+		super(canBeAggro);
 	}
 	
 	@Override

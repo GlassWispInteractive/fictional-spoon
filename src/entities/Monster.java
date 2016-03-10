@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import entities.WalkStrategies.AggroWalk;
 import entities.WalkStrategies.HorizontalWalk;
 import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
@@ -27,7 +26,7 @@ public class Monster extends Entity {
 	// Point2D(1,8)};
 	
 	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(
-			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new AggroWalk(), new RectangleWalk()}));;
+			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk()}));;
 	private WalkStrategy currentWalkStrategy;
 	
 
@@ -52,7 +51,11 @@ public class Monster extends Entity {
 
 		int chosenStrategy = new Random().nextInt(walkStrategies.size());
 		this.currentWalkStrategy = walkStrategies.get(chosenStrategy);
-//		this.currentWalkStrategy = new AggroWalk();
+//		this.currentWalkStrategy = new RandomWalk();
+//		this.currentWalkStrategy = new HorizontalWalk();
+//		this.currentWalkStrategy = new VerticalWalk();
+//		this.currentWalkStrategy = new RectangleWalk();
+		
 		
 		maxType = -1;
 		int max = -1;

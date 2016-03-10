@@ -8,7 +8,9 @@ public class RectangleWalk extends WalkStrategy {
 	
 	public RectangleWalk() {
 		super();
-
+	}
+	public RectangleWalk(boolean canBeAggro) {
+		super(canBeAggro);
 	}
 
 	@Override
