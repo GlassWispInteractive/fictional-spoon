@@ -8,11 +8,36 @@ import java.awt.Point;
 
 public abstract class WalkStrategy {
 	
-	protected int blocked = 0;
+	private int blocked = 0;
 	protected int speedX = 1;
 	protected int speedY = 1;
-	protected int delayTicks = 20;
+	private int delayTicks = 20;
 	protected Map map;
+	
+	protected enum Direction {
+	    NORTH(0, -1), EAST(1, 0), SOUTH(0, 1), WEST(-1, 0);
+
+	    private final int x;
+	    private final int y;
+
+	    private Direction(int x, int y) {
+	        this.x = x;
+	        this.y = y;
+	    }
+	    public int getX() { return x; }
+	    public int getY() { return y; }
+	}
+	
+	// make move
+	protected Point move(Point oldPoint, Direction direction) {
+		
+		Point newPoint = new Point(oldPoint.x, oldPoint.y);
+		
+		newPoint.x += direction.getX();
+		newPoint.y += direction.getY();
+		
+		return newPoint;
+	}
 	
 	public Point walk(int oldX, int oldY){
 		
@@ -40,6 +65,8 @@ public abstract class WalkStrategy {
 		
 		return new Point(oldX, oldY);
 	}
+	
+	
 	
 	protected abstract Point walkStrategy(int oldX, int oldY);
 

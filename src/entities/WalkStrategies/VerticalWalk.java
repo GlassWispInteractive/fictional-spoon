@@ -4,6 +4,8 @@ import java.awt.Point;
 
 public class VerticalWalk extends WalkStrategy {
 	
+	private int directionIndex = 0;
+	
 	public VerticalWalk() {
 		super();
 		
@@ -12,15 +14,19 @@ public class VerticalWalk extends WalkStrategy {
 	@Override
 	public Point walkStrategy(int oldX, int oldY) {
 		
-		Point newPoint = new Point(oldX, oldY);
+		Point newPoint;
 		
-		newPoint.y +=speedY;
+		// get direction
+		Direction dir = Direction.values()[directionIndex];
+
+		// make move
+		newPoint = move(new Point(oldX, oldY),dir);
 		
 		if(!map.isWalkable(oldX, newPoint.y)){
-			speedY *= -1;
+			directionIndex = (directionIndex + 2) % Direction.values().length;
 		}
-
+		
 		return newPoint;
+		
 	}
-
 }

@@ -12,33 +12,29 @@ public class RandomWalk extends WalkStrategy{
 		
 		rnd = new Random();
 	}
+	
+
 
 	@Override
 	protected Point walkStrategy(int oldX, int oldY) {
+		
+		Point newPoint;
+		
+		do {
+			
+			//  calc a random direction
+			int directionIndex = rnd.nextInt(Direction.values().length);
+	
+			// get direction
+			Direction dir = Direction.values()[directionIndex];
+	
+			// make move
+			newPoint = move(new Point(oldX, oldY),dir);
+			
+		} while (!map.isWalkable(newPoint.x, newPoint.y));
 
-		Point newPoint = new Point(oldX, oldY);
-		
-		if(rnd.nextBoolean()){
-			speedX *= -1;
-		}
-		if(rnd.nextBoolean()){
-			speedY *= -1;
-		}
-		
-		if(rnd.nextBoolean()){
-			if(!map.isWalkable(newPoint.x + speedX, oldY)){
-				speedX *= -1;
-			}
-			newPoint.x += speedX;
-		} else {
-			if(!map.isWalkable(oldX, newPoint.y + speedY)){
-				speedY *= -1;
-			}
-			newPoint.y += speedY;
-		}
 		
 		return newPoint;
 		
 	}
-
 }

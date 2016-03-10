@@ -1,19 +1,21 @@
 package entities.WalkStrategies;
 
 import java.awt.Point;
+import java.util.Random;
+
 import entities.Entity;
 import entities.EntityFactory;
 
 public class AggroWalk extends WalkStrategy{
 	
-	private RandomWalk rndWalk;
-	private int area = 5;
-	private boolean playerFarAway = true;;
+	private int area = 8;
+	private boolean playerFarAway = true;
+	private Random rnd;
 	
 	public AggroWalk() {
 		super();
 		
-		rndWalk = new RandomWalk();
+		rnd = new Random();
 	}
 
 	@Override
@@ -26,28 +28,59 @@ public class AggroWalk extends WalkStrategy{
 		
 		playerFarAway = Math.abs(oldX - playerX) > area || Math.abs(oldY - playerY) > area;
 		
-		if(playerFarAway){
-			return rndWalk.walk(oldX, oldY);
-		}
-		//else - go to player
-		
 		Point newPoint = new Point(oldX, oldY);
 		
-		speedX = playerX - oldX;
-		speedY = playerY - oldY;
+		if(playerFarAway){
+		//random walking
+			do {
+				//  calc a random direction
+				int directionIndex = rnd.nextInt(Direction.values().length);
 		
-		if((playerX - oldX) != 0){
-			speedX /= Math.abs(speedX);
-		}
-		if((playerY - oldY) != 0){
-			speedY /= Math.abs(speedY);
-		}
+				// get direction
+				Direction dir = Direction.values()[directionIndex];
 		
-		newPoint.x += speedX;
-		newPoint.y += speedY;
+				// make move
+				newPoint = move(new Point(oldX, oldY),dir);
+				
+			} while (!map.isWalkable(newPoint.x, newPoint.y));
+		}else{
+		//else - go to player
+			
+			if((playerX - oldX) != 0){
+				
+				Direction dir;
+				
+				if((playerX - oldX) > 0) {
+					// get direction
+					dir = Direction.values()[1];
+				} else {
+					// get direction
+					dir = Direction.values()[3];
+				}
+
+				// make move
+				newPoint = move(newPoint, dir);
+			}
+			
+			if((playerY - oldY) != 0){
+				
+				Direction dir;
+				
+				if((playerY - oldY) > 0) {
+					// get direction
+					dir = Direction.values()[2];
+				} else {
+					// get direction
+					dir = Direction.values()[0];
+				}
+
+				// make move
+				newPoint = move(newPoint, dir);
+			}
+		
+		}
 		
 		return newPoint;
 		
 	}
-
 }
