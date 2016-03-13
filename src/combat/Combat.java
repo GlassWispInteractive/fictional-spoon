@@ -6,6 +6,7 @@ import java.util.Arrays;
 import entities.EntityFactory;
 import entities.Monster;
 import game.Events;
+import game.GameScene;
 import game.TileFactory;
 import game.Window;
 import javafx.geometry.VPos;
@@ -16,7 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
-public class Combat {
+public class Combat extends GameScene {
 
 	private static Combat singleton;
 
@@ -61,6 +62,8 @@ public class Combat {
 	}
 
 	private Combat() {
+		super();
+
 		curSoul = 0;
 		curFocus = 0;
 		curAttackRow = 0;
@@ -259,7 +262,10 @@ public class Combat {
 
 	}
 
-	public void render(GraphicsContext gc) {
+	public void render() {
+		// start from clean screen
+		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+
 		// font settings
 		Font font = Font.font("Helvetica", FontWeight.NORMAL, 16);
 		gc.setFont(font);
@@ -271,6 +277,7 @@ public class Combat {
 		// gc.setLineWidth(1);
 
 		gc.fillText(info, 360, Window.SIZE_Y * 0.3);
+
 		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
 		// // background
@@ -284,7 +291,9 @@ public class Combat {
 
 		// progress bar
 		gc.setFill(Color.ORANGE);
-		gc.fillRoundRect(110, Window.SIZE_Y * 0.4 + 5, status * (Window.SIZE_X - 220), 20, 20, 20);
+		// +5 to be lower than outer rect
+		// +2 to have the left border over the delimeter
+		gc.fillRoundRect(110, Window.SIZE_Y * 0.4 + 5, status * (Window.SIZE_X - 220) + 2, 20, 20, 20);
 
 		// draw the delimters
 		gc.setStroke(Color.GREY);

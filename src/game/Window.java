@@ -2,14 +2,7 @@ package game;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -21,14 +14,14 @@ import entities.Entity;
 import entities.EntityFactory;
 
 public class Window extends Application {
-	// constants
+	// public window wide settings
 	public static final int SIZE_X = 1392, SIZE_Y = 896;
+	public static final Font bigFont = Font.font("Helvetica", FontWeight.BOLD, 24);
+	public static final Font smallFont = Font.font("Helvetica", FontWeight.NORMAL, 16);
 
 	// class members
 	private AnimationTimer gameloop;
 
-	private Game game;
-	private World lvl;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -36,53 +29,42 @@ public class Window extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		game = Game.getGame();
-		lvl = World.getWorld();
-
-		// root objects
-		Group root = new Group();
-		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#212121"));
-
-		// main stage settings
+		// stage settings
 		stage.setTitle("Soul Harvester");
 		stage.setResizable(false);
-		stage.setScene(scene);
+		stage.centerOnScreen();
 
+		// event handling
 		stage.setOnCloseRequest(event -> {
 			gameloop.stop();
 			// save game state here
-			// System.out.println("game is saved");
 		});
 
-		// key events
-		stage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent e) {
-				Events.getEvents().addCode(e);
-			}
-		});
-		stage.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent e) {
-				Events.getEvents().removeCode(e);
-			}
+		stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+			Events.getEvents().addCode(event);
 		});
 		
-
+		stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
+			Events.getEvents().removeCode(event);
+		});
+		
+		
+		Game game = Game.getGame();
+		World lvl = World.getWorld();
 		Menu menu = new Menu();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
 
-		Canvas layerMain = new Canvas(SIZE_X, SIZE_Y);
-		Canvas layerMsg = new Canvas(100, 100);
-
-		root.getChildren().add(layerMain);
-		root.getChildren().add(layerMsg);
-		layerMsg.relocate(100, 100);
-
-		Font font = Font.font("Helvetica", FontWeight.BOLD, 24);
-		layerMsg.getGraphicsContext2D().setFont(font);
-		layerMsg.getGraphicsContext2D().setFill(Color.ALICEBLUE);
-		layerMsg.getGraphicsContext2D().fillText("hello", 0, 0);
-
-		GraphicsContext gc = layerMain.getGraphicsContext2D();
+		// Canvas layerMain = new Canvas(SIZE_X, SIZE_Y);
+		// Canvas layerMsg = new Canvas(100, 100);
+		//
+		// root.getChildren().add(layerMain);
+		// root.getChildren().add(layerMsg);
+		// layerMsg.relocate(100, 100);
+		//
+		// 
+		// layerMsg.getGraphicsContext2D().setFont(font);
+		// layerMsg.getGraphicsContext2D().setFill(Color.ALICEBLUE);
+		// layerMsg.getGraphicsContext2D().fillText("hello", 0, 0);
 
 		gameloop = new AnimationTimer() {
 			private int passedTicks = 0;
@@ -101,7 +83,6 @@ public class Window extends Application {
 				}
 
 				// compute a frame
-				gc.clearRect(0, 0, SIZE_X, SIZE_Y);
 
 				switch (game.getState()) {
 				case MENU:
@@ -118,15 +99,15 @@ public class Window extends Application {
 
 				case MAP:
 				case VIEW:
-					stage.setScene(scene);
+					stage.setScene(lvl.getScene());
 					lvl.tick(time);
-					lvl.render(gc);
+					lvl.render();
 					break;
 
 				case COMBAT:
-					stage.setScene(scene);
+					stage.setScene(Combat.startCombat(null, null).getScene());
 					Combat.startCombat(null, null).tick(passedTicks);
-					Combat.startCombat(null, null).render(gc);
+					Combat.startCombat(null, null).render();
 					break;
 
 				default:

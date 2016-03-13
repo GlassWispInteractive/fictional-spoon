@@ -19,7 +19,6 @@ public abstract class GameScene {
 		scene = new Scene(group, Window.SIZE_X, Window.SIZE_Y, Paint.valueOf("#212121"));
 		layerBg = new Canvas(Window.SIZE_X, Window.SIZE_Y);
 		gc = layerBg.getGraphicsContext2D();
-
 		group.getChildren().add(layerBg);
 	}
 

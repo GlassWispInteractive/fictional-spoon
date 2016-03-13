@@ -7,14 +7,14 @@ import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 
-public class World {
+public class World extends GameScene {
 
 	/** SINGELTON */
 	private static World singleton;
 
 	// class components
-	private Generator gen;
 	private Map map;
+	
 	private EntityFactory fac;
 
 	private TileFactory tileFac = TileFactory.getTilesFactory();
@@ -37,8 +37,9 @@ public class World {
 	}
 
 	private World() {
-		gen = new Generator(350, 225);
-		map = gen.newLevel();
+		super();
+
+		map = new Generator(350, 225).newLevel();
 		fac = EntityFactory.getFactory();
 
 		// set view size and be sure to be smaller than the map
@@ -83,7 +84,10 @@ public class World {
 		// }
 	}
 
-	public void render(GraphicsContext gc) {
+	public void render() {
+		// start from clean screen
+		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+
 		// set color and render ground tile
 		// if (Game.getGame().getState() != MAP)
 		for (int x = 0; x < cameraSizeX; x++) {

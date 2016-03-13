@@ -7,8 +7,6 @@ import java.util.Random;
 import javafx.geometry.VPos;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class Menu extends GameScene {
@@ -83,7 +81,6 @@ public class Menu extends GameScene {
 				Game.getGame().setState(State.COMBAT);
 				break;
 			case "Exit":
-				// TODO save?
 				System.exit(0);
 				break;
 			default:
@@ -96,8 +93,9 @@ public class Menu extends GameScene {
 	}
 
 	public void render() {
+		// start from clean screen
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
-		
+
 		// canvas settings
 		double w = gc.getCanvas().getWidth();
 
@@ -111,8 +109,7 @@ public class Menu extends GameScene {
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
-		Font font = Font.font("Helvetica", FontWeight.BOLD, 24);
-		gc.setFont(font);
+		gc.setFont(Window.bigFont);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
