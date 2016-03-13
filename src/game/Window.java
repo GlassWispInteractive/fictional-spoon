@@ -44,7 +44,6 @@ public class Window extends Application {
 		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#212121"));
 
 		// main stage settings
-		
 		stage.setTitle("Soul Harvester");
 		stage.setResizable(false);
 		stage.setScene(scene);

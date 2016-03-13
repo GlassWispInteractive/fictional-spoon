@@ -5,23 +5,16 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javafx.geometry.VPos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
-import javafx.stage.Stage;
 
-public class Menu {
-	private Scene scene;
-	private Canvas layerMain;
-	
+public class Menu extends GameScene {
+
 	
 	private Random rand;
 	private Image logo;
@@ -33,13 +26,7 @@ public class Menu {
 	private boolean started = false;
 
 	public Menu() {
-		// set up JavaFX
-		Group pane = new Group();
-		scene = new Scene(pane, Window.SIZE_X, Window.SIZE_Y, Paint.valueOf("#212121"));
-		
-		layerMain = new Canvas(Window.SIZE_X, Window.SIZE_Y);
-		
-		pane.getChildren().add(layerMain);
+		super();
 		
 
 		// init
@@ -59,9 +46,7 @@ public class Menu {
 		// souls.add(new int[] { 20, 50 });
 	}
 	
-	public Scene getScene() {
-		return scene;
-	}
+	
 
 	public void tick(int ticks) {
 		started = false;
@@ -118,7 +103,7 @@ public class Menu {
 	}
 
 	public void render() {
-		GraphicsContext gc = layerMain.getGraphicsContext2D();
+		GraphicsContext gc = layer.getGraphicsContext2D();
 		// canvas settings
 		double w = gc.getCanvas().getWidth();
 
