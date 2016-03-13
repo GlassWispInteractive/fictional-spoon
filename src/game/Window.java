@@ -50,7 +50,7 @@ public class Window extends Application {
 		
 		
 		Game game = Game.getGame();
-		World lvl = World.getWorld();
+		MapController lvl = MapController.getWorld();
 		Menu menu = new Menu();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
 

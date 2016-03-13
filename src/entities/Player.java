@@ -4,7 +4,7 @@ import game.Events;
 import game.ImageSource;
 import game.TileSource;
 import game.TileFactory;
-import game.World;
+import game.MapController;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -62,7 +62,7 @@ public class Player extends Entity {
 			moved = true;
 		}
 
-		Map map = World.getWorld().getMap();
+		Map map = MapController.getWorld().getMap();
 
 		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
 
@@ -71,7 +71,7 @@ public class Player extends Entity {
 			x = newX;
 			y = newY;
 
-			World.getWorld().setCamera(x, y);
+			MapController.getWorld().setCamera(x, y);
 		}
 
 	}

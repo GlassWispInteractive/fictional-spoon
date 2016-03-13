@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javafx.geometry.VPos;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
@@ -94,6 +95,7 @@ public class Menu extends GameScene {
 
 	public void render() {
 		// start from clean screen
+		GraphicsContext gc = gcs.get(0);
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// canvas settings

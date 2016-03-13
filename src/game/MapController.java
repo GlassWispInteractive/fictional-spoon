@@ -5,19 +5,20 @@ import entities.EntityFactory;
 import gen.Generator;
 import gen.environment.Ground;
 import gen.environment.Map;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class World extends GameScene {
+public class MapController extends GameScene {
 
 	/** SINGELTON */
-	private static World singleton;
+	private static MapController singleton;
 
 	// class components
 	private Map map;
-	
+
 	private EntityFactory fac;
 
-	private TileFactory tileFac = TileFactory.getTilesFactory();
+	private TileFactory tileFac;
 
 	// variables
 	private int size;
@@ -28,18 +29,25 @@ public class World extends GameScene {
 	 * 
 	 * @return
 	 */
-	public static World getWorld() {
+	public static MapController getWorld() {
 		if (singleton == null) {
 
-			singleton = new World();
+			singleton = new MapController();
 		}
 		return singleton;
 	}
 
-	private World() {
+	private MapController() {
 		super();
 
+		// add second layer
+		addLayer(new Canvas(Window.SIZE_X, Window.SIZE_Y));
+
+		// generate fresh map
 		map = new Generator(350, 225).newLevel();
+
+		// load factories
+		tileFac = TileFactory.getTilesFactory();
 		fac = EntityFactory.getFactory();
 
 		// set view size and be sure to be smaller than the map
@@ -86,10 +94,18 @@ public class World extends GameScene {
 
 	public void render() {
 		// start from clean screen
-		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+		GraphicsContext gc = gcs.get(0);
+		gc.clearRect(0, 0, layers.get(0).getWidth(), layers.get(0).getHeight());
+		
+		 renderMap();
+		 renderEntities();
+	}
 
-		// set color and render ground tile
-		// if (Game.getGame().getState() != MAP)
+	public void renderMap() {
+		// start from clean screen
+		GraphicsContext gc = gcs.get(0);
+		gc.clearRect(0, 0, layers.get(0).getWidth(), layers.get(0).getHeight());
+
 		for (int x = 0; x < cameraSizeX; x++) {
 			for (int y = 0; y < cameraSizeY; y++) {
 				if (map.getGround(x + cameraX, y + cameraY) != Ground.WALL) {
@@ -104,12 +120,17 @@ public class World extends GameScene {
 				}
 			}
 		}
+	}
+
+	public void renderEntities() {
+		// start from clean screen
+		GraphicsContext gc = gcs.get(1);
+		gc.clearRect(0, 0, layers.get(1).getWidth(), layers.get(1).getHeight());
 
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, cameraX, cameraY);
 		}
 		fac.getPlayer().render(gc, size, cameraX, cameraY);
-
 	}
 
 	private void drawMapTile(GraphicsContext gc, int x, int y, Ground ground, int tile) {

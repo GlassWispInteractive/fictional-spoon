@@ -1,5 +1,7 @@
 package game;
 
+import java.util.ArrayList;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -11,19 +13,30 @@ public abstract class GameScene {
 
 	protected Group group;
 	protected Scene scene;
-	protected Canvas layerBg;
-	protected GraphicsContext gc;
+	protected ArrayList<Canvas> layers;
+	protected ArrayList<GraphicsContext> gcs;
 
 	protected GameScene() {
+		
 		group = new Group();
 		scene = new Scene(group, Window.SIZE_X, Window.SIZE_Y, Paint.valueOf("#212121"));
-		layerBg = new Canvas(Window.SIZE_X, Window.SIZE_Y);
-		gc = layerBg.getGraphicsContext2D();
-		group.getChildren().add(layerBg);
+		
+		layers = new ArrayList<>();
+		layers.add(new Canvas(Window.SIZE_X, Window.SIZE_Y));
+		
+		gcs = new ArrayList<>();
+		gcs.add(layers.get(0).getGraphicsContext2D());
+		
+		group.getChildren().add(layers.get(0));
 	}
 
 	public Scene getScene() {
 		return scene;
 	}
-
+	
+	protected void addLayer(Canvas layer) {
+		layers.add(layer);
+		gcs.add(layer.getGraphicsContext2D());
+		group.getChildren().add(layer);
+	}
 }
