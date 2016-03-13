@@ -45,7 +45,7 @@ public class MapController extends GameScene {
 		map = new Generator(350, 225).newLevel();
 
 		// add layer
-		addLayer(new Canvas(map.getN() * size, map.getM() * size));
+		addLayer(new Canvas(map.getN() * size, map.getM() * size)); // big image
 		addLayer(new Canvas(Window.SIZE_X, Window.SIZE_Y));
 
 		// load factories
@@ -68,9 +68,10 @@ public class MapController extends GameScene {
 	public Map getMap() {
 		return map;
 	}
-	
-	/** 
+
+	/**
 	 * method is called every tick
+	 * 
 	 * @param elapsedTime
 	 */
 	public void tick(double elapsedTime) {
@@ -80,20 +81,6 @@ public class MapController extends GameScene {
 			mob.tick(elapsedTime);
 		}
 		fac.smartDelete();
-
-		// if (Events.getEvents().isM()) {
-		// if (game.getState() == MAP) {
-		// Entity player = EntityFactory.getFactory().getPlayer();
-		//
-		// game.setState(VIEW);
-		// updateView();
-		// initCamera(player.getX(), player.getY());
-		// } else {
-		// game.setState(MAP);
-		// updateView();
-		// }
-		// Events.getEvents().clear();
-		// }
 	}
 
 	public void render() {
@@ -103,7 +90,7 @@ public class MapController extends GameScene {
 		renderEntities();
 
 	}
-	
+
 	/**
 	 * render the map
 	 */
@@ -114,23 +101,27 @@ public class MapController extends GameScene {
 		final GraphicsContext gc = gcs.get(ID);
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
-		for (int x = 0; x < map.getN(); x++) {
-			for (int y = 0; y < map.getM(); y++) {
-				if (map.getGround(x, y) != Ground.WALL) {
+		for (int x = 0; x < cameraSizeX; x++) {
+			for (int y = 0; y < cameraSizeY; y++) {
+				Ground ground = map.getGround(x + cameraX, y + cameraY);
 
-					drawMapTile(gc, x, y, map.getGround(x, y), map.getTileNumber(x, y));
+				if (ground != Ground.WALL) {
+					// render tile
+					drawTile(gc, x, y, ground, map.getTileNumber(x + cameraX, y + cameraY));
 
 				} else {
-					gc.setFill(Game.getColor(map.getGround(x, y)));
+					// fallback into colored squares
+					gc.setFill(Game.getColor(ground));
 					gc.fillRect(x * size, y * size, size, size);
 
 				}
 			}
 		}
 	}
-	
+
 	/**
-	 * prerenders the map to make it unnecessary to rerender the same map every tick (huge improvement)
+	 * prerenders the map to make it unnecessary to rerender the same map every
+	 * tick (huge improvement)
 	 */
 	private void prerenderMap() {
 		// initialize render screen
@@ -138,21 +129,19 @@ public class MapController extends GameScene {
 		final GraphicsContext gc = gcs.get(ID);
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
+		// full rendering of the map
 		for (int x = 0; x < map.getN(); x++) {
 			for (int y = 0; y < map.getM(); y++) {
 				if (map.getGround(x, y) != Ground.WALL) {
-
-					drawMapTile(gc, x, y, map.getGround(x, y), map.getTileNumber(x, y));
-
-				} else {
-					gc.setFill(Game.getColor(map.getGround(x, y)));
-					gc.fillRect(x * size, y * size, size, size);
-
+					drawTile(gc, x, y, map.getGround(x, y), map.getTileNumber(x, y));
 				}
 			}
 		}
 	}
-
+	
+	/**
+	 * render the entities
+	 */
 	private void renderEntities() {
 		// initialize render screen
 		final int ID = 2;
@@ -164,8 +153,16 @@ public class MapController extends GameScene {
 		}
 		fac.getPlayer().render(gc, size, cameraX, cameraY);
 	}
-
-	private void drawMapTile(GraphicsContext gc, int x, int y, Ground ground, int tile) {
+	
+	/**
+	 * helper function to draw tiles onto the gc object
+	 * @param gc
+	 * @param x
+	 * @param y
+	 * @param ground
+	 * @param tile
+	 */
+	private void drawTile(GraphicsContext gc, int x, int y, Ground ground, int tile) {
 
 		// offset in tile set
 		if (ground == Ground.FLOOR)
@@ -177,9 +174,10 @@ public class MapController extends GameScene {
 
 		tileFac.drawTile(gc, imgsource, x, y, size);
 	}
-	
+
 	/**
 	 * initiaze the camera view
+	 * 
 	 * @param centerX
 	 * @param centerY
 	 */
@@ -189,15 +187,16 @@ public class MapController extends GameScene {
 
 		alignCamera();
 	}
-	
+
 	/**
-	 * updates the camera view
-	 * the view is only chaning when the player moves close to the border
+	 * updates the camera view the view is only chaning when the player moves
+	 * close to the border
+	 * 
 	 * @param centerX
 	 * @param centerY
 	 */
 	public void updateCamera(int centerX, int centerY) {
-		 // 20% of the screen is the 
+		// 20% of the screen is the
 		final int viewPaddingX = cameraSizeX / 5;
 		final int viewPaddingY = cameraSizeY / 5;
 
@@ -216,7 +215,7 @@ public class MapController extends GameScene {
 
 		alignCamera();
 	}
-	
+
 	/**
 	 * aligns the camera according to the displayable screen
 	 */
