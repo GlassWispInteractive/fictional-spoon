@@ -10,11 +10,10 @@ import game.GameScene;
 import game.TileFactory;
 import game.Window;
 import javafx.geometry.VPos;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class Combat extends GameScene {
@@ -47,6 +46,7 @@ public class Combat extends GameScene {
 	public Combat() {
 		super();
 
+		// inits
 		curSoul = 0;
 		curFocus = 0;
 		curAttackRow = 0;
@@ -59,6 +59,19 @@ public class Combat extends GameScene {
 
 		info = "Use 1, 2, 3 or 4 to attack";
 		streak = new ArrayList<>();
+
+		// add layers
+		addLayer(new Canvas(Window.SIZE_X, 300));
+		addLayer(new Canvas(Window.SIZE_X, 300));
+		addLayer(new Canvas(Window.SIZE_X, 100));
+		addLayer(new Canvas(Window.SIZE_X, 100));
+
+		// put up design
+		
+		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
+		layers.get(2).relocate(0, 0);
+		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
+		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
 
 		// hardcoded stuff
 		ComboFactory.getFac().makeCombo(new Element[] { Element.EARTH, Element.FIRE });
@@ -259,51 +272,30 @@ public class Combat extends GameScene {
 		GraphicsContext gc = gcs.get(0);
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
-		// font settings
-		Font font = Font.font("Helvetica", FontWeight.NORMAL, 16);
-		gc.setFont(font);
-		gc.setTextAlign(TextAlignment.LEFT);
-		gc.setTextBaseline(VPos.BASELINE);
+		renderElements();
+		renderMonsters();
+		renderBar();
+		renderInfo();
 
-		// print out current success
-		gc.setFill(Color.ORANGE);
-		// gc.setLineWidth(1);
+		// int textboxWidth = 600;
+		// int textboxHeight = 240;
+		// renderTextboxes(gc, (int) (width - textboxWidth), (int) (height -
+		// textboxHeight), textboxWidth, textboxHeight,
+		// souls.get(curSoul));
 
-		gc.fillText(info, 360, Window.SIZE_Y * 0.3);
+	}
 
-		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
-
-		// // background
-		// gc.setFill(Paint.valueOf("#C0C0C0"));
-		// gc.fillRect(0, 0, width, height);
-
-		// fancy line at 40%
-		gc.setLineWidth(3);
-		gc.setStroke(Color.GREY);
-		gc.strokeRoundRect(100, Window.SIZE_Y * 0.4, Window.SIZE_X - 200, 30, 30, 30);
-
-		// progress bar
-		gc.setFill(Color.ORANGE);
-		// +5 to be lower than outer rect
-		// +2 to have the left border over the delimeter
-		gc.fillRoundRect(110, Window.SIZE_Y * 0.4 + 5, status * (Window.SIZE_X - 220) + 2, 20, 20, 20);
-
-		// draw the delimters
-		gc.setStroke(Color.GREY);
-		gc.strokePolyline(
-				new double[] { 110 + lowerBound * (Window.SIZE_X - 220), 110 + lowerBound * (Window.SIZE_X - 220) },
-				new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
-
-		gc.strokePolyline(
-				new double[] { 110 + upperBound * (Window.SIZE_X - 220), 110 + upperBound * (Window.SIZE_X - 220) },
-				new double[] { Window.SIZE_Y * 0.4, Window.SIZE_Y * 0.4 + 30 }, 2);
-
-		// souls at 65% height
+	private void renderElements() {
+		// initialize render screen
+		final int ID = 1;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		
 		for (int i = 0; i < souls.size(); i++) {
 			gc.setFill(Color.ANTIQUEWHITE);
-			gc.fillText(souls.get(i).getName(), 80 + i * 180, Window.SIZE_Y * 0.65 - 5, 80);
+			gc.fillText(souls.get(i).getName(), 80 + i * 180, 25, 80);
 
-			gc.drawImage(ELEMS[i], 50 + i * 180, Window.SIZE_Y * 0.65, ELEMS[i].getWidth() / 3,
+			gc.drawImage(ELEMS[i], 50 + i * 180, 50, ELEMS[i].getWidth() / 3,
 					ELEMS[i].getHeight() / 3);
 
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
@@ -311,35 +303,82 @@ public class Combat extends GameScene {
 			if (curSoul == i && streakCount > 0) {
 				gc.setStroke(Color.ANTIQUEWHITE);
 				gc.setLineWidth(3);
-				gc.strokeRect(50 + i * 180, Window.SIZE_Y * 0.65, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
+				gc.strokeRect(50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 			}
 		}
+	}
 
-		// monster at 10% height
+	private void renderMonsters() {
+		// initialize render screen
+		final int ID = 2;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+
 		for (int i = 0; i < monster.size(); i++) {
 
 			Image image = TileFactory.getTilesFactory().getImage(monster.get(i).getImageSource());
 
 			gc.setFill(Color.RED);
-			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 180 - image.getWidth(),
-					Window.SIZE_Y * 0.1 - 5, 80);
+			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 180 - image.getWidth(), 50 - 5, 80);
 
-			gc.drawImage(image, Window.SIZE_X - 180 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1, 130, 130);
-			// gc.fillRect(Window.SIZE_X - 150 - i * 120, Window.SIZE_Y * 0.1,
-			// 80, 80);
+			gc.drawImage(image, Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
+			// gc.fillRect(Window.SIZE_X - 150 - i * 120, 50, 80, 80);
 
 			if (curFocus % monster.size() == i) {
 				gc.setStroke(Color.RED);
 				gc.setLineWidth(4);
-				gc.strokeRect(Window.SIZE_X - 180 - i * 180 - image.getWidth(), Window.SIZE_Y * 0.1, 130, 130);
+				gc.strokeRect(Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			}
 		}
 
-		// int textboxWidth = 600;
-		// int textboxHeight = 240;
-		// renderTextboxes(gc, (int) (width - textboxWidth), (int) (height -
-		// textboxHeight), textboxWidth, textboxHeight,
-		// souls.get(curSoul));
+	}
+
+	private void renderBar() {
+		// initialize render screen
+		final int ID = 3;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+
+		// fancy line at 40%
+		gc.setLineWidth(3);
+		gc.setStroke(Color.GREY);
+		gc.strokeRoundRect(100, 5, Window.SIZE_X - 200, 30, 30, 30);
+
+		// progress bar
+		gc.setFill(Color.ORANGE);
+		// +5 to be lower than outer rect
+		// +2 to have the left border over the delimeter
+		gc.fillRoundRect(110, 10, status * (Window.SIZE_X - 220) + 2, 20, 20, 20);
+
+		// draw the delimters
+		gc.setStroke(Color.GREY);
+		gc.strokePolyline(
+				new double[] { 110 + lowerBound * (Window.SIZE_X - 220), 110 + lowerBound * (Window.SIZE_X - 220) },
+				new double[] { 5, 35 }, 2);
+
+		gc.strokePolyline(
+				new double[] { 110 + upperBound * (Window.SIZE_X - 220), 110 + upperBound * (Window.SIZE_X - 220) },
+				new double[] { 5, 35 }, 2);
+	}
+
+	private void renderInfo() {
+		// initialize render screen
+		final int ID = 4;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+
+		// font settings
+		gc.setFont(Window.bigFont);
+		gc.setTextAlign(TextAlignment.CENTER);
+		gc.setTextBaseline(VPos.BASELINE);
+
+		// print out current success
+		gc.setFill(Color.ORANGE);
+		// gc.setLineWidth(1);
+
+		gc.fillText(info, Window.SIZE_X/2, 50);
+
+		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
 	}
 

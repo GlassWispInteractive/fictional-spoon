@@ -16,7 +16,7 @@ public class MapController extends GameScene {
 	private static MapController singleton;
 
 	// class components
-	
+
 	private Map map;
 	private EntityFactory fac;
 	private TileFactory tileFac;
@@ -55,11 +55,9 @@ public class MapController extends GameScene {
 		// set view size and be sure to be smaller than the map
 		cameraSizeX = Math.min(Window.SIZE_X / size, map.getN());
 		cameraSizeY = Math.min(Window.SIZE_Y / size, map.getM());
-		prerenderMap();
 
-		// System.out.println(cameraSizeX);
-		// System.out.println(Window.WINDOW_X / size);
-		// initView();
+		// render the map prior every other rendering and keep it cached
+		prerenderMap();
 	}
 
 	/**

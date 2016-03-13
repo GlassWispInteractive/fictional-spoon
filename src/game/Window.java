@@ -54,19 +54,7 @@ public class Window extends Application {
 		Menu menu = new Menu();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
 		Combat combat = new Combat();
-
-		// Canvas layerMain = new Canvas(SIZE_X, SIZE_Y);
-		// Canvas layerMsg = new Canvas(100, 100);
-		//
-		// root.getChildren().add(layerMain);
-		// root.getChildren().add(layerMsg);
-		// layerMsg.relocate(100, 100);
-		//
-		// 
-		// layerMsg.getGraphicsContext2D().setFont(font);
-		// layerMsg.getGraphicsContext2D().setFill(Color.ALICEBLUE);
-		// layerMsg.getGraphicsContext2D().fillText("hello", 0, 0);
-
+		
 		gameloop = new AnimationTimer() {
 			private int passedTicks = 0;
 			private double lastNanoTime = System.nanoTime();
