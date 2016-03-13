@@ -17,46 +17,32 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class Combat extends GameScene {
-
+	// lists
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
 
-	private int curSoul = 0;
-	private int curFocus = 0;
-	private int curAttackRow = 0;
-	private int curAttackColum = 0;
-	private double status, lowerBound, upperBound;
+	// class member
+	private int curSoul, curFocus, curAttackRow, curAttackColum;
 	private int streakCount;
 	private ArrayList<Element> streak;
+	private double status, lowerBound, upperBound;
 	private String info;
+	private CombatState combatState;
 
+	// internal states
 	private enum CombatState {
 		CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS
 	}
 
-	private CombatState combatState = CombatState.CHOOSE_SOUL;
-
+	// image array
 	private final Image ELEMS[] = new Image[] { new Image("/resources/elem/earth.png"),
 			new Image("/resources/elem/fire.png"), new Image("/resources/elem/wind.png"),
 			new Image("/resources/elem/water.png") };
-	// private final Image FIRE = new Image("/resources/elem/fire.png");
-	// private final Image WIND = new Image("/resources/elem/wind.png");
-	// private final Image WATER = new Image("/resources/elem/water.png");
 
 	public Combat() {
 		super();
 
 		// inits
-		curSoul = 0;
-		curFocus = 0;
-		curAttackRow = 0;
-		curAttackColum = 0;
-
-		status = 0;
-		lowerBound = 0.6;
-		upperBound = 0.75;
-		streakCount = 0;
-
 		info = "Use 1, 2, 3 or 4 to attack";
 		streak = new ArrayList<>();
 
@@ -67,7 +53,6 @@ public class Combat extends GameScene {
 		addLayer(new Canvas(Window.SIZE_X, 100));
 
 		// put up design
-		
 		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
 		layers.get(2).relocate(0, 0);
 		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
@@ -76,8 +61,7 @@ public class Combat extends GameScene {
 		// hardcoded stuff
 		ComboFactory.getFac().makeCombo(new Element[] { Element.EARTH, Element.FIRE });
 		ComboFactory.getFac().makeCombo(new Element[] { Element.WATER, Element.WATER, Element.AIR });
-		ComboFactory.getFac()
-				.makeCombo(new Element[] { Element.EARTH, Element.FIRE, Element.AIR, Element.EARTH, Element.WATER });
+		ComboFactory.getFac().makeCombo(new Element[] { Element.EARTH, Element.FIRE, Element.AIR, Element.AIR });
 
 		setSouls(getHardCodedSouls());
 		setMonster(getHardCodedMonster());
@@ -290,13 +274,12 @@ public class Combat extends GameScene {
 		final int ID = 1;
 		final GraphicsContext gc = gcs.get(ID);
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
-		
+
 		for (int i = 0; i < souls.size(); i++) {
 			gc.setFill(Color.ANTIQUEWHITE);
 			gc.fillText(souls.get(i).getName(), 80 + i * 180, 25, 80);
 
-			gc.drawImage(ELEMS[i], 50 + i * 180, 50, ELEMS[i].getWidth() / 3,
-					ELEMS[i].getHeight() / 3);
+			gc.drawImage(ELEMS[i], 50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
@@ -376,7 +359,7 @@ public class Combat extends GameScene {
 		gc.setFill(Color.ORANGE);
 		// gc.setLineWidth(1);
 
-		gc.fillText(info, Window.SIZE_X/2, 50);
+		gc.fillText(info, Window.SIZE_X / 2, 50);
 
 		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
