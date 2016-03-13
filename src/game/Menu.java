@@ -5,17 +5,14 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javafx.geometry.VPos;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class Menu extends GameScene {
 
-	
 	private Random rand;
 	private Image logo;
 
@@ -27,7 +24,6 @@ public class Menu extends GameScene {
 
 	public Menu() {
 		super();
-		
 
 		// init
 		list = new ArrayList<>();
@@ -41,12 +37,9 @@ public class Menu extends GameScene {
 			int x = rand.nextInt(Window.SIZE_X - 200), y = rand.nextInt(Window.SIZE_Y - 200);
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
-		
-		
+
 		// souls.add(new int[] { 20, 50 });
 	}
-	
-	
 
 	public void tick(int ticks) {
 		started = false;
@@ -103,7 +96,8 @@ public class Menu extends GameScene {
 	}
 
 	public void render() {
-		GraphicsContext gc = layer.getGraphicsContext2D();
+		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+		
 		// canvas settings
 		double w = gc.getCanvas().getWidth();
 

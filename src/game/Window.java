@@ -73,8 +73,6 @@ public class Window extends Application {
 		Canvas layerMain = new Canvas(SIZE_X, SIZE_Y);
 		Canvas layerMsg = new Canvas(100, 100);
 
-		// mainLayer.setCache(true);
-		// canvas.setCacheShape(true);
 		root.getChildren().add(layerMain);
 		root.getChildren().add(layerMsg);
 		layerMsg.relocate(100, 100);
@@ -120,11 +118,13 @@ public class Window extends Application {
 
 				case MAP:
 				case VIEW:
+					stage.setScene(scene);
 					lvl.tick(time);
 					lvl.render(gc);
 					break;
 
 				case COMBAT:
+					stage.setScene(scene);
 					Combat.startCombat(null, null).tick(passedTicks);
 					Combat.startCombat(null, null).render(gc);
 					break;
