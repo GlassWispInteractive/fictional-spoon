@@ -19,8 +19,6 @@ import javafx.scene.text.TextAlignment;
 
 public class Combat extends GameScene {
 
-	private static Combat singleton;
-
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
 
@@ -46,22 +44,7 @@ public class Combat extends GameScene {
 	// private final Image WIND = new Image("/resources/elem/wind.png");
 	// private final Image WATER = new Image("/resources/elem/water.png");
 
-	public static Combat startCombat(ArrayList<Soul> souls, ArrayList<Monster> monster) {
-		if (singleton == null) {
-			singleton = new Combat();
-
-			singleton.setSouls(getHardCodedSouls());
-			singleton.setMonster(getHardCodedMonster());
-			ComboFactory.getFac().makeCombo(new Element[] { Element.EARTH, Element.FIRE });
-			ComboFactory.getFac().makeCombo(new Element[] { Element.WATER, Element.WATER, Element.AIR });
-			ComboFactory.getFac().makeCombo(
-					new Element[] { Element.EARTH, Element.FIRE, Element.AIR, Element.EARTH, Element.WATER });
-		}
-
-		return singleton;
-	}
-
-	private Combat() {
+	public Combat() {
 		super();
 
 		curSoul = 0;
@@ -76,6 +59,15 @@ public class Combat extends GameScene {
 
 		info = "Use 1, 2, 3 or 4 to attack";
 		streak = new ArrayList<>();
+
+		// hardcoded stuff
+		ComboFactory.getFac().makeCombo(new Element[] { Element.EARTH, Element.FIRE });
+		ComboFactory.getFac().makeCombo(new Element[] { Element.WATER, Element.WATER, Element.AIR });
+		ComboFactory.getFac()
+				.makeCombo(new Element[] { Element.EARTH, Element.FIRE, Element.AIR, Element.EARTH, Element.WATER });
+
+		setSouls(getHardCodedSouls());
+		setMonster(getHardCodedMonster());
 
 	}
 

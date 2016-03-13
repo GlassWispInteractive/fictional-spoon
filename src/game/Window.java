@@ -53,6 +53,7 @@ public class Window extends Application {
 		MapController lvl = MapController.getWorld();
 		Menu menu = new Menu();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
+		Combat combat = new Combat();
 
 		// Canvas layerMain = new Canvas(SIZE_X, SIZE_Y);
 		// Canvas layerMsg = new Canvas(100, 100);
@@ -105,9 +106,9 @@ public class Window extends Application {
 					break;
 
 				case COMBAT:
-					stage.setScene(Combat.startCombat(null, null).getScene());
-					Combat.startCombat(null, null).tick(passedTicks);
-					Combat.startCombat(null, null).render();
+					stage.setScene(combat.getScene());
+					combat.tick(passedTicks);
+					combat.render();
 					break;
 
 				default:

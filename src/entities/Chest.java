@@ -1,17 +1,23 @@
 package entities;
 
+import java.util.ArrayList;
+
 import game.ImageSource;
 import game.TileFactory;
 import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chest extends Entity {
+	private static ArrayList<Chest> chests = new ArrayList<>();;
 
-	private boolean chestOpen = false;
+	private boolean chestOpen;
 	TileFactory tileFac;
 
 	public Chest(int x, int y) {
 		super(x, y);
+		chests.add(this);
+		
+		chestOpen = false;
 		tileFac = TileFactory.getTilesFactory();
 	}
 

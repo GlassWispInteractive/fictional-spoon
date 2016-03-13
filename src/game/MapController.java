@@ -12,12 +12,12 @@ public class MapController extends GameScene {
 	// map settings
 	private final int size = 16;
 
-	/** SINGELTON */
+	// singleton
 	private static MapController singleton;
 
 	// class components
+	
 	private Map map;
-
 	private EntityFactory fac;
 	private TileFactory tileFac;
 
@@ -138,7 +138,7 @@ public class MapController extends GameScene {
 			}
 		}
 	}
-	
+
 	/**
 	 * render the entities
 	 */
@@ -153,9 +153,10 @@ public class MapController extends GameScene {
 		}
 		fac.getPlayer().render(gc, size, cameraX, cameraY);
 	}
-	
+
 	/**
 	 * helper function to draw tiles onto the gc object
+	 * 
 	 * @param gc
 	 * @param x
 	 * @param y
@@ -196,9 +197,9 @@ public class MapController extends GameScene {
 	 * @param centerY
 	 */
 	public void updateCamera(int centerX, int centerY) {
-		// 20% of the screen is the
-		final int viewPaddingX = cameraSizeX / 5;
-		final int viewPaddingY = cameraSizeY / 5;
+		// ~15% of the screen is the
+		final int viewPaddingX = cameraSizeX / 7;
+		final int viewPaddingY = cameraSizeY / 7;
 
 		if (centerX - viewPaddingX < cameraX) {
 			cameraX = centerX - viewPaddingX;
