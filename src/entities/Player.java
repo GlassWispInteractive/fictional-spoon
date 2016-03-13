@@ -71,7 +71,7 @@ public class Player extends Entity {
 			x = newX;
 			y = newY;
 
-			MapController.getWorld().setCamera(x, y);
+			MapController.getWorld().updateCamera(x, y);
 		}
 
 	}

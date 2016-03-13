@@ -9,6 +9,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public class MapController extends GameScene {
+	// map settings
+	private final int size = 16;
 
 	/** SINGELTON */
 	private static MapController singleton;
@@ -17,11 +19,10 @@ public class MapController extends GameScene {
 	private Map map;
 
 	private EntityFactory fac;
-
 	private TileFactory tileFac;
 
 	// variables
-	private int size;
+
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
 	/**
@@ -40,35 +41,38 @@ public class MapController extends GameScene {
 	private MapController() {
 		super();
 
-		// add second layer
-		addLayer(new Canvas(Window.SIZE_X, Window.SIZE_Y));
-
 		// generate fresh map
 		map = new Generator(350, 225).newLevel();
+
+		// add layer
+		addLayer(new Canvas(map.getN() * size, map.getM() * size));
+		addLayer(new Canvas(Window.SIZE_X, Window.SIZE_Y));
 
 		// load factories
 		tileFac = TileFactory.getTilesFactory();
 		fac = EntityFactory.getFactory();
 
 		// set view size and be sure to be smaller than the map
-		size = 16;
 		cameraSizeX = Math.min(Window.SIZE_X / size, map.getN());
 		cameraSizeY = Math.min(Window.SIZE_Y / size, map.getM());
+		prerenderMap();
 
 		// System.out.println(cameraSizeX);
 		// System.out.println(Window.WINDOW_X / size);
 		// initView();
 	}
 
+	/**
+	 * @return the map
+	 */
 	public Map getMap() {
-		return this.map;
+		return map;
 	}
-
-	public void setSize(int size) {
-		this.size = size;
-
-	}
-
+	
+	/** 
+	 * method is called every tick
+	 * @param elapsedTime
+	 */
 	public void tick(double elapsedTime) {
 		fac.getPlayer().tick(elapsedTime);
 
@@ -93,28 +97,55 @@ public class MapController extends GameScene {
 	}
 
 	public void render() {
-		// start from clean screen
-		GraphicsContext gc = gcs.get(0);
-		gc.clearRect(0, 0, layers.get(0).getWidth(), layers.get(0).getHeight());
-		
-		 renderMap();
-		 renderEntities();
+		// shift pre
+		layers.get(1).relocate(-16 * cameraX, -16 * cameraY);
+
+		renderEntities();
+
 	}
+	
+	/**
+	 * render the map
+	 */
+	@SuppressWarnings("unused")
+	private void renderMap() {
+		// initialize render screen
+		final int ID = 1;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
-	public void renderMap() {
-		// start from clean screen
-		GraphicsContext gc = gcs.get(0);
-		gc.clearRect(0, 0, layers.get(0).getWidth(), layers.get(0).getHeight());
+		for (int x = 0; x < map.getN(); x++) {
+			for (int y = 0; y < map.getM(); y++) {
+				if (map.getGround(x, y) != Ground.WALL) {
 
-		for (int x = 0; x < cameraSizeX; x++) {
-			for (int y = 0; y < cameraSizeY; y++) {
-				if (map.getGround(x + cameraX, y + cameraY) != Ground.WALL) {
-
-					drawMapTile(gc, x, y, map.getGround(x + cameraX, y + cameraY),
-							map.getTileNumber(x + cameraX, y + cameraY));
+					drawMapTile(gc, x, y, map.getGround(x, y), map.getTileNumber(x, y));
 
 				} else {
-					gc.setFill(Game.getColor(map.getGround(x + cameraX, y + cameraY)));
+					gc.setFill(Game.getColor(map.getGround(x, y)));
+					gc.fillRect(x * size, y * size, size, size);
+
+				}
+			}
+		}
+	}
+	
+	/**
+	 * prerenders the map to make it unnecessary to rerender the same map every tick (huge improvement)
+	 */
+	private void prerenderMap() {
+		// initialize render screen
+		final int ID = 1;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+
+		for (int x = 0; x < map.getN(); x++) {
+			for (int y = 0; y < map.getM(); y++) {
+				if (map.getGround(x, y) != Ground.WALL) {
+
+					drawMapTile(gc, x, y, map.getGround(x, y), map.getTileNumber(x, y));
+
+				} else {
+					gc.setFill(Game.getColor(map.getGround(x, y)));
 					gc.fillRect(x * size, y * size, size, size);
 
 				}
@@ -122,10 +153,11 @@ public class MapController extends GameScene {
 		}
 	}
 
-	public void renderEntities() {
-		// start from clean screen
-		GraphicsContext gc = gcs.get(1);
-		gc.clearRect(0, 0, layers.get(1).getWidth(), layers.get(1).getHeight());
+	private void renderEntities() {
+		// initialize render screen
+		final int ID = 2;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, cameraX, cameraY);
@@ -145,17 +177,29 @@ public class MapController extends GameScene {
 
 		tileFac.drawTile(gc, imgsource, x, y, size);
 	}
-
+	
+	/**
+	 * initiaze the camera view
+	 * @param centerX
+	 * @param centerY
+	 */
 	public void initCamera(int centerX, int centerY) {
 		this.cameraX = centerX - cameraSizeX / 2;
 		this.cameraY = centerY - cameraSizeY / 2;
 
-		fixCamera();
+		alignCamera();
 	}
-
-	public void setCamera(int centerX, int centerY) {
-		int viewPaddingX = cameraSizeX / 5; // 20%
-		int viewPaddingY = cameraSizeY / 5;
+	
+	/**
+	 * updates the camera view
+	 * the view is only chaning when the player moves close to the border
+	 * @param centerX
+	 * @param centerY
+	 */
+	public void updateCamera(int centerX, int centerY) {
+		 // 20% of the screen is the 
+		final int viewPaddingX = cameraSizeX / 5;
+		final int viewPaddingY = cameraSizeY / 5;
 
 		if (centerX - viewPaddingX < cameraX) {
 			cameraX = centerX - viewPaddingX;
@@ -170,10 +214,13 @@ public class MapController extends GameScene {
 			cameraY = centerY + viewPaddingY - cameraSizeY;
 		}
 
-		fixCamera();
+		alignCamera();
 	}
-
-	private void fixCamera() {
+	
+	/**
+	 * aligns the camera according to the displayable screen
+	 */
+	private void alignCamera() {
 		if (cameraX < 0) {
 			cameraX = 0;
 		}
