@@ -5,15 +5,24 @@ import java.util.Arrays;
 import java.util.Random;
 
 import javafx.geometry.VPos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Stage;
 
 public class Menu {
-	private static Menu singleton;
+	private Scene scene;
+	private Canvas layerMain;
+	
+	
 	private Random rand;
 	private Image logo;
 
@@ -23,7 +32,17 @@ public class Menu {
 	private int soulWait;
 	private boolean started = false;
 
-	private Menu() {
+	public Menu() {
+		// set up JavaFX
+		Group pane = new Group();
+		scene = new Scene(pane, Window.SIZE_X, Window.SIZE_Y, Paint.valueOf("#212121"));
+		
+		layerMain = new Canvas(Window.SIZE_X, Window.SIZE_Y);
+		
+		pane.getChildren().add(layerMain);
+		
+
+		// init
 		list = new ArrayList<>();
 		rand = new Random();
 		cur = 0;
@@ -35,15 +54,13 @@ public class Menu {
 			int x = rand.nextInt(Window.SIZE_X - 200), y = rand.nextInt(Window.SIZE_Y - 200);
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
+		
+		
 		// souls.add(new int[] { 20, 50 });
 	}
-
-	public static Menu getMenu() {
-		if (singleton == null) {
-			singleton = new Menu();
-		}
-
-		return singleton;
+	
+	public Scene getScene() {
+		return scene;
 	}
 
 	public void tick(int ticks) {
@@ -100,7 +117,8 @@ public class Menu {
 		Events.getEvents().clear();
 	}
 
-	public void render(GraphicsContext gc) {
+	public void render() {
+		GraphicsContext gc = layerMain.getGraphicsContext2D();
 		// canvas settings
 		double w = gc.getCanvas().getWidth();
 

@@ -8,7 +8,10 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 import static game.State.*;
@@ -35,16 +38,16 @@ public class Window extends Application {
 	public void start(Stage stage) {
 		game = Game.getGame();
 		lvl = World.getWorld();
-		Menu.getMenu().setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
 
 		// root objects
 		Group root = new Group();
 		Scene scene = new Scene(root, SIZE_X, SIZE_Y, Paint.valueOf("#212121"));
 
 		// main stage settings
-		stage.setScene(scene);
+		
 		stage.setTitle("Soul Harvester");
 		stage.setResizable(false);
+		stage.setScene(scene);
 
 		stage.setOnCloseRequest(event -> {
 			gameloop.stop();
@@ -52,25 +55,37 @@ public class Window extends Application {
 			// System.out.println("game is saved");
 		});
 
-		Canvas canvas = new Canvas(SIZE_X, SIZE_Y);
-		canvas.setCache(true);
-		// canvas.setCacheShape(true);
-		root.getChildren().add(canvas);
-
 		// key events
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+		stage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				Events.getEvents().addCode(e);
 			}
 		});
-
-		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+		stage.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
 				Events.getEvents().removeCode(e);
 			}
 		});
+		
 
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+		Menu menu = new Menu();
+		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
+
+		Canvas layerMain = new Canvas(SIZE_X, SIZE_Y);
+		Canvas layerMsg = new Canvas(100, 100);
+
+		// mainLayer.setCache(true);
+		// canvas.setCacheShape(true);
+		root.getChildren().add(layerMain);
+		root.getChildren().add(layerMsg);
+		layerMsg.relocate(100, 100);
+
+		Font font = Font.font("Helvetica", FontWeight.BOLD, 24);
+		layerMsg.getGraphicsContext2D().setFont(font);
+		layerMsg.getGraphicsContext2D().setFill(Color.ALICEBLUE);
+		layerMsg.getGraphicsContext2D().fillText("hello", 0, 0);
+
+		GraphicsContext gc = layerMain.getGraphicsContext2D();
 
 		gameloop = new AnimationTimer() {
 			private int passedTicks = 0;
@@ -93,9 +108,10 @@ public class Window extends Application {
 
 				switch (game.getState()) {
 				case MENU:
-					Menu.getMenu().tick(passedTicks);
-					Menu.getMenu().render(gc);
-					if (Menu.getMenu().isStarted()) {
+					stage.setScene(menu.getScene());
+					menu.tick(passedTicks);
+					menu.render();
+					if (menu.isStarted()) {
 						Entity player = EntityFactory.getFactory().getPlayer();
 						// lvl.updateView();
 						lvl.initCamera(player.getX(), player.getY());

@@ -17,7 +17,7 @@ public class World {
 	private Map map;
 	private EntityFactory fac;
 
-	TileFactory tileFac = TileFactory.getTilesFactory();
+	private TileFactory tileFac = TileFactory.getTilesFactory();
 
 	// variables
 	private int size;
