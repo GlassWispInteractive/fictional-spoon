@@ -3,9 +3,9 @@ package entities;
 import java.util.ArrayList;
 
 import combat.Combo;
-import game.ImageSource;
-import game.TileFactory;
-import game.TileSource;
+import framework.ImageSource;
+import framework.TileFactory;
+import framework.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chest extends Entity {

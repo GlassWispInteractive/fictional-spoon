@@ -1,10 +1,10 @@
 package entities;
 
-import game.Events;
-import game.ImageSource;
-import game.TileSource;
-import game.TileFactory;
-import game.MapController;
+import framework.Events;
+import framework.ImageSource;
+import framework.MapController;
+import framework.TileFactory;
+import framework.TileSource;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 

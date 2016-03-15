@@ -1,4 +1,4 @@
-package game;
+package framework;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +10,9 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class Menu extends StateView {
+//import static game.State.*;
 
+public class Menu extends State {
 	private Random rand;
 	private Image logo;
 
@@ -79,7 +80,7 @@ public class Menu extends StateView {
 				started = true;
 				break;
 			case "Combat":
-				StateController.getGame().setState(State.COMBAT);
+//				StateControl.getCtrl().setState(StateName.COMBAT);
 				break;
 			case "Exit":
 				System.exit(0);

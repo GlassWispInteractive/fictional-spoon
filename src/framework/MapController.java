@@ -1,4 +1,4 @@
-package game;
+package framework;
 
 import entities.Entity;
 import entities.EntityFactory;
@@ -8,7 +8,7 @@ import gen.environment.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class MapController extends StateView {
+public class MapController extends State {
 	// map settings
 	private final int size = 16;
 
@@ -109,7 +109,7 @@ public class MapController extends StateView {
 
 				} else {
 					// fallback into colored squares
-					gc.setFill(StateController.getColor(ground));
+					gc.setFill(Window.groundColor[ground.ordinal()]);
 					gc.fillRect(x * size, y * size, size, size);
 
 				}

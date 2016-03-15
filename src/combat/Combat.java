@@ -3,12 +3,11 @@ package combat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import entities.EntityFactory;
 import entities.Monster;
-import game.Events;
-import game.StateView;
-import game.TileFactory;
-import game.Window;
+import framework.Events;
+import framework.State;
+import framework.TileFactory;
+import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,7 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class Combat extends StateView {
+public class Combat extends State {
 	// lists
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
