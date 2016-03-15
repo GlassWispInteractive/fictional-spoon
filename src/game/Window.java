@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 import static game.State.*;
 
 import combat.Combat;
+import combat.Combo;
 import entities.Entity;
 import entities.EntityFactory;
 
@@ -29,6 +30,8 @@ public class Window extends Application {
 
 	@Override
 	public void start(Stage stage) {
+		Combo.random(5);
+		
 		// stage settings
 		stage.setTitle("Soul Harvester");
 		stage.setResizable(false);

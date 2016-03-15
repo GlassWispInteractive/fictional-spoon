@@ -59,9 +59,9 @@ public class Combat extends GameScene {
 		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
 
 		// hardcoded stuff
-		ComboFactory.getFac().makeCombo(new Element[] { Element.EARTH, Element.FIRE });
-		ComboFactory.getFac().makeCombo(new Element[] { Element.WATER, Element.WATER, Element.AIR });
-		ComboFactory.getFac().makeCombo(new Element[] { Element.EARTH, Element.FIRE, Element.AIR, Element.AIR });
+		new Combo(new Element[] { Element.EARTH, Element.FIRE });
+		new Combo(new Element[] { Element.WATER, Element.WATER, Element.AIR });
+		new Combo(new Element[] { Element.EARTH, Element.FIRE, Element.AIR, Element.AIR });
 
 		setSouls(getHardCodedSouls());
 		setMonster(getHardCodedMonster());
@@ -242,7 +242,7 @@ public class Combat extends GameScene {
 	public void eval(Element[] streakElem) {
 		// System.out.println(Arrays.toString(combo));
 
-		for (Combo combo : ComboFactory.getFac().getCombos()) {
+		for (Combo combo : Combo.getCombosInUse()) {
 			if (Arrays.equals(streakElem, combo.getCombo())) {
 				info = "Combo completed!";
 				streak.clear();
