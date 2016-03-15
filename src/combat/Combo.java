@@ -3,6 +3,10 @@ package combat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Combo {
 	private static ArrayList<Combo> combos = new ArrayList<>();
@@ -13,16 +17,19 @@ public class Combo {
 	public Combo(Element[] combo) {
 		this.setCombo(combo);
 		combos.add(this);
-		
-		System.out.println(Arrays.toString(combo));
+
+		// System.out.println(Arrays.toString(combo));
 	}
-	
-	public static Combo random(int len) {
-		Element[] elements = new Element[len];
-		System.out.println(Arrays.stream(elements).map(e -> Element.FIRE).toArray().toString());
-		System.out.println(Arrays.toString(elements));
-		
-		return null;
+
+	public static Combo random(int lenT) {
+		Random random = new Random();
+		random.setSeed(42);
+
+		Element[] elements = new Element[lenT];
+
+		elements = Arrays.stream(elements).map(e -> Element.values()[random.nextInt(4)]).toArray(Element[]::new);
+
+		return new Combo(elements);
 	}
 
 	/**
@@ -37,6 +44,14 @@ public class Combo {
 	 */
 	public static HashSet<Combo> getCombosInUse() {
 		return combosInUse;
+	}
+
+	/**
+	 * clear the combo list
+	 */
+	public static void clear() {
+		// delete every combo which is not yet activated
+		combos = (ArrayList<Combo>) combos.stream().filter(e -> combosInUse.contains(e)).collect(Collectors.toList());
 	}
 
 	/**
@@ -59,5 +74,12 @@ public class Combo {
 	 */
 	public void activate() {
 		combosInUse.add(this);
+	}
+
+	@Override
+	public String toString() {
+		// write each element as the first latter
+		return Arrays.stream(combo).map(e -> e.toString().substring(0, 1)).collect(Collectors.joining("-"));
+
 	}
 }

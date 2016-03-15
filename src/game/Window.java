@@ -30,7 +30,7 @@ public class Window extends Application {
 
 	@Override
 	public void start(Stage stage) {
-		Combo.random(5);
+		
 		
 		// stage settings
 		stage.setTitle("Soul Harvester");
@@ -57,6 +57,7 @@ public class Window extends Application {
 		Menu menu = new Menu();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
 		Combat combat = new Combat();
+		Combo.random(5);
 		
 		gameloop = new AnimationTimer() {
 			private int passedTicks = 0;
