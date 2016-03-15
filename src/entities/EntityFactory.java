@@ -68,8 +68,8 @@ public class EntityFactory {
 		return monster;
 	}
 	
-	public SuperMonster makeSuperMonster(int x, int y, String name) {
-		SuperMonster superMonster = new SuperMonster(x, y, name);
+	public Portal makeSuperMonster(int x, int y, String name) {
+		Portal superMonster = new Portal(x, y, name);
 		addEnts.add(superMonster);
 		return superMonster;
 	}

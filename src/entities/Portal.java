@@ -9,15 +9,17 @@ import java.util.Random;
 
 import javafx.scene.canvas.GraphicsContext;
 
-public class SuperMonster extends Entity{
+public class Portal extends Entity{
 	
 	private Random rnd = new Random();
 	private TileFactory tileFac = TileFactory.getTilesFactory();
-	private ImageSource imgSource = new ImageSource(TileSource.MONSTER_TILES, 4, 8);
+//	private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 23, 7); //alternative
+	private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 40, 9);
+//	private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 36, 1); //alternative
 	private int blocked = 0;
 	private int maxMonsterSpawn = 3;
 
-	public SuperMonster(int x, int y, String name) {
+	public Portal(int x, int y, String name) {
 		super(x, y);
 		
 		delayTicks = 1000;
