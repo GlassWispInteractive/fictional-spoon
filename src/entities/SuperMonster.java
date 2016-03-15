@@ -4,8 +4,6 @@ import game.ImageSource;
 import game.TileFactory;
 import game.TileSource;
 import game.World;
-import gen.environment.Map;
-
 import java.awt.Point;
 import java.util.Random;
 
@@ -17,11 +15,12 @@ public class SuperMonster extends Entity{
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 	private ImageSource imgSource = new ImageSource(TileSource.MONSTER_TILES, 4, 8);
 	private int blocked = 0;
+	private int maxMonsterSpawn = 3;
 
 	public SuperMonster(int x, int y, String name) {
 		super(x, y);
 		
-		delayTicks = 10000;
+		delayTicks = 1000;
 	}
 
 	@Override
@@ -53,57 +52,25 @@ public class SuperMonster extends Entity{
 	
 		Direction dir;
 		Point spawnPoint;
-		
-		dir = Direction.values()[directionIndex];
-		
-		spawnPoint = dir.move(new Point(x, y));
-		
-//		System.out.println("############");
-//		System.out.println("im here: " + new Point(x, y));
-		
-//		System.out.println(directionIndex);
-		if(World.getWorld().getMap().isWalkable(spawnPoint.x, spawnPoint.y)){
-//			System.out.println("found spawnPoint "+spawnPoint);
-			return;
-		}
-		directionIndex = (++directionIndex) % Direction.values().length;
-//		System.out.println(directionIndex);
-		if(World.getWorld().getMap().isWalkable(spawnPoint.x, spawnPoint.y)){
-//			System.out.println("found spawnPoint "+spawnPoint);
-			return;
-		}
-		directionIndex = (++directionIndex) % Direction.values().length;
-//		System.out.println(directionIndex);
-		if(World.getWorld().getMap().isWalkable(spawnPoint.x, spawnPoint.y)){
-//			System.out.println("found spawnPoint "+spawnPoint);
-			return;
-		}
-		directionIndex = (++directionIndex) % Direction.values().length;
-//		System.out.println(directionIndex);
-		if(World.getWorld().getMap().isWalkable(spawnPoint.x, spawnPoint.y)){
-//			System.out.println("found spawnPoint "+spawnPoint);
-			return;
-		}
-		
-//		System.out.println(directionIndex);
-		System.out.println("############");
-		System.out.println("im here: " + new Point(x, y));
-		System.out.println("no spawnpoint");
-		return;
 
-//		do{
-//			
-//			dir = Direction.values()[directionIndex];
-//			
-//			spawnPoint = dir.move(new Point(x, y));
-//			
-//			directionIndex = (++directionIndex) % Direction.values().length;
-//			
-//		} while (World.getWorld().getMap().isWalkable(spawnPoint.x, spawnPoint.y));
+		do{
+			
+			dir = Direction.values()[directionIndex];
+			
+			spawnPoint = dir.move(new Point(x, y));
+			
+			directionIndex = (++directionIndex) % Direction.values().length;
+			
+		} while (!World.getWorld().getMap().isWalkable(spawnPoint.x, spawnPoint.y));
 		
 		
 		// let the generator generate the params ?
-//		EntityFactory.getFactory().makeMonster(spawnPoint.x, spawnPoint.y, 100, new int[]{1, 2, 3, 4, 5}, "test");
+		if(maxMonsterSpawn > 0){
+			maxMonsterSpawn--;
+			int[] power = new int[]{0, 0, 0, 0, 0};
+			power[rnd.nextInt(power.length)] = 5;
+			EntityFactory.getFactory().makeMonster(spawnPoint.x, spawnPoint.y, 100, power, "test");
+		}
 	}
 
 }

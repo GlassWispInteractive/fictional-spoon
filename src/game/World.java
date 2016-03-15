@@ -66,6 +66,7 @@ public class World {
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(elapsedTime);
 		}
+		fac.smartAdd();
 		fac.smartDelete();
 
 		// if (Events.getEvents().isM()) {

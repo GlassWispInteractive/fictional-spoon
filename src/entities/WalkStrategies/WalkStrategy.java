@@ -150,9 +150,10 @@ public abstract class WalkStrategy {
 		}
 		
 		// make move
-		newPoint = dir1.move(newPoint, dir2);
-		
-		return newPoint;
+		if(dir1 == null){
+			return dir2.move(newPoint);
+		}
+		return dir1.move(newPoint, dir2);
 	}
 	
 	
