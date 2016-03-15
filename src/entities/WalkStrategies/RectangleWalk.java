@@ -2,6 +2,8 @@ package entities.WalkStrategies;
 
 import java.awt.Point;
 
+import entities.Direction;
+
 public class RectangleWalk extends WalkStrategy {
 	
 	private int directionIndex = 0;
@@ -22,7 +24,7 @@ public class RectangleWalk extends WalkStrategy {
 		Direction dir = Direction.values()[directionIndex];
 
 		// make move
-		newPoint = move(new Point(oldX, oldY),dir);
+		newPoint = dir.move(new Point(oldX, oldY));
 		
 		
 		if(!map.isWalkable(newPoint.x, newPoint.y) || !map.isWalkableRoom(newPoint.x, newPoint.y)){

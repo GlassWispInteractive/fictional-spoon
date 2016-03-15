@@ -1,5 +1,6 @@
 package entities.WalkStrategies;
 
+import entities.Direction;
 import entities.Entity;
 import entities.EntityFactory;
 import game.World;
@@ -29,72 +30,7 @@ public abstract class WalkStrategy {
 	public WalkStrategy(boolean canBeAggro) {
 		this.canBeAggro = canBeAggro;
 	}
-	
-	protected enum Direction {
-	    NORTH(0, -1), EAST(1, 0), SOUTH(0, 1), WEST(-1, 0);
-
-	    private final int x;
-	    private final int y;
-
-	    private Direction(int x, int y) {
-	        this.x = x;
-	        this.y = y;
-	    }
-	    public int getX() { return x; }
-	    public int getY() { return y; }
-	}
-	
-	// make move
-	protected Point move(Point oldPoint, Direction dir) {
 		
-		if(dir == null){
-			return oldPoint;
-		}
-		
-		Point newPoint = new Point(oldPoint.x, oldPoint.y);
-		
-		newPoint.x += dir.getX();
-		newPoint.y += dir.getY();
-		
-		return newPoint;
-	}
-	protected Point move(Point oldPoint, Direction dir1, Direction dir2) {
-		
-		if(dir1 == null){
-			move(oldPoint, dir2);
-		}
-		if(dir2 == null){
-			move(oldPoint, dir1);
-		}
-		
-		//try to walk both direction together
-		Point newPoint = move(move(oldPoint, dir1), dir2);
-		
-		if(map.isWalkable(newPoint.x, newPoint.y)){
-			//both direction together is walkable
-			return newPoint;
-		}
-		
-		//calc both directions separately
-		Point newPoint1 = move(oldPoint, dir1);
-		Point newPoint2 = move(oldPoint, dir2);
-		
-		//try if one is not walkable
-		if(!map.isWalkable(newPoint1.x, newPoint1.y)){
-			return newPoint2;
-		}
-		if(!map.isWalkable(newPoint2.x, newPoint2.y)){
-			return newPoint1;
-		}
-		
-		//both are walkable and use one randomly
-		if(rnd.nextBoolean()){
-			return newPoint1;
-		}else{
-			return newPoint2;
-		}
-	}
-	
 	public Point walk(int oldX, int oldY){
 		
 		map = World.getWorld().getMap();
@@ -171,7 +107,7 @@ public abstract class WalkStrategy {
 			Direction dir = Direction.values()[directionIndex];
 	
 			// make move
-			newPoint = move(new Point(oldX, oldY),dir);
+			newPoint = dir.move(new Point(oldX, oldY));
 			
 		} while (!map.isWalkable(newPoint.x, newPoint.y));
 
@@ -214,7 +150,7 @@ public abstract class WalkStrategy {
 		}
 		
 		// make move
-		newPoint = move(newPoint, dir1, dir2);
+		newPoint = dir1.move(newPoint, dir2);
 		
 		return newPoint;
 	}

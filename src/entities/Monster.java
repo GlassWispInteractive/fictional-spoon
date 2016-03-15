@@ -38,14 +38,13 @@ public class Monster extends Entity {
 	private int maxType = -1;
 	private String name;
 	private boolean monsterDead = false;
-	TileFactory tileFac;
+	private TileFactory tileFac = TileFactory.getTilesFactory();
 
 	public Monster(int x, int y, int hp, int[] power, String name) {
 		super(x, y);
 
 		this.hp = hp;
 		this.name = name;
-		this.tileFac = TileFactory.getTilesFactory();
 		this.power = power;
 		this.delayTicks = 10;
 
@@ -79,7 +78,6 @@ public class Monster extends Entity {
 		} else {
 			tileFac.drawTile(gc, tileType[maxType], (x - offsetX), (y - offsetY), size);
 		}
-
 	}
 
 	@Override

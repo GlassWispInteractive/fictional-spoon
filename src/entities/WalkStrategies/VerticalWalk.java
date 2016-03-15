@@ -2,6 +2,8 @@ package entities.WalkStrategies;
 
 import java.awt.Point;
 
+import entities.Direction;
+
 public class VerticalWalk extends WalkStrategy {
 	
 	private int directionIndex = 0;
@@ -22,7 +24,7 @@ public class VerticalWalk extends WalkStrategy {
 		Direction dir = Direction.values()[directionIndex];
 
 		// make move
-		newPoint = move(new Point(oldX, oldY),dir);
+		newPoint = dir.move(new Point(oldX, oldY));
 		
 		if(!map.isWalkable(oldX, newPoint.y)){
 			directionIndex = (directionIndex + 2) % Direction.values().length;
