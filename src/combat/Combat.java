@@ -80,12 +80,14 @@ public class Combat extends State {
 	}
 
 	private void setMonster(Monster[] monster) {
-		this.monster = (ArrayList<Monster>) Arrays.asList(monster);
+		this.monster = new ArrayList<Monster>(Arrays.asList(monster));
+		
 	}
 
 	@Override
 	public void tick(int ticks) {
-		status = Math.min(1, status + ticks / 120);
+		status = Math.min(1, status + ticks / 120.0);
+		System.out.println(status);
 
 		EventControl e = EventControl.getEvents();
 

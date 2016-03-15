@@ -58,7 +58,7 @@ public abstract class State {
 	/**
 	 * start this scene
 	 */
-	protected void start() {
+	public void start() {
 		parent = ctrl.getState();
 		ctrl.setState(this);
 
@@ -68,7 +68,7 @@ public abstract class State {
 	/**
 	 * stop this scene and return to parental scene
 	 */
-	protected void stop() {
+	public void stop() {
 		if (parent != null)
 			parent.start();
 	}

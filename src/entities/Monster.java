@@ -1,5 +1,6 @@
 package entities;
 
+import combat.Combat;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
@@ -63,7 +64,8 @@ public class Monster extends Entity {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-			
+			monsterDead = true;
+			new Combat(new Monster[]{this}).start();
 		}
 	}
 
