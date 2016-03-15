@@ -9,13 +9,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import org.omg.PortableServer.POAManagerPackage.State;
-
-import combat.Combat;
-import combat.Combo;
-import entities.Entity;
-import entities.EntityFactory;
-
 public class Window extends Application {
 	// public window wide settings
 	public static final int SIZE_X = 1392, SIZE_Y = 896;
@@ -58,9 +51,12 @@ public class Window extends Application {
 		stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
 			Events.getEvents().removeCode(event);
 		});
+		
+		StateControl ctrl = StateControl.getCtrl();
 
 		Menu menu = new Menu();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
+		menu.start();
 
 		gameloop = new AnimationTimer() {
 
@@ -78,7 +74,8 @@ public class Window extends Application {
 				}
 
 				// compute a frame
-				menu.start();
+				ctrl.tick(passedTicks);
+				ctrl.render();
 
 				//
 

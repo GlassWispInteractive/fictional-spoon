@@ -83,7 +83,8 @@ public class Combat extends State {
 		this.monster = (ArrayList<Monster>) Arrays.asList(monster);
 	}
 
-	public void tick(double ticks) {
+	@Override
+	public void tick(int ticks) {
 		status = Math.min(1, status + ticks / 120);
 
 		Events e = Events.getEvents();
@@ -402,5 +403,7 @@ public class Combat extends State {
 		gc.fillText("BACK", columX - width / attacks.length,
 				rowY + height / (attacks[attacks.length - 1].length + 1) / 2);
 	}
+
+
 
 }

@@ -8,12 +8,12 @@ import gen.environment.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class MapController extends State {
+public class MapControl extends State {
 	// map settings
 	private final int size = 16;
 
 	// singleton
-	private static MapController singleton;
+	private static MapControl singleton;
 
 	// class components
 
@@ -30,15 +30,15 @@ public class MapController extends State {
 	 * 
 	 * @return
 	 */
-	public static MapController getWorld() {
+	public static MapControl getWorld() {
 		if (singleton == null) {
 
-			singleton = new MapController();
+			singleton = new MapControl();
 		}
 		return singleton;
 	}
 
-	private MapController() {
+	private MapControl() {
 		super();
 
 		// generate fresh map
@@ -70,17 +70,19 @@ public class MapController extends State {
 	/**
 	 * method is called every tick
 	 * 
-	 * @param elapsedTime
+	 * @param ticks
 	 */
-	public void tick(double elapsedTime) {
-		fac.getPlayer().tick(elapsedTime);
+	@Override
+	public void tick(int ticks) {
+		fac.getPlayer().tick(ticks);
 
 		for (Entity mob : fac.getMobs()) {
-			mob.tick(elapsedTime);
+			mob.tick(ticks);
 		}
 		fac.smartDelete();
 	}
 
+	@Override
 	public void render() {
 		// shift pre
 		layers.get(1).relocate(-16 * cameraX, -16 * cameraY);

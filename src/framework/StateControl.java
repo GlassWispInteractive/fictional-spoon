@@ -40,11 +40,15 @@ public class StateControl {
 	 *            the state to set
 	 */
 	public void setState(State state) {
-//		this.state = ;
+		this.state = state;
 	}
-
-//	public boolean isMenu() {
-//		return state == StateName.MENU;
-//	}
+	
+	public void tick(int ticks) {
+		state.tick(ticks);
+	}
+	
+	public void render() {
+		state.render();
+	}
 
 }

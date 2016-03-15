@@ -77,7 +77,7 @@ public class Menu extends State {
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
 			case "Start":
-				started = true;
+				
 				break;
 			case "Combat":
 //				StateControl.getCtrl().setState(StateName.COMBAT);

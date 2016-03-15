@@ -2,7 +2,7 @@ package entities;
 
 import framework.Events;
 import framework.ImageSource;
-import framework.MapController;
+import framework.MapControl;
 import framework.TileFactory;
 import framework.TileSource;
 import gen.environment.Map;
@@ -62,7 +62,7 @@ public class Player extends Entity {
 			moved = true;
 		}
 
-		Map map = MapController.getWorld().getMap();
+		Map map = MapControl.getWorld().getMap();
 
 		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
 
@@ -71,7 +71,7 @@ public class Player extends Entity {
 			x = newX;
 			y = newY;
 
-			MapController.getWorld().updateCamera(x, y);
+			MapControl.getWorld().updateCamera(x, y);
 		}
 
 	}
