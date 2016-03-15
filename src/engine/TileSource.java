@@ -1,4 +1,4 @@
-package framework;
+package engine;
 
 public enum TileSource{
 	MAP_TILES,

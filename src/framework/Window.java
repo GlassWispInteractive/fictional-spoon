@@ -45,18 +45,21 @@ public class Window extends Application {
 		});
 
 		stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-			Events.getEvents().addCode(event);
+			EventControl.getEvents().addCode(event);
 		});
 
 		stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
-			Events.getEvents().removeCode(event);
+			EventControl.getEvents().removeCode(event);
 		});
-		
+
 		StateControl ctrl = StateControl.getCtrl();
 
-		Menu menu = new Menu();
+		MenuControl menu = new MenuControl();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
 		menu.start();
+
+		// precompute the game initialization
+		GameControl.getControl();
 
 		gameloop = new AnimationTimer() {
 
@@ -77,38 +80,10 @@ public class Window extends Application {
 				ctrl.tick(passedTicks);
 				ctrl.render();
 
-				//
-
-				// switch (game.getState()) {
-				// case MENU:
-				// stage.setScene(menu.getScene());
-				// menu.tick(passedTicks);
-				// menu.render();
-				// if (menu.isStarted()) {
-				// Entity player = EntityFactory.getFactory().getPlayer();
-				// // lvl.updateView();
-				// lvl.initCamera(player.getX(), player.getY());
-				// game.setState(StateName.VIEW);
-				// }
-				// break;
-				//
-				// case MAP:
-				// case VIEW:
-				// stage.setScene(lvl.getScene());
-				// lvl.tick(time);
-				// lvl.render();
-				// break;
-				//
-				// case COMBAT:
-				//// stage.setScene(combat.getScene());
-				//// combat.tick(passedTicks);
-				//// combat.render();
-				// break;
-				//
-				// default:
-				// throw new IllegalArgumentException("Unknown game state: " +
-				// game.getState());
-				// }
+				// for development only
+				if (EventControl.getEvents().isESC()) {
+					ctrl.getState().stop();
+				}
 			}
 		};
 

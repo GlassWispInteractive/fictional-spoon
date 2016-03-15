@@ -1,5 +1,8 @@
 package framework;
 
+import engine.ImageSource;
+import engine.TileFactory;
+import engine.TileSource;
 import entities.Entity;
 import entities.EntityFactory;
 import gen.Generator;
@@ -8,21 +11,19 @@ import gen.environment.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class MapControl extends State {
+public class GameControl extends State {
 	// map settings
 	private final int size = 16;
 
 	// singleton
-	private static MapControl singleton;
+	private static GameControl singleton;
 
 	// class components
-
 	private Map map;
 	private EntityFactory fac;
 	private TileFactory tileFac;
 
 	// variables
-
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
 	/**
@@ -30,15 +31,15 @@ public class MapControl extends State {
 	 * 
 	 * @return
 	 */
-	public static MapControl getWorld() {
+	public static GameControl getControl() {
 		if (singleton == null) {
-
-			singleton = new MapControl();
+			singleton = new GameControl();
 		}
 		return singleton;
 	}
 
-	private MapControl() {
+	private GameControl() {
+		// call the very important state constructor
 		super();
 
 		// generate fresh map
@@ -58,6 +59,10 @@ public class MapControl extends State {
 
 		// render the map prior every other rendering and keep it cached
 		prerenderMap();
+
+		// set view
+		Entity player = EntityFactory.getFactory().getPlayer();
+		initCamera(player.getX(), player.getY());
 	}
 
 	/**
@@ -80,6 +85,66 @@ public class MapControl extends State {
 			mob.tick(ticks);
 		}
 		fac.smartDelete();
+	}
+
+	/**
+	 * initiaze the camera view
+	 * 
+	 * @param centerX
+	 * @param centerY
+	 */
+	public void initCamera(int centerX, int centerY) {
+		this.cameraX = centerX - cameraSizeX / 2;
+		this.cameraY = centerY - cameraSizeY / 2;
+
+		alignCamera();
+	}
+
+	/**
+	 * updates the camera view the view is only chaning when the player moves
+	 * close to the border
+	 * 
+	 * @param centerX
+	 * @param centerY
+	 */
+	public void updateCamera(int centerX, int centerY) {
+		// ~15% of the screen is the
+		final int viewPaddingX = cameraSizeX / 7;
+		final int viewPaddingY = cameraSizeY / 7;
+
+		if (centerX - viewPaddingX < cameraX) {
+			cameraX = centerX - viewPaddingX;
+		}
+		if (centerX + viewPaddingX - cameraSizeX > cameraX) {
+			cameraX = centerX + viewPaddingX - cameraSizeX;
+		}
+		if (centerY - viewPaddingY < cameraY) {
+			cameraY = centerY - viewPaddingY;
+		}
+		if (centerY + viewPaddingY - cameraSizeY > cameraY) {
+			cameraY = centerY + viewPaddingY - cameraSizeY;
+		}
+
+		alignCamera();
+	}
+
+	/**
+	 * aligns the camera according to the displayable screen
+	 */
+	private void alignCamera() {
+		if (cameraX < 0) {
+			cameraX = 0;
+		}
+		if (cameraY < 0) {
+			cameraY = 0;
+		}
+
+		if (cameraX >= map.getN() - cameraSizeX) {
+			cameraX = map.getN() - cameraSizeX;
+		}
+		if (cameraY >= map.getM() - cameraSizeY) {
+			cameraY = map.getM() - cameraSizeY;
+		}
 	}
 
 	@Override
@@ -174,65 +239,5 @@ public class MapControl extends State {
 		ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, tile % 57, tile / 57);
 
 		tileFac.drawTile(gc, imgsource, x, y, size);
-	}
-
-	/**
-	 * initiaze the camera view
-	 * 
-	 * @param centerX
-	 * @param centerY
-	 */
-	public void initCamera(int centerX, int centerY) {
-		this.cameraX = centerX - cameraSizeX / 2;
-		this.cameraY = centerY - cameraSizeY / 2;
-
-		alignCamera();
-	}
-
-	/**
-	 * updates the camera view the view is only chaning when the player moves
-	 * close to the border
-	 * 
-	 * @param centerX
-	 * @param centerY
-	 */
-	public void updateCamera(int centerX, int centerY) {
-		// ~15% of the screen is the
-		final int viewPaddingX = cameraSizeX / 7;
-		final int viewPaddingY = cameraSizeY / 7;
-
-		if (centerX - viewPaddingX < cameraX) {
-			cameraX = centerX - viewPaddingX;
-		}
-		if (centerX + viewPaddingX - cameraSizeX > cameraX) {
-			cameraX = centerX + viewPaddingX - cameraSizeX;
-		}
-		if (centerY - viewPaddingY < cameraY) {
-			cameraY = centerY - viewPaddingY;
-		}
-		if (centerY + viewPaddingY - cameraSizeY > cameraY) {
-			cameraY = centerY + viewPaddingY - cameraSizeY;
-		}
-
-		alignCamera();
-	}
-
-	/**
-	 * aligns the camera according to the displayable screen
-	 */
-	private void alignCamera() {
-		if (cameraX < 0) {
-			cameraX = 0;
-		}
-		if (cameraY < 0) {
-			cameraY = 0;
-		}
-
-		if (cameraX >= map.getN() - cameraSizeX) {
-			cameraX = map.getN() - cameraSizeX;
-		}
-		if (cameraY >= map.getM() - cameraSizeY) {
-			cameraY = map.getM() - cameraSizeY;
-		}
 	}
 }

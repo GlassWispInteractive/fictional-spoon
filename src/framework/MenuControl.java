@@ -12,7 +12,7 @@ import javafx.scene.text.TextAlignment;
 
 //import static game.State.*;
 
-public class Menu extends State {
+public class MenuControl extends State {
 	private Random rand;
 	private Image logo;
 
@@ -22,7 +22,7 @@ public class Menu extends State {
 	private int soulWait;
 	private boolean started = false;
 
-	public Menu() {
+	public MenuControl() {
 		super();
 
 		// init
@@ -44,7 +44,7 @@ public class Menu extends State {
 	public void tick(int ticks) {
 		started = false;
 
-		Events e = Events.getEvents();
+		EventControl e = EventControl.getEvents();
 
 		// soul computation
 		if (soulWait > 0) {
@@ -77,7 +77,7 @@ public class Menu extends State {
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
 			case "Start":
-				
+				GameControl.getControl().start();
 				break;
 			case "Combat":
 //				StateControl.getCtrl().setState(StateName.COMBAT);
@@ -91,7 +91,7 @@ public class Menu extends State {
 		}
 
 		// no double key activation
-		Events.getEvents().clear();
+		EventControl.getEvents().clear();
 	}
 
 	public void render() {

@@ -3,10 +3,10 @@ package combat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import engine.TileFactory;
 import entities.Monster;
-import framework.Events;
+import framework.EventControl;
 import framework.State;
-import framework.TileFactory;
 import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -87,7 +87,7 @@ public class Combat extends State {
 	public void tick(int ticks) {
 		status = Math.min(1, status + ticks / 120);
 
-		Events e = Events.getEvents();
+		EventControl e = EventControl.getEvents();
 
 		// if (e.isLeft()) {
 		// curSoul = (curSoul + souls.size() - 1) % souls.size();
@@ -178,7 +178,7 @@ public class Combat extends State {
 		// }
 		// break;
 
-		Events.getEvents().clear();
+		EventControl.getEvents().clear();
 
 	}
 
