@@ -2,6 +2,7 @@ package entities;
 
 import java.util.ArrayList;
 
+import combat.Combo;
 import game.ImageSource;
 import game.TileFactory;
 import game.TileSource;
@@ -10,21 +11,22 @@ import javafx.scene.canvas.GraphicsContext;
 public class Chest extends Entity {
 	private static ArrayList<Chest> chests = new ArrayList<>();;
 
-	private boolean chestOpen;
+	private Combo item;
 	TileFactory tileFac;
 
-	public Chest(int x, int y) {
+	public Chest(int x, int y, Combo combo) {
 		super(x, y);
+		this.item = combo;
+		
 		chests.add(this);
 		
-		chestOpen = false;
 		tileFac = TileFactory.getTilesFactory();
 	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 
-		if (chestOpen) {
+		if (item == null) {
 			ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 15, 7);
 			tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
 		} else {
@@ -38,7 +40,7 @@ public class Chest extends Entity {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-			chestOpen = true;
+			item = null;
 		}
 
 	}

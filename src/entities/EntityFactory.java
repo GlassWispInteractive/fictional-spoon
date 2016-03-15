@@ -67,7 +67,7 @@ public class EntityFactory {
 	}
 
 	public Chest makeChest(int x, int y) {
-		Chest chest = new Chest(x, y);
+		Chest chest = new Chest(x, y, null);
 		ents.add(chest);
 		return chest;
 	}
