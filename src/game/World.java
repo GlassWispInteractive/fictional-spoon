@@ -45,7 +45,7 @@ public class World {
 		size = 16;
 		cameraSizeX = Math.min(Window.SIZE_X / size, map.getN());
 		cameraSizeY = Math.min(Window.SIZE_Y / size, map.getM());
-
+		
 		// System.out.println(cameraSizeX);
 		// System.out.println(Window.WINDOW_X / size);
 		// initView();

@@ -397,7 +397,8 @@ public class Generator {
 			powers[type] = used;
 			used -= used;
 
-			fac.makeMonster(p[0], p[1], 0, powers, "monster");
+//			fac.makeMonster(p[0], p[1], 0, powers, "monster");
+			fac.makeSuperMonster(p[0], p[1], "Informatiker");
 
 			// create a chest every 3 rooms
 			if (i % 3 == 0) {

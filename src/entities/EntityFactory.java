@@ -65,6 +65,12 @@ public class EntityFactory {
 		ents.add(monster);
 		return monster;
 	}
+	
+	public SuperMonster makeSuperMonster(int x, int y, String name) {
+		SuperMonster superMonster = new SuperMonster(x, y, name);
+		ents.add(superMonster);
+		return superMonster;
+	}
 
 	public Chest makeChest(int x, int y) {
 		Chest chest = new Chest(x, y);
