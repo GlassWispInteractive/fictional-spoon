@@ -39,7 +39,8 @@ public class Chest extends Entity {
 	public void tick(double elapsedTime) {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
-		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
+		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY() && item != null) {
+			item.activate();
 			item = null;
 		}
 

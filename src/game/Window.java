@@ -52,11 +52,10 @@ public class Window extends Application {
 		});
 		
 		
-		Game game = Game.getGame();
+		StateController game = StateController.getGame();
 		MapController lvl = MapController.getWorld();
 		Menu menu = new Menu();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
-		Combat combat = new Combat();
 		Combo.random(5);
 		
 		gameloop = new AnimationTimer() {
@@ -98,9 +97,9 @@ public class Window extends Application {
 					break;
 
 				case COMBAT:
-					stage.setScene(combat.getScene());
-					combat.tick(passedTicks);
-					combat.render();
+//					stage.setScene(combat.getScene());
+//					combat.tick(passedTicks);
+//					combat.render();
 					break;
 
 				default:

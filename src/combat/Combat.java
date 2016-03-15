@@ -6,7 +6,7 @@ import java.util.Arrays;
 import entities.EntityFactory;
 import entities.Monster;
 import game.Events;
-import game.GameScene;
+import game.StateView;
 import game.TileFactory;
 import game.Window;
 import javafx.geometry.VPos;
@@ -16,7 +16,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class Combat extends GameScene {
+public class Combat extends StateView {
 	// lists
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
@@ -39,7 +39,7 @@ public class Combat extends GameScene {
 			new Image("/resources/elem/fire.png"), new Image("/resources/elem/wind.png"),
 			new Image("/resources/elem/water.png") };
 
-	public Combat() {
+	public Combat(Monster[] monster) {
 		super();
 
 		// inits
@@ -58,25 +58,12 @@ public class Combat extends GameScene {
 		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
 		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
 
-		// hardcoded stuff
-		new Combo(new Element[] { Element.EARTH, Element.FIRE });
-		new Combo(new Element[] { Element.WATER, Element.WATER, Element.AIR });
-		new Combo(new Element[] { Element.EARTH, Element.FIRE, Element.AIR, Element.AIR });
-
 		setSouls(getHardCodedSouls());
-		setMonster(getHardCodedMonster());
+//		setMonster(getHardCodedMonster());
+		setMonster(monster);
 
 	}
 
-	private static ArrayList<Monster> getHardCodedMonster() {
-		ArrayList<Monster> list = new ArrayList<Monster>();
-
-		list.add(EntityFactory.getFactory().makeMonster(13, 13, 0, new int[] { 1, 2, 3, 4, 5 }, "name"));
-		list.add(EntityFactory.getFactory().makeMonster(12, 23, 0, new int[] { 1, 6, 3, 4, 5 }, "test"));
-		list.add(EntityFactory.getFactory().makeMonster(14, 33, 0, new int[] { 1, 2, 3, 4, 2 }, "rudolf"));
-
-		return list;
-	}
 
 	private static ArrayList<Soul> getHardCodedSouls() {
 		ArrayList<Soul> list = new ArrayList<Soul>();
@@ -93,8 +80,8 @@ public class Combat extends GameScene {
 		this.souls = souls;
 	}
 
-	private void setMonster(ArrayList<Monster> monster) {
-		this.monster = monster;
+	private void setMonster(Monster[] monster) {
+		this.monster = (ArrayList<Monster>) Arrays.asList(monster);
 	}
 
 	public void tick(double ticks) {
@@ -220,7 +207,7 @@ public class Combat extends GameScene {
 			streakCount++;
 
 			streak.add(Element.values()[curSoul]);
-			info = "current hit streak: " + streak.toString();
+			info = "current hit streak: " + Combo.toString(streak.toArray(new Element[]{}));
 
 			// System.out.println("Bonus damage");
 		} else {

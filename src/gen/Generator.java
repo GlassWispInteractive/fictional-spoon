@@ -4,6 +4,7 @@ import static gen.environment.Ground.*;
 
 import java.util.*;
 
+import combat.Combo;
 import entities.EntityFactory;
 import gen.environment.Cell;
 import gen.environment.DisjointSet;
@@ -403,7 +404,8 @@ public class Generator {
 			if (i % 3 == 0) {
 				p = q.get(0);
 				q.remove(0);
-				fac.makeChest(p[0], p[1]);
+				int len = rand.nextInt(5); 
+				fac.makeChest(p[0], p[1], Combo.random(2 + len));
 			}
 
 			// create a shrine every 10 rooms

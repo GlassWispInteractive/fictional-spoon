@@ -10,7 +10,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class Menu extends GameScene {
+public class Menu extends StateView {
 
 	private Random rand;
 	private Image logo;
@@ -79,7 +79,7 @@ public class Menu extends GameScene {
 				started = true;
 				break;
 			case "Combat":
-				Game.getGame().setState(State.COMBAT);
+				StateController.getGame().setState(State.COMBAT);
 				break;
 			case "Exit":
 				System.exit(0);

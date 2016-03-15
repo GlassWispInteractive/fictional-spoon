@@ -5,8 +5,8 @@ import static game.State.*;
 import gen.environment.Ground;
 import javafx.scene.paint.Paint;
 
-public class Game {
-	private static Game singleton;
+public class StateController {
+	private static StateController singleton;
 
 	// game state
 	private State state;
@@ -15,13 +15,13 @@ public class Game {
 	private static Paint[] groundColor = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"), Paint.valueOf("#D4B790"),
 			Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
 
-	private Game() {
+	private StateController() {
 		state = MENU;
 	}
 
-	public static Game getGame() {
+	public static StateController getGame() {
 		if (singleton == null) {
-			singleton = new Game();
+			singleton = new StateController();
 		}
 
 		return singleton;

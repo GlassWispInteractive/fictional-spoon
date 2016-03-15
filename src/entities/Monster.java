@@ -63,7 +63,7 @@ public class Monster extends Entity {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-			monsterDead = true;
+			
 		}
 	}
 

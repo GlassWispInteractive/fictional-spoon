@@ -73,13 +73,18 @@ public class Combo {
 	 * activate the combo for the player
 	 */
 	public void activate() {
+		System.out.println(this.toString());
 		combosInUse.add(this);
 	}
 
 	@Override
 	public String toString() {
-		// write each element as the first latter
-		return Arrays.stream(combo).map(e -> e.toString().substring(0, 1)).collect(Collectors.joining("-"));
+		return toString(combo);
 
+	}
+
+	public static String toString(Element[] elements) {
+		// write each element as the first latter
+		return Arrays.stream(elements).map(e -> e.toString().substring(0, 1)).collect(Collectors.joining("-"));
 	}
 }
