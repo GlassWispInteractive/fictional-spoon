@@ -26,7 +26,7 @@ public class Monster extends Entity {
 	// Point2D(1,8)};
 	
 	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(
-			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk()}));;
+			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk()}));
 	private WalkStrategy currentWalkStrategy;
 	
 
