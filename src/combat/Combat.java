@@ -38,7 +38,11 @@ public class Combat extends State {
 			new Image("/resources/elem/fire.png"), new Image("/resources/elem/wind.png"),
 			new Image("/resources/elem/water.png") };
 
-	public Combat(Monster[] monster) {
+	
+	public Combat(Monster[] monsterArray) {
+		this(new ArrayList<Monster>(Arrays.asList(monsterArray)));
+	}
+	public Combat(ArrayList<Monster> monster) {
 		super();
 
 		// inits
@@ -59,7 +63,7 @@ public class Combat extends State {
 
 		setSouls(getHardCodedSouls());
 //		setMonster(getHardCodedMonster());
-		setMonster(monster);
+		this.monster = monster;
 
 	}
 
@@ -77,11 +81,6 @@ public class Combat extends State {
 
 	private void setSouls(ArrayList<Soul> souls) {
 		this.souls = souls;
-	}
-
-	private void setMonster(Monster[] monster) {
-		this.monster = new ArrayList<Monster>(Arrays.asList(monster));
-		
 	}
 
 	@Override

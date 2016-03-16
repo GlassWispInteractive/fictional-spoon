@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import combat.Combat;
+
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
@@ -62,6 +64,11 @@ public class Opponent extends Entity {
 
 			x = newPosition.x;
 			y = newPosition.y;
+		}
+		
+		EntityFactory fac = EntityFactory.getFactory();
+		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
+			new Combat(monsterList).start();
 		}
 		
 	}
