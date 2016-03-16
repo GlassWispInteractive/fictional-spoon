@@ -1,8 +1,8 @@
 package entities;
 
-import game.ImageSource;
-import game.TileFactory;
-import game.TileSource;
+import engine.ImageSource;
+import engine.TileFactory;
+import engine.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Shrine extends Entity {

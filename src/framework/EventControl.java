@@ -1,22 +1,22 @@
-package game;
+package framework;
 
 import java.util.ArrayList;
 
 import javafx.scene.input.KeyEvent;
 
-public class Events {
-	private static Events instance;
+public class EventControl {
+	private static EventControl instance;
 	private ArrayList<String> input;
 	// private ArrayList<String> delete;
 
-	private Events() {
+	private EventControl() {
 		input = new ArrayList<String>();
 		// delete = new ArrayList<String>();
 	}
 
-	public static Events getEvents() {
+	public static EventControl getEvents() {
 		if (instance == null) {
-			instance = new Events();
+			instance = new EventControl();
 		}
 
 		return instance;

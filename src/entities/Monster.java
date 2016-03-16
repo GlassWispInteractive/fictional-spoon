@@ -1,8 +1,20 @@
 package entities;
 
-import game.ImageSource;
-import game.TileFactory;
-import game.TileSource;
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
+
+import entities.WalkStrategies.HorizontalWalk;
+import entities.WalkStrategies.RandomWalk;
+import entities.WalkStrategies.RectangleWalk;
+import entities.WalkStrategies.VerticalWalk;
+import entities.WalkStrategies.WalkStrategy;
+
+import combat.Combat;
+import engine.ImageSource;
+import engine.TileFactory;
+import engine.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Monster extends Entity {
@@ -14,6 +26,11 @@ public class Monster extends Entity {
 
 	// 2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new
 	// Point2D(1,8)};
+	
+	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(
+			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk()}));
+	private WalkStrategy currentWalkStrategy;
+	
 
 	@SuppressWarnings("unused")
 	private int hp;
@@ -23,16 +40,24 @@ public class Monster extends Entity {
 	private int maxType = -1;
 	private String name;
 	private boolean monsterDead = false;
-	TileFactory tileFac;
+	private TileFactory tileFac = TileFactory.getTilesFactory();
 
 	public Monster(int x, int y, int hp, int[] power, String name) {
 		super(x, y);
 
 		this.hp = hp;
 		this.name = name;
-		this.tileFac = TileFactory.getTilesFactory();
 		this.power = power;
+		this.delayTicks = 10;
 
+		int chosenStrategy = new Random().nextInt(walkStrategies.size());
+		this.currentWalkStrategy = walkStrategies.get(chosenStrategy);
+//		this.currentWalkStrategy = new RandomWalk();
+//		this.currentWalkStrategy = new HorizontalWalk();
+//		this.currentWalkStrategy = new VerticalWalk();
+//		this.currentWalkStrategy = new RectangleWalk();
+		
+		
 		maxType = -1;
 		int max = -1;
 		for (int i = 0; i < this.power.length; i++) {
@@ -55,15 +80,25 @@ public class Monster extends Entity {
 		} else {
 			tileFac.drawTile(gc, tileType[maxType], (x - offsetX), (y - offsetY), size);
 		}
-
 	}
 
 	@Override
 	public void tick(double elapsedTime) {
+		
+		//monster walk
+		if(!monsterDead){
+			Point newPosition = currentWalkStrategy.walk(x, y);
+
+			x = newPosition.x;
+			y = newPosition.y;
+		}
+
+		
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
 			monsterDead = true;
+			new Combat(new Monster[]{this}).start();
 		}
 	}
 

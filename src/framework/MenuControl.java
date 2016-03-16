@@ -1,4 +1,4 @@
-package game;
+package framework;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,12 +8,11 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
-public class Menu {
-	private static Menu singleton;
+//import static game.State.*;
+
+public class MenuControl extends State {
 	private Random rand;
 	private Image logo;
 
@@ -23,7 +22,10 @@ public class Menu {
 	private int soulWait;
 	private boolean started = false;
 
-	private Menu() {
+	public MenuControl() {
+		super();
+
+		// init
 		list = new ArrayList<>();
 		rand = new Random();
 		cur = 0;
@@ -35,21 +37,14 @@ public class Menu {
 			int x = rand.nextInt(Window.SIZE_X - 200), y = rand.nextInt(Window.SIZE_Y - 200);
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
+
 		// souls.add(new int[] { 20, 50 });
-	}
-
-	public static Menu getMenu() {
-		if (singleton == null) {
-			singleton = new Menu();
-		}
-
-		return singleton;
 	}
 
 	public void tick(int ticks) {
 		started = false;
 
-		Events e = Events.getEvents();
+		EventControl e = EventControl.getEvents();
 
 		// soul computation
 		if (soulWait > 0) {
@@ -82,13 +77,12 @@ public class Menu {
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
 			case "Start":
-				started = true;
+				GameControl.getControl().start();
 				break;
 			case "Combat":
-				Game.getGame().setState(State.COMBAT);
+//				StateControl.getCtrl().setState(StateName.COMBAT);
 				break;
 			case "Exit":
-				// TODO save?
 				System.exit(0);
 				break;
 			default:
@@ -97,10 +91,14 @@ public class Menu {
 		}
 
 		// no double key activation
-		Events.getEvents().clear();
+		EventControl.getEvents().clear();
 	}
 
-	public void render(GraphicsContext gc) {
+	public void render() {
+		// start from clean screen
+		GraphicsContext gc = gcs.get(0);
+		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+
 		// canvas settings
 		double w = gc.getCanvas().getWidth();
 
@@ -114,8 +112,7 @@ public class Menu {
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
-		Font font = Font.font("Helvetica", FontWeight.BOLD, 24);
-		gc.setFont(font);
+		gc.setFont(Window.bigFont);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);

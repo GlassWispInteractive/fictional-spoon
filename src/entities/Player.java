@@ -1,10 +1,10 @@
 package entities;
 
-import game.Events;
-import game.ImageSource;
-import game.TileSource;
-import game.TileFactory;
-import game.World;
+import engine.ImageSource;
+import engine.TileFactory;
+import engine.TileSource;
+import framework.EventControl;
+import framework.GameControl;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -37,7 +37,7 @@ public class Player extends Entity {
 
 	@Override
 	public void tick(double elapsedTime) {
-		Events e = Events.getEvents();
+		EventControl e = EventControl.getEvents();
 		int newX = x, newY = y;
 		boolean moved = false;
 
@@ -62,7 +62,7 @@ public class Player extends Entity {
 			moved = true;
 		}
 
-		Map map = World.getWorld().getMap();
+		Map map = GameControl.getControl().getMap();
 
 		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
 
@@ -71,7 +71,7 @@ public class Player extends Entity {
 			x = newX;
 			y = newY;
 
-			World.getWorld().setCamera(x, y);
+			GameControl.getControl().updateCamera(x, y);
 		}
 
 	}

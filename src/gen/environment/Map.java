@@ -133,5 +133,9 @@ public class Map {
 	public boolean isWalkable(int x, int y) {
 		return getGround(x, y) != WALL && getGround(x, y) != ERROR;
 	}
+	
+	public boolean isWalkableRoom(int x, int y) {
+		return getGround(x, y) == ROOM && getGround(x, y) != ERROR;
+	}
 
 }

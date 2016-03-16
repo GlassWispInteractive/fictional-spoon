@@ -2,6 +2,8 @@ package entities;
 
 import java.util.ArrayList;
 
+import combat.Combo;
+
 /**
  * Factory for MobileObject objects
  * 
@@ -12,6 +14,7 @@ public class EntityFactory {
 	private static EntityFactory singleton;
 	private ArrayList<Entity> ents;
 	private ArrayList<Entity> deletEnts;
+	private ArrayList<Entity> addEnts;
 	private Entity player;
 
 	/**
@@ -20,6 +23,7 @@ public class EntityFactory {
 	private EntityFactory() {
 		ents = new ArrayList<Entity>();
 		deletEnts = new ArrayList<Entity>();
+		addEnts = new ArrayList<Entity>();
 	}
 
 	/**
@@ -62,20 +66,39 @@ public class EntityFactory {
 
 	public Monster makeMonster(int x, int y, int hp, int[] power, String name) {
 		Monster monster = new Monster(x, y, hp, power, name);
-		ents.add(monster);
+		addEnts.add(monster);
 		return monster;
 	}
+	
+	public Portal makeSuperMonster(int x, int y, String name) {
+		Portal superMonster = new Portal(x, y, name);
+		addEnts.add(superMonster);
+		return superMonster;
+	}
+	
+	public Opponent makeOpponent(int x, int y, String name) {
+		Opponent opponent = new Opponent(x, y, name);
+		addEnts.add(opponent);
+		return opponent;
+	}
 
-	public Chest makeChest(int x, int y) {
-		Chest chest = new Chest(x, y);
-		ents.add(chest);
+	public Chest makeChest(int x, int y, Combo combo) {		
+		Chest chest = new Chest(x, y, combo);
+		addEnts.add(chest);
 		return chest;
 	}
 
 	public Shrine makeShrine(int x, int y) {
 		Shrine shrine = new Shrine(x, y);
-		ents.add(shrine);
+		addEnts.add(shrine);
 		return shrine;
+	}
+	
+	public void smartAdd(){
+		for (Entity ent : addEnts) {
+			ents.add(ent);
+		}
+		addEnts.clear();
 	}
 
 }
