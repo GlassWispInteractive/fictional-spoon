@@ -25,7 +25,7 @@ public class Combo {
 
 		Element[] elements = new Element[lenT];
 
-		elements = Arrays.stream(elements).map(e -> Element.values()[random.nextInt(4)]).toArray(Element[]::new);
+		elements = Arrays.stream(elements).map(e -> Element.values()[random.nextInt(Element.values().length)]).toArray(Element[]::new);
 
 		return new Combo(elements);
 	}
@@ -71,7 +71,7 @@ public class Combo {
 	 * activate the combo for the player
 	 */
 	public void activate() {
-//		System.out.println(this.toString());
+		System.out.println(this.toString());
 		combosInUse.add(this);
 	}
 

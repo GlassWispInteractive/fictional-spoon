@@ -69,8 +69,11 @@ public abstract class State {
 	 * stop this scene and return to parental scene
 	 */
 	public void stop() {
-		if (parent != null)
+		System.out.println("stop!");
+		if (parent != null){
+			System.out.println("...parent starting...");
 			parent.start();
+		}
 	}
 
 	protected abstract void tick(int ticks);

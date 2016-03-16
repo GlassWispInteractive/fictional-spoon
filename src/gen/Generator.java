@@ -398,7 +398,7 @@ public class Generator {
 			powers[type] = used;
 			used -= used;
 
-			fac.makeMonster(p[0], p[1], 0, powers, "monster");
+			fac.makeMonster(p[0], p[1], 100, powers, "monster");
 			
 			// create a superMonster every 8 rooms
 			if (i % 8 == 0) {

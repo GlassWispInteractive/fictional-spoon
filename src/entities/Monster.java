@@ -71,6 +71,10 @@ public class Monster extends Entity {
 	public String getName() {
 		return name;
 	}
+	
+	public boolean isDead(){
+		return monsterDead;
+	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
@@ -97,13 +101,20 @@ public class Monster extends Entity {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-			monsterDead = true;
 			new Combat(new Monster[]{this}).start();
 		}
 	}
 
 	public ImageSource getImageSource() {
 		return tileType[maxType];
+	}
+	
+	public void getDamage(int dmg){
+		hp -= dmg;
+		
+		if(hp <= 0){
+			monsterDead = true;
+		}
 	}
 
 }

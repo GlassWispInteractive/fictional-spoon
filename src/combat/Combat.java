@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import engine.TileFactory;
+import entities.Entity;
 import entities.Monster;
 import framework.EventControl;
+import framework.GameControl;
 import framework.State;
 import framework.Window;
 import javafx.geometry.VPos;
@@ -180,7 +182,25 @@ public class Combat extends State {
 		// break;
 
 		EventControl.getEvents().clear();
+		
+		//check if all monsters are still alive and make smartDelete with dead monster
+		ArrayList<Monster> dyingMonster = new ArrayList<Monster>();
+		for(Monster mon : monster){
+			if(mon.isDead()){
+				dyingMonster.add(mon);
+			}
+		}
+		//smart delete
+		for (Monster dyingMon : dyingMonster) {
+			monster.remove(dyingMon);
+		}
+		dyingMonster.clear();
 
+		//check, if alive monster exists
+		if(monster.size() == 0){
+			this.stop();
+//			GameControl.getControl().start();
+		}
 	}
 
 	private void setBounds() {
@@ -210,7 +230,7 @@ public class Combat extends State {
 			streak.add(Element.values()[curSoul]);
 			info = "current hit streak: " + Combo.toString(streak.toArray(new Element[]{}));
 
-			// System.out.println("Bonus damage");
+			monster.get(curFocus).getDamage(10);
 		} else {
 			// adjust level
 			streakCount = 0;
@@ -233,6 +253,7 @@ public class Combat extends State {
 		for (Combo combo : Combo.getCombosInUse()) {
 			if (Arrays.equals(streakElem, combo.getCombo())) {
 				info = "Combo completed!";
+				monster.get(curFocus).getDamage(10);
 				streak.clear();
 			}
 		}
