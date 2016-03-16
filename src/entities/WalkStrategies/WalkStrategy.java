@@ -3,7 +3,7 @@ package entities.WalkStrategies;
 import entities.Direction;
 import entities.Entity;
 import entities.EntityFactory;
-import game.World;
+import framework.GameControl;
 import gen.environment.Map;
 
 import java.awt.Point;
@@ -33,7 +33,7 @@ public abstract class WalkStrategy {
 		
 	public Point walk(int oldX, int oldY){
 		
-		map = World.getWorld().getMap();
+		map = GameControl.getControl().getMap();
 
 		Point newPoint = choseStrategy(oldX, oldY);
 		

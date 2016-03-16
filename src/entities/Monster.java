@@ -10,9 +10,11 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
-import game.ImageSource;
-import game.TileFactory;
-import game.TileSource;
+
+import combat.Combat;
+import engine.ImageSource;
+import engine.TileFactory;
+import engine.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Monster extends Entity {
@@ -96,6 +98,7 @@ public class Monster extends Entity {
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
 			monsterDead = true;
+			new Combat(new Monster[]{this}).start();
 		}
 	}
 

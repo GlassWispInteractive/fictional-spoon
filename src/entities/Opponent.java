@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import engine.ImageSource;
+import engine.TileFactory;
+import engine.TileSource;
 import entities.WalkStrategies.HorizontalWalk;
 import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
-import game.ImageSource;
-import game.TileFactory;
-import game.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Opponent extends Entity {

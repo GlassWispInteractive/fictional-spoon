@@ -1,9 +1,10 @@
 package entities;
 
-import game.ImageSource;
-import game.TileFactory;
-import game.TileSource;
-import game.World;
+import engine.ImageSource;
+import engine.TileFactory;
+import engine.TileSource;
+import framework.GameControl;
+
 import java.awt.Point;
 import java.util.Random;
 
@@ -63,7 +64,7 @@ public class Portal extends Entity{
 			
 			directionIndex = (++directionIndex) % Direction.values().length;
 			
-		} while (!World.getWorld().getMap().isWalkable(spawnPoint.x, spawnPoint.y));
+		} while (!GameControl.getControl().getMap().isWalkable(spawnPoint.x, spawnPoint.y));
 		
 		
 		// let the generator generate the params ?

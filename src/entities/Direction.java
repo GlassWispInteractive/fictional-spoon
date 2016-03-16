@@ -1,6 +1,6 @@
 package entities;
 
-import game.World;
+import framework.GameControl;
 import gen.environment.Map;
 
 import java.awt.Point;
@@ -12,7 +12,7 @@ public enum Direction {
     private final int x;
     private final int y;
     private Random rnd = new Random();
-    private Map map = World.getWorld().getMap();
+    private Map map = GameControl.getControl().getMap();
 
     private Direction(int x, int y) {
         this.x = x;

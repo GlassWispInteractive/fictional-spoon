@@ -2,6 +2,8 @@ package entities;
 
 import java.util.ArrayList;
 
+import combat.Combo;
+
 /**
  * Factory for MobileObject objects
  * 
@@ -80,8 +82,8 @@ public class EntityFactory {
 		return opponent;
 	}
 
-	public Chest makeChest(int x, int y) {
-		Chest chest = new Chest(x, y);
+	public Chest makeChest(int x, int y, Combo combo) {		
+		Chest chest = new Chest(x, y, combo);
 		addEnts.add(chest);
 		return chest;
 	}

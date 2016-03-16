@@ -1,4 +1,4 @@
-package game;
+package engine;
 
 public enum TileSource{
 	MAP_TILES,
