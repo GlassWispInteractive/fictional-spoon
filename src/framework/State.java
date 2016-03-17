@@ -1,7 +1,6 @@
 package framework;
 
 import java.util.ArrayList;
-
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -60,20 +59,25 @@ public abstract class State {
 	 */
 	public void start() {
 		parent = ctrl.getState();
-		ctrl.setState(this);
 
-		Window.setScene(scene);
+		changeState();
 	}
-
+	
 	/**
 	 * stop this scene and return to parental scene
 	 */
 	public void stop() {
-		System.out.println("stop!");
-		if (parent != null){
-			System.out.println("...parent starting...");
-			parent.start();
+		
+		if(parent != null){
+			parent.changeState();
 		}
+	}
+	
+	private void changeState(){
+		
+		ctrl.setState(this);
+
+		Window.setScene(scene);
 	}
 
 	protected abstract void tick(int ticks);

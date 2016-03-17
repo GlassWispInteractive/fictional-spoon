@@ -54,7 +54,7 @@ public class Window extends Application {
 
 		StateControl ctrl = StateControl.getCtrl();
 
-		MenuControl menu = new MenuControl();
+		MenuControl menu = MenuControl.getControl();
 		menu.setList(new String[] { "Start", "Combat", "Help", "Credits", "Exit" });
 		menu.start();
 

@@ -32,7 +32,6 @@ public class Monster extends Entity {
 	private WalkStrategy currentWalkStrategy;
 	
 
-	@SuppressWarnings("unused")
 	private int hp;
 	// earth, fire, air, water, mystic #korra
 	private int[] power = new int[5];
@@ -95,13 +94,12 @@ public class Monster extends Entity {
 
 			x = newPosition.x;
 			y = newPosition.y;
-		}
-
-		
-		// check intersection
-		EntityFactory fac = EntityFactory.getFactory();
-		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-			new Combat(new Monster[]{this}).start();
+			
+			// check intersection
+			EntityFactory fac = EntityFactory.getFactory();
+			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
+				new Combat(new Monster[]{this}).start();
+			}
 		}
 	}
 

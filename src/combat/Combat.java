@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import engine.TileFactory;
-import entities.Entity;
 import entities.Monster;
+import entities.Opponent;
 import framework.EventControl;
-import framework.GameControl;
 import framework.State;
 import framework.Window;
 import javafx.geometry.VPos;
@@ -21,6 +20,7 @@ public class Combat extends State {
 	// lists
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
+	private Opponent opponent = null; //null = only monster
 
 	// class member
 	private int curSoul, curFocus, curAttackRow, curAttackColum;
@@ -41,6 +41,11 @@ public class Combat extends State {
 			new Image("/resources/elem/water.png") };
 
 	
+	public Combat(Opponent opponent) {
+		this(new ArrayList<Monster>(opponent.getMonsterList()));
+		
+		this.opponent = opponent;
+	}
 	public Combat(Monster[] monsterArray) {
 		this(new ArrayList<Monster>(Arrays.asList(monsterArray)));
 	}
@@ -91,6 +96,10 @@ public class Combat extends State {
 //		System.out.println(status);
 
 		EventControl e = EventControl.getEvents();
+		
+		if(curFocus > monster.size() -1) {
+			curFocus = monster.size() -1;
+		}
 
 		// if (e.isLeft()) {
 		// curSoul = (curSoul + souls.size() - 1) % souls.size();
@@ -198,8 +207,11 @@ public class Combat extends State {
 
 		//check, if alive monster exists
 		if(monster.size() == 0){
+			//opponent dead
+			if(opponent != null){
+				opponent.setDead(true);
+			}
 			this.stop();
-//			GameControl.getControl().start();
 		}
 	}
 
@@ -230,7 +242,7 @@ public class Combat extends State {
 			streak.add(Element.values()[curSoul]);
 			info = "current hit streak: " + Combo.toString(streak.toArray(new Element[]{}));
 
-			monster.get(curFocus).getDamage(10);
+			monster.get(curFocus).getDamage(50);
 		} else {
 			// adjust level
 			streakCount = 0;

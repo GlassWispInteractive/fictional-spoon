@@ -13,6 +13,10 @@ import javafx.scene.text.TextAlignment;
 //import static game.State.*;
 
 public class MenuControl extends State {
+	
+	// singleton
+	private static MenuControl singleton;
+	
 	private Random rand;
 	private Image logo;
 
@@ -21,8 +25,15 @@ public class MenuControl extends State {
 	private ArrayList<double[]> souls;
 	private int soulWait;
 	private boolean started = false;
+	
+	public static MenuControl getControl() {
+		if (singleton == null) {
+			singleton = new MenuControl();
+		}
+		return singleton;
+	}
 
-	public MenuControl() {
+	private MenuControl() {
 		super();
 
 		// init
