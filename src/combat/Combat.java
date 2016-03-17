@@ -287,14 +287,34 @@ public class Combat extends State {
 		status = 0;
 	}
 
-	public void eval(Element[] streakElem) {
-		// System.out.println(Arrays.toString(combo));
+//	public void eval(Element[] streakElem) {
+//		// System.out.println(Arrays.toString(combo));
+//
+//		for (Combo combo : Combo.getCombosInUse()) {
+//			if (Arrays.equals(streakElem, combo.getCombo())) {
+//				info = "Combo completed!";
+//				player.doAttack(monster.get(curFocus), combo);
+//				streak.clear();
+//			}
+//		}
+//
+//	}
+	
+	private void eval(Element[] streakElem) {
 
 		for (Combo combo : Combo.getCombosInUse()) {
-			if (Arrays.equals(streakElem, combo.getCombo())) {
-				info = "Combo completed!";
-				player.doAttack(monster.get(curFocus), combo);
-				streak.clear();
+			Element[] elements = combo.getCombo();
+			if(streakElem.length >= elements.length){
+				for(int i = 1; i <= elements.length; i++){
+					if(elements[elements.length - i] != streakElem[streakElem.length - i]){
+						break;
+					}
+					if(i == elements.length){
+						info = "Combo completed!";
+						player.doAttack(monster.get(curFocus), combo);
+						streak.clear();
+					}
+				}
 			}
 		}
 
