@@ -10,14 +10,14 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
-
 import combat.Combat;
+import combat.IAttackable;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Monster extends Entity {
+public class Monster extends Entity implements IAttackable {
 
 	private ImageSource[] tileType = { new ImageSource(TileSource.MONSTER_TILES, 2, 5),
 			new ImageSource(TileSource.MONSTER_TILES, 0, 5), new ImageSource(TileSource.MONSTER_TILES, 0, 1),
@@ -33,6 +33,7 @@ public class Monster extends Entity {
 	
 
 	private int hp;
+	private final int maxHp;
 	// earth, fire, air, water, mystic #korra
 	private int[] power = new int[5];
 
@@ -45,6 +46,7 @@ public class Monster extends Entity {
 		super(x, y);
 
 		this.hp = hp;
+		this.maxHp = hp;
 		this.name = name;
 		this.power = power;
 		this.delayTicks = 10;
@@ -73,6 +75,9 @@ public class Monster extends Entity {
 	
 	public boolean isDead(){
 		return monsterDead;
+	}
+	public String getHpInfo() {
+		return "["+hp+" / "+maxHp+"]";
 	}
 
 	@Override
@@ -107,7 +112,8 @@ public class Monster extends Entity {
 		return tileType[maxType];
 	}
 	
-	public void getDamage(int dmg){
+	@Override
+	public void getDmg(int dmg){
 		hp -= dmg;
 		
 		if(hp <= 0){

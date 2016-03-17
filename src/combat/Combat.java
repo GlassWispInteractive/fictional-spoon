@@ -23,11 +23,14 @@ public class Combat extends State {
 	private Opponent opponent = null; //null = only monster
 
 	// class member
-	private int curSoul, curFocus, curAttackRow, curAttackColum;
+	private int curSoul, curFocus;
+	@SuppressWarnings("unused")
+	private int curAttackRow, curAttackColum;
 	private int streakCount;
 	private ArrayList<Element> streak;
 	private double status, lowerBound, upperBound;
 	private String info;
+	@SuppressWarnings("unused")
 	private CombatState combatState;
 
 	// internal states
@@ -242,7 +245,7 @@ public class Combat extends State {
 			streak.add(Element.values()[curSoul]);
 			info = "current hit streak: " + Combo.toString(streak.toArray(new Element[]{}));
 
-			monster.get(curFocus).getDamage(50);
+			souls.get(curSoul).doAttack(monster.get(curFocus));
 		} else {
 			// adjust level
 			streakCount = 0;
@@ -265,7 +268,7 @@ public class Combat extends State {
 		for (Combo combo : Combo.getCombosInUse()) {
 			if (Arrays.equals(streakElem, combo.getCombo())) {
 				info = "Combo completed!";
-				monster.get(curFocus).getDamage(10);
+				souls.get(curSoul).doAttack(monster.get(curFocus), combo);
 				streak.clear();
 			}
 		}
@@ -323,7 +326,7 @@ public class Combat extends State {
 			Image image = TileFactory.getTilesFactory().getImage(monster.get(i).getImageSource());
 
 			gc.setFill(Color.RED);
-			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 180 - image.getWidth(), 50 - 5, 80);
+			gc.fillText(monster.get(i).getName() + " "+monster.get(i).getHpInfo(), Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
 
 			gc.drawImage(image, Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			// gc.fillRect(Window.SIZE_X - 150 - i * 120, 50, 80, 80);
@@ -386,57 +389,57 @@ public class Combat extends State {
 
 	}
 
-	@SuppressWarnings("unused")
-	private void renderTextboxes(GraphicsContext gc, int x, int y, int width, int height, Soul currentSoul) {
-
-		int rowY = y;
-		int columX = x;
-
-		Attacks[][] attacks = currentSoul.getAttacks();
-
-		// attack fields
-		for (int i = 0; i < attacks.length; i++) {
-
-			columX = x;
-
-			for (int j = 0; j < attacks[i].length; j++) {
-
-				int boxWidth = width / attacks.length;
-				int boxHeight = height / (attacks[i].length + 1);
-
-				gc.setFill(Color.WHITE);
-				if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == i && curAttackColum == j) {
-					gc.setFill(Color.GRAY);
-				}
-				gc.fillRect(columX, rowY, boxWidth, boxHeight);
-
-				gc.setStroke(Color.BLACK);
-				gc.strokeRect(columX, rowY, boxWidth, boxHeight);
-				gc.setFill(Color.BLACK);
-				gc.fillText(attacks[i][j].getName(), columX, rowY + boxHeight / 2);
-
-				columX += width / attacks.length;
-			}
-
-			rowY += height / (attacks[i].length + 1);
-		}
-
-		// back button
-		gc.setFill(Color.WHITE);
-		if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == attacks.length
-				&& curAttackColum == attacks[attacks.length - 1].length - 1) {
-			gc.setFill(Color.GRAY);
-		}
-		gc.fillRect(columX - width / attacks.length, rowY, width / attacks.length,
-				height / (attacks[attacks.length - 1].length + 1));
-
-		gc.setStroke(Color.BLACK);
-		gc.strokeRect(columX - width / attacks.length, rowY, width / attacks.length,
-				height / (attacks[attacks.length - 1].length + 1));
-		gc.setFill(Color.BLACK);
-		gc.fillText("BACK", columX - width / attacks.length,
-				rowY + height / (attacks[attacks.length - 1].length + 1) / 2);
-	}
+//	@SuppressWarnings("unused")
+//	private void renderTextboxes(GraphicsContext gc, int x, int y, int width, int height, Soul currentSoul) {
+//
+//		int rowY = y;
+//		int columX = x;
+//
+//		Attacks[][] attacks = currentSoul.getAttacks();
+//
+//		// attack fields
+//		for (int i = 0; i < attacks.length; i++) {
+//
+//			columX = x;
+//
+//			for (int j = 0; j < attacks[i].length; j++) {
+//
+//				int boxWidth = width / attacks.length;
+//				int boxHeight = height / (attacks[i].length + 1);
+//
+//				gc.setFill(Color.WHITE);
+//				if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == i && curAttackColum == j) {
+//					gc.setFill(Color.GRAY);
+//				}
+//				gc.fillRect(columX, rowY, boxWidth, boxHeight);
+//
+//				gc.setStroke(Color.BLACK);
+//				gc.strokeRect(columX, rowY, boxWidth, boxHeight);
+//				gc.setFill(Color.BLACK);
+//				gc.fillText(attacks[i][j].getName(), columX, rowY + boxHeight / 2);
+//
+//				columX += width / attacks.length;
+//			}
+//
+//			rowY += height / (attacks[i].length + 1);
+//		}
+//
+//		// back button
+//		gc.setFill(Color.WHITE);
+//		if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == attacks.length
+//				&& curAttackColum == attacks[attacks.length - 1].length - 1) {
+//			gc.setFill(Color.GRAY);
+//		}
+//		gc.fillRect(columX - width / attacks.length, rowY, width / attacks.length,
+//				height / (attacks[attacks.length - 1].length + 1));
+//
+//		gc.setStroke(Color.BLACK);
+//		gc.strokeRect(columX - width / attacks.length, rowY, width / attacks.length,
+//				height / (attacks[attacks.length - 1].length + 1));
+//		gc.setFill(Color.BLACK);
+//		gc.fillText("BACK", columX - width / attacks.length,
+//				rowY + height / (attacks[attacks.length - 1].length + 1) / 2);
+//	}
 
 
 

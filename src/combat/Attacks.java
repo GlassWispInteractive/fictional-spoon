@@ -5,23 +5,49 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Attacks {
-
+	
 	private String name;
 	private static ArrayList<String> attackNames = new ArrayList<String>(Arrays.asList(
 			new String[] { "Feuerwerfer", "Wasserbombe", "Pustekuchen", "Erdloch", "Schmetterball", "Traubenwerfer",
 					"Rutschschlag", "Faustschlag", "Ausruhen", "Sein Leben chillen", "Stecker ziehen" }));
+	
+	private int attackDmg;
 
-	public Attacks(String name) {
-		this.name = name;
-	}
-
+	//generate name + attackDmg
 	public Attacks() {
-		Random rnd = new Random();
-		this.name = attackNames.get(rnd.nextInt(attackNames.size() - 1));
+		this(new Random().nextInt(40) + 10, attackNames.get(new Random().nextInt(attackNames.size() - 1)));
 	}
-
+	
+	//generate name
+	public Attacks(int attackDmg) {
+		this(attackDmg, attackNames.get(new Random().nextInt(attackNames.size() - 1)));
+	}
+	
+	//save attackDmg and name
+	public Attacks(int attackDmg, String name) {
+		this.name = name;
+		this.attackDmg = attackDmg;
+	}	
+	
+	
+	
 	public String getName() {
 		return name;
+	}
+	
+	public void doAttack(IAttackable focus) {
+		doAttack(focus, null);
+	}
+	public void doAttack(IAttackable focus, Combo combo) {
+		int dmg = attackDmg;
+		float luck = new Random().nextFloat() + 0.5f;
+		dmg *= luck;
+		focus.getDmg(dmg);
+	}
+	
+	
+	public int getDamage(){
+		return attackDmg;
 	}
 
 }
