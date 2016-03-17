@@ -398,7 +398,7 @@ public class Generator {
 			powers[type] = used;
 			used -= used;
 
-			fac.makeMonster(p[0], p[1], 0, powers, "monster");
+			fac.makeMonster(p[0], p[1], 100, powers, "monster");
 			
 			// create a superMonster every 8 rooms
 			if (i % 8 == 0) {
@@ -419,7 +419,7 @@ public class Generator {
 				p = q.get(0);
 				q.remove(0);
 				int len = rand.nextInt(5); 
-				fac.makeChest(p[0], p[1], Combo.random(2 + len));
+				fac.makeChest(p[0], p[1], Combo.generate(2 + len));
 			}
 
 			// create a shrine every 10 rooms

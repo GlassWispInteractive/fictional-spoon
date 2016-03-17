@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import combat.Combat;
-
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
@@ -16,12 +15,14 @@ import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Opponent extends Entity {
 	
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 	private ImageSource imgSource = new ImageSource(TileSource.CHAR_TILES, 0, 11);
 	private int blocked = 0;
+	private boolean opponentDead = false;
 	Random rnd = new Random();
 	
 	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(
@@ -47,34 +48,52 @@ public class Opponent extends Entity {
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-		tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
+		
+		if(opponentDead){
+			gc.setFill(Color.RED);
+			gc.fillRect((x - offsetX) * size, (y - offsetY) * size, size, size);
+			tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
+		} else {
+			tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
+		}
 	}
 
 	@Override
 	public void tick(double elapsedTime) {
 		
-		if(blocked >= 0){
-			blocked--;
-		}
-		
-		if(blocked < 0){
-			blocked = delayTicks - 1;
+		if(!opponentDead){
 			
-			Point newPosition = currentWalkStrategy.walk(x, y);
+			if(blocked >= 0){
+				blocked--;
+			}
+			
+			if(blocked < 0){
+				blocked = delayTicks - 1;
+				
+				Point newPosition = currentWalkStrategy.walk(x, y);
 
-			x = newPosition.x;
-			y = newPosition.y;
-		}
-		
-		EntityFactory fac = EntityFactory.getFactory();
-		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-			new Combat(monsterList).start();
-		}
-		
+				x = newPosition.x;
+				y = newPosition.y;
+			}
+			
+			EntityFactory fac = EntityFactory.getFactory();
+			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
+				new Combat(this).start();
+			}
+			
+		}		
 	}
 	
 	public ArrayList<Monster> getMonsterList(){
 		return monsterList;
+	}
+	
+	public boolean isDead(){
+		return opponentDead;
+	}
+	
+	public void setDead(boolean dead){
+		this.opponentDead = dead;
 	}
 
 }

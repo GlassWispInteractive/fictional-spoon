@@ -1,5 +1,12 @@
 package entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import combat.Combat;
+import combat.Combo;
+import combat.IAttackable;
+import combat.Soul;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
@@ -8,23 +15,25 @@ import framework.GameControl;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Player extends Entity {
+public class Player extends Entity implements IAttackable{
 
-	@SuppressWarnings("unused")
 	private int hp = 100;
-
+	private final int maxHp;
+	private String name = "Spieler";
+	private Combat combat;
+	
+	private ArrayList<Soul> souls = new ArrayList<Soul>(Arrays.asList(new Soul[]{new Soul("Earth (1)"), new Soul("Fire (2)"), new Soul("Air (3)"), new Soul("Water (4)")}));
+	
 	// for speed
 	private int blocked = 0;
 
-	@SuppressWarnings("unused")
-	private int souls[];
 	TileFactory tileFac;
 
 	public Player(int x, int y) {
 		super(x, y);
 		delayTicks = 4;
+		this.maxHp = hp;
 
-		souls = new int[] { 1, 1, 1, 1, 1 };
 		tileFac = TileFactory.getTilesFactory();
 	}
 
@@ -74,5 +83,37 @@ public class Player extends Entity {
 			GameControl.getControl().updateCamera(x, y);
 		}
 
+	}
+	
+	public String getPlayerInfo() {
+		return ""+name+" ["+hp+" / "+maxHp+"]";
+	}
+	
+	public boolean isDead() {
+		return hp <= 0;
+	}
+	public ArrayList<Soul> getSouls() {
+		return souls;
+	}
+	public void setCombat(Combat combat) {
+		this.combat = combat;
+	}
+	public void heal() {
+		this.hp = maxHp;
+	}
+
+	@Override
+	public void getDmg(int dmg) {
+		hp -= dmg;
+	}
+	
+	@Override
+	public void doAttack(IAttackable focus){
+		souls.get(combat.getCurSoul()).getAttack().doAttack(focus);
+	}
+	
+	@Override
+	public void doAttack(IAttackable focus, Combo combo) {
+		souls.get(combat.getCurSoul()).getAttack().doAttack(focus, combo);
 	}
 }

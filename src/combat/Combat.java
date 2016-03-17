@@ -2,9 +2,16 @@ package combat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
+
+import com.sun.javafx.tk.FontLoader;
+import com.sun.javafx.tk.Toolkit;
 
 import engine.TileFactory;
+import entities.EntityFactory;
 import entities.Monster;
+import entities.Opponent;
+import entities.Player;
 import framework.EventControl;
 import framework.State;
 import framework.Window;
@@ -19,14 +26,21 @@ public class Combat extends State {
 	// lists
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
-
+	private Opponent opponent = null; //null = only monster
+	private Player player = (Player) EntityFactory.getFactory().getPlayer();
 	// class member
-	private int curSoul, curFocus, curAttackRow, curAttackColum;
+	private int curSoul, curFocus;
+	@SuppressWarnings("unused")
+	private int curAttackRow, curAttackColum;
 	private int streakCount;
 	private ArrayList<Element> streak;
 	private double status, lowerBound, upperBound;
 	private String info;
+	@SuppressWarnings("unused")
 	private CombatState combatState;
+	
+	private int delayTicks = 100;
+	private int blocked = delayTicks;
 
 	// internal states
 	private enum CombatState {
@@ -39,6 +53,11 @@ public class Combat extends State {
 			new Image("/resources/elem/water.png") };
 
 	
+	public Combat(Opponent opponent) {
+		this(new ArrayList<Monster>(opponent.getMonsterList()));
+		
+		this.opponent = opponent;
+	}
 	public Combat(Monster[] monsterArray) {
 		this(new ArrayList<Monster>(Arrays.asList(monsterArray)));
 	}
@@ -54,33 +73,22 @@ public class Combat extends State {
 		addLayer(new Canvas(Window.SIZE_X, 300));
 		addLayer(new Canvas(Window.SIZE_X, 100));
 		addLayer(new Canvas(Window.SIZE_X, 100));
+		addLayer(new Canvas(Window.SIZE_X, 100));
+		addLayer(new Canvas(Window.SIZE_X, 510));
 
 		// put up design
 		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
 		layers.get(2).relocate(0, 0);
 		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
 		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
+		layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
+		layers.get(6).relocate(Window.SIZE_X - 100, Window.SIZE_Y * 0.85);
 
-		setSouls(getHardCodedSouls());
+		player.setCombat(this);
+		this.souls = player.getSouls();
 //		setMonster(getHardCodedMonster());
 		this.monster = monster;
 
-	}
-
-
-	private static ArrayList<Soul> getHardCodedSouls() {
-		ArrayList<Soul> list = new ArrayList<Soul>();
-
-		list.add(new Soul("Earth (1)"));
-		list.add(new Soul("Fire (2)"));
-		list.add(new Soul("Air (3)"));
-		list.add(new Soul("Water (4)"));
-
-		return list;
-	}
-
-	private void setSouls(ArrayList<Soul> souls) {
-		this.souls = souls;
 	}
 
 	@Override
@@ -89,6 +97,10 @@ public class Combat extends State {
 //		System.out.println(status);
 
 		EventControl e = EventControl.getEvents();
+		
+		if(curFocus > monster.size() -1) {
+			curFocus = monster.size() -1;
+		}
 
 		// if (e.isLeft()) {
 		// curSoul = (curSoul + souls.size() - 1) % souls.size();
@@ -133,7 +145,7 @@ public class Combat extends State {
 		}
 
 		setBounds();
-
+		
 		// case CHOOSE_ATTACK:
 		// if (e.isLeft()) {
 		// if (curAttackRow <= 1) {
@@ -175,12 +187,56 @@ public class Combat extends State {
 		// }
 		// if (e.isEnter()) {
 		// // attack
-		// // TODO attack monster
 		// }
 		// break;
 
 		EventControl.getEvents().clear();
+		
+		//check if all monsters are still alive and make smartDelete with dead monster
+		ArrayList<Monster> dyingMonster = new ArrayList<Monster>();
+		for(Monster mon : monster){
+			if(mon.isDead()){
+				dyingMonster.add(mon);
+			}
+		}
+		//smart delete
+		for (Monster dyingMon : dyingMonster) {
+			monster.remove(dyingMon);
+		}
+		dyingMonster.clear();
 
+		//check, if alive monster exists
+		if(monster.size() == 0){
+			//opponent dead
+			if(opponent != null){
+				opponent.setDead(true);
+			}
+			this.stop();
+		}
+		
+		if(player.isDead()) {
+			//TODO
+			System.out.println("Player is dead!!");
+		}
+		
+		
+		//let monster attack
+		if(blocked < 0){
+			blocked = delayTicks - 1;
+			
+			Random rnd = new Random();
+			int rndMonsterIndex;
+			if(monster.size() == 1){
+				rndMonsterIndex = 0;
+			} else {
+				rndMonsterIndex = rnd.nextInt(monster.size() -1);
+			}
+			Monster attackMonster = monster.get(rndMonsterIndex);
+			
+			attackMonster.doAttack(player);
+		} else {
+			blocked--;
+		}
 	}
 
 	private void setBounds() {
@@ -201,6 +257,10 @@ public class Combat extends State {
 			upperBound = 0.75;
 		}
 	}
+	
+	public int getCurSoul() {
+		return curSoul;
+	}
 
 	private void attack() {
 		// check whether timing is fine
@@ -210,7 +270,7 @@ public class Combat extends State {
 			streak.add(Element.values()[curSoul]);
 			info = "current hit streak: " + Combo.toString(streak.toArray(new Element[]{}));
 
-			// System.out.println("Bonus damage");
+			player.doAttack(monster.get(curFocus));
 		} else {
 			// adjust level
 			streakCount = 0;
@@ -227,13 +287,34 @@ public class Combat extends State {
 		status = 0;
 	}
 
-	public void eval(Element[] streakElem) {
-		// System.out.println(Arrays.toString(combo));
+//	public void eval(Element[] streakElem) {
+//		// System.out.println(Arrays.toString(combo));
+//
+//		for (Combo combo : Combo.getCombosInUse()) {
+//			if (Arrays.equals(streakElem, combo.getCombo())) {
+//				info = "Combo completed!";
+//				player.doAttack(monster.get(curFocus), combo);
+//				streak.clear();
+//			}
+//		}
+//
+//	}
+	
+	private void eval(Element[] streakElem) {
 
 		for (Combo combo : Combo.getCombosInUse()) {
-			if (Arrays.equals(streakElem, combo.getCombo())) {
-				info = "Combo completed!";
-				streak.clear();
+			Element[] elements = combo.getCombo();
+			if(streakElem.length >= elements.length){
+				for(int i = 1; i <= elements.length; i++){
+					if(elements[elements.length - i] != streakElem[streakElem.length - i]){
+						break;
+					}
+					if(i == elements.length){
+						info = "Combo completed!";
+						player.doAttack(monster.get(curFocus), combo);
+						streak.clear();
+					}
+				}
 			}
 		}
 
@@ -248,6 +329,8 @@ public class Combat extends State {
 		renderMonsters();
 		renderBar();
 		renderInfo();
+		renderPlayerInfo();
+		renderTextboxes();
 
 		// int textboxWidth = 600;
 		// int textboxHeight = 240;
@@ -290,7 +373,7 @@ public class Combat extends State {
 			Image image = TileFactory.getTilesFactory().getImage(monster.get(i).getImageSource());
 
 			gc.setFill(Color.RED);
-			gc.fillText(monster.get(i).getName(), Window.SIZE_X - 150 - i * 180 - image.getWidth(), 50 - 5, 80);
+			gc.fillText(monster.get(i).getName() + " "+monster.get(i).getHpInfo(), Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
 
 			gc.drawImage(image, Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			// gc.fillRect(Window.SIZE_X - 150 - i * 120, 50, 80, 80);
@@ -352,58 +435,129 @@ public class Combat extends State {
 		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
 	}
+	
+	private void renderPlayerInfo() {
+		// initialize render screen
+		final int ID = 5;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
-	@SuppressWarnings("unused")
-	private void renderTextboxes(GraphicsContext gc, int x, int y, int width, int height, Soul currentSoul) {
+		// font settings
+		gc.setFont(Window.bigFont);
+//		gc.setTextAlign(TextAlignment.CENTER);
+		gc.setTextBaseline(VPos.BASELINE);
+		gc.setFill(Color.ORANGE);
+		// gc.setLineWidth(1);
 
-		int rowY = y;
-		int columX = x;
-
-		Attacks[][] attacks = currentSoul.getAttacks();
-
-		// attack fields
-		for (int i = 0; i < attacks.length; i++) {
-
-			columX = x;
-
-			for (int j = 0; j < attacks[i].length; j++) {
-
-				int boxWidth = width / attacks.length;
-				int boxHeight = height / (attacks[i].length + 1);
-
-				gc.setFill(Color.WHITE);
-				if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == i && curAttackColum == j) {
-					gc.setFill(Color.GRAY);
-				}
-				gc.fillRect(columX, rowY, boxWidth, boxHeight);
-
-				gc.setStroke(Color.BLACK);
-				gc.strokeRect(columX, rowY, boxWidth, boxHeight);
-				gc.setFill(Color.BLACK);
-				gc.fillText(attacks[i][j].getName(), columX, rowY + boxHeight / 2);
-
-				columX += width / attacks.length;
-			}
-
-			rowY += height / (attacks[i].length + 1);
-		}
-
-		// back button
-		gc.setFill(Color.WHITE);
-		if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == attacks.length
-				&& curAttackColum == attacks[attacks.length - 1].length - 1) {
-			gc.setFill(Color.GRAY);
-		}
-		gc.fillRect(columX - width / attacks.length, rowY, width / attacks.length,
-				height / (attacks[attacks.length - 1].length + 1));
-
-		gc.setStroke(Color.BLACK);
-		gc.strokeRect(columX - width / attacks.length, rowY, width / attacks.length,
-				height / (attacks[attacks.length - 1].length + 1));
-		gc.setFill(Color.BLACK);
-		gc.fillText("BACK", columX - width / attacks.length,
-				rowY + height / (attacks[attacks.length - 1].length + 1) / 2);
+		gc.fillText(player.getPlayerInfo(), 50, 50);
 	}
+	
+	private void renderTextboxes() {
+		// initialize render screen
+		final int ID = 6;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		
+		// font settings
+		gc.setFont(Window.bigFont);
+		gc.setTextAlign(TextAlignment.CENTER);
+		gc.setTextBaseline(VPos.BASELINE);
+		// gc.setLineWidth(1);
+
+		ArrayList<String> comboNames = new ArrayList<String>();
+		comboNames.add("Combos:");
+		for(Combo combo : Combo.getCombosInUse()){
+			comboNames.add(combo.toString());
+		}
+		if(Combo.getCombosInUse().size() == 0){
+			comboNames.clear();
+			comboNames.add("No Combos");
+		}
+
+		FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+		int textWidth = (int)fontLoader.computeStringWidth("", gc.getFont());
+		int textHeight = (int)fontLoader.getFontMetrics(gc.getFont()).getLineHeight();
+		
+		//calc textLength
+		for(int i = 0; i < comboNames.size(); i++) {
+			if(textWidth < (int)fontLoader.computeStringWidth(comboNames.get(i).toString(), gc.getFont())) {
+				textWidth = (int)fontLoader.computeStringWidth(comboNames.get(i).toString(), gc.getFont());
+			}
+		}
+		
+		int rowY = 0;
+		int padding = 10;
+		int width = textWidth + 2*padding;
+		int height = (int) (1.5 * textHeight);
+
+
+
+		for (int j = 0; j < Math.min(10, comboNames.size()); j++) { //only max 10 combos can be shown
+
+			gc.setStroke(Color.ORANGE);
+			gc.strokeRect(0, rowY, padding + width, height);
+
+			gc.setFill(Color.ORANGE);
+			gc.fillText(comboNames.get(j).toString(), width / 2, rowY + height/2 + textHeight/4);
+
+			rowY += height;
+		}
+		
+		
+		layers.get(ID).relocate(Window.SIZE_X - width - 2*padding, Window.SIZE_Y - height*Math.min(10, comboNames.size()) - padding);
+	}
+
+//	@SuppressWarnings("unused")
+//	private void renderTextboxes(GraphicsContext gc, int x, int y, int width, int height, Soul currentSoul) {
+//
+//		int rowY = y;
+//		int columX = x;
+//
+//		Attacks[][] attacks = currentSoul.getAttacks();
+//
+//		// attack fields
+//		for (int i = 0; i < attacks.length; i++) {
+//
+//			columX = x;
+//
+//			for (int j = 0; j < attacks[i].length; j++) {
+//
+//				int boxWidth = width / attacks.length;
+//				int boxHeight = height / (attacks[i].length + 1);
+//
+//				gc.setFill(Color.WHITE);
+//				if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == i && curAttackColum == j) {
+//					gc.setFill(Color.GRAY);
+//				}
+//				gc.fillRect(columX, rowY, boxWidth, boxHeight);
+//
+//				gc.setStroke(Color.BLACK);
+//				gc.strokeRect(columX, rowY, boxWidth, boxHeight);
+//				gc.setFill(Color.BLACK);
+//				gc.fillText(attacks[i][j].getName(), columX, rowY + boxHeight / 2);
+//
+//				columX += width / attacks.length;
+//			}
+//
+//			rowY += height / (attacks[i].length + 1);
+//		}
+//
+//		// back button
+//		gc.setFill(Color.WHITE);
+//		if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == attacks.length
+//				&& curAttackColum == attacks[attacks.length - 1].length - 1) {
+//			gc.setFill(Color.GRAY);
+//		}
+//		gc.fillRect(columX - width / attacks.length, rowY, width / attacks.length,
+//				height / (attacks[attacks.length - 1].length + 1));
+//
+//		gc.setStroke(Color.BLACK);
+//		gc.strokeRect(columX - width / attacks.length, rowY, width / attacks.length,
+//				height / (attacks[attacks.length - 1].length + 1));
+//		gc.setFill(Color.BLACK);
+//		gc.fillText("BACK", columX - width / attacks.length,
+//				rowY + height / (attacks[attacks.length - 1].length + 1) / 2);
+//	}
 
 
 
