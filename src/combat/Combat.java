@@ -74,7 +74,7 @@ public class Combat extends State {
 		addLayer(new Canvas(Window.SIZE_X, 100));
 		addLayer(new Canvas(Window.SIZE_X, 100));
 		addLayer(new Canvas(Window.SIZE_X, 100));
-		addLayer(new Canvas(Window.SIZE_X, 500));
+		addLayer(new Canvas(Window.SIZE_X, 510));
 
 		// put up design
 		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
@@ -449,6 +449,10 @@ public class Combat extends State {
 		for(Combo combo : Combo.getCombosInUse()){
 			comboNames.add(combo.toString());
 		}
+		if(Combo.getCombosInUse().size() == 0){
+			comboNames.clear();
+			comboNames.add("No Combos");
+		}
 
 		FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
 		int textWidth = (int)fontLoader.computeStringWidth("", gc.getFont());
@@ -468,7 +472,7 @@ public class Combat extends State {
 
 
 
-		for (int j = 0; j < comboNames.size(); j++) {
+		for (int j = 0; j < Math.min(10, comboNames.size()); j++) { //only max 10 combos can be shown
 
 			gc.setStroke(Color.ORANGE);
 			gc.strokeRect(0, rowY, padding + width, height);
@@ -480,7 +484,7 @@ public class Combat extends State {
 		}
 		
 		
-		layers.get(ID).relocate(Window.SIZE_X - width - 2*padding, Window.SIZE_Y - height*comboNames.size() - padding);
+		layers.get(ID).relocate(Window.SIZE_X - width - 2*padding, Window.SIZE_Y - height*Math.min(10, comboNames.size()) - padding);
 	}
 
 //	@SuppressWarnings("unused")

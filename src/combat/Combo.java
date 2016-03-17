@@ -12,14 +12,14 @@ public class Combo {
 
 	private Element[] combo;
 
-	public Combo(Element[] combo) {
+	private Combo(Element[] combo) {
 		this.setCombo(combo);
 		combos.add(this);
 
 		// System.out.println(Arrays.toString(combo));
 	}
 
-	public static Combo random(int lenT) {
+	public static Combo generate(int lenT) {
 		Random random = new Random();
 		random.setSeed(42);
 
