@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import com.sun.javafx.tk.FontLoader;
+import com.sun.javafx.tk.Toolkit;
+
 import engine.TileFactory;
 import entities.EntityFactory;
 import entities.Monster;
@@ -71,6 +74,7 @@ public class Combat extends State {
 		addLayer(new Canvas(Window.SIZE_X, 100));
 		addLayer(new Canvas(Window.SIZE_X, 100));
 		addLayer(new Canvas(Window.SIZE_X, 100));
+		addLayer(new Canvas(Window.SIZE_X, 500));
 
 		// put up design
 		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
@@ -78,6 +82,7 @@ public class Combat extends State {
 		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
 		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
 		layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
+		layers.get(6).relocate(Window.SIZE_X - 100, Window.SIZE_Y * 0.85);
 
 		player.setCombat(this);
 		this.souls = player.getSouls();
@@ -305,6 +310,7 @@ public class Combat extends State {
 		renderBar();
 		renderInfo();
 		renderPlayerInfo();
+		renderTextboxes();
 
 		// int textboxWidth = 600;
 		// int textboxHeight = 240;
@@ -424,6 +430,57 @@ public class Combat extends State {
 		// gc.setLineWidth(1);
 
 		gc.fillText(player.getPlayerInfo(), 50, 50);
+	}
+	
+	private void renderTextboxes() {
+		// initialize render screen
+		final int ID = 6;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		
+		// font settings
+		gc.setFont(Window.bigFont);
+		gc.setTextAlign(TextAlignment.CENTER);
+		gc.setTextBaseline(VPos.BASELINE);
+		// gc.setLineWidth(1);
+
+		ArrayList<String> comboNames = new ArrayList<String>();
+		comboNames.add("Combos:");
+		for(Combo combo : Combo.getCombosInUse()){
+			comboNames.add(combo.toString());
+		}
+
+		FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+		int textWidth = (int)fontLoader.computeStringWidth("", gc.getFont());
+		int textHeight = (int)fontLoader.getFontMetrics(gc.getFont()).getLineHeight();
+		
+		//calc textLength
+		for(int i = 0; i < comboNames.size(); i++) {
+			if(textWidth < (int)fontLoader.computeStringWidth(comboNames.get(i).toString(), gc.getFont())) {
+				textWidth = (int)fontLoader.computeStringWidth(comboNames.get(i).toString(), gc.getFont());
+			}
+		}
+		
+		int rowY = 0;
+		int padding = 10;
+		int width = textWidth + 2*padding;
+		int height = (int) (1.5 * textHeight);
+
+
+
+		for (int j = 0; j < comboNames.size(); j++) {
+
+			gc.setStroke(Color.ORANGE);
+			gc.strokeRect(0, rowY, padding + width, height);
+
+			gc.setFill(Color.ORANGE);
+			gc.fillText(comboNames.get(j).toString(), width / 2, rowY + height/2 + textHeight/4);
+
+			rowY += height;
+		}
+		
+		
+		layers.get(ID).relocate(Window.SIZE_X - width - 2*padding, Window.SIZE_Y - height*comboNames.size() - padding);
 	}
 
 //	@SuppressWarnings("unused")
