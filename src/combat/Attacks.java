@@ -42,6 +42,9 @@ public class Attacks {
 		int dmg = attackDmg;
 		float luck = new Random().nextFloat() + 0.5f;
 		dmg *= luck;
+		if(combo != null){
+			dmg += dmg * combo.getCombo().length / 10f;  //for each combo step get 10% extra dmg
+		}
 		focus.getDmg(dmg);
 	}
 	
