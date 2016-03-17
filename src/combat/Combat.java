@@ -2,10 +2,13 @@ package combat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import engine.TileFactory;
+import entities.EntityFactory;
 import entities.Monster;
 import entities.Opponent;
+import entities.Player;
 import framework.EventControl;
 import framework.State;
 import framework.Window;
@@ -21,7 +24,7 @@ public class Combat extends State {
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
 	private Opponent opponent = null; //null = only monster
-
+	private Player player = (Player) EntityFactory.getFactory().getPlayer();
 	// class member
 	private int curSoul, curFocus;
 	@SuppressWarnings("unused")
@@ -32,6 +35,9 @@ public class Combat extends State {
 	private String info;
 	@SuppressWarnings("unused")
 	private CombatState combatState;
+	
+	private int delayTicks = 100;
+	private int blocked = delayTicks;
 
 	// internal states
 	private enum CombatState {
@@ -64,33 +70,20 @@ public class Combat extends State {
 		addLayer(new Canvas(Window.SIZE_X, 300));
 		addLayer(new Canvas(Window.SIZE_X, 100));
 		addLayer(new Canvas(Window.SIZE_X, 100));
+		addLayer(new Canvas(Window.SIZE_X, 100));
 
 		// put up design
 		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
 		layers.get(2).relocate(0, 0);
 		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
 		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
+		layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
 
-		setSouls(getHardCodedSouls());
+		player.setCombat(this);
+		this.souls = player.getSouls();
 //		setMonster(getHardCodedMonster());
 		this.monster = monster;
 
-	}
-
-
-	private static ArrayList<Soul> getHardCodedSouls() {
-		ArrayList<Soul> list = new ArrayList<Soul>();
-
-		list.add(new Soul("Earth (1)"));
-		list.add(new Soul("Fire (2)"));
-		list.add(new Soul("Air (3)"));
-		list.add(new Soul("Water (4)"));
-
-		return list;
-	}
-
-	private void setSouls(ArrayList<Soul> souls) {
-		this.souls = souls;
 	}
 
 	@Override
@@ -147,7 +140,7 @@ public class Combat extends State {
 		}
 
 		setBounds();
-
+		
 		// case CHOOSE_ATTACK:
 		// if (e.isLeft()) {
 		// if (curAttackRow <= 1) {
@@ -189,7 +182,6 @@ public class Combat extends State {
 		// }
 		// if (e.isEnter()) {
 		// // attack
-		// // TODO attack monster
 		// }
 		// break;
 
@@ -216,6 +208,30 @@ public class Combat extends State {
 			}
 			this.stop();
 		}
+		
+		if(player.isDead()) {
+			//TODO
+			System.out.println("Player is dead!!");
+		}
+		
+		
+		//let monster attack
+		if(blocked < 0){
+			blocked = delayTicks - 1;
+			
+			Random rnd = new Random();
+			int rndMonsterIndex;
+			if(monster.size() == 1){
+				rndMonsterIndex = 0;
+			} else {
+				rndMonsterIndex = rnd.nextInt(monster.size() -1);
+			}
+			Monster attackMonster = monster.get(rndMonsterIndex);
+			
+			attackMonster.doAttack(player);
+		} else {
+			blocked--;
+		}
 	}
 
 	private void setBounds() {
@@ -236,6 +252,10 @@ public class Combat extends State {
 			upperBound = 0.75;
 		}
 	}
+	
+	public int getCurSoul() {
+		return curSoul;
+	}
 
 	private void attack() {
 		// check whether timing is fine
@@ -245,7 +265,7 @@ public class Combat extends State {
 			streak.add(Element.values()[curSoul]);
 			info = "current hit streak: " + Combo.toString(streak.toArray(new Element[]{}));
 
-			souls.get(curSoul).doAttack(monster.get(curFocus));
+			player.doAttack(monster.get(curFocus));
 		} else {
 			// adjust level
 			streakCount = 0;
@@ -268,7 +288,7 @@ public class Combat extends State {
 		for (Combo combo : Combo.getCombosInUse()) {
 			if (Arrays.equals(streakElem, combo.getCombo())) {
 				info = "Combo completed!";
-				souls.get(curSoul).doAttack(monster.get(curFocus), combo);
+				player.doAttack(monster.get(curFocus), combo);
 				streak.clear();
 			}
 		}
@@ -284,6 +304,7 @@ public class Combat extends State {
 		renderMonsters();
 		renderBar();
 		renderInfo();
+		renderPlayerInfo();
 
 		// int textboxWidth = 600;
 		// int textboxHeight = 240;
@@ -387,6 +408,22 @@ public class Combat extends State {
 
 		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
+	}
+	
+	private void renderPlayerInfo() {
+		// initialize render screen
+		final int ID = 5;
+		final GraphicsContext gc = gcs.get(ID);
+		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+
+		// font settings
+		gc.setFont(Window.bigFont);
+//		gc.setTextAlign(TextAlignment.CENTER);
+		gc.setTextBaseline(VPos.BASELINE);
+		gc.setFill(Color.ORANGE);
+		// gc.setLineWidth(1);
+
+		gc.fillText(player.getPlayerInfo(), 50, 50);
 	}
 
 //	@SuppressWarnings("unused")

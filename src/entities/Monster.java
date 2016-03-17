@@ -10,7 +10,9 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
+import combat.Attacks;
 import combat.Combat;
+import combat.Combo;
 import combat.IAttackable;
 import engine.ImageSource;
 import engine.TileFactory;
@@ -36,11 +38,13 @@ public class Monster extends Entity implements IAttackable {
 	private final int maxHp;
 	// earth, fire, air, water, mystic #korra
 	private int[] power = new int[5];
+	private Attacks attack;
 
 	private int maxType = -1;
 	private String name;
 	private boolean monsterDead = false;
 	private TileFactory tileFac = TileFactory.getTilesFactory();
+	
 
 	public Monster(int x, int y, int hp, int[] power, String name) {
 		super(x, y);
@@ -67,6 +71,7 @@ public class Monster extends Entity implements IAttackable {
 				max = this.power[i];
 			}
 		}
+		this.attack = new Attacks(max);
 	}
 
 	public String getName() {
@@ -119,6 +124,16 @@ public class Monster extends Entity implements IAttackable {
 		if(hp <= 0){
 			monsterDead = true;
 		}
+	}
+	
+	@Override
+	public void doAttack(IAttackable focus){
+		attack.doAttack(focus);
+	}
+	
+	@Override
+	public void doAttack(IAttackable focus, Combo combo) {
+		attack.doAttack(focus, combo);
 	}
 
 }

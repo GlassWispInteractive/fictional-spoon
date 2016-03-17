@@ -7,7 +7,9 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Shrine extends Entity {
 	private int blocked = 0;
-	TileFactory tileFac;
+	private TileFactory tileFac;
+	private Player player = (Player) EntityFactory.getFactory().getPlayer();
+	
 
 	public Shrine(int x, int y) {
 		super(x, y);
@@ -31,14 +33,14 @@ public class Shrine extends Entity {
 	@Override
 	public void tick(double elapsedTime) {
 		// check intersection
-		EntityFactory fac = EntityFactory.getFactory();
-
-		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY() && blocked == 0) {
+		if (x == player.getX() && y == player.getY() && blocked == 0) {
+			player.heal();
 			blocked = delayTicks;
 		}
 
-		if (blocked > 0)
+		if (blocked > 0) {
 			blocked--;
+		}
 	}
 
 }
