@@ -2,6 +2,7 @@ package framework;
 
 import gameviews.AltertView;
 import gameviews.GameView;
+import gameviews.MapView;
 import generation.Map;
 
 public class GameControl extends State {
@@ -17,6 +18,8 @@ public class GameControl extends State {
 	};
 
 	private GameView[] views;
+	private final int n = Views.values().length;
+	private MapView mp;
 
 	/**
 	 * static method to get the singleton class object
@@ -34,16 +37,17 @@ public class GameControl extends State {
 		// call the very important state constructor
 		super();
 
-		// views count
-		final int n = Views.values().length;
-
 		views = new GameView[n];
-		views[Views.ALERT.ordinal()] = new AltertView(null);
+
+		addLayer("map", 0, 0, 350 * size, 225 * size);
+		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
+		mp = new MapView(layers.get("map"), layers.get("entities"));
+		views[Views.MAP.ordinal()] = mp;
 
 		// add layer
-		addLayer("map", 0, 0, 1 * size, 1 * size);
+
 		// image
-		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
+		
 	}
 
 	/**
@@ -51,7 +55,7 @@ public class GameControl extends State {
 	 */
 	public Map getMap() {
 		// return map;
-		return null;
+		return mp.getMap();
 	}
 
 	/**
@@ -61,12 +65,22 @@ public class GameControl extends State {
 	 */
 	@Override
 	public void tick(int ticks) {
+		for (int i = 0; i < n; i++) {
+			if (views[i] == null)
+				continue;
 
+			views[i].tick(ticks);
+		}
 	}
 
 	@Override
 	protected void render() {
+		for (int i = 0; i < n; i++) {
+			if (views[i] == null)
+				continue;
 
+			views[i].render();
+		}
 	}
 
 	public void updateCamera(int x, int y) {
