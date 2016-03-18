@@ -5,9 +5,9 @@ import engine.TileFactory;
 import engine.TileSource;
 import entities.Entity;
 import entities.EntityFactory;
-import gen.LevelBuilder;
-import gen.environment.Ground;
-import gen.environment.Map;
+import generation.Ground;
+import generation.LevelBuilder;
+import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 
 public class GameControl extends State {

@@ -1,4 +1,4 @@
-package gen.environment;
+package generation;
 
 public class Cell {
 	private Ground ground;

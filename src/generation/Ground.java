@@ -1,4 +1,4 @@
-package gen.environment;
+package generation;
 
 public enum Ground {
 	WALL,

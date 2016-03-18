@@ -1,8 +1,8 @@
-package gen;
+package generation;
 
-import static gen.environment.Ground.FLOOR;
-import static gen.environment.Ground.ROOM;
-import static gen.environment.Ground.WALL;
+import static generation.Ground.FLOOR;
+import static generation.Ground.ROOM;
+import static generation.Ground.WALL;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,9 +10,6 @@ import java.util.Random;
 
 import combat.Combo;
 import entities.EntityFactory;
-import gen.environment.Cell;
-import gen.environment.DisjointSet;
-import gen.environment.Map;
 
 /**
  * builder pattern class to generate level maps source:

@@ -1,6 +1,6 @@
-package gen.environment;
+package generation;
 
-import static gen.environment.Ground.*;
+import static generation.Ground.*;
 
 public class Map {
 	private Cell[][] map;

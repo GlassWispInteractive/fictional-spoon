@@ -14,7 +14,7 @@
  *     Andrey Loskutov <loskutov@gmx.de> - generified interface, bug 462760
  ******************************************************************************/
 
-package gen.environment;
+package generation;
 
 import java.util.HashMap;
 import java.util.Iterator;
