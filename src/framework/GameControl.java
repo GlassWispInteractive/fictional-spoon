@@ -8,7 +8,6 @@ import entities.EntityFactory;
 import gen.Generator;
 import gen.environment.Ground;
 import gen.environment.Map;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
 public class GameControl extends State {
@@ -46,8 +45,8 @@ public class GameControl extends State {
 		map = new Generator(350, 225).newLevel();
 
 		// add layer
-		addLayer(new Canvas(map.getN() * size, map.getM() * size)); // big image
-		addLayer(new Canvas(Window.SIZE_X, Window.SIZE_Y));
+		addLayer("map", 0, 0, map.getN() * size, map.getM() * size); // big image
+		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// load factories
 		tileFac = TileFactory.getTilesFactory();
@@ -151,7 +150,7 @@ public class GameControl extends State {
 	@Override
 	public void render() {
 		// shift pre
-		layers.get(1).relocate(-16 * cameraX, -16 * cameraY);
+		layers.get("map").relocate(-16 * cameraX, -16 * cameraY);
 
 		renderEntities();
 
@@ -191,9 +190,8 @@ public class GameControl extends State {
 	 */
 	private void prerenderMap() {
 		// initialize render screen
-		final int ID = 1;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		final GraphicsContext gc = gcs.get("map");
+		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// full rendering of the map
 		for (int x = 0; x < map.getN(); x++) {
@@ -210,9 +208,8 @@ public class GameControl extends State {
 	 */
 	private void renderEntities() {
 		// initialize render screen
-		final int ID = 2;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		final GraphicsContext gc = gcs.get("entities");
+		gc.clearRect(0, 0, layers.get("entities").getWidth(), layers.get("entities").getHeight());
 
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, cameraX, cameraY);

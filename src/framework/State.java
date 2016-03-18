@@ -1,6 +1,7 @@
 package framework;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -18,8 +19,8 @@ public abstract class State {
 	// class members
 	protected Group group;
 	protected Scene scene;
-	protected ArrayList<Canvas> layers;
-	protected ArrayList<GraphicsContext> gcs;
+	protected HashMap<String, Canvas> layers;
+	protected HashMap<String, GraphicsContext> gcs;
 	protected boolean paused;
 
 	protected State() {
@@ -31,13 +32,13 @@ public abstract class State {
 		scene = new Scene(group, Window.SIZE_X, Window.SIZE_Y, Paint.valueOf("#212121"));
 
 		// create layers and extract their gc
-		layers = new ArrayList<>();
-		layers.add(new Canvas(Window.SIZE_X, Window.SIZE_Y));
+		layers = new HashMap<>();
+		layers.put("main", new Canvas(Window.SIZE_X, Window.SIZE_Y));
 
-		gcs = new ArrayList<>();
-		gcs.add(layers.get(0).getGraphicsContext2D());
+		gcs = new HashMap<>();
+		gcs.put("main", layers.get("main").getGraphicsContext2D());
 
-		group.getChildren().add(layers.get(0));
+		group.getChildren().add(layers.get("main"));
 
 		// pause state is false
 		paused = false;
@@ -48,10 +49,14 @@ public abstract class State {
 	 * 
 	 * @param layer
 	 */
-	protected void addLayer(Canvas layer) {
-		layers.add(layer);
-		gcs.add(layer.getGraphicsContext2D());
+	protected void addLayer(String name, double x, double y, double w, double h) {
+		Canvas layer = new Canvas(w, h);
 		group.getChildren().add(layer);
+		layer.relocate(x, y);
+
+		// update hash maps
+		layers.put(name, layer);
+		gcs.put(name, layer.getGraphicsContext2D());
 	}
 
 	/**
@@ -60,21 +65,34 @@ public abstract class State {
 	public void start() {
 		parent = ctrl.getState();
 
-		changeState();
+		active();
 	}
-	
+
 	/**
 	 * stop this scene and return to parental scene
 	 */
 	public void stop() {
-		
-		if(parent != null){
-			parent.changeState();
+		if (parent != null) {
+			parent.active();
 		}
 	}
-	
-	private void changeState(){
-		
+
+	/**
+	 * go back every state until the root state is reached
+	 */
+	public void clean() {
+		State aux = this;
+		while (aux.parent != null) {
+			aux = aux.parent;
+		}
+		aux.active();
+	}
+
+	/**
+	 * internal function to put this state active
+	 */
+	private void active() {
+
 		ctrl.setState(this);
 
 		Window.setScene(scene);

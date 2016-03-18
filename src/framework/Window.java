@@ -1,9 +1,13 @@
 package framework;
 
+import java.io.File;
+
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -16,6 +20,8 @@ public class Window extends Application {
 	public static final Font smallFont = Font.font("Helvetica", FontWeight.NORMAL, 16);
 	public static final Paint[] groundColor = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"),
 			Paint.valueOf("#D4B790"), Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
+
+	public static boolean music = false;
 
 	// make the stage acessible
 	private static Scene scene;
@@ -89,6 +95,13 @@ public class Window extends Application {
 
 		stage.show();
 		gameloop.start();
+
+		if (music) {
+			Media sound = new Media(new File("src/resources/sounds/tristram.mp3").toURI().toString());
+			MediaPlayer mediaPlayer = new MediaPlayer(sound);
+			mediaPlayer.setAutoPlay(true);
+
+		}
 	}
 
 	public static void setScene(Scene scene) {
