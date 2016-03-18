@@ -43,7 +43,7 @@ public class Generator {
 
 		// init pseudorandom generators
 		rand = new Random();
-		rand.setSeed(42);
+		// rand.setSeed(42);
 
 		// init room super array
 		roomTable = new int[ROOM_LIMIT][];

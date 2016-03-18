@@ -7,6 +7,8 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Combo {
+	private static Random random = new Random();
+	
 	private static ArrayList<Combo> combos = new ArrayList<>();
 	private static HashSet<Combo> combosInUse = new HashSet<>();
 
@@ -18,13 +20,14 @@ public class Combo {
 
 		// System.out.println(Arrays.toString(combo));
 	}
-
+	
+	/**
+	 * Random generatedable object
+	 * @param lenT
+	 * @return
+	 */
 	public static Combo generate(int lenT) {
-		Random random = new Random();
-		random.setSeed(42);
-
 		Element[] elements = new Element[lenT];
-
 		elements = Arrays.stream(elements).map(e -> Element.values()[random.nextInt(Element.values().length)]).toArray(Element[]::new);
 
 		return new Combo(elements);
