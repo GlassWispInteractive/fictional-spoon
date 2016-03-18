@@ -5,7 +5,7 @@ import engine.TileFactory;
 import engine.TileSource;
 import entities.Entity;
 import entities.EntityFactory;
-import gen.Generator;
+import gen.LevelBuilder;
 import gen.environment.Ground;
 import gen.environment.Map;
 import javafx.scene.canvas.GraphicsContext;
@@ -42,10 +42,12 @@ public class GameControl extends State {
 		super();
 
 		// generate fresh map
-		map = new Generator(350, 225).newLevel();
+		map = LevelBuilder.newLevel(350, 225);
+		// map = new LevelBuilder(350, 225).genRooms().genMaze().create();
 
 		// add layer
-		addLayer("map", 0, 0, map.getN() * size, map.getM() * size); // big image
+		addLayer("map", 0, 0, map.getN() * size, map.getM() * size); // big
+																		// image
 		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// load factories
