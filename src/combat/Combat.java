@@ -83,7 +83,7 @@ public class Combat extends State {
 		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
 		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
 		layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
-		layers.get(6).relocate(Window.SIZE_X - 100, Window.SIZE_Y * 0.85);
+		layers.get(6).relocate(0, Window.SIZE_Y - 510);
 
 		player.setCombat(this);
 		this.souls = player.getSouls();
@@ -487,10 +487,12 @@ public class Combat extends State {
 			}
 		}
 
-		int rowY = 0;
+		
 		int padding = 10;
 		int width = textWidth + 2 * padding;
 		int height = (int) (1.5 * textHeight);
+		int rowY = (int) (layers.get(ID).getHeight() - height * Math.min(10, comboNames.size()) - padding);
+		int columnX = (int) (layers.get(ID).getWidth() - width - 2*padding);
 
 		for (int j = 0; j < Math.min(10, comboNames.size()); j++) { // only max
 																	// 10 combos
@@ -498,16 +500,13 @@ public class Combat extends State {
 																	// shown
 
 			gc.setStroke(Color.ORANGE);
-			gc.strokeRect(0, rowY, padding + width, height);
+			gc.strokeRect(columnX, rowY, padding + width, height);
 
 			gc.setFill(Color.ORANGE);
-			gc.fillText(comboNames.get(j).toString(), width / 2, rowY + height / 2 + textHeight / 4);
+			gc.fillText(comboNames.get(j).toString(), columnX + width / 2, rowY + height / 2 + textHeight / 4);
 
 			rowY += height;
 		}
-
-		layers.get(ID).relocate(Window.SIZE_X - width - 2 * padding,
-				Window.SIZE_Y - height * Math.min(10, comboNames.size()) - padding);
 	}
 
 	// @SuppressWarnings("unused")
