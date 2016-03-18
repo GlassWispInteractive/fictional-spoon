@@ -226,12 +226,8 @@ public class Combat extends State {
 			blocked = delayTicks - 1;
 
 			Random rnd = new Random();
-			int rndMonsterIndex;
-			if (monster.size() == 1) {
-				rndMonsterIndex = 0;
-			} else {
-				rndMonsterIndex = rnd.nextInt(monster.size() - 1);
-			}
+			int rndMonsterIndex = rnd.nextInt(monster.size());
+			
 			Monster attackMonster = monster.get(rndMonsterIndex);
 
 			attackMonster.doAttack(player);
