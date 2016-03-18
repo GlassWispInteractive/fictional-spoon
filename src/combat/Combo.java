@@ -74,7 +74,6 @@ public class Combo {
 	 * activate the combo for the player
 	 */
 	public void activate() {
-		System.out.println(this.toString());
 		combosInUse.add(this);
 	}
 

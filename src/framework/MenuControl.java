@@ -90,8 +90,9 @@ public class MenuControl extends State {
 			case "Start":
 				GameControl.getControl().start();
 				break;
-			case "Combat":
+			case "Help":
 //				StateControl.getCtrl().setState(StateName.COMBAT);
+				HelpControl.getControl().start();
 				break;
 			case "Exit":
 				System.exit(0);

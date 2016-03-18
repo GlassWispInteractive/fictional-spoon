@@ -61,7 +61,7 @@ public class Window extends Application {
 		StateControl ctrl = StateControl.getCtrl();
 
 		MenuControl menu = MenuControl.getControl();
-		menu.setList(new String[] { "Start", "Wildcard", "Credits", "Exit" });
+		menu.setList(new String[] { "Start", "Help", "Wildcard", "Exit" });
 		menu.start();
 
 		// precompute the game initialization
