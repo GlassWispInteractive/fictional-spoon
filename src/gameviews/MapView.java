@@ -5,14 +5,14 @@ import engine.TileFactory;
 import engine.TileSource;
 import entities.Entity;
 import entities.EntityFactory;
-import framework.State;
 import framework.Window;
 import generation.Ground;
 import generation.LevelBuilder;
 import generation.Map;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class MapView extends State {
+public class MapView extends GameView {
 	// map settings
 	private final int size = 16;
 
@@ -24,17 +24,13 @@ public class MapView extends State {
 	// variables
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
-	private MapView() {
+	private MapView(Canvas mapLayer, Canvas entitiesLayer) {
 		// call the very important state constructor
+		super(entitiesLayer);
 
 		// generate fresh map
 		map = LevelBuilder.newLevel(350, 225);
 		// map = new LevelBuilder(350, 225).genRooms().genMaze().create();
-
-		// add layer
-		addLayer("map", 0, 0, map.getN() * size, map.getM() * size); // big
-																		// image
-		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// load factories
 		tileFac = TileFactory.getTilesFactory();
@@ -64,7 +60,6 @@ public class MapView extends State {
 	 * 
 	 * @param ticks
 	 */
-	@Override
 	public void tick(int ticks) {
 		fac.getPlayer().tick(ticks);
 
@@ -138,38 +133,10 @@ public class MapView extends State {
 	@Override
 	public void render() {
 		// shift pre
-		layers.get("map").relocate(-16 * cameraX, -16 * cameraY);
+		layer.relocate(-16 * cameraX, -16 * cameraY);
 
 		renderEntities();
 
-	}
-
-	/**
-	 * render the map
-	 */
-	@SuppressWarnings("unused")
-	private void renderMap() {
-		// initialize render screen
-		final int ID = 1;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
-
-		for (int x = 0; x < cameraSizeX; x++) {
-			for (int y = 0; y < cameraSizeY; y++) {
-				Ground ground = map.getGround(x + cameraX, y + cameraY);
-
-				if (ground != Ground.WALL) {
-					// render tile
-					drawTile(gc, x, y, ground, map.getTileNumber(x + cameraX, y + cameraY));
-
-				} else {
-					// fallback into colored squares
-					gc.setFill(Window.groundColor[ground.ordinal()]);
-					gc.fillRect(x * size, y * size, size, size);
-
-				}
-			}
-		}
 	}
 
 	/**
@@ -178,8 +145,8 @@ public class MapView extends State {
 	 */
 	private void prerenderMap() {
 		// initialize render screen
-		final GraphicsContext gc = gcs.get("map");
-		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+//		final GraphicsContext gc = gcs.get("map");
+//		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// full rendering of the map
 		for (int x = 0; x < map.getN(); x++) {
@@ -196,8 +163,8 @@ public class MapView extends State {
 	 */
 	private void renderEntities() {
 		// initialize render screen
-		final GraphicsContext gc = gcs.get("entities");
-		gc.clearRect(0, 0, layers.get("entities").getWidth(), layers.get("entities").getHeight());
+//		final GraphicsContext gc = gcs.get("entities");
+		gc.clearRect(0, 0, layer.getWidth(), layer.getHeight());
 
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, cameraX, cameraY);
