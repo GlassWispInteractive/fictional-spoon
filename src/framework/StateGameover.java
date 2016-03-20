@@ -11,22 +11,22 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class GameoverScreen extends State {
+public class StateGameover extends State {
 
-	private static GameoverScreen singleton;
+	private static StateGameover singleton;
 	private int cur;
 	private ArrayList<String> list = new ArrayList<String>(Arrays.asList(new String[] { "Restart", "Credit", "Exit" }));
 
-	public static GameoverScreen getGameoverScreen() {
+	public static StateGameover getGameoverScreen() {
 
 		if (singleton == null) {
-			singleton = new GameoverScreen();
+			singleton = new StateGameover();
 		}
 
 		return singleton;
 	}
 
-	private GameoverScreen() {
+	private StateGameover() {
 
 	}
 
@@ -46,10 +46,10 @@ public class GameoverScreen extends State {
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
 			case "Restart":
-				MenuControl.getControl().start();
+				StateMenu.getControl().start();
 				break;
 			case "Credit":
-				CreditScreen.getCreditScreen().start();
+				StateCredits.getCreditScreen().start();
 				break;
 			case "Exit":
 				System.exit(0);

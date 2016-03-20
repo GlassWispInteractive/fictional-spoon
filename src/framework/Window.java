@@ -1,13 +1,10 @@
 package framework;
 
-import java.io.File;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -66,8 +63,8 @@ public class Window extends Application {
 
 		StateControl ctrl = StateControl.getCtrl();
 
-		MenuControl menu = MenuControl.getControl();
-		menu.setList(new String[] { "Start", "Combos", "Credits", "Help", "Exit" });
+		StateMenu menu = StateMenu.getControl();
+		menu.setList(new String[] { "Start", "Credits", "Help", "Exit" });
 		menu.start();
 
 		// precompute the game initialization
@@ -102,12 +99,7 @@ public class Window extends Application {
 		stage.show();
 		gameloop.start();
 
-		if (music) {
-			Media sound = new Media(new File("src/resources/sounds/tristram.mp3").toURI().toString());
-			MediaPlayer mediaPlayer = new MediaPlayer(sound);
-			mediaPlayer.setAutoPlay(true);
-
-		}
+		
 	}
 
 	public static void setScene(Scene scene) {

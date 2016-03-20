@@ -13,7 +13,7 @@ import entities.Monster;
 import entities.Opponent;
 import entities.Player;
 import framework.EventControl;
-import framework.GameoverScreen;
+import framework.StateGameover;
 import framework.SpookingSouls;
 import framework.State;
 import framework.Window;
@@ -220,7 +220,7 @@ public class Combat extends State {
 		}
 
 		if (player.isDead()) {
-			GameoverScreen.getGameoverScreen().start();
+			StateGameover.getGameoverScreen().start();
 		}
 
 		// let monster attack

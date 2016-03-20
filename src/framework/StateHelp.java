@@ -1,10 +1,10 @@
 package framework;
 
-public class HelpControl extends State {
+public class StateHelp extends State {
 	// singleton
-	private static HelpControl singleton;
+	private static StateHelp singleton;
 
-	private HelpControl() {
+	private StateHelp() {
 		super();
 	}
 	
@@ -13,9 +13,9 @@ public class HelpControl extends State {
 	 * 
 	 * @return
 	 */
-	public static HelpControl getControl() {
+	public static StateHelp getControl() {
 		if (singleton == null) {
-			singleton = new HelpControl();
+			singleton = new StateHelp();
 		}
 		return singleton;
 	}

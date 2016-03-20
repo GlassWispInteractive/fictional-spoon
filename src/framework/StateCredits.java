@@ -5,20 +5,20 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class CreditScreen extends State {
+public class StateCredits extends State {
 
-	private static CreditScreen singleton;
+	private static StateCredits singleton;
 
-	public static CreditScreen getCreditScreen() {
+	public static StateCredits getCreditScreen() {
 
 		if (singleton == null) {
-			singleton = new CreditScreen();
+			singleton = new StateCredits();
 		}
 
 		return singleton;
 	}
 
-	private CreditScreen() {
+	private StateCredits() {
 
 	}
 

@@ -11,9 +11,9 @@ import javafx.scene.text.TextAlignment;
 
 //import static game.State.*;
 
-public class MenuControl extends State {
+public class StateMenu extends State {
 	// singleton
-	private static MenuControl singleton;
+	private static StateMenu singleton;
 
 	private Image logo;
 
@@ -21,15 +21,15 @@ public class MenuControl extends State {
 	private int cur;
 	private boolean started = false;
 
-	public static MenuControl getControl() {
+	public static StateMenu getControl() {
 		if (singleton == null) {
-			singleton = new MenuControl();
+			singleton = new StateMenu();
 		}
 
 		return singleton;
 	}
 
-	private MenuControl() {
+	private StateMenu() {
 		super();
 
 		// init
@@ -60,11 +60,11 @@ public class MenuControl extends State {
 				GameControl.getControl().start();
 				break;
 			case "Credits":
-				CreditScreen.getCreditScreen().start();
+				StateCredits.getCreditScreen().start();
 				break;
 			case "Help":
 				// StateControl.getCtrl().setState(StateName.COMBAT);
-				HelpControl.getControl().start();
+				StateHelp.getControl().start();
 				break;
 			case "Exit":
 				System.exit(0);

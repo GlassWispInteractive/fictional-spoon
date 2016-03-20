@@ -3,15 +3,11 @@ package framework;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class SpookingSouls {
 	private static SpookingSouls singleton;
-
-	// decorated object
-	private Canvas canvas;
 
 	private static ArrayList<double[]> souls;
 	private static int soulWait;
