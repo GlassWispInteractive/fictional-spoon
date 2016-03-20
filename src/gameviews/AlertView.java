@@ -40,7 +40,7 @@ public class AlertView extends GameView {
 		gc.setTextBaseline(VPos.CENTER);
 		gc.setLineWidth(1);
 
-		gc.setFill(Color.DARKGRAY.deriveColor(0, 1.2, 1, 0.6));
+		gc.setFill(Color.RED.deriveColor(0, 1.2, 1, duration / DUR));
 		gc.fillText(alert, layer.getWidth() / 2, 30);
 		System.out.println(layer.getWidth() / 2);
 	}
