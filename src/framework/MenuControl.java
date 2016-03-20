@@ -64,6 +64,7 @@ public class MenuControl extends State {
 				break;
 			case "Credits":
 				CreditScreen.getCreditScreen().start();
+				break;
 			case "Help":
 //				StateControl.getCtrl().setState(StateName.COMBAT);
 				HelpControl.getControl().start();
