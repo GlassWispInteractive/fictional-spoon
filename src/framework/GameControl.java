@@ -84,9 +84,7 @@ public class GameControl extends State {
 	}
 
 	public void updateCamera(int x, int y) {
-		// views[MAP].updateCamera(x, y);
-		// wrong for now
-
+		mp.updateCamera(x, y);
 	}
 
 }
