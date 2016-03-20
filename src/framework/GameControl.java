@@ -2,6 +2,7 @@ package framework;
 
 import entities.EntityFactory;
 import gameviews.AlertView;
+import gameviews.ComboView;
 import gameviews.GameView;
 import gameviews.InfoView;
 import gameviews.MapView;
@@ -23,6 +24,7 @@ public class GameControl extends State {
 	private final int n = Views.values().length;
 
 	private MapView mapView;
+	private ComboView comboView;
 	private InfoView infoView;
 
 	private AlertView alertView;
@@ -65,6 +67,10 @@ public class GameControl extends State {
 		alertView = new AlertView(layers.get("alert"));
 		alertView.push("Walk with WASD");
 		views[Views.ALERT.ordinal()] = alertView;
+		
+		addLayer("combo", 0, 0, Window.SIZE_X, Window.SIZE_Y);
+		comboView = new ComboView(layers.get("combo"));
+		views[Views.COMBO.ordinal()] = comboView;
 	}
 
 	/**
