@@ -224,7 +224,7 @@ public class Combat extends State {
 			if (monster.size() == 1) {
 				rndMonsterIndex = 0;
 			} else {
-				rndMonsterIndex = rnd.nextInt(monster.size() - 1);
+				rndMonsterIndex = rnd.nextInt(monster.size());
 			}
 			Monster attackMonster = monster.get(rndMonsterIndex);
 

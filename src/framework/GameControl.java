@@ -19,6 +19,7 @@ public class GameControl extends State {
 
 	private GameView[] views;
 	private final int n = Views.values().length;
+	private AlertView alertView;
 	private MapView mp;
 
 	/**
@@ -45,9 +46,9 @@ public class GameControl extends State {
 		views[Views.MAP.ordinal()] = mp;
 		
 		addLayer("alert", 0, 300, Window.SIZE_X, 100);
-		AlertView alert = new AlertView(layers.get("alert"));
-		alert.push("test this");
-		views[Views.ALERT.ordinal()] = alert;
+		alertView = new AlertView(layers.get("alert"));
+		alertView.push("Walk with WASD");
+		views[Views.ALERT.ordinal()] = alertView;
 		
 
 	}
@@ -87,6 +88,10 @@ public class GameControl extends State {
 
 	public void updateCamera(int x, int y) {
 		mp.updateCamera(x, y);
+	}
+
+	public void alert(String string) {
+		alertView.push(string);
 	}
 
 }

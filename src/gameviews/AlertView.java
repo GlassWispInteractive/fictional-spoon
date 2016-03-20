@@ -12,7 +12,7 @@ import javafx.scene.text.TextAlignment;
 public class AlertView extends GameView {
 	// constants
 	
-	private final double REPETITIONS = 4, SPEED = 25, DURATION = Math.PI * SPEED * REPETITIONS;
+	private final double REPETITIONS = 2, SPEED = 25, DURATION = Math.PI * SPEED * REPETITIONS;
 
 	// class members
 	private Queue<String> alerts;
@@ -48,7 +48,7 @@ public class AlertView extends GameView {
 			return;
 		}
 
-		gc.setFont(Window.bigFont);
+		gc.setFont(Window.hugeFont);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);

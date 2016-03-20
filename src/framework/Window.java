@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 public class Window extends Application {
 	// public window wide settings
 	public static final int SIZE_X = 1200, SIZE_Y = 800;
+	public static final Font hugeFont = Font.font("Helvetica", FontWeight.BOLD, 40);
 	public static final Font bigFont = Font.font("Helvetica", FontWeight.BOLD, 24);
 	public static final Font smallFont = Font.font("Helvetica", FontWeight.NORMAL, 16);
 	public static final Paint[] groundColor = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"),
