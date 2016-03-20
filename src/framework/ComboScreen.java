@@ -51,7 +51,7 @@ public class ComboScreen extends State {
     private void renderTextboxes(GraphicsContext gc) {
 
 	// font settings
-	gc.setFont(Window.bigFont);
+	gc.setFont(Window.normalFont);
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.BASELINE);
 	// gc.setLineWidth(1);
@@ -75,9 +75,9 @@ public class ComboScreen extends State {
 	for (int i = 0; i < comboNames.size(); i++) {
 	    
 	    if (i == 0) {
-		gc.setFont(Window.hugeFont);
-	    } else {
 		gc.setFont(Window.bigFont);
+	    } else {
+		gc.setFont(Window.normalFont);
 	    }
 	    if (textWidth < (int) fontLoader.computeStringWidth(
 		    comboNames.get(i).toString(), gc.getFont())) {
@@ -98,10 +98,10 @@ public class ComboScreen extends State {
 	for (int j = 0; j < Math.min(10, comboNames.size()); j++) {
 
 	    if (j == 0) {
-		gc.setFont(Window.hugeFont);
+		gc.setFont(Window.bigFont);
 		
 	    } else {
-		gc.setFont(Window.bigFont);
+		gc.setFont(Window.normalFont);
 	    }
 
 	    gc.setFill(Color.ORANGE);

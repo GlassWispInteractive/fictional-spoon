@@ -64,6 +64,9 @@ public class MenuControl extends State {
 			case "Combos":
 				ComboScreen.getComboScreen().start();
 				break;
+			case "Credit":
+				//TODO Credit
+				break;
 			case "Exit":
 				System.exit(0);
 				break;
@@ -91,7 +94,7 @@ public class MenuControl extends State {
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
-		gc.setFont(Window.bigFont);
+		gc.setFont(Window.normalFont);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
