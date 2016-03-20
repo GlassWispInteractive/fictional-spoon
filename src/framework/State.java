@@ -48,11 +48,20 @@ public abstract class State {
 	}
 
 	/**
-	 * add a new layer to this scene
+	 * add a new layer to the root
 	 * 
 	 * @param layer
 	 */
 	protected void addLayer(String name, double x, double y, double w, double h) {
+		addLayer(this.group, name, x, y, w, h);
+	}
+	
+	/**
+	 * add a new layer to some group
+	 * 
+	 * @param layer
+	 */
+	protected void addLayer(Group group, String name, double x, double y, double w, double h) {
 		Canvas layer = new Canvas(w, h);
 		group.getChildren().add(layer);
 		layer.relocate(x, y);

@@ -1,5 +1,8 @@
 package framework;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import entities.EntityFactory;
 import gameviews.AlertView;
 import gameviews.ComboView;
@@ -17,11 +20,10 @@ public class GameControl extends State {
 
 	// class components
 	protected enum Views {
-		ALERT, COMBAT, COMBO, INFO, MAP, OBJECTIVE
+		COMBAT, COMBO, MAP
 	};
 
-	private GameView[] views;
-	private final int n = Views.values().length;
+	private Set<GameView> collection;
 
 	private MapView mapView;
 	private ComboView comboView;
@@ -52,25 +54,26 @@ public class GameControl extends State {
 		// call the very important state constructor
 		super();
 
-		views = new GameView[n];
+		
+		collection = new HashSet<GameView>();
 
 		addLayer("map", 0, 0, 350 * size, 225 * size);
 		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
 		mapView = new MapView(layers.get("map"), layers.get("entities"));
-		views[Views.MAP.ordinal()] = mapView;
+		collection.add(mapView);
 
 		addLayer("info", 0, Window.SIZE_Y - 50, Window.SIZE_X, 50);
 		infoView = new InfoView(layers.get("info"));
-		views[Views.INFO.ordinal()] = infoView;
-
+		collection.add(infoView);
+		
 		addLayer("alert", 0, 300, Window.SIZE_X, 100);
 		alertView = new AlertView(layers.get("alert"));
 		alertView.push("Walk with WASD");
-		views[Views.ALERT.ordinal()] = alertView;
+		collection.add(alertView);
 		
 		addLayer("combo", 0, 0, Window.SIZE_X, Window.SIZE_Y);
 		comboView = new ComboView(layers.get("combo"));
-		views[Views.COMBO.ordinal()] = comboView;
+		collection.add(comboView);
 	}
 
 	/**
@@ -88,20 +91,15 @@ public class GameControl extends State {
 	 */
 	@Override
 	public void tick(int ticks) {
-		for (int i = 0; i < n; i++) {
-			if (views[i] == null)
-				continue;
-
-			views[i].tick(ticks);
+		for (GameView view : collection) {
+			view.tick(ticks);
 		}
 	}
 
 	@Override
 	protected void render() {
-		for (int i = 0; i < n; i++) {
-			if (views[i] == null)
-				continue;
-			views[i].render();
+		for (GameView view : collection) {
+			view.render();
 		}
 	}
 
