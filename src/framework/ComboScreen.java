@@ -1,7 +1,6 @@
 package framework;
 
 import java.util.ArrayList;
-import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 
 import combat.Combo;
@@ -50,63 +49,95 @@ public class ComboScreen extends State {
     private void renderTextboxes(GraphicsContext gc) {
 
 	// font settings
-	gc.setFont(Window.normalFont);
+	gc.setFont(Window.NORMAL_FONT);
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.BASELINE);
 	// gc.setLineWidth(1);
-
-	ArrayList<String> comboNames = new ArrayList<String>();
-	comboNames.add("Combos:");
-	for (Combo combo : Combo.getCombosInUse()) {
-	    comboNames.add(combo.toString());
-	}
-	if (Combo.getCombosInUse().size() == 0) {
-	    comboNames.clear();
-	    comboNames.add("No Combos");
-	}
-
-	FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
-	int textWidth = (int) fontLoader.computeStringWidth("", gc.getFont());
-	int textHeight = (int) fontLoader.getFontMetrics(gc.getFont())
-		.getLineHeight();
-
-	// calc textLength
-	for (int i = 0; i < comboNames.size(); i++) {
-	    
-	    if (i == 0) {
-		gc.setFont(Window.bigFont);
-	    } else {
-		gc.setFont(Window.normalFont);
-	    }
-	    if (textWidth < (int) fontLoader.computeStringWidth(
-		    comboNames.get(i).toString(), gc.getFont())) {
-		textWidth = (int) fontLoader.computeStringWidth(
-			comboNames.get(i).toString(), gc.getFont());
-	    }
-	}
-
-	int padding = 10;
-	int width = textWidth + 2 * padding;
-	int height = (int) (1.5 * textHeight);
-	int rowY = (int) (Window.SIZE_Y * 0.2);
-	int columnX = (int) (Window.SIZE_X /2 - width / 2 -  padding);
 	
-	gc.setStroke(Color.ORANGE);
-	gc.strokeLine(0, rowY + padding, Window.SIZE_X, rowY + padding);
 
-	for (int j = 0; j < Math.min(10, comboNames.size()); j++) {
-
-	    if (j == 0) {
-		gc.setFont(Window.bigFont);
-		
-	    } else {
-		gc.setFont(Window.normalFont);
-	    }
-
-	    gc.setFill(Color.ORANGE);
-	    gc.fillText(comboNames.get(j).toString(), columnX + width / 2, rowY);
-
-	    rowY += height;
+	String[][] comboNames = splitComboNames();
+	
+	int textHeight = (int) Toolkit.getToolkit().getFontLoader().getFontMetrics(gc.getFont())
+		.getLineHeight();
+	int padding = 10;
+	int width = Window.SIZE_X / Math.max(1, comboNames.length);
+	int height = (int) (1.5 * textHeight);
+	int startY = 50;
+	int rowY;
+	int columnX = 0;
+	
+	
+	//draw title
+	gc.setFill(Color.RED);
+	gc.setStroke(Color.RED);
+	gc.setFont(Window.BIG_FONT);
+	if(comboNames.length == 0) {
+	    gc.fillText("No Combos", Window.SIZE_X / 2, startY);
+	} else {
+	    gc.fillText("Combos:", Window.SIZE_X / 2, 50);
 	}
+	gc.strokeLine(0, startY + padding, Window.SIZE_X, startY + padding);
+
+
+	//draw all combos in use
+	for(int i = 0; i < comboNames.length; i++) {
+	   	    
+	    rowY = startY + height + padding;
+	    
+        	for (int j = 0; j < comboNames[i].length; j++) {
+                
+        	    gc.setFill(Color.DARKRED);
+        	    if(comboNames[i][j] != null) {
+        		gc.fillText(comboNames[i][j].toString(), columnX + width / 2, rowY, width - 2*padding);
+        	    }
+        
+        	    rowY += height;
+        	}
+        	
+        	columnX += width;
+	}
+    }
+    
+    private String[][] splitComboNames() {
+	
+	String[][] array;
+	
+	ArrayList<Combo> combosInUse = new ArrayList<Combo>(Combo.getCombosInUse());
+		
+	float rowNumber = 0f;
+	int columnNumber;
+	
+	if(combosInUse.size() == 0) {
+	    rowNumber = 0;
+	} else if(combosInUse.size() <= 15) {
+	    rowNumber = 1;
+	} else if(combosInUse.size() <= 30) {
+	    rowNumber = 2;
+	} else if(combosInUse.size() <= 45) {
+	    rowNumber = 3;
+	} else if(combosInUse.size() <= 60) {
+	    rowNumber = 4;
+	} else {
+	    rowNumber = 5;
+	}
+	
+	columnNumber = (int) Math.ceil(combosInUse.size() / rowNumber);
+		
+	
+	array = new String[(int) rowNumber][columnNumber];
+	
+	for(int i = 0; i < rowNumber;  i++) {
+	    for(int j = 0; j < columnNumber; j++) {
+		
+		if(combosInUse.size() > 0) {
+		    array[i][j] = combosInUse.get(combosInUse.size() -1).toString();
+		    combosInUse.remove(combosInUse.size() -1);
+		} else {
+		    break;
+		}
+	    }
+	}
+	
+	return array;
     }
 }
