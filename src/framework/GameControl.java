@@ -44,7 +44,7 @@ public class GameControl extends State {
 		mp = new MapView(layers.get("map"), layers.get("entities"));
 		views[Views.MAP.ordinal()] = mp;
 		
-		addLayer("alert", 300, 300, Window.SIZE_X, 100);
+		addLayer("alert", 0, 300, Window.SIZE_X, 100);
 		AlertView alert = new AlertView(layers.get("alert"));
 		alert.push("test this");
 		views[Views.ALERT.ordinal()] = alert;
