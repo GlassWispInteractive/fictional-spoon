@@ -5,6 +5,6 @@ package framework;
  * @author danny
  *
  */
-public class SoundControl {
+class SoundControl {
 
 }

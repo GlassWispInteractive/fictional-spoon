@@ -39,7 +39,7 @@ import java.util.List;
  *            element type
  * @since 3.2
  */
-public class DisjointSet<T> {
+class DisjointSet<T> {
 	/**
 	 * A node in the disjoint set forest.  Each tree in the forest is
 	 * a disjoint set, where the root of the tree is the set representative.
