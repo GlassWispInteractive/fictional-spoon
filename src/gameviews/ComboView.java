@@ -26,17 +26,10 @@ public class ComboView extends GameView {
 
 	@Override
 	public void render() {
-
 		// start from clean screen
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
-
-//		renderBackgroundSouls(gc);
-
-		renderTextboxes(gc);
-
-	}
-
-	private void renderTextboxes(GraphicsContext gc) {
+		gc.setFill(Color.WHITE);
+		gc.fillRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// font settings
 		gc.setFont(Window.NORMAL_FONT);

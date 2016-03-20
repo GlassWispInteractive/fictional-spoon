@@ -28,11 +28,10 @@ public class MapView extends GameView {
 	public MapView(Canvas mapLayer, Canvas entitiesLayer) {
 		// call the very important state constructor
 		super(entitiesLayer);
-		bg = mapLayer;
+		bg = new Canvas(350 * size, 225 * size);
 		
 		// generate fresh map
 		map = LevelBuilder.newLevel(350, 225);
-		// map = new LevelBuilder(350, 225).genRooms().genMaze().create();
 
 		// load factories
 		tileFac = TileFactory.getTilesFactory();
@@ -135,7 +134,7 @@ public class MapView extends GameView {
 	@Override
 	public void render() {
 		// shift prerendered map
-		bg.relocate(-16 * cameraX, -16 * cameraY);
+//		bg.relocate(-16 * cameraX, -16 * cameraY);
 
 		renderEntities();
 
@@ -147,9 +146,8 @@ public class MapView extends GameView {
 	 */
 	private void prerenderMap() {
 		// initialize render screen
-//		final GraphicsContext gc = gcs.get("map");
-//		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
-		GraphicsContext gc = bg.getGraphicsContext2D();
+		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+//		GraphicsContext gc = .getGraphicsContext2D();
 
 		// full rendering of the map
 		for (int x = 0; x < map.getN(); x++) {

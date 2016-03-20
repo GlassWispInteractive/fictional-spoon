@@ -6,6 +6,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 
 public abstract class State {
@@ -22,7 +23,6 @@ public abstract class State {
 	protected HashMap<String, Canvas> layers;
 	protected HashMap<String, GraphicsContext> gcs;
 	protected boolean paused;
-	
 
 	protected State() {
 		// get control object
@@ -43,8 +43,7 @@ public abstract class State {
 
 		// pause state is false
 		paused = false;
-		
-		
+
 	}
 
 	/**
@@ -53,17 +52,23 @@ public abstract class State {
 	 * @param layer
 	 */
 	protected void addLayer(String name, double x, double y, double w, double h) {
-		addLayer(this.group, name, x, y, w, h);
+		Canvas layer = new Canvas(w, h);
+		group.getChildren().add(layer);
+		layer.relocate(x, y);
+
+		// update hash maps
+		layers.put(name, layer);
+		gcs.put(name, layer.getGraphicsContext2D());
 	}
-	
+
 	/**
 	 * add a new layer to some group
 	 * 
 	 * @param layer
 	 */
-	protected void addLayer(Group group, String name, double x, double y, double w, double h) {
+	protected void stackLayer(StackPane pane, String name, double x, double y, double w, double h) {
 		Canvas layer = new Canvas(w, h);
-		group.getChildren().add(layer);
+		pane.getChildren().add(layer);
 		layer.relocate(x, y);
 
 		// update hash maps
@@ -111,8 +116,7 @@ public abstract class State {
 	}
 
 	protected abstract void tick(int ticks);
- 
+
 	protected abstract void render();
-	
-	
+
 }

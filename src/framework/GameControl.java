@@ -10,11 +10,10 @@ import gameviews.GameView;
 import gameviews.InfoView;
 import gameviews.MapView;
 import generation.Map;
+import javafx.scene.Group;
+import javafx.scene.layout.StackPane;
 
 public class GameControl extends State {
-	// map settings
-	private final int size = 16;
-
 	// singleton
 	private static GameControl singleton;
 
@@ -53,28 +52,41 @@ public class GameControl extends State {
 	private GameControl() {
 		// call the very important state constructor
 		super();
-
+		
+//		add new subgroup
+		StackPane center = new StackPane();
+		
+		center.setPrefWidth(Window.SIZE_X);
+		center.minHeight(Window.SIZE_Y - 100);
+		center.maxHeight(Window.SIZE_Y - 100);
+		group.getChildren().add(center);
+		center.relocate(0, 50);
 		
 		collection = new HashSet<GameView>();
+		
+		stackLayer(center, "combo", 0, 0, Window.SIZE_X, Window.SIZE_Y - 100);
+		comboView = new ComboView(layers.get("combo"));
+		collection.add(comboView);
 
-		addLayer("map", 0, 0, 350 * size, 225 * size);
-		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
-		mapView = new MapView(layers.get("map"), layers.get("entities"));
-		collection.add(mapView);
-
-		addLayer("info", 0, Window.SIZE_Y - 50, Window.SIZE_X, 50);
-		infoView = new InfoView(layers.get("info"));
-		collection.add(infoView);
+//		addLayer("info", 0, Window.SIZE_Y - 50, Window.SIZE_X, 50);
+//		infoView = new InfoView(layers.get("info"));
+//		collection.add(infoView);
 		
 		addLayer("alert", 0, 300, Window.SIZE_X, 100);
 		alertView = new AlertView(layers.get("alert"));
 		alertView.push("Walk with WASD");
 		collection.add(alertView);
 		
-		addLayer("combo", 0, 0, Window.SIZE_X, Window.SIZE_Y);
-		comboView = new ComboView(layers.get("combo"));
-		collection.add(comboView);
+		
+		
+//		final int size = 16;
+//		stackLayer(center, "map", 0, 0, 350 * size, 225 * size);
+//		stackLayer(center, "entities", 0, 0, Window.SIZE_X, Window.SIZE_Y - 100);
+//		mapView = new MapView(layers.get("map"), layers.get("entities"));
+//		collection.add(mapView);
 	}
+	
+	
 
 	/**
 	 * @return the map
