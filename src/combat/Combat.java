@@ -14,6 +14,7 @@ import entities.Opponent;
 import entities.Player;
 import framework.EventControl;
 import framework.GameoverScreen;
+import framework.SpookingSouls;
 import framework.State;
 import framework.Window;
 import javafx.geometry.VPos;
@@ -28,7 +29,7 @@ public class Combat extends State {
 	private ArrayList<Monster> monster;
 	private Opponent opponent = null; // null = only monster
 	private Player player = (Player) EntityFactory.getFactory().getPlayer();
-	
+
 	// class member
 	private int curSoul, curFocus;
 	@SuppressWarnings("unused")
@@ -69,22 +70,21 @@ public class Combat extends State {
 		// inits
 		info = "Use 1, 2, 3 or 4 to attack";
 		streak = new ArrayList<>();
-		
+
 		addLayer("elems", 0, Window.SIZE_Y * 0.65, Window.SIZE_X, 300);
 		addLayer("monster", 0, 0, Window.SIZE_X, 300);
 		addLayer("bar", 0, Window.SIZE_Y * 0.4, Window.SIZE_X, 100);
 		addLayer("info", 0, Window.SIZE_Y * 0.3, Window.SIZE_X, 100);
 		addLayer("info2", 0, Window.SIZE_Y * 0.85, Window.SIZE_X, 100);
 		addLayer("combo", 0, Window.SIZE_Y - 510, Window.SIZE_X, 510);
-		
 
 		// put up design
-//		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
-//		layers.get(2).relocate(0, 0);
-//		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
-//		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
-//		layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
-//		layers.get(6).relocate(0, Window.SIZE_Y - 510);
+		// layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
+		// layers.get(2).relocate(0, 0);
+		// layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
+		// layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
+		// layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
+		// layers.get(6).relocate(0, Window.SIZE_Y - 510);
 
 		player.setCombat(this);
 		this.souls = player.getSouls();
@@ -95,9 +95,8 @@ public class Combat extends State {
 
 	@Override
 	public void tick(int ticks) {
-	    
-	    	computeBackgroundSouls(ticks);
-	    
+		SpookingSouls.getObject().tick(ticks);
+
 		status = Math.min(1, status + ticks / 40.0);
 		// System.out.println(status);
 
@@ -230,7 +229,7 @@ public class Combat extends State {
 
 			Random rnd = new Random();
 			int rndMonsterIndex = rnd.nextInt(monster.size());
-			
+
 			Monster attackMonster = monster.get(rndMonsterIndex);
 
 			attackMonster.doAttack(player);
@@ -324,8 +323,8 @@ public class Combat extends State {
 		// start from clean screen
 		GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
-		
-		renderBackgroundSouls(gc);
+
+		SpookingSouls.getObject().render(gc);
 
 		renderElements();
 		renderMonsters();
@@ -482,19 +481,17 @@ public class Combat extends State {
 			}
 		}
 
-		
 		int padding = 10;
 		int width = textWidth + 2 * padding;
 		int height = (int) (1.5 * textHeight);
 		int rowY = (int) (layers.get("combo").getHeight() - height * Math.min(9, comboNames.size()) - padding);
-		int columnX = (int) (layers.get("combo").getWidth() - width - 2*padding);
+		int columnX = (int) (layers.get("combo").getWidth() - width - 2 * padding);
 
 		for (int j = 0; j < Math.min(9, comboNames.size()); j++) { // only max
 																	// 10 combos
 																	// can be
 																	// shown
 
-		    
 			gc.setStroke(Color.ORANGE);
 			gc.strokeRect(columnX, rowY, padding + width, height);
 

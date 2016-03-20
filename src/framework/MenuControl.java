@@ -12,7 +12,6 @@ import javafx.scene.text.TextAlignment;
 //import static game.State.*;
 
 public class MenuControl extends State {
-	
 	// singleton
 	private static MenuControl singleton;
 
@@ -21,11 +20,12 @@ public class MenuControl extends State {
 	private ArrayList<String> list;
 	private int cur;
 	private boolean started = false;
-	
+
 	public static MenuControl getControl() {
 		if (singleton == null) {
 			singleton = new MenuControl();
 		}
+
 		return singleton;
 	}
 
@@ -45,7 +45,7 @@ public class MenuControl extends State {
 		EventControl e = EventControl.getEvents();
 
 		// soul computation
-		computeBackgroundSouls(ticks);
+		SpookingSouls.getObject().tick(ticks);
 
 		// event handling
 		if (e.isUp())
@@ -59,14 +59,11 @@ public class MenuControl extends State {
 			case "Start":
 				GameControl.getControl().start();
 				break;
-			case "Combos":
-				ComboScreen.getComboScreen().start();
-				break;
 			case "Credits":
 				CreditScreen.getCreditScreen().start();
 				break;
 			case "Help":
-//				StateControl.getCtrl().setState(StateName.COMBAT);
+				// StateControl.getCtrl().setState(StateName.COMBAT);
 				HelpControl.getControl().start();
 				break;
 			case "Exit":
@@ -88,9 +85,9 @@ public class MenuControl extends State {
 
 		// canvas settings
 		double w = gc.getCanvas().getWidth();
-		
-		//render backGround souls
-		renderBackgroundSouls(gc);
+
+		// render backGround souls
+		SpookingSouls.getObject().render(gc);
 
 		// render logo image
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
