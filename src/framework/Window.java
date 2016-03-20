@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 public class Window extends Application {
 	// public window wide settings
 	public static final int SIZE_X = 1200, SIZE_Y = 800;
+	public static final Font hugeFont = Font.font("Helvetica", FontWeight.BOLD, 32);
 	public static final Font bigFont = Font.font("Helvetica", FontWeight.BOLD, 24);
 	public static final Font smallFont = Font.font("Helvetica", FontWeight.NORMAL, 16);
 	public static final Paint[] groundColor = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"),
@@ -55,7 +56,7 @@ public class Window extends Application {
 		StateControl ctrl = StateControl.getCtrl();
 
 		MenuControl menu = MenuControl.getControl();
-		menu.setList(new String[] { "Start", "Wildcard", "Credits", "Exit" });
+		menu.setList(new String[] { "Start", "Combos", "Credits", "Exit" });
 		menu.start();
 
 		// precompute the game initialization

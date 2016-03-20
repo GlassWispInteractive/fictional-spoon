@@ -2,7 +2,6 @@ package framework;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,14 +15,11 @@ public class MenuControl extends State {
 	
 	// singleton
 	private static MenuControl singleton;
-	
-	private Random rand;
+
 	private Image logo;
 
 	private ArrayList<String> list;
 	private int cur;
-	private ArrayList<double[]> souls;
-	private int soulWait;
 	private boolean started = false;
 	
 	public static MenuControl getControl() {
@@ -38,18 +34,11 @@ public class MenuControl extends State {
 
 		// init
 		list = new ArrayList<>();
-		rand = new Random();
 		cur = 0;
 
 		logo = new Image("/resources/logo.png");
 
-		souls = new ArrayList<>();
-		for (int i = 0; i < 25; i++) {
-			int x = rand.nextInt(Window.SIZE_X - 200), y = rand.nextInt(Window.SIZE_Y - 200);
-			souls.add(new double[] { 100 + x, 100 + y });
-		}
-
-		// souls.add(new int[] { 20, 50 });
+		initBackgroundSouls();
 	}
 
 	public void tick(int ticks) {
@@ -58,25 +47,7 @@ public class MenuControl extends State {
 		EventControl e = EventControl.getEvents();
 
 		// soul computation
-		if (soulWait > 0) {
-			soulWait -= ticks;
-		} else {
-			soulWait = 15;
-
-			for (double[] soul : souls) {
-				soul[0] += (-1) + rand.nextInt(3);
-				if (soul[0] < 50)
-					soul[0] = 50;
-				if (soul[0] > Window.SIZE_X - 50)
-					soul[0] = Window.SIZE_X - 50;
-
-				soul[1] += (-1) + rand.nextInt(3);
-				if (soul[1] < 50)
-					soul[1] = 50;
-				if (soul[1] > Window.SIZE_Y - 50)
-					soul[1] = Window.SIZE_Y - 50;
-			}
-		}
+		computeBackgroundSouls(ticks);
 
 		// event handling
 		if (e.isUp())
@@ -90,8 +61,8 @@ public class MenuControl extends State {
 			case "Start":
 				GameControl.getControl().start();
 				break;
-			case "Combat":
-//				StateControl.getCtrl().setState(StateName.COMBAT);
+			case "Combos":
+				ComboScreen.getComboScreen().start();
 				break;
 			case "Exit":
 				System.exit(0);
@@ -112,12 +83,9 @@ public class MenuControl extends State {
 
 		// canvas settings
 		double w = gc.getCanvas().getWidth();
-
-		// render background souls
-		for (double[] soul : souls) {
-			gc.setFill(Color.DARKRED.deriveColor(2, 1.2, 1, 0.3));
-			gc.fillOval(soul[0], soul[1], 25, 25);
-		}
+		
+		//render backGround souls
+		renderBackgroundSouls(gc);
 
 		// render logo image
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
