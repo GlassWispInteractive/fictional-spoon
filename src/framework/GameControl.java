@@ -2,6 +2,7 @@ package framework;
 
 import gameviews.AlertView;
 import gameviews.GameView;
+import gameviews.InfoView;
 import gameviews.MapView;
 import generation.Map;
 
@@ -19,8 +20,11 @@ public class GameControl extends State {
 
 	private GameView[] views;
 	private final int n = Views.values().length;
+
+	private MapView mapView;
+	private InfoView infoView;
+
 	private AlertView alertView;
-	private MapView mp;
 
 	/**
 	 * static method to get the singleton class object
@@ -42,14 +46,17 @@ public class GameControl extends State {
 
 		addLayer("map", 0, 0, 350 * size, 225 * size);
 		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
-		mp = new MapView(layers.get("map"), layers.get("entities"));
-		views[Views.MAP.ordinal()] = mp;
-		
+		mapView = new MapView(layers.get("map"), layers.get("entities"));
+		views[Views.MAP.ordinal()] = mapView;
+
+		addLayer("info", 0, Window.SIZE_Y - 50, Window.SIZE_X, 50);
+		infoView = new InfoView(layers.get("info"));
+		views[Views.INFO.ordinal()] = infoView;
+
 		addLayer("alert", 0, 300, Window.SIZE_X, 100);
 		alertView = new AlertView(layers.get("alert"));
 		alertView.push("Walk with WASD");
 		views[Views.ALERT.ordinal()] = alertView;
-		
 
 	}
 
@@ -58,7 +65,7 @@ public class GameControl extends State {
 	 */
 	public Map getMap() {
 		// return map;
-		return mp.getMap();
+		return mapView.getMap();
 	}
 
 	/**
@@ -87,7 +94,7 @@ public class GameControl extends State {
 	}
 
 	public void updateCamera(int x, int y) {
-		mp.updateCamera(x, y);
+		mapView.updateCamera(x, y);
 	}
 
 	public void alert(String string) {

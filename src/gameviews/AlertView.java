@@ -11,7 +11,7 @@ import javafx.scene.text.TextAlignment;
 
 public class AlertView extends GameView {
 	// constants
-	
+
 	private final double REPETITIONS = 2, SPEED = 25, DURATION = Math.PI * SPEED * REPETITIONS;
 
 	// class members
@@ -21,8 +21,15 @@ public class AlertView extends GameView {
 	private double alpha;
 
 	public AlertView(Canvas layer) {
+		// inits
 		super(layer);
 		alerts = new LinkedList<>();
+
+		// font settings to be set only once
+		gc.setFont(Window.hugeFont);
+		gc.setTextAlign(TextAlignment.CENTER);
+		gc.setTextBaseline(VPos.CENTER);
+		gc.setLineWidth(1);
 	}
 
 	@Override
@@ -48,20 +55,13 @@ public class AlertView extends GameView {
 			return;
 		}
 
-		gc.setFont(Window.hugeFont);
-
-		gc.setTextAlign(TextAlignment.CENTER);
-		gc.setTextBaseline(VPos.CENTER);
-		gc.setLineWidth(1);
-
-		
+		// render text with alpha opcity
 		gc.setFill(Color.RED.deriveColor(0, 1.2, 1, alpha));
-		gc.fillText(alert, layer.getWidth() / 2, 30);
+		gc.fillText(alert, layer.getWidth() / 2, 50);
 	}
 
-	public boolean push(String alert) {
+	public void push(String alert) {
 		alerts.add(alert);
-		return true;
 	}
 
 }
