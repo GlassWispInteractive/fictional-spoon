@@ -95,6 +95,9 @@ public class Combat extends State {
 
 	@Override
 	public void tick(int ticks) {
+	    
+	    	computeBackgroundSouls(ticks);
+	    
 		status = Math.min(1, status + ticks / 40.0);
 		// System.out.println(status);
 
@@ -321,6 +324,8 @@ public class Combat extends State {
 		// start from clean screen
 		GraphicsContext gc = gcs.get(0);
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+		
+		renderBackgroundSouls(gc);
 
 		renderElements();
 		renderMonsters();

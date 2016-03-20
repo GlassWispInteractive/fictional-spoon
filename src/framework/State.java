@@ -25,8 +25,8 @@ public abstract class State {
 	protected ArrayList<GraphicsContext> gcs;
 	protected boolean paused;
 	
-	private ArrayList<double[]> souls;
-	private int soulWait;
+	private static ArrayList<double[]> souls;
+	private static int soulWait;
 	private Random rand = new Random();
 
 	protected State() {
@@ -48,9 +48,14 @@ public abstract class State {
 
 		// pause state is false
 		paused = false;
+		
+		if(souls == null) {
+		    initBackgroundSouls();
+		}
+		
 	}
 
-	protected void initBackgroundSouls() {
+	private void initBackgroundSouls() {
 		//background souls
 		souls = new ArrayList<>();
 		for (int i = 0; i < 25; i++) {

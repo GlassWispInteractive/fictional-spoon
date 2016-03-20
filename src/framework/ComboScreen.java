@@ -25,7 +25,6 @@ public class ComboScreen extends State {
 
     private ComboScreen() {
 
-	initBackgroundSouls();
     }
 
     @Override

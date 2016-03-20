@@ -37,8 +37,6 @@ public class MenuControl extends State {
 		cur = 0;
 
 		logo = new Image("/resources/logo.png");
-
-		initBackgroundSouls();
 	}
 
 	public void tick(int ticks) {
@@ -64,8 +62,8 @@ public class MenuControl extends State {
 			case "Combos":
 				ComboScreen.getComboScreen().start();
 				break;
-			case "Credit":
-				//TODO Credit
+			case "Credits":
+				CreditScreen.getCreditScreen().start();
 				break;
 			case "Exit":
 				System.exit(0);

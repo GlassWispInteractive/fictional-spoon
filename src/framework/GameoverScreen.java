@@ -27,8 +27,7 @@ public class GameoverScreen extends State{
     }
 
     private GameoverScreen() {
-
-	initBackgroundSouls();
+	
     }
 
     @Override
@@ -51,7 +50,7 @@ public class GameoverScreen extends State{
 		    	MenuControl.getControl().start();
 			break;
 		case "Credit":
-			//TODO Credit
+		   	CreditScreen.getCreditScreen().start();
 			break;
 		case "Exit":
 			System.exit(0);
