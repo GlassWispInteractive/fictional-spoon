@@ -37,6 +37,13 @@ public class GameControl extends State {
 		}
 		return singleton;
 	}
+	
+	public static void resetGame(){
+	    //reset EntityFactory
+	    EntityFactory.resetGame();	    
+	    
+	    singleton = new GameControl();
+	}
 
 	private GameControl() {
 		// call the very important state constructor
@@ -48,7 +55,7 @@ public class GameControl extends State {
 		// add layer
 		addLayer(new Canvas(map.getN() * size, map.getM() * size)); // big image
 		addLayer(new Canvas(Window.SIZE_X, Window.SIZE_Y));
-
+		
 		// load factories
 		tileFac = TileFactory.getTilesFactory();
 		fac = EntityFactory.getFactory();
@@ -61,7 +68,7 @@ public class GameControl extends State {
 		prerenderMap();
 
 		// set view
-		Entity player = EntityFactory.getFactory().getPlayer();
+		Entity player = fac.getPlayer();
 		initCamera(player.getX(), player.getY());
 	}
 

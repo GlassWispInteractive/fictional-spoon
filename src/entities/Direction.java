@@ -12,7 +12,7 @@ public enum Direction {
     private final int x;
     private final int y;
     private Random rnd = new Random();
-    private Map map = GameControl.getControl().getMap();
+    private Map map;
 
     private Direction(int x, int y) {
         this.x = x;
@@ -32,6 +32,8 @@ public enum Direction {
 		return newPoint;
 	}
 	public Point move(Point oldPoint, Direction dir2) {
+	    
+	    	map = GameControl.getControl().getMap();
 		
 		if(dir2 == null){
 			return move(oldPoint);

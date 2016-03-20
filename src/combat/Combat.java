@@ -13,6 +13,7 @@ import entities.Monster;
 import entities.Opponent;
 import entities.Player;
 import framework.EventControl;
+import framework.GameoverScreen;
 import framework.State;
 import framework.Window;
 import javafx.geometry.VPos;
@@ -217,8 +218,7 @@ public class Combat extends State {
 		}
 
 		if (player.isDead()) {
-			// TODO
-			System.out.println("Player is dead!!");
+			GameoverScreen.getGameoverScreen().start();
 		}
 
 		// let monster attack
@@ -420,7 +420,7 @@ public class Combat extends State {
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
 		// font settings
-		gc.setFont(Window.bigFont);
+		gc.setFont(Window.normalFont);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 
@@ -441,7 +441,7 @@ public class Combat extends State {
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
 		// font settings
-		gc.setFont(Window.bigFont);
+		gc.setFont(Window.normalFont);
 		// gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		gc.setFill(Color.ORANGE);
@@ -457,7 +457,7 @@ public class Combat extends State {
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
 		// font settings
-		gc.setFont(Window.bigFont);
+		gc.setFont(Window.normalFont);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
