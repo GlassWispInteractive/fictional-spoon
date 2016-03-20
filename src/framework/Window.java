@@ -11,12 +11,13 @@ import javafx.stage.Stage;
 
 public class Window extends Application {
 	// public window wide settings
+    	public static final String TITLE = "fictional spoon";
 	public static final int SIZE_X = 1200, SIZE_Y = 800;
-	public static final Font hugeFont = Font.font("Helvetica", FontWeight.BOLD, 64);
-	public static final Font bigFont = Font.font("Helvetica", FontWeight.BOLD, 32);
-	public static final Font normalFont = Font.font("Helvetica", FontWeight.BOLD, 24);
-	public static final Font smallFont = Font.font("Helvetica", FontWeight.NORMAL, 16);
-	public static final Paint[] groundColor = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"),
+	public static final Font HUGE_FONT = Font.font("Helvetica", FontWeight.BOLD, 64);
+	public static final Font BIG_FONT = Font.font("Helvetica", FontWeight.BOLD, 32);
+	public static final Font NORMAL_FONT = Font.font("Helvetica", FontWeight.BOLD, 24);
+	public static final Font SMALL_FONT = Font.font("Helvetica", FontWeight.NORMAL, 16);
+	public static final Paint[] GROUND_COLOR = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"),
 			Paint.valueOf("#D4B790"), Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
 
 	// make the stage acessible
@@ -36,7 +37,7 @@ public class Window extends Application {
 	@Override
 	public void start(Stage stage) {
 		// stage settings
-		stage.setTitle("fictional spoon");
+		stage.setTitle(TITLE);
 		stage.setResizable(false);
 		stage.centerOnScreen();
 

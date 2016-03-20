@@ -17,7 +17,7 @@ public class Combo {
 	private Combo(Element[] combo) {
 		this.setCombo(combo);
 		combos.add(this);
-
+//		combosInUse.add(this);
 		// System.out.println(Arrays.toString(combo));
 	}
 	

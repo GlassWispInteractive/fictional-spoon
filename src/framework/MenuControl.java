@@ -92,7 +92,7 @@ public class MenuControl extends State {
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
-		gc.setFont(Window.normalFont);
+		gc.setFont(Window.NORMAL_FONT);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);

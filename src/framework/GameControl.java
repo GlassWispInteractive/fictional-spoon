@@ -184,7 +184,7 @@ public class GameControl extends State {
 
 				} else {
 					// fallback into colored squares
-					gc.setFill(Window.groundColor[ground.ordinal()]);
+					gc.setFill(Window.GROUND_COLOR[ground.ordinal()]);
 					gc.fillRect(x * size, y * size, size, size);
 
 				}

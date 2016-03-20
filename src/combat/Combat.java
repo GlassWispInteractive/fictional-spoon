@@ -425,7 +425,7 @@ public class Combat extends State {
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
 		// font settings
-		gc.setFont(Window.normalFont);
+		gc.setFont(Window.NORMAL_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 
@@ -446,7 +446,7 @@ public class Combat extends State {
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
 		// font settings
-		gc.setFont(Window.normalFont);
+		gc.setFont(Window.NORMAL_FONT);
 		// gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		gc.setFill(Color.ORANGE);
@@ -462,7 +462,7 @@ public class Combat extends State {
 		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
 
 		// font settings
-		gc.setFont(Window.normalFont);
+		gc.setFont(Window.NORMAL_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
@@ -492,10 +492,10 @@ public class Combat extends State {
 		int padding = 10;
 		int width = textWidth + 2 * padding;
 		int height = (int) (1.5 * textHeight);
-		int rowY = (int) (layers.get(ID).getHeight() - height * Math.min(10, comboNames.size()) - padding);
+		int rowY = (int) (layers.get(ID).getHeight() - height * Math.min(9, comboNames.size()) - padding);
 		int columnX = (int) (layers.get(ID).getWidth() - width - 2*padding);
 
-		for (int j = 0; j < Math.min(10, comboNames.size()); j++) { // only max
+		for (int j = 0; j < Math.min(9, comboNames.size()); j++) { // only max
 																	// 10 combos
 																	// can be
 																	// shown

@@ -72,7 +72,7 @@ public class GameoverScreen extends State{
 	gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 	
 	// font settings
-	gc.setFont(Window.hugeFont);
+	gc.setFont(Window.HUGE_FONT);
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.BASELINE);
 	// gc.setLineWidth(1);
@@ -88,7 +88,7 @@ public class GameoverScreen extends State{
 	//List
 	// calc textLength
 	
-	gc.setFont(Window.normalFont);
+	gc.setFont(Window.NORMAL_FONT);
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.CENTER);
 	gc.setLineWidth(1);
