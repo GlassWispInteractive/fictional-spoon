@@ -1,7 +1,7 @@
 package entities;
 
 import framework.GameControl;
-import gen.environment.Map;
+import generation.Map;
 
 import java.awt.Point;
 import java.util.Random;

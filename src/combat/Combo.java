@@ -17,7 +17,7 @@ public class Combo {
 	private Combo(Element[] combo) {
 		this.setCombo(combo);
 		combos.add(this);
-//		combosInUse.add(this);
+		combosInUse.add(this);
 		// System.out.println(Arrays.toString(combo));
 	}
 	
@@ -74,7 +74,6 @@ public class Combo {
 	 * activate the combo for the player
 	 */
 	public void activate() {
-		System.out.println(this.toString());
 		combosInUse.add(this);
 	}
 

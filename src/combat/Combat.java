@@ -17,7 +17,6 @@ import framework.GameoverScreen;
 import framework.State;
 import framework.Window;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -29,6 +28,7 @@ public class Combat extends State {
 	private ArrayList<Monster> monster;
 	private Opponent opponent = null; // null = only monster
 	private Player player = (Player) EntityFactory.getFactory().getPlayer();
+	
 	// class member
 	private int curSoul, curFocus;
 	@SuppressWarnings("unused")
@@ -69,22 +69,22 @@ public class Combat extends State {
 		// inits
 		info = "Use 1, 2, 3 or 4 to attack";
 		streak = new ArrayList<>();
-
-		// add layers
-		addLayer(new Canvas(Window.SIZE_X, 300));
-		addLayer(new Canvas(Window.SIZE_X, 300));
-		addLayer(new Canvas(Window.SIZE_X, 100));
-		addLayer(new Canvas(Window.SIZE_X, 100));
-		addLayer(new Canvas(Window.SIZE_X, 100));
-		addLayer(new Canvas(Window.SIZE_X, 510));
+		
+		addLayer("elems", 0, Window.SIZE_Y * 0.65, Window.SIZE_X, 300);
+		addLayer("monster", 0, 0, Window.SIZE_X, 300);
+		addLayer("bar", 0, Window.SIZE_Y * 0.4, Window.SIZE_X, 100);
+		addLayer("info", 0, Window.SIZE_Y * 0.3, Window.SIZE_X, 100);
+		addLayer("info2", 0, Window.SIZE_Y * 0.85, Window.SIZE_X, 100);
+		addLayer("combo", 0, Window.SIZE_Y - 510, Window.SIZE_X, 510);
+		
 
 		// put up design
-		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
-		layers.get(2).relocate(0, 0);
-		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
-		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
-		layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
-		layers.get(6).relocate(0, Window.SIZE_Y - 510);
+//		layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
+//		layers.get(2).relocate(0, 0);
+//		layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
+//		layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
+//		layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
+//		layers.get(6).relocate(0, Window.SIZE_Y - 510);
 
 		player.setCombat(this);
 		this.souls = player.getSouls();
@@ -322,7 +322,7 @@ public class Combat extends State {
 
 	public void render() {
 		// start from clean screen
-		GraphicsContext gc = gcs.get(0);
+		GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 		
 		renderBackgroundSouls(gc);
@@ -332,7 +332,7 @@ public class Combat extends State {
 		renderBar();
 		renderInfo();
 		renderPlayerInfo();
-		renderTextboxes();
+		renderCombo();
 
 		// int textboxWidth = 600;
 		// int textboxHeight = 240;
@@ -344,9 +344,8 @@ public class Combat extends State {
 
 	private void renderElements() {
 		// initialize render screen
-		final int ID = 1;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		final GraphicsContext gc = gcs.get("elems");
+		gc.clearRect(0, 0, layers.get("elems").getWidth(), layers.get("elems").getHeight());
 
 		for (int i = 0; i < souls.size(); i++) {
 			gc.setFill(Color.ANTIQUEWHITE);
@@ -366,9 +365,8 @@ public class Combat extends State {
 
 	private void renderMonsters() {
 		// initialize render screen
-		final int ID = 2;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		final GraphicsContext gc = gcs.get("monster");
+		gc.clearRect(0, 0, layers.get("monster").getWidth(), layers.get("monster").getHeight());
 
 		for (int i = 0; i < monster.size(); i++) {
 
@@ -392,9 +390,8 @@ public class Combat extends State {
 
 	private void renderBar() {
 		// initialize render screen
-		final int ID = 3;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		final GraphicsContext gc = gcs.get("bar");
+		gc.clearRect(0, 0, layers.get("bar").getWidth(), layers.get("bar").getHeight());
 
 		// fancy line at 40%
 		gc.setLineWidth(3);
@@ -420,9 +417,8 @@ public class Combat extends State {
 
 	private void renderInfo() {
 		// initialize render screen
-		final int ID = 4;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		final GraphicsContext gc = gcs.get("info");
+		gc.clearRect(0, 0, layers.get("info").getWidth(), layers.get("info").getHeight());
 
 		// font settings
 		gc.setFont(Window.NORMAL_FONT);
@@ -441,9 +437,8 @@ public class Combat extends State {
 
 	private void renderPlayerInfo() {
 		// initialize render screen
-		final int ID = 5;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		final GraphicsContext gc = gcs.get("info2");
+		gc.clearRect(0, 0, layers.get("info2").getWidth(), layers.get("info2").getHeight());
 
 		// font settings
 		gc.setFont(Window.NORMAL_FONT);
@@ -455,11 +450,10 @@ public class Combat extends State {
 		gc.fillText(player.getPlayerInfo(), 50, 50);
 	}
 
-	private void renderTextboxes() {
+	private void renderCombo() {
 		// initialize render screen
-		final int ID = 6;
-		final GraphicsContext gc = gcs.get(ID);
-		gc.clearRect(0, 0, layers.get(ID).getWidth(), layers.get(ID).getHeight());
+		final GraphicsContext gc = gcs.get("combo");
+		gc.clearRect(0, 0, layers.get("combo").getWidth(), layers.get("combo").getHeight());
 
 		// font settings
 		gc.setFont(Window.NORMAL_FONT);
@@ -492,14 +486,15 @@ public class Combat extends State {
 		int padding = 10;
 		int width = textWidth + 2 * padding;
 		int height = (int) (1.5 * textHeight);
-		int rowY = (int) (layers.get(ID).getHeight() - height * Math.min(9, comboNames.size()) - padding);
-		int columnX = (int) (layers.get(ID).getWidth() - width - 2*padding);
+		int rowY = (int) (layers.get("combo").getHeight() - height * Math.min(9, comboNames.size()) - padding);
+		int columnX = (int) (layers.get("combo").getWidth() - width - 2*padding);
 
 		for (int j = 0; j < Math.min(9, comboNames.size()); j++) { // only max
 																	// 10 combos
 																	// can be
 																	// shown
 
+		    
 			gc.setStroke(Color.ORANGE);
 			gc.strokeRect(columnX, rowY, padding + width, height);
 

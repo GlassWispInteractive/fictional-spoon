@@ -64,6 +64,9 @@ public class MenuControl extends State {
 				break;
 			case "Credits":
 				CreditScreen.getCreditScreen().start();
+			case "Help":
+//				StateControl.getCtrl().setState(StateName.COMBAT);
+				HelpControl.getControl().start();
 				break;
 			case "Exit":
 				System.exit(0);
@@ -79,7 +82,7 @@ public class MenuControl extends State {
 
 	public void render() {
 		// start from clean screen
-		GraphicsContext gc = gcs.get(0);
+		GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// canvas settings

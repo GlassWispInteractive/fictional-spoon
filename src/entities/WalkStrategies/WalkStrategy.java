@@ -4,7 +4,7 @@ import entities.Direction;
 import entities.Entity;
 import entities.EntityFactory;
 import framework.GameControl;
-import gen.environment.Map;
+import generation.Map;
 
 import java.awt.Point;
 import java.util.Random;
