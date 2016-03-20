@@ -46,7 +46,11 @@ public class CreditScreen extends State{
 
 	//Title
 	gc.setFill(Color.RED);
-	gc.fillText(Window.TITLE, Window.SIZE_X / 2, Window.SIZE_Y / 2);
+	gc.setStroke(Color.RED);
+	gc.fillText(Window.TITLE, Window.SIZE_X / 2, 75);
+	gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
+	
+
 	
     }
 
