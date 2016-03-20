@@ -1,6 +1,6 @@
 package framework;
 
-import gameviews.AltertView;
+import gameviews.AlertView;
 import gameviews.GameView;
 import gameviews.MapView;
 import generation.Map;
@@ -43,11 +43,13 @@ public class GameControl extends State {
 		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
 		mp = new MapView(layers.get("map"), layers.get("entities"));
 		views[Views.MAP.ordinal()] = mp;
-
-		// add layer
-
-		// image
 		
+		addLayer("alert", 300, 300, Window.SIZE_X, 100);
+		AlertView alert = new AlertView(layers.get("alert"));
+		alert.push("test this");
+		views[Views.ALERT.ordinal()] = alert;
+		
+
 	}
 
 	/**
