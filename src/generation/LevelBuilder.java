@@ -29,7 +29,9 @@ public class LevelBuilder {
 	private Map map;
 	private Random rnd;
 	private int rooms[][], roomNum = 0;
-
+	private EntityFactory fac = EntityFactory.getFactory();
+	private ArrayList<int[]> spawnPoints = new ArrayList<>();
+	
 	public LevelBuilder(int n, int m) {
 		n = n - (n + 1) % 2;
 		m = m - (m + 1) % 2;
@@ -50,8 +52,17 @@ public class LevelBuilder {
 	 * @return
 	 */
 	public static Map newLevel(int n, int m) {
-		return new LevelBuilder(n, m).genRooms().genMaze().clearDeadends().genLoops().clearDeadends().genEntities()
+		return new LevelBuilder(n, m).genMap().genRandomEntities()
 				.create();
+	}
+	
+	/**
+	 * general method to generate a random map
+	 * 
+	 */
+	public LevelBuilder genMap() {
+	    
+	    return genRooms().genMaze().clearDeadends().genLoops().clearDeadends().genPlayer();
 	}
 
 	/**
@@ -334,77 +345,235 @@ public class LevelBuilder {
 		// return updated builder object
 		return this;
 	}
+	
+	/**
+	 * 
+	 *  spawn Entities on generated walkable points
+	 * 
+	 */
+	
+        private void generateSpawnPoints() {
+        	spawnPoints.clear();
+        
+        	for (int i = 1; i < map.getN(); i += 2) {
+        	    for (int j = 1; j < map.getM(); j += 2) {
+        
+        		if (map.isWalkable(i, j)) {
+        		    spawnPoints.add(new int[] { i, j });
+        		}
+        	    }
+        	}
+        
+        	Collections.shuffle(spawnPoints);
+        }
+        
+        private int[] getSpawnPoint() {
+            return getSpawnPoint(false);
+        }
+    
+        private int[] getSpawnPoint(boolean roomOnly) {
+            
+            	if(spawnPoints.size() == 0) {
+            	    generateSpawnPoints();
+            	}
+    
+        	Collections.shuffle(spawnPoints);
+        	
+        	int[] newSpawnPoint = null;
+        	
+        	if(roomOnly) {
+        	    	for(int[] p : spawnPoints) {
+                	    
+        	    	    if(map.isWalkableRoom(p[0], p[1])){
+        	        	newSpawnPoint = p;
+        	        	spawnPoints.remove(p);
+        	        	
+        	        	return newSpawnPoint;
+        	    	    }
+                	}
+        	}
+        
 
-	public LevelBuilder genEntities() {
-		// get factory
-		EntityFactory fac = EntityFactory.getFactory();
+            	newSpawnPoint = spawnPoints.get(0);
+            	spawnPoints.remove(0);
+        
+        	return newSpawnPoint;
+        }
+        
+        public LevelBuilder genPlayer() {
+            
+        	int[] newSpwan;
+        
+        	newSpwan = getSpawnPoint(true);
+        	fac.makePlayer(newSpwan[0], newSpwan[1]);
+        
+        	return this;
+        }
+        
+        public LevelBuilder genRandomEntities() {
+            
+            int monsterNum = rnd.nextInt(2*roomNum);
+            int portalNum = rnd.nextInt(roomNum/20);
+            int opponentNum = rnd.nextInt(roomNum/20); 
+            int chestNum = rnd.nextInt(roomNum/10);
+            int shrineNum = rnd.nextInt(roomNum/15);
+            
+            return genMonster(monsterNum).genPortal(portalNum).genOpponent(opponentNum).genChest(chestNum).genShrine(shrineNum);
+        }
+    
+        public LevelBuilder genMonster(int num) {
+    	    
+    		int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
+    		// monsters can be of the given power or at most 2 points higher
+    		used += rnd.nextInt(3);
+    
+    		// create monster of random type
+    		type = rnd.nextInt(5);
+    		powers[type] = used;
+    		used -= used;
+    	    
+            	int[] newSpwan;
+            	boolean roomOnly = true;
+            	    
+            	    
+            	for(int i = 0; i < num; i++) {
+            		
+        		newSpwan = getSpawnPoint(roomOnly);
+        		fac.makeMonster(newSpwan[0], newSpwan[1], 100, powers, "monster");
+        		
+        		// last 30% can be in random positions
+        		if(i > num*0.7) {
+        		    roomOnly = false;
+        		}
+            	}
+            	    
+            	return this;
+        }
+    
+        public LevelBuilder genPortal(int num) {
+    
+        	int[] newSpwan;
+        
+        	for (int i = 0; i < num; i++) {
+        
+        	    newSpwan = getSpawnPoint();
+        	    fac.makePortal(newSpwan[0], newSpwan[1], "Informatiker");
+        	}
+        
+        	return this;
+        }
+    
+        public LevelBuilder genOpponent(int num) {
+        
+        	int[] newSpwan;
+        
+        	for (int i = 0; i < num; i++) {
+        
+        	    newSpwan = getSpawnPoint();
+        	    fac.makeOpponent(newSpwan[0], newSpwan[1], "Informatiker");
+        	}
+        
+        	return this;
+        }
+    
+        public LevelBuilder genChest(int num) {
+    
+        	int[] newSpwan;
+        
+        	for (int i = 0; i < num; i++) {
+        
+        	    newSpwan = getSpawnPoint();
+        	    int len = rnd.nextInt(3);
+        	    fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2 + len));
+        	}
+        
+        	return this;
+        }
+    
+        public LevelBuilder genShrine(int num) {
+    
+        	int[] newSpwan;
+        
+        	for (int i = 0; i < num; i++) {
+        
+        	    newSpwan = getSpawnPoint();
+        	    fac.makeShrine(newSpwan[0], newSpwan[1]);
+        	}
+        
+        	return this;
+        }
 
-		// create player
-		int x, y, room[] = rooms[0];
-		x = room[0] + rnd.nextInt(room[1]);
-		y = room[2] + rnd.nextInt(room[3]);
 
-		fac.makePlayer(x, y);
-
-		// create objects for every room
-		for (int i = 1; i < roomNum; i++) {
-			// declare variables
-			final int xStart = rooms[i][0], xLen = rooms[i][1], yStart = rooms[i][2], yLen = rooms[i][3];
-
-			// generate possible points in room
-			ArrayList<int[]> q = new ArrayList<>();
-			for (int j = 0; j < xLen; j++)
-				for (int k = 0; k < yLen; k++)
-					q.add(new int[] { xStart + j, yStart + k });
-			Collections.shuffle(q);
-
-			// choose those for putting on an object
-			int p[];
-			p = q.get(0);
-			q.remove(0);
-
-			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
-			// monsters can be of the given power or at most 2 points higher
-			used += rnd.nextInt(3);
-
-			// create monster of random type
-			type = rnd.nextInt(5);
-			powers[type] = used;
-			used -= used;
-
-			fac.makeMonster(p[0], p[1], 100, powers, "monster");
-
-			// create a superMonster every 8 rooms
-			if (i % 8 == 0) {
-				p = q.get(0);
-				q.remove(0);
-				fac.makeSuperMonster(p[0], p[1], "Informatiker");
-			}
-
-			// create a opponent every 7 rooms
-			if (i % 8 == 0) {
-				p = q.get(0);
-				q.remove(0);
-				fac.makeOpponent(p[0], p[1], "Informatiker");
-			}
-
-			// create a chest every 3 rooms
-			if (i % 3 == 0) {
-				p = q.get(0);
-				q.remove(0);
-				int len = rnd.nextInt(5);
-				fac.makeChest(p[0], p[1], Combo.generate(2 + len));
-			}
-
-			// create a shrine every 10 rooms
-			if (i % 10 == 0) {
-				p = q.get(0);
-				q.remove(0);
-				fac.makeShrine(p[0], p[1]);
-			}
-		}
-
-		// return updated builder object
-		return this;
-	}
+//	public LevelBuilder genEntities() {
+//		// get factory
+//		EntityFactory fac = EntityFactory.getFactory();
+//
+//		// create player
+//		int x, y, room[] = rooms[0];
+//		x = room[0] + rnd.nextInt(room[1]);
+//		y = room[2] + rnd.nextInt(room[3]);
+//
+//		fac.makePlayer(x, y);
+//
+//		// create objects for every room
+//		for (int i = 1; i < roomNum; i++) {
+//			// declare variables
+//			final int xStart = rooms[i][0], xLen = rooms[i][1], yStart = rooms[i][2], yLen = rooms[i][3];
+//
+//			// generate possible points in room
+//			ArrayList<int[]> q = new ArrayList<>();
+//			for (int j = 0; j < xLen; j++)
+//				for (int k = 0; k < yLen; k++)
+//					q.add(new int[] { xStart + j, yStart + k });
+//			Collections.shuffle(q);
+//
+//			// choose those for putting on an object
+//			int p[];
+//			p = q.get(0);
+//			q.remove(0);
+//
+//			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
+//			// monsters can be of the given power or at most 2 points higher
+//			used += rnd.nextInt(3);
+//
+//			// create monster of random type
+//			type = rnd.nextInt(5);
+//			powers[type] = used;
+//			used -= used;
+//
+//			fac.makeMonster(p[0], p[1], 100, powers, "monster");
+//
+//			// create a Portal every 8 rooms
+//			if (i % 8 == 0) {
+//				p = q.get(0);
+//				q.remove(0);
+//				fac.makePortal(p[0], p[1], "Informatiker");
+//			}
+//
+//			// create a opponent every 7 rooms
+//			if (i % 8 == 0) {
+//				p = q.get(0);
+//				q.remove(0);
+//				fac.makeOpponent(p[0], p[1], "Informatiker");
+//			}
+//
+//			// create a chest every 3 rooms
+//			if (i % 3 == 0) {
+//				p = q.get(0);
+//				q.remove(0);
+//				int len = rnd.nextInt(5);
+//				fac.makeChest(p[0], p[1], Combo.generate(2 + len));
+//			}
+//
+//			// create a shrine every 10 rooms
+//			if (i % 10 == 0) {
+//				p = q.get(0);
+//				q.remove(0);
+//				fac.makeShrine(p[0], p[1]);
+//			}
+//		}
+//
+//		// return updated builder object
+//		return this;
+//	}
 }
