@@ -412,11 +412,18 @@ public class LevelBuilder {
         
         public LevelBuilder genRandomEntities() {
             
-            int monsterNum = rnd.nextInt(2*roomNum);
-            int portalNum = rnd.nextInt(roomNum/20);
-            int opponentNum = rnd.nextInt(roomNum/20); 
-            int chestNum = rnd.nextInt(roomNum/10);
-            int shrineNum = rnd.nextInt(roomNum/15);
+            final int roomNum100 = roomNum;
+            final int roomNum050 = (int) (roomNum * 0.5);
+            final int roomNum020 = (int) (roomNum * 0.2);
+            final int roomNum010 = (int) (roomNum * 0.1);
+            final int roomNum005 = (int) (roomNum * 0.05);
+            final int roomNum003 = (int) (roomNum * 0.03);
+            
+            int monsterNum = roomNum100 + rnd.nextInt(roomNum050);
+            int portalNum = roomNum005 + rnd.nextInt(roomNum003);
+            int opponentNum = roomNum010 + rnd.nextInt(roomNum005); 
+            int chestNum = roomNum020 + rnd.nextInt(roomNum005);
+            int shrineNum = roomNum010 + rnd.nextInt(roomNum005);
             
             return genMonster(monsterNum).genPortal(portalNum).genOpponent(opponentNum).genChest(chestNum).genShrine(shrineNum);
         }
