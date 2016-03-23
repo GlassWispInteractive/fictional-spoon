@@ -2,6 +2,12 @@ package framework;
 
 import java.util.HashMap;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.util.Duration;
+
 public class ScreenControl {
 	// singleton object
 	private static ScreenControl singleton;
@@ -37,6 +43,7 @@ public class ScreenControl {
 	 */
 	public void addScreen(String name, Screen screen) {
 		screens.put(name, screen);
+		screen.getScene().getRoot().setOpacity(0);
 	}
 
 	/**
@@ -54,9 +61,35 @@ public class ScreenControl {
 	 * @param name
 	 */
 	public void setScreen(String name) {
-		if (screens.get(name) != null) {
+		Timeline animation;
+
+		// dont try to set new screen
+		if (screens.get(name) == null) {
+			System.out.println("invalid screen");
+			return;
+		}
+
+		// fade out animation
+		if (screen != null) {
+			DoubleProperty opacity = screen.getScene().getRoot().opacityProperty();
+			animation = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
+					new KeyFrame(new Duration(800), new KeyValue(opacity, 0.0)));
+			animation.play();
+			animation.setOnFinished(e -> {
+				screen = screens.get(name);
+				Window.setScene(screen.getScene());
+				
+				DoubleProperty newOpacity = screen.getScene().getRoot().opacityProperty();
+				new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(newOpacity, 0.0)),
+						new KeyFrame(new Duration(800), new KeyValue(newOpacity, 1.0))).play();
+			});
+		} else {
 			screen = screens.get(name);
 			Window.setScene(screen.getScene());
+			
+			DoubleProperty newOpacity = screen.getScene().getRoot().opacityProperty();
+			new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(newOpacity, 0.0)),
+					new KeyFrame(new Duration(800), new KeyValue(newOpacity, 1.0))).play();
 		}
 	}
 }

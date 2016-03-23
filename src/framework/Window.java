@@ -1,6 +1,5 @@
 package framework;
 
-
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -14,7 +13,7 @@ import screens.MenuScreen;
 
 public class Window extends Application {
 	// public window wide settings
-    	public static final String TITLE = "fictional spoon";
+	public static final String TITLE = "fictional spoon";
 	public static final int SIZE_X = 1200, SIZE_Y = 800;
 	public static final Font HUGE_FONT = Font.font("Helvetica", FontWeight.BOLD, 64);
 	public static final Font BIG_FONT = Font.font("Helvetica", FontWeight.BOLD, 32);
@@ -22,9 +21,12 @@ public class Window extends Application {
 	public static final Font SMALL_FONT = Font.font("Helvetica", FontWeight.NORMAL, 16);
 	public static final Paint[] GROUND_COLOR = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"),
 			Paint.valueOf("#D4B790"), Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
-//	public static final Font hugeFont = Font.font("Helvetica", FontWeight.BOLD, 40);
-//	public static final Font bigFont = Font.font("Helvetica", FontWeight.BOLD, 24);
-//	public static final Font smallFont = Font.font("Helvetica", FontWeight.NORMAL, 16);
+	// public static final Font hugeFont = Font.font("Helvetica",
+	// FontWeight.BOLD, 40);
+	// public static final Font bigFont = Font.font("Helvetica",
+	// FontWeight.BOLD, 24);
+	// public static final Font smallFont = Font.font("Helvetica",
+	// FontWeight.NORMAL, 16);
 
 	public static boolean music = false;
 
@@ -62,34 +64,31 @@ public class Window extends Application {
 		stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
 			EventControl.getEvents().removeCode(event);
 		});
-		
-		
-		
-//		ScreensController mainContainer = new ScreensController();
-//        mainContainer.loadScreen(ScreensFramework.screen1ID, ScreensFramework.screen1File);
-//        mainContainer.loadScreen(ScreensFramework.screen2ID, ScreensFramework.screen2File);
-//        mainContainer.loadScreen(ScreensFramework.screen3ID, ScreensFramework.screen3File);
-//        
-//        mainContainer.setScreen(ScreensFramework.screen1ID);
-//        
-//        Group root = new Group();
-//        root.getChildren().addAll(mainContainer);
-//        Scene scene = new Scene(root);
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-		
-		
-		
-		
+
+		// ScreensController mainContainer = new ScreensController();
+		// mainContainer.loadScreen(ScreensFramework.screen1ID,
+		// ScreensFramework.screen1File);
+		// mainContainer.loadScreen(ScreensFramework.screen2ID,
+		// ScreensFramework.screen2File);
+		// mainContainer.loadScreen(ScreensFramework.screen3ID,
+		// ScreensFramework.screen3File);
+		//
+		// mainContainer.setScreen(ScreensFramework.screen1ID);
+		//
+		// Group root = new Group();
+		// root.getChildren().addAll(mainContainer);
+		// Scene scene = new Scene(root);
+		// primaryStage.setScene(scene);
+		// primaryStage.show();
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
 		ctrl.addScreen("menu", MenuScreen.getControl());
 		ctrl.addScreen("credits", CreditsScreen.getCreditScreen());
-//		ctrl.addScreen("", );
+		// ctrl.addScreen("", );
 
 		MenuScreen.getControl().setList(new String[] { "Start", "Credits", "Help", "Exit" });
 		ctrl.setScreen("menu");
-		
+
 		// precompute the game initialization
 		GameControl.getControl();
 
@@ -105,7 +104,9 @@ public class Window extends Application {
 				// adjust stage if necessary
 				if (Window.newStage) {
 					newStage = false;
+
 					stage.setScene(scene);
+
 				}
 
 				// compute a frame
@@ -117,7 +118,6 @@ public class Window extends Application {
 		stage.show();
 		gameloop.start();
 
-		
 	}
 
 	public static void setScene(Scene scene) {

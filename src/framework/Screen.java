@@ -3,6 +3,7 @@ package framework;
 import java.util.HashMap;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -15,7 +16,6 @@ public abstract class Screen {
 
 	// internal organisation
 	private ScreenControl ctrl;
-	private Screen parent = null;
 
 	// class members
 	protected Group group;
