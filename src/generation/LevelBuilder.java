@@ -51,7 +51,7 @@ public class LevelBuilder {
 	 * @param m
 	 * @return
 	 */
-	public static Map newLevel(int n, int m) {
+	public static Map newRandomLevel(int n, int m) {
 		return new LevelBuilder(n, m).genMap().genRandomEntities()
 				.create();
 	}
@@ -421,29 +421,28 @@ public class LevelBuilder {
             return genMonster(monsterNum).genPortal(portalNum).genOpponent(opponentNum).genChest(chestNum).genShrine(shrineNum);
         }
     
-        public LevelBuilder genMonster(int num) {
-    	    
-    		int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
-    		// monsters can be of the given power or at most 2 points higher
-    		used += rnd.nextInt(3);
-    
-    		// create monster of random type
-    		type = rnd.nextInt(5);
-    		powers[type] = used;
-    		used -= used;
-    	    
+        public LevelBuilder genMonster(int num) {     
+            
             	int[] newSpwan;
-            	boolean roomOnly = true;
-            	    
+        	boolean roomOnly = true;
             	    
             	for(int i = 0; i < num; i++) {
+            	    
+        		int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
+            		// monsters can be of the given power or at most 2 points higher
+            		used += rnd.nextInt(3);
+            
+            		// create monster of random type
+            		type = rnd.nextInt(5);
+            		powers[type] = used;
+            		used -= used;
             		
         		newSpwan = getSpawnPoint(roomOnly);
         		fac.makeMonster(newSpwan[0], newSpwan[1], 100, powers, "monster");
         		
         		// last 30% can be in random positions
         		if(i > num*0.7) {
-        		    roomOnly = false;
+//        		    roomOnly = false;
         		}
             	}
             	    

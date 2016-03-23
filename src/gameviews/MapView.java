@@ -31,7 +31,7 @@ public class MapView extends GameView {
 		bg = mapLayer;
 		
 		// generate fresh map
-		map = LevelBuilder.newLevel(350, 225);
+		map = LevelBuilder.newRandomLevel(350, 225);
 		// map = new LevelBuilder(350, 225).genRooms().genMaze().create();
 
 		// load factories
