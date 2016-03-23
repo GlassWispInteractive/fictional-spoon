@@ -14,7 +14,7 @@ public abstract class WalkStrategy {
 	
 	protected Map map;
 	
-	private Random rnd = new Random();
+	protected Random rnd = new Random();
 	private int blocked = 0;
 	private int delayTicks = 20;
 	

@@ -9,6 +9,7 @@ import combat.Combat;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
+import entities.WalkStrategies.FloorWalk;
 import entities.WalkStrategies.HorizontalWalk;
 import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
@@ -26,7 +27,7 @@ public class Opponent extends Entity {
 	Random rnd = new Random();
 	
 	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(
-			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk()}));
+		new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new FloorWalk(), new RectangleWalk()}));
 	private WalkStrategy currentWalkStrategy;
 	
 	private ArrayList<Monster> monsterList = new ArrayList<Monster>();
