@@ -26,7 +26,7 @@ public class VerticalWalk extends WalkStrategy {
 		// make move
 		newPoint = dir.move(new Point(oldX, oldY));
 		
-		if(!map.isWalkable(oldX, newPoint.y)){
+		if(!map.isWalkableRoom(oldX, newPoint.y)){
 			directionIndex = (directionIndex + 2) % Direction.values().length;
 		}
 		
