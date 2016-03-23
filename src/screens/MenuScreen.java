@@ -1,21 +1,23 @@
-package framework;
+package screens;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import framework.EventControl;
+import framework.GameControl;
+import framework.Screen;
+import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-import screens.CreditsScreen;
-import screens.HelpScreen;
 
 //import static game.State.*;
 
-public class StateMenu extends Screen {
+public class MenuScreen extends Screen {
 	// singleton
-	private static StateMenu singleton;
+	private static MenuScreen singleton;
 
 	private Image logo;
 
@@ -23,15 +25,15 @@ public class StateMenu extends Screen {
 	private int cur;
 	private boolean started = false;
 
-	public static StateMenu getControl() {
+	public static MenuScreen getControl() {
 		if (singleton == null) {
-			singleton = new StateMenu();
+			singleton = new MenuScreen();
 		}
 
 		return singleton;
 	}
 
-	private StateMenu() {
+	private MenuScreen() {
 		super();
 
 		// init

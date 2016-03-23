@@ -9,6 +9,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import screens.MenuScreen;
 
 public class Window extends Application {
 	// public window wide settings
@@ -63,7 +64,7 @@ public class Window extends Application {
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
 
-		StateMenu menu = StateMenu.getControl();
+		MenuScreen menu = MenuScreen.getControl();
 		menu.setList(new String[] { "Start", "Credits", "Help", "Exit" });
 		menu.start();
 

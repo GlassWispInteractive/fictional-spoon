@@ -1,8 +1,11 @@
-package framework;
+package screens;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+import framework.Screen;
+import framework.ScreenDecorator;
+import framework.Window;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 

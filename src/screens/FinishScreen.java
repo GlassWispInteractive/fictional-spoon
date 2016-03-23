@@ -9,7 +9,6 @@ import com.sun.javafx.tk.Toolkit;
 import framework.EventControl;
 import framework.GameControl;
 import framework.Screen;
-import framework.StateMenu;
 import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -54,7 +53,7 @@ public class FinishScreen extends Screen {
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
 			case "Restart":
-				StateMenu.getControl().start();
+				MenuScreen.getControl().start();
 				break;
 			case "Credit":
 				CreditsScreen.getCreditScreen().start();
