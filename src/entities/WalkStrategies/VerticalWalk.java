@@ -16,7 +16,7 @@ public class VerticalWalk extends WalkStrategy {
 	}
 	
 	@Override
-	public Point walkStrategy(int oldX, int oldY) {
+	public Point walkWithStrategy(int oldX, int oldY) {
 		
 		Point newPoint;
 		
