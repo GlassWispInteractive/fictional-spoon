@@ -10,6 +10,7 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
+import framework.ScreenControl;
 import combat.Attacks;
 import combat.Combat;
 import combat.Combo;
@@ -108,7 +109,8 @@ public class Monster extends Entity implements IAttackable {
 			// check intersection
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-				new Combat(new Monster[]{this}).start();
+				ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[]{this}));
+				ScreenControl.getCtrl().setScreen("combat");
 			}
 		}
 	}

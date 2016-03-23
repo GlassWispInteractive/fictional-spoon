@@ -5,9 +5,7 @@ import java.util.Set;
 
 import entities.EntityFactory;
 import generation.Map;
-import javafx.scene.Group;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import screens.AlertDecorator;
 import screens.ComboScreen;

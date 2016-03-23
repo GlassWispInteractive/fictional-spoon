@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import framework.EventControl;
-import framework.GameControl;
 import framework.Screen;
+import framework.ScreenControl;
 import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -61,14 +61,13 @@ public class MenuScreen extends Screen {
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
 			case "Start":
-				GameControl.getControl().start();
+				ScreenControl.getCtrl().setScreen("game");
 				break;
 			case "Credits":
-				CreditsScreen.getCreditScreen().start();
+				ScreenControl.getCtrl().setScreen("credits");
 				break;
 			case "Help":
-				// StateControl.getCtrl().setState(StateName.COMBAT);
-				HelpScreen.getControl().start();
+				ScreenControl.getCtrl().setScreen("help");
 				break;
 			case "Exit":
 				System.exit(0);

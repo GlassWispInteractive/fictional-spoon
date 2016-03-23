@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 
 public abstract class Screen {
@@ -76,44 +75,9 @@ public abstract class Screen {
 		layers.put(name, layer);
 		gcs.put(name, layer.getGraphicsContext2D());
 	}
-
-	/**
-	 * start this scene
-	 */
-	public void start() {
-		parent = ctrl.getState();
-
-		active();
-	}
-
-	/**
-	 * stop this scene and return to parental scene
-	 */
-	public void stop() {
-		if (parent != null) {
-			parent.active();
-		}
-	}
-
-	/**
-	 * go back every state until the root state is reached
-	 */
-	public void clean() {
-		Screen aux = this;
-		while (aux.parent != null) {
-			aux = aux.parent;
-		}
-		aux.active();
-	}
-
-	/**
-	 * internal function to put this state active
-	 */
-	private void active() {
-
-		ctrl.setState(this);
-
-		Window.setScene(scene);
+	
+	public Scene getScene() {
+		return scene;
 	}
 
 	protected abstract void tick(int ticks);

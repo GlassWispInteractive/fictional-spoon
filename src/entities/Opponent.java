@@ -14,6 +14,7 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
+import framework.ScreenControl;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -78,7 +79,8 @@ public class Opponent extends Entity {
 			
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-				new Combat(this).start();
+				ScreenControl.getCtrl().addScreen("combat", new Combat(this));
+				ScreenControl.getCtrl().setScreen("combat");
 			}
 			
 		}		

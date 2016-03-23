@@ -50,7 +50,7 @@ public class SoulsDecorator extends ScreenDecorator {
 		}
 
 		// call decorated screen
-		decoratedScreen.tick(ticks);
+		// decoratedScreen.tick(ticks);
 	}
 
 	public void render(GraphicsContext gc) {
@@ -59,8 +59,8 @@ public class SoulsDecorator extends ScreenDecorator {
 			gc.setFill(Color.DARKRED.deriveColor(2, 1.2, 1, 0.3));
 			gc.fillOval(soul[0], soul[1], 25, 25);
 		}
-		
+
 		// call decorated screen
-		decoratedScreen.render();
+		// decoratedScreen.render();
 	}
 }

@@ -61,13 +61,32 @@ public class Window extends Application {
 		stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
 			EventControl.getEvents().removeCode(event);
 		});
+		
+		
+		
+//		ScreensController mainContainer = new ScreensController();
+//        mainContainer.loadScreen(ScreensFramework.screen1ID, ScreensFramework.screen1File);
+//        mainContainer.loadScreen(ScreensFramework.screen2ID, ScreensFramework.screen2File);
+//        mainContainer.loadScreen(ScreensFramework.screen3ID, ScreensFramework.screen3File);
+//        
+//        mainContainer.setScreen(ScreensFramework.screen1ID);
+//        
+//        Group root = new Group();
+//        root.getChildren().addAll(mainContainer);
+//        Scene scene = new Scene(root);
+//        primaryStage.setScene(scene);
+//        primaryStage.show();
+		
+		
+		
+		
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
+		ctrl.addScreen("menu", MenuScreen.getControl());
 
-		MenuScreen menu = MenuScreen.getControl();
-		menu.setList(new String[] { "Start", "Credits", "Help", "Exit" });
-		menu.start();
-
+		MenuScreen.getControl().setList(new String[] { "Start", "Credits", "Help", "Exit" });
+		ctrl.setScreen("menu");
+		
 		// precompute the game initialization
 		GameControl.getControl();
 
@@ -89,11 +108,6 @@ public class Window extends Application {
 				// compute a frame
 				ctrl.tick(passedTicks);
 				ctrl.render();
-
-				// for development only
-				if (EventControl.getEvents().isESC()) {
-					ctrl.getState().stop();
-				}
 			}
 		};
 

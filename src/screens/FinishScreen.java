@@ -9,6 +9,7 @@ import com.sun.javafx.tk.Toolkit;
 import framework.EventControl;
 import framework.GameControl;
 import framework.Screen;
+import framework.ScreenControl;
 import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,7 +19,7 @@ import javafx.scene.text.TextAlignment;
 public class FinishScreen extends Screen {
 	private final String won = "You have won the game", lost = "Game over";
 	private boolean finish = false;
-	
+
 	private static FinishScreen singleton;
 	private int cur;
 	private ArrayList<String> list = new ArrayList<String>(Arrays.asList(new String[] { "Restart", "Credit", "Exit" }));
@@ -33,16 +34,14 @@ public class FinishScreen extends Screen {
 	}
 
 	private FinishScreen() {
-		
 
 	}
 
 	@Override
 	protected void tick(int ticks) {
-
 		EventControl e = EventControl.getEvents();
 
-//		SpookingSouls.getObject().tick(ticks);
+		// SpookingSouls.getObject().tick(ticks);
 		// event handling
 		if (e.isLeft())
 			cur = (cur + list.size() - 1) % list.size();
@@ -51,12 +50,15 @@ public class FinishScreen extends Screen {
 			cur = (cur + 1) % list.size();
 
 		if (e.isEnter()) {
+			// TODO: put resetgame properly
+			GameControl.resetGame();
+
 			switch (list.get(cur)) {
 			case "Restart":
-				MenuScreen.getControl().start();
+				ScreenControl.getCtrl().setScreen("menu");
 				break;
 			case "Credit":
-				CreditsScreen.getCreditScreen().start();
+				ScreenControl.getCtrl().setScreen("credits");
 				break;
 			case "Exit":
 				System.exit(0);
@@ -83,11 +85,11 @@ public class FinishScreen extends Screen {
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
 
-//		SpookingSouls.getObject().render(gc);
+		// SpookingSouls.getObject().render(gc);
 
 		// Game Over
 		gc.setFill(Color.RED);
-		gc.fillText(lost, Window.SIZE_X / 2, Window.SIZE_Y / 2);
+		gc.fillText(finish ? won : lost, Window.SIZE_X / 2, Window.SIZE_Y / 2);
 
 		// List
 		// calc textLength
@@ -133,11 +135,4 @@ public class FinishScreen extends Screen {
 			columnX += width;
 		}
 	}
-
-	@Override
-	public void start() {
-		super.start();
-		GameControl.resetGame();
-	}
-
 }

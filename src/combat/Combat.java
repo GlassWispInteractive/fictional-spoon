@@ -14,6 +14,7 @@ import entities.Opponent;
 import entities.Player;
 import framework.EventControl;
 import framework.Screen;
+import framework.ScreenControl;
 import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -215,11 +216,15 @@ public class Combat extends Screen {
 			if (opponent != null) {
 				opponent.setDead(true);
 			}
-			this.stop();
+			
+			ScreenControl.getCtrl().removeScreen("combat");
+			ScreenControl.getCtrl().setScreen("game");
+			
+//			this.stop();
 		}
 
 		if (player.isDead()) {
-			FinishScreen.getGameoverScreen().start();
+			ScreenControl.getCtrl().setScreen("game over");
 		}
 
 		// let monster attack
