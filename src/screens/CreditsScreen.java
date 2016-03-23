@@ -1,30 +1,32 @@
-package framework;
+package screens;
 
+import framework.Screen;
+import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class StateCredits extends State {
+public class CreditsScreen extends Screen {
 
-	private static StateCredits singleton;
+	private static CreditsScreen singleton;
 
-	public static StateCredits getCreditScreen() {
+	public static CreditsScreen getCreditScreen() {
 
 		if (singleton == null) {
-			singleton = new StateCredits();
+			singleton = new CreditsScreen();
 		}
 
 		return singleton;
 	}
 
-	private StateCredits() {
+	private CreditsScreen() {
 
 	}
 
 	@Override
 	protected void tick(int ticks) {
-		SpookingSouls.getObject().tick(ticks);
+//		SpookingSouls.getObject().tick(ticks);
 	}
 
 	@Override
@@ -34,7 +36,7 @@ public class StateCredits extends State {
 		GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
-		SpookingSouls.getObject().render(gc);
+//		SpookingSouls.getObject().render(gc);
 
 		// font settings
 		gc.setFont(Window.HUGE_FONT);

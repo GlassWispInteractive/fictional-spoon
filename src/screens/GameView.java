@@ -1,4 +1,4 @@
-package gameviews;
+package screens;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

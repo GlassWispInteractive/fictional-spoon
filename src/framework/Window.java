@@ -61,7 +61,7 @@ public class Window extends Application {
 			EventControl.getEvents().removeCode(event);
 		});
 
-		StateControl ctrl = StateControl.getCtrl();
+		ScreenControl ctrl = ScreenControl.getCtrl();
 
 		StateMenu menu = StateMenu.getControl();
 		menu.setList(new String[] { "Start", "Credits", "Help", "Exit" });

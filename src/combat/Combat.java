@@ -13,17 +13,16 @@ import entities.Monster;
 import entities.Opponent;
 import entities.Player;
 import framework.EventControl;
-import framework.StateGameover;
-import framework.SpookingSouls;
-import framework.State;
+import framework.Screen;
 import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import screens.FinishScreen;
 
-public class Combat extends State {
+public class Combat extends Screen {
 	// lists
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
@@ -95,7 +94,7 @@ public class Combat extends State {
 
 	@Override
 	public void tick(int ticks) {
-		SpookingSouls.getObject().tick(ticks);
+//		SpookingSouls.getObject().tick(ticks);
 
 		status = Math.min(1, status + ticks / 40.0);
 		// System.out.println(status);
@@ -220,7 +219,7 @@ public class Combat extends State {
 		}
 
 		if (player.isDead()) {
-			StateGameover.getGameoverScreen().start();
+			FinishScreen.getGameoverScreen().start();
 		}
 
 		// let monster attack
@@ -324,7 +323,7 @@ public class Combat extends State {
 		GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
-		SpookingSouls.getObject().render(gc);
+//		SpookingSouls.getObject().render(gc);
 
 		renderElements();
 		renderMonsters();

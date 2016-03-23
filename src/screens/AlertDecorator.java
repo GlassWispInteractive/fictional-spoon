@@ -1,4 +1,4 @@
-package gameviews;
+package screens;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -9,7 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class AlertView extends GameView {
+public class AlertDecorator extends GameView {
 	// constants
 
 	private final double REPETITIONS = 2, SPEED = 25, DURATION = Math.PI * SPEED * REPETITIONS;
@@ -20,7 +20,7 @@ public class AlertView extends GameView {
 	private int remainingTicks = 0;
 	private double alpha;
 
-	public AlertView(Canvas layer) {
+	public AlertDecorator(Canvas layer) {
 		// inits
 		super(layer);
 		alerts = new LinkedList<>();

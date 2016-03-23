@@ -8,10 +8,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
+import screens.CreditsScreen;
+import screens.HelpScreen;
 
 //import static game.State.*;
 
-public class StateMenu extends State {
+public class StateMenu extends Screen {
 	// singleton
 	private static StateMenu singleton;
 
@@ -45,7 +47,7 @@ public class StateMenu extends State {
 		EventControl e = EventControl.getEvents();
 
 		// soul computation
-		SpookingSouls.getObject().tick(ticks);
+//		SpookingSouls.getObject().tick(ticks);
 
 		// event handling
 		if (e.isUp())
@@ -60,11 +62,11 @@ public class StateMenu extends State {
 				GameControl.getControl().start();
 				break;
 			case "Credits":
-				StateCredits.getCreditScreen().start();
+				CreditsScreen.getCreditScreen().start();
 				break;
 			case "Help":
 				// StateControl.getCtrl().setState(StateName.COMBAT);
-				StateHelp.getControl().start();
+				HelpScreen.getControl().start();
 				break;
 			case "Exit":
 				System.exit(0);
@@ -87,7 +89,7 @@ public class StateMenu extends State {
 		double w = gc.getCanvas().getWidth();
 
 		// render backGround souls
-		SpookingSouls.getObject().render(gc);
+//		SpookingSouls.getObject().render(gc);
 
 		// render logo image
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);

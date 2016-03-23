@@ -6,14 +6,14 @@ import java.util.Random;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class SpookingSouls {
-	private static SpookingSouls singleton;
-
+public class SoulsDecorator extends ScreenDecorator {
 	private static ArrayList<double[]> souls;
 	private static int soulWait;
-	private Random rand = new Random();
+	private static Random rand = new Random();
 
-	private SpookingSouls() {
+	public SoulsDecorator(Screen decoratedScreen) {
+		super(decoratedScreen);
+
 		// background souls
 		souls = new ArrayList<>();
 		soulWait = 0;
@@ -22,14 +22,6 @@ public class SpookingSouls {
 			int x = rand.nextInt(Window.SIZE_X - 200), y = rand.nextInt(Window.SIZE_Y - 200);
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
-	}
-
-	public static SpookingSouls getObject() {
-		if (singleton == null) {
-			singleton = new SpookingSouls();
-		}
-
-		return singleton;
 	}
 
 	public void tick(int ticks) {
@@ -53,6 +45,9 @@ public class SpookingSouls {
 					soul[1] = Window.SIZE_Y - 50;
 			}
 		}
+
+		// call decorated screen
+		decoratedScreen.tick(ticks);
 	}
 
 	public void render(GraphicsContext gc) {
@@ -61,5 +56,8 @@ public class SpookingSouls {
 			gc.setFill(Color.DARKRED.deriveColor(2, 1.2, 1, 0.3));
 			gc.fillOval(soul[0], soul[1], 25, 25);
 		}
+		
+		// call decorated screen
+		decoratedScreen.render();
 	}
 }

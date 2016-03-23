@@ -1,11 +1,11 @@
-package gameviews;
+package screens;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 
-public class InfoView extends GameView {
+public class PanelDecorator extends GameView {
 
-	public InfoView(Canvas layer) {
+	public PanelDecorator(Canvas layer) {
 		super(layer);
 		// TODO Auto-generated constructor stub
 	}

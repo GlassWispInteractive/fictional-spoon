@@ -1,4 +1,4 @@
-package framework;
+package screens;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,27 +6,35 @@ import java.util.Arrays;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 
+import framework.EventControl;
+import framework.GameControl;
+import framework.Screen;
+import framework.StateMenu;
+import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class StateGameover extends State {
-
-	private static StateGameover singleton;
+public class FinishScreen extends Screen {
+	private final String won = "You have won the game", lost = "Game over";
+	private boolean finish = false;
+	
+	private static FinishScreen singleton;
 	private int cur;
 	private ArrayList<String> list = new ArrayList<String>(Arrays.asList(new String[] { "Restart", "Credit", "Exit" }));
 
-	public static StateGameover getGameoverScreen() {
+	public static FinishScreen getGameoverScreen() {
 
 		if (singleton == null) {
-			singleton = new StateGameover();
+			singleton = new FinishScreen();
 		}
 
 		return singleton;
 	}
 
-	private StateGameover() {
+	private FinishScreen() {
+		
 
 	}
 
@@ -35,7 +43,7 @@ public class StateGameover extends State {
 
 		EventControl e = EventControl.getEvents();
 
-		SpookingSouls.getObject().tick(ticks);
+//		SpookingSouls.getObject().tick(ticks);
 		// event handling
 		if (e.isLeft())
 			cur = (cur + list.size() - 1) % list.size();
@@ -49,7 +57,7 @@ public class StateGameover extends State {
 				StateMenu.getControl().start();
 				break;
 			case "Credit":
-				StateCredits.getCreditScreen().start();
+				CreditsScreen.getCreditScreen().start();
 				break;
 			case "Exit":
 				System.exit(0);
@@ -76,11 +84,11 @@ public class StateGameover extends State {
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
 
-		SpookingSouls.getObject().render(gc);
-		
+//		SpookingSouls.getObject().render(gc);
+
 		// Game Over
 		gc.setFill(Color.RED);
-		gc.fillText("Game over", Window.SIZE_X / 2, Window.SIZE_Y / 2);
+		gc.fillText(lost, Window.SIZE_X / 2, Window.SIZE_Y / 2);
 
 		// List
 		// calc textLength

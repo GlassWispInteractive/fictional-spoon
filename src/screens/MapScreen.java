@@ -1,4 +1,4 @@
-package gameviews;
+package screens;
 
 import engine.ImageSource;
 import engine.TileFactory;
@@ -11,8 +11,9 @@ import generation.LevelBuilder;
 import generation.Map;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
-public class MapView extends GameView {
+public class MapScreen extends GameView {
 	// map settings
 	private final int size = 16;
 
@@ -25,11 +26,11 @@ public class MapView extends GameView {
 	// variables
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
-	public MapView(Canvas mapLayer, Canvas entitiesLayer) {
+	public MapScreen(Canvas mapLayer, Canvas entitiesLayer) {
 		// call the very important state constructor
-		super(entitiesLayer);
+		super(mapLayer);
 		bg = new Canvas(350 * size, 225 * size);
-		
+
 		// generate fresh map
 		map = LevelBuilder.newLevel(350, 225);
 
@@ -134,8 +135,9 @@ public class MapView extends GameView {
 	@Override
 	public void render() {
 		// shift prerendered map
-//		bg.relocate(-16 * cameraX, -16 * cameraY);
+		bg.relocate(-16 * cameraX, -16 * cameraY);
 
+		// render entities
 		renderEntities();
 
 	}
@@ -145,15 +147,19 @@ public class MapView extends GameView {
 	 * tick (huge improvement)
 	 */
 	private void prerenderMap() {
+		// GraphicsContext gc = bg.getGraphicsContext2D();
+
 		// initialize render screen
-		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
-//		GraphicsContext gc = .getGraphicsContext2D();
+		gc.clearRect(0, 0, layer.getWidth(), layer.getHeight());
 
 		// full rendering of the map
 		for (int x = 0; x < map.getN(); x++) {
 			for (int y = 0; y < map.getM(); y++) {
 				if (map.getGround(x, y) != Ground.WALL) {
 					drawTile(gc, x, y, map.getGround(x, y), map.getTileNumber(x, y));
+				} else {
+					gc.setFill(Color.ANTIQUEWHITE);
+					gc.fillRect(x * size, y * size, size, size);
 				}
 			}
 		}
@@ -164,13 +170,13 @@ public class MapView extends GameView {
 	 */
 	private void renderEntities() {
 		// initialize render screen
-//		final GraphicsContext gc = gcs.get("entities");
-		gc.clearRect(0, 0, layer.getWidth(), layer.getHeight());
-
-		for (Entity mob : fac.getMobs()) {
-			mob.render(gc, size, cameraX, cameraY);
-		}
-		fac.getPlayer().render(gc, size, cameraX, cameraY);
+		// final GraphicsContext gc = gcs.get("entities");
+		// gc.clearRect(0, 0, layer.getWidth(), layer.getHeight());
+		//
+		// for (Entity mob : fac.getMobs()) {
+		// mob.render(gc, size, cameraX, cameraY);
+		// }
+		// fac.getPlayer().render(gc, size, cameraX, cameraY);
 	}
 
 	/**

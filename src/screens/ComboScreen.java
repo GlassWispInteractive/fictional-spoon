@@ -1,4 +1,4 @@
-package gameviews;
+package screens;
 
 import java.util.ArrayList;
 
@@ -12,9 +12,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class ComboView extends GameView {
+public class ComboScreen extends GameView {
 
-	public ComboView(Canvas layer) {
+	public ComboScreen(Canvas layer) {
 		super(layer);
 	}
 

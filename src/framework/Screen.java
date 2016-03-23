@@ -6,16 +6,17 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Paint;
 
-public abstract class State {
+public abstract class Screen {
 	// singleton object
-	protected static State singleton;
+	protected static Screen singleton;
 
 	// internal organisation
-	private StateControl ctrl;
-	private State parent = null;
+	private ScreenControl ctrl;
+	private Screen parent = null;
 
 	// class members
 	protected Group group;
@@ -24,9 +25,9 @@ public abstract class State {
 	protected HashMap<String, GraphicsContext> gcs;
 	protected boolean paused;
 
-	protected State() {
+	protected Screen() {
 		// get control object
-		ctrl = StateControl.getCtrl();
+		ctrl = ScreenControl.getCtrl();
 
 		// init group and scene as root of this scene
 		group = new Group();
@@ -66,7 +67,7 @@ public abstract class State {
 	 * 
 	 * @param layer
 	 */
-	protected void stackLayer(StackPane pane, String name, double x, double y, double w, double h) {
+	protected void stackLayer(Pane pane, String name, double x, double y, double w, double h) {
 		Canvas layer = new Canvas(w, h);
 		pane.getChildren().add(layer);
 		layer.relocate(x, y);
@@ -98,7 +99,7 @@ public abstract class State {
 	 * go back every state until the root state is reached
 	 */
 	public void clean() {
-		State aux = this;
+		Screen aux = this;
 		while (aux.parent != null) {
 			aux = aux.parent;
 		}
