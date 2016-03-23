@@ -377,7 +377,7 @@ public class LevelBuilder {
             	    generateSpawnPoints();
             	}
     
-        	Collections.shuffle(spawnPoints);
+//        	Collections.shuffle(spawnPoints);
         	
         	int[] newSpawnPoint = null;
         	
