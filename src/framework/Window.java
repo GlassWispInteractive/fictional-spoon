@@ -9,6 +9,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import screens.CreditsScreen;
 import screens.MenuScreen;
 
 public class Window extends Application {
@@ -83,6 +84,8 @@ public class Window extends Application {
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
 		ctrl.addScreen("menu", MenuScreen.getControl());
+		ctrl.addScreen("credits", CreditsScreen.getCreditScreen());
+//		ctrl.addScreen("", );
 
 		MenuScreen.getControl().setList(new String[] { "Start", "Credits", "Help", "Exit" });
 		ctrl.setScreen("menu");
@@ -106,8 +109,8 @@ public class Window extends Application {
 				}
 
 				// compute a frame
-				ctrl.tick(passedTicks);
-				ctrl.render();
+				ctrl.getScreen().tick(passedTicks);
+				ctrl.getScreen().render();
 			}
 		};
 

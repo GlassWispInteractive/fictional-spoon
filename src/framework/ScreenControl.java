@@ -2,23 +2,16 @@ package framework;
 
 import java.util.HashMap;
 
-
-
 public class ScreenControl {
+	// singleton object
 	private static ScreenControl singleton;
 
 	// game state
-	private HashMap<String, Screen> screens = new HashMap<>();
-
+	private HashMap<String, Screen> screens;
 	private Screen screen;
 
-	// static colors
-
 	private ScreenControl() {
-		// state = StateName.MENU;
-		// states = new HashMap<>();
-		// states.put(MENU, value)
-
+		screens = new HashMap<>();
 	}
 
 	public static ScreenControl getCtrl() {
@@ -32,29 +25,38 @@ public class ScreenControl {
 	/**
 	 * @return the state
 	 */
-	public Screen getState() {
+	public Screen getScreen() {
 		return screen;
 	}
 
-	public void tick(int ticks) {
-		screen.tick(ticks);
-	}
-
-	public void render() {
-		screen.render();
-	}
-
+	/**
+	 * add new screen with string id
+	 * 
+	 * @param name
+	 * @param screen
+	 */
 	public void addScreen(String name, Screen screen) {
 		screens.put(name, screen);
 	}
 
+	/**
+	 * remove a screen by string id
+	 * 
+	 * @param name
+	 */
 	public void removeScreen(String name) {
 		screens.remove(name);
 	}
-	
-	public void setScreen(String name) {
-		screen = screens.get(name);
-		Window.setScene(screen.getScene());
-	}
 
+	/**
+	 * set some screen active
+	 * 
+	 * @param name
+	 */
+	public void setScreen(String name) {
+		if (screens.get(name) != null) {
+			screen = screens.get(name);
+			Window.setScene(screen.getScene());
+		}
+	}
 }
