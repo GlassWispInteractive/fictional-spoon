@@ -9,7 +9,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import screens.CreditsScreen;
-import screens.MapScreen;
 import screens.MenuScreen;
 import screens.SoulsDecorator;
 
@@ -92,8 +91,8 @@ public class Window extends Application {
 				}
 
 				// compute a frame
-				ctrl.getScreen().tick(passedTicks);
-				ctrl.getScreen().render();
+				ctrl.tick(passedTicks);
+				ctrl.render();
 			}
 		};
 

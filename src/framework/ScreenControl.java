@@ -3,11 +3,6 @@ package framework;
 import java.util.HashMap;
 
 import javafx.animation.FadeTransition;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.SequentialTransition;
-import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
 import javafx.util.Duration;
 
 public class ScreenControl {
@@ -17,6 +12,7 @@ public class ScreenControl {
 	// game state
 	private HashMap<String, Screen> screens;
 	private Screen screen;
+	private boolean ticking = true;
 
 	private ScreenControl() {
 		screens = new HashMap<>();
@@ -63,9 +59,6 @@ public class ScreenControl {
 	 * @param name
 	 */
 	public void setScreen(String name) {
-		Timeline animation;
-		FadeTransition ftIn, ftOut;
-
 		// dont try to set new screen
 		if (screens.get(name) == null) {
 			System.out.println("invalid screen");
@@ -74,31 +67,33 @@ public class ScreenControl {
 
 		// fade out animation
 		if (screen != null) {
-			ftOut = new FadeTransition(new Duration(500), screen.getScene().getRoot());
-			ftOut.setFromValue(1);
-			ftOut.setToValue(0);
-			ftOut.play();
+			FadeTransition ft = new FadeTransition(new Duration(500), screen.getScene().getRoot());
+			ft.setFromValue(1);
+			ft.setToValue(0);
+			ft.play();
 			
-			ftIn = new FadeTransition(new Duration(500), screens.get(name).getScene().getRoot());
-			ftIn.setFromValue(0);
-			ftIn.setToValue(1);
-//			ftIn.play();
-			
-			
-			ftOut.setOnFinished(e -> {
-				screen = screens.get(name);
-				Window.setScene(screen.getScene());
-				
-				ftIn.play();
+			ticking = false;
+
+			ft.setOnFinished(e -> {
+				fadeIn(name);
 			});
 		} else {
-			screen = screens.get(name);
-			Window.setScene(screen.getScene());
-
-			DoubleProperty newOpacity = screen.getScene().getRoot().opacityProperty();
-			new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(newOpacity, 0.0)),
-					new KeyFrame(new Duration(2500), new KeyValue(newOpacity, 1.0))).play();
+			fadeIn(name);
 		}
+	}
+
+	private void fadeIn(String name) {
+		screen = screens.get(name);
+		Window.setScene(screen.getScene());
+
+		FadeTransition ft = new FadeTransition(new Duration(250), screen.getScene().getRoot());
+		ft.setFromValue(0);
+		ft.setToValue(1);
+		ft.play();
+
+		ft.setOnFinished(e -> {
+			ticking = true;
+		});
 	}
 
 	/**
@@ -116,5 +111,17 @@ public class ScreenControl {
 		// add screen first and then set it
 		addScreen(name, screen);
 		setScreen(name);
+	}
+
+	public void tick(int ticks) {
+		if (ticking && screen != null) {
+			screen.tick(ticks);
+		}
+	}
+
+	public void render() {
+		if (screen != null) {
+			screen.render();
+		}
 	}
 }
