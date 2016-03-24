@@ -35,7 +35,7 @@ public class Shrine extends Entity {
 	public void tick(double elapsedTime) {
 		// check intersection
 		if (x == player.getX() && y == player.getY() && blocked == 0) {
-			GameControl.getControl().alert("Player health completely restored");
+			GameControl.getControl().alert("Player health restored");
 			player.heal();
 			blocked = delayTicks;
 		}

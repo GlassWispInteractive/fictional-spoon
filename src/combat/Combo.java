@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 public class Combo {
 	private static Random random = new Random();
-	
+
 	private static ArrayList<Combo> combos = new ArrayList<>();
 	private static HashSet<Combo> combosInUse = new HashSet<>();
 
@@ -17,18 +17,20 @@ public class Combo {
 	private Combo(Element[] combo) {
 		this.setCombo(combo);
 		combos.add(this);
-//		combosInUse.add(this);
+		// combosInUse.add(this);
 		// System.out.println(Arrays.toString(combo));
 	}
-	
+
 	/**
 	 * Random generatedable object
+	 * 
 	 * @param lenT
 	 * @return
 	 */
 	public static Combo generate(int lenT) {
 		Element[] elements = new Element[lenT];
-		elements = Arrays.stream(elements).map(e -> Element.values()[random.nextInt(Element.values().length)]).toArray(Element[]::new);
+		elements = Arrays.stream(elements).map(e -> Element.values()[random.nextInt(Element.values().length)])
+				.toArray(Element[]::new);
 
 		return new Combo(elements);
 	}
@@ -85,6 +87,7 @@ public class Combo {
 
 	public static String toString(Element[] elements) {
 		// write each element as the first latter
-		return Arrays.stream(elements).map(e -> e.toString().substring(0, 1)+"1").collect(Collectors.joining("-"));
+		// toString().substring(0, 1) to get the first char
+		return Arrays.stream(elements).map(e -> "" + (1 + e.ordinal())).collect(Collectors.joining("-"));
 	}
 }
