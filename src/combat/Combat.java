@@ -77,14 +77,6 @@ public class Combat extends Screen {
 		addLayer("info2", 0, Window.SIZE_Y * 0.85, Window.SIZE_X, 100);
 		addLayer("combo", 0, Window.SIZE_Y - 510, Window.SIZE_X, 510);
 
-		// put up design
-		// layers.get(1).relocate(0, Window.SIZE_Y * 0.65);
-		// layers.get(2).relocate(0, 0);
-		// layers.get(3).relocate(0, Window.SIZE_Y * 0.4);
-		// layers.get(4).relocate(0, Window.SIZE_Y * 0.3);
-		// layers.get(5).relocate(0, Window.SIZE_Y * 0.85);
-		// layers.get(6).relocate(0, Window.SIZE_Y - 510);
-
 		player.setCombat(this);
 		this.souls = player.getSouls();
 		// setMonster(getHardCodedMonster());

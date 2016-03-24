@@ -20,21 +20,11 @@ public class FinishScreen extends Screen {
 	private final String won = "You have won the game", lost = "Game over";
 	private boolean finish = false;
 
-	private static FinishScreen singleton;
 	private int cur;
 	private ArrayList<String> list = new ArrayList<String>(Arrays.asList(new String[] { "Restart", "Credit", "Exit" }));
 
-	public static FinishScreen getGameoverScreen() {
-
-		if (singleton == null) {
-			singleton = new FinishScreen();
-		}
-
-		return singleton;
-	}
-
-	private FinishScreen() {
-
+	public FinishScreen(boolean finish) {
+		this.finish = finish;
 	}
 
 	@Override

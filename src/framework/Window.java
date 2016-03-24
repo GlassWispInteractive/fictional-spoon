@@ -9,6 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import screens.CreditsScreen;
+import screens.FinishScreen;
 import screens.MenuScreen;
 import screens.SoulsDecorator;
 
@@ -62,12 +63,18 @@ public class Window extends Application {
 		ScreenControl ctrl = ScreenControl.getCtrl();
 		ctrl.setScreen("menu", new SoulsDecorator(MenuScreen.getControl()));
 		ctrl.addScreen("credits", new SoulsDecorator(CreditsScreen.getCreditScreen()));
+		
+		ctrl.addScreen("game won", new SoulsDecorator(new FinishScreen(true)));
+		ctrl.addScreen("game over", new SoulsDecorator(new FinishScreen(false)));
 		// ctrl.addScreen("", );
 
 		MenuScreen.getControl().setList(new String[] { "Start", "Credits", "Help", "Exit" });
 
 		// precompute the game initialization
 		GameControl.getControl();
+		
+		
+		ctrl.setScreen("game won");
 
 		gameloop = new AnimationTimer() {
 
