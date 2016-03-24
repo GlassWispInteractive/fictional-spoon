@@ -38,6 +38,10 @@ public class EntityFactory {
 
 		return singleton;
 	}
+	
+	public static void resetGame() {
+	    singleton = new EntityFactory();
+	}
 
 	public ArrayList<Entity> getMobs() {
 		return ents;

@@ -6,6 +6,7 @@ import combat.Combo;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
+import framework.GameControl;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chest extends Entity {
@@ -40,6 +41,7 @@ public class Chest extends Entity {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY() && item != null) {
+			GameControl.getControl().alert("New combo: " + item.toString());
 			item.activate();
 			item = null;
 		}

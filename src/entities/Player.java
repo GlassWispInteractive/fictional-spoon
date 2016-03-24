@@ -12,7 +12,7 @@ import engine.TileFactory;
 import engine.TileSource;
 import framework.EventControl;
 import framework.GameControl;
-import gen.environment.Map;
+import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Player extends Entity implements IAttackable{
