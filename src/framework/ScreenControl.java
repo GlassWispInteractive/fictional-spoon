@@ -56,7 +56,7 @@ public class ScreenControl {
 	}
 
 	/**
-	 * set some screen active
+	 * set a screen by string id
 	 * 
 	 * @param name
 	 */
@@ -78,7 +78,7 @@ public class ScreenControl {
 			animation.setOnFinished(e -> {
 				screen = screens.get(name);
 				Window.setScene(screen.getScene());
-				
+
 				DoubleProperty newOpacity = screen.getScene().getRoot().opacityProperty();
 				new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(newOpacity, 0.0)),
 						new KeyFrame(new Duration(800), new KeyValue(newOpacity, 1.0))).play();
@@ -86,10 +86,27 @@ public class ScreenControl {
 		} else {
 			screen = screens.get(name);
 			Window.setScene(screen.getScene());
-			
+
 			DoubleProperty newOpacity = screen.getScene().getRoot().opacityProperty();
 			new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(newOpacity, 0.0)),
-					new KeyFrame(new Duration(800), new KeyValue(newOpacity, 1.0))).play();
+					new KeyFrame(new Duration(2500), new KeyValue(newOpacity, 1.0))).play();
 		}
+	}
+
+	/**
+	 * set a new screen by giving it a name
+	 * 
+	 * @param name
+	 * @param screen
+	 */
+	public void setScreen(String name, Screen screen) {
+		// if scene id is already used, dont set screen
+		if (screens.get(name) != null) {
+			return;
+		}
+
+		// add screen first and then set it
+		addScreen(name, screen);
+		setScreen(name);
 	}
 }

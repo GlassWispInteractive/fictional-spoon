@@ -3,7 +3,6 @@ package framework;
 import java.util.HashMap;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,20 +13,13 @@ public abstract class Screen {
 	// singleton object
 	protected static Screen singleton;
 
-	// internal organisation
-	private ScreenControl ctrl;
-
 	// class members
 	protected Group group;
 	protected Scene scene;
 	protected HashMap<String, Canvas> layers;
 	protected HashMap<String, GraphicsContext> gcs;
-	protected boolean paused;
 
 	protected Screen() {
-		// get control object
-		ctrl = ScreenControl.getCtrl();
-
 		// init group and scene as root of this scene
 		group = new Group();
 		scene = new Scene(group, Window.SIZE_X, Window.SIZE_Y, Paint.valueOf("#212121"));
@@ -40,10 +32,6 @@ public abstract class Screen {
 		gcs.put("main", layers.get("main").getGraphicsContext2D());
 
 		group.getChildren().add(layers.get("main"));
-
-		// pause state is false
-		paused = false;
-
 	}
 
 	/**

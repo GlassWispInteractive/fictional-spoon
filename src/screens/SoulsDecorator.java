@@ -21,13 +21,18 @@ public class SoulsDecorator extends ScreenDecorator {
 		souls = new ArrayList<>();
 		soulWait = 0;
 
-		for (int i = 0; i < 25; i++) {
-			int x = rand.nextInt(Window.SIZE_X - 200), y = rand.nextInt(Window.SIZE_Y - 200);
+		for (int i = 0; i < 10; i++) {
+			final int x = rand.nextInt(Window.SIZE_X - 200), y = rand.nextInt(Window.SIZE_Y - 200);
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
+
+		addLayer("souls", 0, 0, Window.SIZE_X, Window.SIZE_Y);
 	}
 
 	public void tick(int ticks) {
+		// call decorated screen
+		super.tick(ticks);
+
 		// soul computation
 		if (soulWait > 0) {
 			soulWait -= ticks;
@@ -48,19 +53,20 @@ public class SoulsDecorator extends ScreenDecorator {
 					soul[1] = Window.SIZE_Y - 50;
 			}
 		}
-
-		// call decorated screen
-		// decoratedScreen.tick(ticks);
 	}
 
-	public void render(GraphicsContext gc) {
+	public void render() {
+		// call decorated screen
+		super.render();
+
+		// render souls
+		GraphicsContext gc = gcs.get("souls");
+		gc.clearRect(0, 0, layers.get("souls").getWidth(), layers.get("souls").getHeight());
+
 		// render background souls
 		for (double[] soul : souls) {
-			gc.setFill(Color.DARKRED.deriveColor(2, 1.2, 1, 0.3));
+			gc.setFill(Color.RED.deriveColor(2, 1.2, 1, 0.3));
 			gc.fillOval(soul[0], soul[1], 25, 25);
 		}
-
-		// call decorated screen
-		// decoratedScreen.render();
 	}
 }

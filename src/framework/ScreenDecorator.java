@@ -5,11 +5,15 @@ public abstract class ScreenDecorator extends Screen {
 	
 	public ScreenDecorator(Screen decoratedScreen) {
 		this.decoratedScreen = decoratedScreen;
+		group = decoratedScreen.group;
+		scene = decoratedScreen.scene;
+		layers = decoratedScreen.layers;
+		gcs = decoratedScreen.gcs;
+		
 	}
 	
 	protected void tick(int ticks) {
 		decoratedScreen.tick(ticks);
-		System.out.println("screen decorator tick");
 	}
 
 	protected void render() {

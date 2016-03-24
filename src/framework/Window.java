@@ -10,6 +10,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import screens.CreditsScreen;
 import screens.MenuScreen;
+import screens.SoulsDecorator;
 
 public class Window extends Application {
 	// public window wide settings
@@ -82,12 +83,11 @@ public class Window extends Application {
 		// primaryStage.show();
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
-		ctrl.addScreen("menu", MenuScreen.getControl());
-		ctrl.addScreen("credits", CreditsScreen.getCreditScreen());
+		ctrl.setScreen("menu", new SoulsDecorator(MenuScreen.getControl()));
+		ctrl.addScreen("credits", new SoulsDecorator(CreditsScreen.getCreditScreen()));
 		// ctrl.addScreen("", );
 
 		MenuScreen.getControl().setList(new String[] { "Start", "Credits", "Help", "Exit" });
-		ctrl.setScreen("menu");
 
 		// precompute the game initialization
 		GameControl.getControl();

@@ -23,7 +23,6 @@ public class MenuScreen extends Screen {
 
 	private ArrayList<String> list;
 	private int cur;
-	private boolean started = false;
 
 	public static MenuScreen getControl() {
 		if (singleton == null) {
@@ -44,12 +43,10 @@ public class MenuScreen extends Screen {
 	}
 
 	public void tick(int ticks) {
-		started = false;
-
 		EventControl e = EventControl.getEvents();
 
 		// soul computation
-//		SpookingSouls.getObject().tick(ticks);
+		// SpookingSouls.getObject().tick(ticks);
 
 		// event handling
 		if (e.isUp())
@@ -90,7 +87,7 @@ public class MenuScreen extends Screen {
 		double w = gc.getCanvas().getWidth();
 
 		// render backGround souls
-//		SpookingSouls.getObject().render(gc);
+		// SpookingSouls.getObject().render(gc);
 
 		// render logo image
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
@@ -127,9 +124,5 @@ public class MenuScreen extends Screen {
 	public void setList(String[] strings) {
 		list = new ArrayList<String>(Arrays.asList(strings));
 		cur = 0;
-	}
-
-	public boolean isStarted() {
-		return started;
 	}
 }
