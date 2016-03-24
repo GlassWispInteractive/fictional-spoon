@@ -326,7 +326,7 @@ public class Combat extends Screen {
 		renderBar();
 		renderInfo();
 		renderPlayerInfo();
-		renderCombo();
+		renderComboOverview();
 
 		// int textboxWidth = 600;
 		// int textboxHeight = 240;
@@ -444,7 +444,7 @@ public class Combat extends Screen {
 		gc.fillText(player.getPlayerInfo(), 50, 50);
 	}
 
-	private void renderCombo() {
+	private void renderComboOverview() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("combo");
 		gc.clearRect(0, 0, layers.get("combo").getWidth(), layers.get("combo").getHeight());
