@@ -8,14 +8,13 @@ import combat.Combo;
 import framework.Screen;
 import framework.Window;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class ComboScreen extends Screen {
 
-	public ComboScreen(Canvas layer) {
+	public ComboScreen() {
 		// call parent constructor
 		super();
 	}
@@ -30,11 +29,8 @@ public class ComboScreen extends Screen {
 		final GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
 
-		gc.setFill(Color.WHITE);
-		gc.fillRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
-
 		// font settings
-		gc.setFont(Window.NORMAL_FONT);
+		gc.setFont(Window.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
@@ -56,7 +52,7 @@ public class ComboScreen extends Screen {
 		if (comboNames.length == 0) {
 			gc.fillText("No Combos", Window.SIZE_X / 2, startY);
 		} else {
-			gc.fillText("Combos:", Window.SIZE_X / 2, 50);
+			gc.fillText("List of all Combo attacks", Window.SIZE_X / 2, 50);
 		}
 		gc.strokeLine(0, startY + padding, Window.SIZE_X, startY + padding);
 

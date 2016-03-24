@@ -84,7 +84,7 @@ public class FinishScreen extends Screen {
 		// List
 		// calc textLength
 
-		gc.setFont(Window.NORMAL_FONT);
+		gc.setFont(Window.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
 		gc.setLineWidth(1);

@@ -17,6 +17,7 @@ import entities.WalkStrategies.WalkStrategy;
 import framework.ScreenControl;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import screens.MapScreen;
 
 public class Opponent extends Entity {
 	
@@ -52,7 +53,7 @@ public class Opponent extends Entity {
 		
 		if(opponentDead){
 			gc.setFill(Color.RED);
-			gc.fillRect((x - offsetX) * size, (y - offsetY) * size, size, size);
+			gc.fillRect((x - offsetX) * size, MapScreen.MARGIN + (y - offsetY) * size, size, size);
 			tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
 		} else {
 			tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);

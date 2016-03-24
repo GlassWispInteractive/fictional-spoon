@@ -8,8 +8,10 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import screens.ComboScreen;
 import screens.CreditsScreen;
 import screens.FinishScreen;
+import screens.HelpScreen;
 import screens.MenuScreen;
 import screens.SoulsDecorator;
 
@@ -19,7 +21,7 @@ public class Window extends Application {
 	public static final int SIZE_X = 1200, SIZE_Y = 800;
 	public static final Font HUGE_FONT = Font.font("Helvetica", FontWeight.BOLD, 64);
 	public static final Font BIG_FONT = Font.font("Helvetica", FontWeight.BOLD, 32);
-	public static final Font NORMAL_FONT = Font.font("Helvetica", FontWeight.BOLD, 24);
+	public static final Font DEFAULT_FONT = Font.font("Helvetica", FontWeight.BOLD, 24);
 	public static final Font SMALL_FONT = Font.font("Helvetica", FontWeight.NORMAL, 16);
 	public static final Paint[] GROUND_COLOR = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"),
 			Paint.valueOf("#D4B790"), Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
@@ -61,20 +63,19 @@ public class Window extends Application {
 		});
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
-		ctrl.setScreen("menu", new SoulsDecorator(MenuScreen.getControl()));
-		ctrl.addScreen("credits", new SoulsDecorator(CreditsScreen.getCreditScreen()));
-		
+		ctrl.setScreen("menu", new SoulsDecorator(MenuScreen.getScreen()));
+		ctrl.addScreen("combo", new SoulsDecorator(new ComboScreen()));
+		ctrl.addScreen("credits", new SoulsDecorator(CreditsScreen.getScreen()));
+		ctrl.addScreen("help", new SoulsDecorator(HelpScreen.getScreen()));
+
 		ctrl.addScreen("game won", new SoulsDecorator(new FinishScreen(true)));
 		ctrl.addScreen("game over", new SoulsDecorator(new FinishScreen(false)));
 		// ctrl.addScreen("", );
 
-		MenuScreen.getControl().setList(new String[] { "Start", "Credits", "Help", "Exit" });
+		MenuScreen.getScreen().setList(new String[] { "Start", "Credits", "Help", "Exit" });
 
 		// precompute the game initialization
 		GameControl.getControl();
-		
-		
-		ctrl.setScreen("game won");
 
 		gameloop = new AnimationTimer() {
 

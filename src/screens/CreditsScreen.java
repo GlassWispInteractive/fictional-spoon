@@ -11,7 +11,7 @@ public class CreditsScreen extends Screen {
 
 	private static CreditsScreen singleton;
 
-	public static CreditsScreen getCreditScreen() {
+	public static CreditsScreen getScreen() {
 
 		if (singleton == null) {
 			singleton = new CreditsScreen();

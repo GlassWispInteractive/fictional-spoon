@@ -415,7 +415,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("info").getWidth(), layers.get("info").getHeight());
 
 		// font settings
-		gc.setFont(Window.NORMAL_FONT);
+		gc.setFont(Window.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 
@@ -435,7 +435,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("info2").getWidth(), layers.get("info2").getHeight());
 
 		// font settings
-		gc.setFont(Window.NORMAL_FONT);
+		gc.setFont(Window.DEFAULT_FONT);
 		// gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		gc.setFill(Color.ORANGE);
@@ -450,7 +450,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("combo").getWidth(), layers.get("combo").getHeight());
 
 		// font settings
-		gc.setFont(Window.NORMAL_FONT);
+		gc.setFont(Window.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);

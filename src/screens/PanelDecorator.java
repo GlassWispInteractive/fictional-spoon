@@ -41,7 +41,7 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setFill(Paint.valueOf("#212121"));
 		gc.fillRect(0, 0, layers.get("top panel").getWidth(), layers.get("top panel").getHeight());
 		gc.setFill(Color.ANTIQUEWHITE);
-		gc.fillRect(0, MapScreen.MARGIN - 2, layers.get("top panel").getWidth(), 2);
+		gc.fillRect(0, MapScreen.MARGIN - 7, layers.get("top panel").getWidth(), 2);
 	}
 
 	private void renderBottomPanel() {
@@ -53,7 +53,7 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setFill(Paint.valueOf("#212121"));
 		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
 		gc.setFill(Color.ANTIQUEWHITE);
-		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), 2);
+		gc.fillRect(0, 5, layers.get("bottom panel").getWidth(), 2);
 	}
 
 }

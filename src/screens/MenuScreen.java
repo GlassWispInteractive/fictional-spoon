@@ -24,7 +24,7 @@ public class MenuScreen extends Screen {
 	private ArrayList<String> list;
 	private int cur;
 
-	public static MenuScreen getControl() {
+	public static MenuScreen getScreen() {
 		if (singleton == null) {
 			singleton = new MenuScreen();
 		}
@@ -93,7 +93,7 @@ public class MenuScreen extends Screen {
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
-		gc.setFont(Window.NORMAL_FONT);
+		gc.setFont(Window.DEFAULT_FONT);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);

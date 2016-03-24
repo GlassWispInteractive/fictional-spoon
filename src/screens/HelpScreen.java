@@ -15,7 +15,7 @@ public class HelpScreen extends Screen {
 	 * 
 	 * @return
 	 */
-	public static HelpScreen getControl() {
+	public static HelpScreen getScreen() {
 		if (singleton == null) {
 			singleton = new HelpScreen();
 		}
