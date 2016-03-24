@@ -1,4 +1,4 @@
-# Soul Harvester
+# Fictional Spoon
 
 This is a game under development. You can download an executable .jar file at the [release history](https://github.com/dhaunac/fictional-spoon/releases).
 

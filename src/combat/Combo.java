@@ -17,7 +17,7 @@ public class Combo {
 	private Combo(Element[] combo) {
 		this.setCombo(combo);
 		combos.add(this);
-		combosInUse.add(this);
+//		combosInUse.add(this);
 		// System.out.println(Arrays.toString(combo));
 	}
 	
@@ -85,6 +85,6 @@ public class Combo {
 
 	public static String toString(Element[] elements) {
 		// write each element as the first latter
-		return Arrays.stream(elements).map(e -> e.toString().substring(0, 1)).collect(Collectors.joining("-"));
+		return Arrays.stream(elements).map(e -> e.toString().substring(0, 1)+"1").collect(Collectors.joining("-"));
 	}
 }

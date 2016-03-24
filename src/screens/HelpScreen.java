@@ -1,10 +1,12 @@
-package framework;
+package screens;
 
-public class HelpControl extends State {
+import framework.Screen;
+
+public class HelpScreen extends Screen {
 	// singleton
-	private static HelpControl singleton;
+	private static HelpScreen singleton;
 
-	private HelpControl() {
+	private HelpScreen() {
 		super();
 	}
 	
@@ -13,9 +15,9 @@ public class HelpControl extends State {
 	 * 
 	 * @return
 	 */
-	public static HelpControl getControl() {
+	public static HelpScreen getScreen() {
 		if (singleton == null) {
-			singleton = new HelpControl();
+			singleton = new HelpScreen();
 		}
 		return singleton;
 	}

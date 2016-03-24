@@ -1,49 +1,56 @@
-package gameviews;
+package screens;
 
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import entities.Entity;
 import entities.EntityFactory;
+import framework.EventControl;
+import framework.Screen;
+import framework.ScreenControl;
 import framework.Window;
 import generation.Ground;
 import generation.LevelBuilder;
 import generation.Map;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class MapView extends GameView {
+public class MapScreen extends Screen {
+	// constants
+	public final static int MARGIN = 3 * 16;
+	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * MARGIN;
+
 	// map settings
 	private final int size = 16;
 
 	// class components
-	private Canvas bg;
 	private Map map;
 	private EntityFactory fac;
-	private TileFactory tileFac;
+	private TileFactory tileFac = TileFactory.getTilesFactory();;
 
 	// variables
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
-	public MapView(Canvas mapLayer, Canvas entitiesLayer) {
-		// call the very important state constructor
-		super(entitiesLayer);
-		bg = mapLayer;
-		
+	public MapScreen() {
+		// call parent constructor
+		super();
+
 		// generate fresh map
 		map = LevelBuilder.newRandomLevel(350, 225);
-		// map = new LevelBuilder(350, 225).genRooms().genMaze().create();
+
+		// set layout
+		addLayer("map", 0, 0, 350 * size, 225 * size);
+		addLayer("entities", 0, 0, WIDTH, HEIGHT);
+
+		// render the map prior every other rendering and keep it cached
+		prerenderMap();
 
 		// load factories
 		tileFac = TileFactory.getTilesFactory();
 		fac = EntityFactory.getFactory();
 
 		// set view size and be sure to be smaller than the map
-		cameraSizeX = Math.min(Window.SIZE_X / size, map.getN());
-		cameraSizeY = Math.min(Window.SIZE_Y / size, map.getM());
-
-		// render the map prior every other rendering and keep it cached
-		prerenderMap();
+		cameraSizeX = Math.min(WIDTH / size, map.getN());
+		cameraSizeY = Math.min(HEIGHT / size, map.getM());
 
 		// set view
 		Entity player = EntityFactory.getFactory().getPlayer();
@@ -68,8 +75,13 @@ public class MapView extends GameView {
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(ticks);
 		}
+
 		fac.smartAdd();
 		fac.smartDelete();
+		
+		if (EventControl.getEvents().isC()) {
+			ScreenControl.getCtrl().setScreen("combo");
+		}
 	}
 
 	/**
@@ -135,8 +147,9 @@ public class MapView extends GameView {
 	@Override
 	public void render() {
 		// shift prerendered map
-		bg.relocate(-16 * cameraX, -16 * cameraY);
+		layers.get("map").relocate(-16 * cameraX, -16 * cameraY);
 
+		// render entities
 		renderEntities();
 
 	}
@@ -147,15 +160,17 @@ public class MapView extends GameView {
 	 */
 	private void prerenderMap() {
 		// initialize render screen
-//		final GraphicsContext gc = gcs.get("map");
-//		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
-		GraphicsContext gc = bg.getGraphicsContext2D();
+		GraphicsContext gc = gcs.get("map");
+		gc.clearRect(0, 0, layers.get("map").getWidth(), layers.get("map").getHeight());
 
 		// full rendering of the map
 		for (int x = 0; x < map.getN(); x++) {
 			for (int y = 0; y < map.getM(); y++) {
 				if (map.getGround(x, y) != Ground.WALL) {
 					drawTile(gc, x, y, map.getGround(x, y), map.getTileNumber(x, y));
+				} else {
+					// gc.setFill(Color.ANTIQUEWHITE);
+					// gc.fillRect(x * size, y * size, size, size);
 				}
 			}
 		}
@@ -166,8 +181,8 @@ public class MapView extends GameView {
 	 */
 	private void renderEntities() {
 		// initialize render screen
-//		final GraphicsContext gc = gcs.get("entities");
-		gc.clearRect(0, 0, layer.getWidth(), layer.getHeight());
+		final GraphicsContext gc = gcs.get("entities");
+		gc.clearRect(0, 0, layers.get("entities").getWidth(), layers.get("entities").getHeight());
 
 		for (Entity mob : fac.getMobs()) {
 			mob.render(gc, size, cameraX, cameraY);
@@ -193,6 +208,14 @@ public class MapView extends GameView {
 			tile += 20 + 57 * 12;// +-7
 
 		ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, tile % 57, tile / 57);
+
+		// System.out.println(tileFac);
+		// System.out.println(gc);
+		// System.out.println(imgsource);
+		// System.out.println(x);
+		// System.out.println(y);
+		// System.out.println(size);
+		// System.out.println();
 
 		tileFac.drawTile(gc, imgsource, x, y, size);
 	}

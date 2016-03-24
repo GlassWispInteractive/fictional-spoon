@@ -1,8 +1,12 @@
-package framework;
+package screens;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import framework.EventControl;
+import framework.Screen;
+import framework.ScreenControl;
+import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -11,25 +15,24 @@ import javafx.scene.text.TextAlignment;
 
 //import static game.State.*;
 
-public class MenuControl extends State {
-	
+public class MenuScreen extends Screen {
 	// singleton
-	private static MenuControl singleton;
+	private static MenuScreen singleton;
 
 	private Image logo;
 
 	private ArrayList<String> list;
 	private int cur;
-	private boolean started = false;
-	
-	public static MenuControl getControl() {
+
+	public static MenuScreen getScreen() {
 		if (singleton == null) {
-			singleton = new MenuControl();
+			singleton = new MenuScreen();
 		}
+
 		return singleton;
 	}
 
-	private MenuControl() {
+	private MenuScreen() {
 		super();
 
 		// init
@@ -40,12 +43,10 @@ public class MenuControl extends State {
 	}
 
 	public void tick(int ticks) {
-		started = false;
-
 		EventControl e = EventControl.getEvents();
 
 		// soul computation
-		computeBackgroundSouls(ticks);
+		// SpookingSouls.getObject().tick(ticks);
 
 		// event handling
 		if (e.isUp())
@@ -57,17 +58,13 @@ public class MenuControl extends State {
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
 			case "Start":
-				GameControl.getControl().start();
-				break;
-			case "Combos":
-				ComboScreen.getComboScreen().start();
+				ScreenControl.getCtrl().setScreen("game");
 				break;
 			case "Credits":
-				CreditScreen.getCreditScreen().start();
+				ScreenControl.getCtrl().setScreen("credits");
 				break;
 			case "Help":
-//				StateControl.getCtrl().setState(StateName.COMBAT);
-				HelpControl.getControl().start();
+				ScreenControl.getCtrl().setScreen("help");
 				break;
 			case "Exit":
 				System.exit(0);
@@ -83,20 +80,20 @@ public class MenuControl extends State {
 
 	public void render() {
 		// start from clean screen
-		GraphicsContext gc = gcs.get("main");
+		final GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// canvas settings
-		double w = gc.getCanvas().getWidth();
-		
-		//render backGround souls
-		renderBackgroundSouls(gc);
+		final double w = gc.getCanvas().getWidth();
+
+		// render backGround souls
+		// SpookingSouls.getObject().render(gc);
 
 		// render logo image
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
-		gc.setFont(Window.NORMAL_FONT);
+		gc.setFont(Window.DEFAULT_FONT);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
@@ -127,9 +124,5 @@ public class MenuControl extends State {
 	public void setList(String[] strings) {
 		list = new ArrayList<String>(Arrays.asList(strings));
 		cur = 0;
-	}
-
-	public boolean isStarted() {
-		return started;
 	}
 }

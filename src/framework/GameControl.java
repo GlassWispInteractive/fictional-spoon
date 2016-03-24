@@ -1,31 +1,25 @@
 package framework;
 
 import entities.EntityFactory;
-import gameviews.AlertView;
-import gameviews.GameView;
-import gameviews.InfoView;
-import gameviews.MapView;
 import generation.Map;
+import screens.AlertDecorator;
+import screens.MapScreen;
+import screens.PanelDecorator;
 
-public class GameControl extends State {
-	// map settings
-	private final int size = 16;
-
+public class GameControl {
 	// singleton
 	private static GameControl singleton;
 
 	// class components
 	protected enum Views {
-		ALERT, COMBAT, COMBO, INFO, MAP, OBJECTIVE
+		COMBAT, COMBO, MAP
 	};
 
-	private GameView[] views;
-	private final int n = Views.values().length;
-
-	private MapView mapView;
-	private InfoView infoView;
-
-	private AlertView alertView;
+	private MapScreen map;
+	private PanelDecorator panel;
+	private AlertDecorator alert;
+	
+	private boolean combo = false;
 
 	/**
 	 * static method to get the singleton class object
@@ -38,33 +32,24 @@ public class GameControl extends State {
 		}
 		return singleton;
 	}
-	
-	public static void resetGame(){
-	    //reset EntityFactory
-	    EntityFactory.resetGame();	    
-	    
-	    singleton = new GameControl();
+
+	public static void resetGame() {
+		// reset EntityFactory
+		EntityFactory.resetGame();
+
+		singleton = new GameControl();
 	}
-	
+
 	private GameControl() {
 		// call the very important state constructor
 		super();
 
-		views = new GameView[n];
-
-		addLayer("map", 0, 0, 350 * size, 225 * size);
-		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
-		mapView = new MapView(layers.get("map"), layers.get("entities"));
-		views[Views.MAP.ordinal()] = mapView;
-
-		addLayer("info", 0, Window.SIZE_Y - 50, Window.SIZE_X, 50);
-		infoView = new InfoView(layers.get("info"));
-		views[Views.INFO.ordinal()] = infoView;
-
-		addLayer("alert", 0, 300, Window.SIZE_X, 100);
-		alertView = new AlertView(layers.get("alert"));
-		alertView.push("Walk with WASD");
-		views[Views.ALERT.ordinal()] = alertView;
+		ScreenControl ctrl = ScreenControl.getCtrl();
+		map = new MapScreen();
+		panel = new PanelDecorator(map);
+		alert = new AlertDecorator(panel);
+		alert.push("Walk with WASD");
+		ctrl.addScreen("game", alert);
 	}
 
 	/**
@@ -72,39 +57,15 @@ public class GameControl extends State {
 	 */
 	public Map getMap() {
 		// return map;
-		return mapView.getMap();
-	}
-
-	/**
-	 * method is called every tick
-	 * 
-	 * @param ticks
-	 */
-	@Override
-	public void tick(int ticks) {
-		for (int i = 0; i < n; i++) {
-			if (views[i] == null)
-				continue;
-
-			views[i].tick(ticks);
-		}
-	}
-
-	@Override
-	protected void render() {
-		for (int i = 0; i < n; i++) {
-			if (views[i] == null)
-				continue;
-			views[i].render();
-		}
+		return map.getMap();
 	}
 
 	public void updateCamera(int x, int y) {
-		mapView.updateCamera(x, y);
+		map.updateCamera(x, y);
 	}
 
 	public void alert(String string) {
-		alertView.push(string);
+		alert.push(string);
 	}
 
 }
