@@ -21,7 +21,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
-import screens.FinishScreen;
 
 public class Combat extends Screen {
 	// lists

@@ -6,6 +6,7 @@ import generation.Map;
 import screens.AlertDecorator;
 import screens.GameView;
 import screens.MapScreen;
+import screens.PanelDecorator;
 
 public class GameControl extends Screen {
 	// singleton
@@ -46,7 +47,7 @@ public class GameControl extends Screen {
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
 		mapView = new MapScreen();
-		ctrl.addScreen("game", mapView);
+		ctrl.addScreen("game", new PanelDecorator(mapView));
 	}
 
 	/**

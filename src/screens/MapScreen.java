@@ -11,16 +11,19 @@ import generation.Ground;
 import generation.LevelBuilder;
 import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class MapScreen extends Screen {
+	// constants
+	public final static int MARGIN = 3 * 16;
+	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * MARGIN;
+
 	// map settings
 	private final int size = 16;
 
 	// class components
 	private Map map;
 	private EntityFactory fac;
-	private TileFactory tileFac;
+	private TileFactory tileFac = TileFactory.getTilesFactory();;
 
 	// variables
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
@@ -34,7 +37,7 @@ public class MapScreen extends Screen {
 
 		// set layout
 		addLayer("map", 0, 0, 350 * size, 225 * size);
-		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
+		addLayer("entities", 0, 0, WIDTH, HEIGHT);
 
 		// render the map prior every other rendering and keep it cached
 		prerenderMap();
@@ -44,8 +47,8 @@ public class MapScreen extends Screen {
 		fac = EntityFactory.getFactory();
 
 		// set view size and be sure to be smaller than the map
-		cameraSizeX = Math.min(Window.SIZE_X / size, map.getN());
-		cameraSizeY = Math.min(Window.SIZE_Y / size, map.getM());
+		cameraSizeX = Math.min(WIDTH / size, map.getN());
+		cameraSizeY = Math.min(HEIGHT / size, map.getM());
 
 		// set view
 		Entity player = EntityFactory.getFactory().getPlayer();
@@ -70,6 +73,7 @@ public class MapScreen extends Screen {
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(ticks);
 		}
+
 		fac.smartAdd();
 		fac.smartDelete();
 	}
@@ -159,8 +163,8 @@ public class MapScreen extends Screen {
 				if (map.getGround(x, y) != Ground.WALL) {
 					drawTile(gc, x, y, map.getGround(x, y), map.getTileNumber(x, y));
 				} else {
-					gc.setFill(Color.ANTIQUEWHITE);
-					gc.fillRect(x * size, y * size, size, size);
+					// gc.setFill(Color.ANTIQUEWHITE);
+					// gc.fillRect(x * size, y * size, size, size);
 				}
 			}
 		}
@@ -199,6 +203,14 @@ public class MapScreen extends Screen {
 
 		ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, tile % 57, tile / 57);
 
-//		tileFac.drawTile(gc, imgsource, x, y, size);
+		// System.out.println(tileFac);
+		// System.out.println(gc);
+		// System.out.println(imgsource);
+		// System.out.println(x);
+		// System.out.println(y);
+		// System.out.println(size);
+		// System.out.println();
+
+		tileFac.drawTile(gc, imgsource, x, y, size);
 	}
 }

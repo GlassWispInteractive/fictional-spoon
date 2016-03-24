@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
+import screens.MapScreen;
 
 public class TileFactory {
 
@@ -26,17 +27,17 @@ public class TileFactory {
 
 		// 1st dim. count of different ressauces
 		for (int i = 0; i < sourceCount; i++) {
-		    
-		    	TileSource source = TileSource.values()[i];
-		    	
+
+			TileSource source = TileSource.values()[i];
+
 			// 2. dim number of cols
 			int cols = (int) ((source.getImage().getWidth() + 1) / (source.getTileWidth() + source.getMargin()));
-    			subTiles[i] = new Image[cols][];
-    			for (int j = 0; j < cols; j++) {
-    				// 3. dim number of rows
-    				int rows = (int) ((source.getImage().getHeight() + 1) / (source.getTileWidth() + source.getMargin()));
-    				subTiles[i][j] = new Image[rows];
-    			}
+			subTiles[i] = new Image[cols][];
+			for (int j = 0; j < cols; j++) {
+				// 3. dim number of rows
+				int rows = (int) ((source.getImage().getHeight() + 1) / (source.getTileWidth() + source.getMargin()));
+				subTiles[i][j] = new Image[rows];
+			}
 		}
 	}
 
@@ -63,7 +64,7 @@ public class TileFactory {
 		}
 
 		gc.drawImage(subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()], x * size,
-				y * size);
+				MapScreen.MARGIN + y * size);
 	}
 
 	public Image scale(ImageSource imgSource, int scaling) {
@@ -109,12 +110,14 @@ public class TileFactory {
 	}
 
 	private void loadImageSource(ImageSource imgSource) {
-	    
-	    	TileSource source = TileSource.values()[imgSource.getTileSourceOrdinal()];
-	    
+
+		TileSource source = TileSource.values()[imgSource.getTileSourceOrdinal()];
+
 		PixelReader reader = source.getImage().getPixelReader();
-		WritableImage newImage = new WritableImage(reader, (source.getTileWidth() + source.getMargin()) * imgSource.getTileX(),
-				(source.getTileHeight() + source.getMargin()) * imgSource.getTileY(), source.getTileWidth(), source.getTileHeight());
+		WritableImage newImage = new WritableImage(reader,
+				(source.getTileWidth() + source.getMargin()) * imgSource.getTileX(),
+				(source.getTileHeight() + source.getMargin()) * imgSource.getTileY(), source.getTileWidth(),
+				source.getTileHeight());
 
 		subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()] = newImage;
 	}
