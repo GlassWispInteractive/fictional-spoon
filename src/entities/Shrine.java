@@ -3,6 +3,7 @@ package entities;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
+import framework.GameControl;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Shrine extends Entity {
@@ -34,6 +35,7 @@ public class Shrine extends Entity {
 	public void tick(double elapsedTime) {
 		// check intersection
 		if (x == player.getX() && y == player.getY() && blocked == 0) {
+			GameControl.getControl().alert("Player health completely restored");
 			player.heal();
 			blocked = delayTicks;
 		}

@@ -19,8 +19,9 @@ public class GameControl extends Screen {
 
 	private Set<GameView> collection;
 
-	private MapScreen mapView;
-	private AlertDecorator alertView;
+	private MapScreen map;
+	private PanelDecorator panel;
+	private AlertDecorator alert;
 
 	/**
 	 * static method to get the singleton class object
@@ -46,8 +47,11 @@ public class GameControl extends Screen {
 		super();
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
-		mapView = new MapScreen();
-		ctrl.addScreen("game", new PanelDecorator(mapView));
+		map = new MapScreen();
+		panel = new PanelDecorator(map);
+		alert = new AlertDecorator(panel);
+		alert.push("Walk with WASD");
+		ctrl.addScreen("game", alert);
 	}
 
 	/**
@@ -55,7 +59,7 @@ public class GameControl extends Screen {
 	 */
 	public Map getMap() {
 		// return map;
-		return mapView.getMap();
+		return map.getMap();
 	}
 
 	/**
@@ -78,11 +82,11 @@ public class GameControl extends Screen {
 	}
 
 	public void updateCamera(int x, int y) {
-		mapView.updateCamera(x, y);
+		map.updateCamera(x, y);
 	}
 
 	public void alert(String string) {
-		// alertView.push(string);
+		alert.push(string);
 	}
 
 }
