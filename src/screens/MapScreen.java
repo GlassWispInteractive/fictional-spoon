@@ -35,7 +35,7 @@ public class MapScreen extends Screen {
 		super();
 
 		// generate fresh map
-		map = LevelBuilder.newLevel(350, 225);
+		map = LevelBuilder.newRandomLevel(350, 225);
 
 		// set layout
 		addLayer("map", 0, 0, 350 * size, 225 * size);

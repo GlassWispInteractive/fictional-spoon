@@ -16,7 +16,7 @@ public class RectangleWalk extends WalkStrategy {
 	}
 
 	@Override
-	protected Point walkStrategy(int oldX, int oldY) {
+	protected Point walkWithStrategy(int oldX, int oldY) {
 		
 		Point newPoint;
 		

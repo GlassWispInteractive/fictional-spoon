@@ -16,7 +16,7 @@ public class HorizontalWalk extends WalkStrategy{
 	}
 
 	@Override
-	public Point walkStrategy(int oldX, int oldY) {
+	public Point walkWithStrategy(int oldX, int oldY) {
 		
 		Point newPoint;
 		
@@ -26,7 +26,7 @@ public class HorizontalWalk extends WalkStrategy{
 		// make move
 		newPoint = dir.move(new Point(oldX, oldY));
 		
-		if(!map.isWalkable(newPoint.x, oldY)){
+		if(!map.isWalkableRoom(newPoint.x, oldY)){
 			directionIndex = (directionIndex + 2) % Direction.values().length;
 		}
 		

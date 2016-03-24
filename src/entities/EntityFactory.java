@@ -74,10 +74,10 @@ public class EntityFactory {
 		return monster;
 	}
 	
-	public Portal makeSuperMonster(int x, int y, String name) {
-		Portal superMonster = new Portal(x, y, name);
-		addEnts.add(superMonster);
-		return superMonster;
+	public Portal makePortal(int x, int y, String name) {
+		Portal portal = new Portal(x, y, name);
+		addEnts.add(portal);
+		return portal;
 	}
 	
 	public Opponent makeOpponent(int x, int y, String name) {

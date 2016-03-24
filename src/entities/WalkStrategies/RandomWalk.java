@@ -14,7 +14,7 @@ public class RandomWalk extends WalkStrategy{
 
 
 	@Override
-	protected Point walkStrategy(int oldX, int oldY) {
+	protected Point walkWithStrategy(int oldX, int oldY) {
 		
 		return randomWalk(oldX, oldY);
 		

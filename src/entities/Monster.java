@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
+import entities.WalkStrategies.FloorWalk;
 import entities.WalkStrategies.HorizontalWalk;
 import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
@@ -19,7 +20,6 @@ import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import javafx.scene.canvas.GraphicsContext;
-import screens.MapScreen;
 
 public class Monster extends Entity implements IAttackable {
 
@@ -32,7 +32,7 @@ public class Monster extends Entity implements IAttackable {
 	// Point2D(1,8)};
 	
 	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(
-			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk()}));
+			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new FloorWalk(), new RectangleWalk()}));
 	private WalkStrategy currentWalkStrategy;
 	
 

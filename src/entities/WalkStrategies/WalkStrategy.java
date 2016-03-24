@@ -14,14 +14,15 @@ public abstract class WalkStrategy {
 	
 	protected Map map;
 	
-	private Random rnd = new Random();
+	protected Random rnd = new Random();
 	private int blocked = 0;
 	private int delayTicks = 20;
 	
 	private boolean playerFarAway = true;
 	private int area = 8;
-	private boolean aggro = false;
 	private boolean canBeAggro;
+	
+	private Point[] oldPoints = new Point[2];
 	
 	public WalkStrategy() {
 		this.canBeAggro = rnd.nextBoolean();
@@ -32,17 +33,22 @@ public abstract class WalkStrategy {
 	}
 		
 	public Point walk(int oldX, int oldY){
+	    
+		if(oldPoints[1] == null) {
+		    oldPoints[0] = new Point(oldX, oldY);
+		    oldPoints[1] = new Point(oldX, oldY);
+		}
 		
 		map = GameControl.getControl().getMap();
-
-		Point newPoint = choseStrategy(oldX, oldY);
 		
 		if(blocked > 0){
 			blocked--;
 		}
 		
 		if(blocked <= 0){
-			
+		    
+			Point newPoint = choseStrategy(oldX, oldY);
+						
 			blocked = delayTicks - 1;
 			
 			if(!map.isWalkable(newPoint.x, oldY)){
@@ -53,6 +59,12 @@ public abstract class WalkStrategy {
 			}
 
 			if(map.isWalkable(newPoint.x, newPoint.y)){
+				//update last two points
+				oldPoints[1].x = oldPoints[0].x;
+				oldPoints[1].y = oldPoints[0].y;
+				oldPoints[0].x = newPoint.x;
+				oldPoints[0].y = newPoint.y;
+			    
 				return newPoint;
 			}
 		}
@@ -71,27 +83,11 @@ public abstract class WalkStrategy {
 		int playerY = player.getY();
 		playerFarAway = Math.abs(oldX - playerX) > area || Math.abs(oldY - playerY) > area;
 		
-		if(!playerFarAway){
-			aggro = true;
-		}		
-		if(playerFarAway && map.isWalkableRoom(oldX, oldY)){
-			aggro = false;
+		if(playerFarAway){
+			return walkStrategy(oldX, oldY);
+		} else {	
+			return aggroWalk(oldX, oldY);
 		}
-		
-		Point newPoint;
-		
-		if(!aggro){
-			newPoint = walkStrategy(oldX, oldY);
-		} else {
-			
-			if(playerFarAway){
-				newPoint = randomWalk(oldX, oldY);
-			} else {
-				newPoint = aggroWalk(oldX, oldY);
-			}
-		}
-		
-		return newPoint;
 	}
 	
 	protected Point randomWalk(int oldX, int oldY) {
@@ -159,7 +155,38 @@ public abstract class WalkStrategy {
 		return dir1.move(newPoint, dir2);
 	}
 	
+	protected Point walkStrategy(int oldX, int oldY) {
+	    
+	    	if(map.isWalkableRoom(oldX, oldY)) {
+	    	    return walkWithStrategy(oldX, oldY);
+	    	}
+	        
+		Point newPoint;		
+		
+		int directionIndex = rnd.nextInt(Direction.values().length);
+		
+		for(int i = 0; i < 4; i++) {
+		    
+		    Direction dir = Direction.values()[directionIndex];
+		    newPoint = dir.move(new Point(oldX, oldY));
+		    
+		    if(map.isWalkable(newPoint.x, newPoint.y)) {
+        		    if(newPoint.x != oldPoints[1].x || newPoint.y != oldPoints[1].y) {
+        			return newPoint;
+        		    }
+		    }
+		    
+		    
+		    directionIndex = (++directionIndex) % Direction.values().length;
+		    
+		}
+		
+		System.err.println("No walkable field");
+
+		newPoint = null;
+		return newPoint;
+	}
 	
-	protected abstract Point walkStrategy(int oldX, int oldY);
+	protected abstract Point walkWithStrategy(int oldX, int oldY);
 
 }
