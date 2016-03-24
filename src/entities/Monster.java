@@ -20,7 +20,6 @@ import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import javafx.scene.canvas.GraphicsContext;
-import screens.MapScreen;
 
 public class Monster extends Entity implements IAttackable {
 

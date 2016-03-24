@@ -18,8 +18,6 @@ public class GameControl {
 	private MapScreen map;
 	private PanelDecorator panel;
 	private AlertDecorator alert;
-	
-	private boolean combo = false;
 
 	/**
 	 * static method to get the singleton class object
