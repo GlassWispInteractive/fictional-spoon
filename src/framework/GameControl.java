@@ -1,14 +1,12 @@
 package framework;
 
-import java.util.Set;
 import entities.EntityFactory;
 import generation.Map;
 import screens.AlertDecorator;
-import screens.GameView;
 import screens.MapScreen;
 import screens.PanelDecorator;
 
-public class GameControl extends Screen {
+public class GameControl {
 	// singleton
 	private static GameControl singleton;
 
@@ -17,11 +15,11 @@ public class GameControl extends Screen {
 		COMBAT, COMBO, MAP
 	};
 
-	private Set<GameView> collection;
-
 	private MapScreen map;
 	private PanelDecorator panel;
 	private AlertDecorator alert;
+	
+	private boolean combo = false;
 
 	/**
 	 * static method to get the singleton class object
@@ -60,25 +58,6 @@ public class GameControl extends Screen {
 	public Map getMap() {
 		// return map;
 		return map.getMap();
-	}
-
-	/**
-	 * method is called every tick
-	 * 
-	 * @param ticks
-	 */
-	@Override
-	public void tick(int ticks) {
-		for (GameView view : collection) {
-			view.tick(ticks);
-		}
-	}
-
-	@Override
-	protected void render() {
-		for (GameView view : collection) {
-			view.render();
-		}
 	}
 
 	public void updateCamera(int x, int y) {

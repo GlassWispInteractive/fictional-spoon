@@ -5,7 +5,9 @@ import engine.TileFactory;
 import engine.TileSource;
 import entities.Entity;
 import entities.EntityFactory;
+import framework.EventControl;
 import framework.Screen;
+import framework.ScreenControl;
 import framework.Window;
 import generation.Ground;
 import generation.LevelBuilder;
@@ -76,6 +78,10 @@ public class MapScreen extends Screen {
 
 		fac.smartAdd();
 		fac.smartDelete();
+		
+		if (EventControl.getEvents().isC()) {
+			ScreenControl.getCtrl().setScreen("combo");
+		}
 	}
 
 	/**

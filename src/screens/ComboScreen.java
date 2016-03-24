@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import com.sun.javafx.tk.Toolkit;
 
 import combat.Combo;
+import framework.EventControl;
 import framework.Screen;
+import framework.ScreenControl;
 import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,8 +22,10 @@ public class ComboScreen extends Screen {
 	}
 
 	public void tick(int ticks) {
-		// TODO Auto-generated method stub
-
+		// event handling
+		if (EventControl.getEvents().isC()) {
+			ScreenControl.getCtrl().setScreen("game");
+		}
 	}
 
 	public void render() {

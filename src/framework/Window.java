@@ -64,7 +64,7 @@ public class Window extends Application {
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
 		ctrl.setScreen("menu", new SoulsDecorator(MenuScreen.getScreen()));
-		ctrl.addScreen("combo", new SoulsDecorator(new ComboScreen()));
+		ctrl.addScreen("combo", new ComboScreen());
 		ctrl.addScreen("credits", new SoulsDecorator(CreditsScreen.getScreen()));
 		ctrl.addScreen("help", new SoulsDecorator(HelpScreen.getScreen()));
 
