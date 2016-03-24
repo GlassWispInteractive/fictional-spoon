@@ -2,8 +2,10 @@ package framework;
 
 import java.util.HashMap;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.util.Duration;
@@ -62,6 +64,7 @@ public class ScreenControl {
 	 */
 	public void setScreen(String name) {
 		Timeline animation;
+		FadeTransition ftIn, ftOut;
 
 		// dont try to set new screen
 		if (screens.get(name) == null) {
@@ -71,17 +74,22 @@ public class ScreenControl {
 
 		// fade out animation
 		if (screen != null) {
-			DoubleProperty opacity = screen.getScene().getRoot().opacityProperty();
-			animation = new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),
-					new KeyFrame(new Duration(800), new KeyValue(opacity, 0.0)));
-			animation.play();
-			animation.setOnFinished(e -> {
+			ftOut = new FadeTransition(new Duration(500), screen.getScene().getRoot());
+			ftOut.setFromValue(1);
+			ftOut.setToValue(0);
+			ftOut.play();
+			
+			ftIn = new FadeTransition(new Duration(500), screens.get(name).getScene().getRoot());
+			ftIn.setFromValue(0);
+			ftIn.setToValue(1);
+//			ftIn.play();
+			
+			
+			ftOut.setOnFinished(e -> {
 				screen = screens.get(name);
 				Window.setScene(screen.getScene());
-
-				DoubleProperty newOpacity = screen.getScene().getRoot().opacityProperty();
-				new Timeline(new KeyFrame(Duration.ZERO, new KeyValue(newOpacity, 0.0)),
-						new KeyFrame(new Duration(800), new KeyValue(newOpacity, 1.0))).play();
+				
+				ftIn.play();
 			});
 		} else {
 			screen = screens.get(name);

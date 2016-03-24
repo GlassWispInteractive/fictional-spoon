@@ -5,20 +5,19 @@ import engine.TileFactory;
 import engine.TileSource;
 import entities.Entity;
 import entities.EntityFactory;
+import framework.Screen;
 import framework.Window;
 import generation.Ground;
 import generation.LevelBuilder;
 import generation.Map;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class MapScreen extends GameView {
+public class MapScreen extends Screen {
 	// map settings
 	private final int size = 16;
 
 	// class components
-	private Canvas bg;
 	private Map map;
 	private EntityFactory fac;
 	private TileFactory tileFac;
@@ -26,13 +25,19 @@ public class MapScreen extends GameView {
 	// variables
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
-	public MapScreen(Canvas mapLayer, Canvas entitiesLayer) {
-		// call the very important state constructor
-		super(mapLayer);
-		bg = new Canvas(350 * size, 225 * size);
+	public MapScreen() {
+		// call parent constructor
+		super();
 
 		// generate fresh map
 		map = LevelBuilder.newLevel(350, 225);
+
+		// set layout
+		addLayer("map", 0, 0, 350 * size, 225 * size);
+		addLayer("entities", 0, 0, Window.SIZE_X, Window.SIZE_Y);
+
+		// render the map prior every other rendering and keep it cached
+		prerenderMap();
 
 		// load factories
 		tileFac = TileFactory.getTilesFactory();
@@ -41,9 +46,6 @@ public class MapScreen extends GameView {
 		// set view size and be sure to be smaller than the map
 		cameraSizeX = Math.min(Window.SIZE_X / size, map.getN());
 		cameraSizeY = Math.min(Window.SIZE_Y / size, map.getM());
-
-		// render the map prior every other rendering and keep it cached
-		prerenderMap();
 
 		// set view
 		Entity player = EntityFactory.getFactory().getPlayer();
@@ -135,7 +137,7 @@ public class MapScreen extends GameView {
 	@Override
 	public void render() {
 		// shift prerendered map
-		bg.relocate(-16 * cameraX, -16 * cameraY);
+		layers.get("map").relocate(-16 * cameraX, -16 * cameraY);
 
 		// render entities
 		renderEntities();
@@ -147,10 +149,9 @@ public class MapScreen extends GameView {
 	 * tick (huge improvement)
 	 */
 	private void prerenderMap() {
-		// GraphicsContext gc = bg.getGraphicsContext2D();
-
 		// initialize render screen
-		gc.clearRect(0, 0, layer.getWidth(), layer.getHeight());
+		GraphicsContext gc = gcs.get("map");
+		gc.clearRect(0, 0, layers.get("map").getWidth(), layers.get("map").getHeight());
 
 		// full rendering of the map
 		for (int x = 0; x < map.getN(); x++) {
@@ -170,13 +171,13 @@ public class MapScreen extends GameView {
 	 */
 	private void renderEntities() {
 		// initialize render screen
-		// final GraphicsContext gc = gcs.get("entities");
-		// gc.clearRect(0, 0, layer.getWidth(), layer.getHeight());
-		//
-		// for (Entity mob : fac.getMobs()) {
-		// mob.render(gc, size, cameraX, cameraY);
-		// }
-		// fac.getPlayer().render(gc, size, cameraX, cameraY);
+		final GraphicsContext gc = gcs.get("entities");
+		gc.clearRect(0, 0, layers.get("entities").getWidth(), layers.get("entities").getHeight());
+
+		for (Entity mob : fac.getMobs()) {
+			mob.render(gc, size, cameraX, cameraY);
+		}
+		fac.getPlayer().render(gc, size, cameraX, cameraY);
 	}
 
 	/**
@@ -198,6 +199,6 @@ public class MapScreen extends GameView {
 
 		ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, tile % 57, tile / 57);
 
-		tileFac.drawTile(gc, imgsource, x, y, size);
+//		tileFac.drawTile(gc, imgsource, x, y, size);
 	}
 }

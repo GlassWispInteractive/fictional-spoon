@@ -41,7 +41,4 @@ class SoundControl {
 		this.on = on;
 		update();
 	}
-	
-	
-	
 }

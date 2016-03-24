@@ -80,11 +80,11 @@ public class MenuScreen extends Screen {
 
 	public void render() {
 		// start from clean screen
-		GraphicsContext gc = gcs.get("main");
+		final GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
 		// canvas settings
-		double w = gc.getCanvas().getWidth();
+		final double w = gc.getCanvas().getWidth();
 
 		// render backGround souls
 		// SpookingSouls.getObject().render(gc);

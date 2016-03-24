@@ -5,28 +5,31 @@ import java.util.ArrayList;
 import com.sun.javafx.tk.Toolkit;
 
 import combat.Combo;
+import framework.Screen;
 import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class ComboScreen extends GameView {
+public class ComboScreen extends Screen {
 
 	public ComboScreen(Canvas layer) {
-		super(layer);
+		// call parent constructor
+		super();
 	}
 
-	@Override
 	public void tick(int ticks) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void render() {
 		// start from clean screen
-		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+		final GraphicsContext gc = gcs.get("main");
+		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
+
 		gc.setFill(Color.WHITE);
 		gc.fillRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 

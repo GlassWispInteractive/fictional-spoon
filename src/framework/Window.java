@@ -9,6 +9,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import screens.CreditsScreen;
+import screens.MapScreen;
 import screens.MenuScreen;
 import screens.SoulsDecorator;
 
@@ -22,13 +23,6 @@ public class Window extends Application {
 	public static final Font SMALL_FONT = Font.font("Helvetica", FontWeight.NORMAL, 16);
 	public static final Paint[] GROUND_COLOR = { Paint.valueOf("#212121"), Paint.valueOf("#A1D490"),
 			Paint.valueOf("#D4B790"), Paint.valueOf("#9C7650"), Paint.valueOf("#801B1B"), Paint.valueOf("#000000") };
-	// public static final Font hugeFont = Font.font("Helvetica",
-	// FontWeight.BOLD, 40);
-	// public static final Font bigFont = Font.font("Helvetica",
-	// FontWeight.BOLD, 24);
-	// public static final Font smallFont = Font.font("Helvetica",
-	// FontWeight.NORMAL, 16);
-
 	public static boolean music = false;
 
 	// make the stage acessible
@@ -66,22 +60,6 @@ public class Window extends Application {
 			EventControl.getEvents().removeCode(event);
 		});
 
-		// ScreensController mainContainer = new ScreensController();
-		// mainContainer.loadScreen(ScreensFramework.screen1ID,
-		// ScreensFramework.screen1File);
-		// mainContainer.loadScreen(ScreensFramework.screen2ID,
-		// ScreensFramework.screen2File);
-		// mainContainer.loadScreen(ScreensFramework.screen3ID,
-		// ScreensFramework.screen3File);
-		//
-		// mainContainer.setScreen(ScreensFramework.screen1ID);
-		//
-		// Group root = new Group();
-		// root.getChildren().addAll(mainContainer);
-		// Scene scene = new Scene(root);
-		// primaryStage.setScene(scene);
-		// primaryStage.show();
-
 		ScreenControl ctrl = ScreenControl.getCtrl();
 		ctrl.setScreen("menu", new SoulsDecorator(MenuScreen.getControl()));
 		ctrl.addScreen("credits", new SoulsDecorator(CreditsScreen.getCreditScreen()));
@@ -109,6 +87,10 @@ public class Window extends Application {
 
 				}
 
+				if (EventControl.getEvents().isESC()) {
+					ctrl.setScreen("menu");
+				}
+
 				// compute a frame
 				ctrl.getScreen().tick(passedTicks);
 				ctrl.getScreen().render();
@@ -117,7 +99,6 @@ public class Window extends Application {
 
 		stage.show();
 		gameloop.start();
-
 	}
 
 	public static void setScene(Scene scene) {
