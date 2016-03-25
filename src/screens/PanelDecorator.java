@@ -77,8 +77,8 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.clearRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
 
 		// draw background
-		gc.setFill(Paint.valueOf("#212121"));
-		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
+//		gc.setFill(Paint.valueOf("#212121"));
+//		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
 		gc.setFill(Color.ANTIQUEWHITE);
 		gc.fillRect(0, 5, layers.get("bottom panel").getWidth(), 2);
 	}

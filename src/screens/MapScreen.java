@@ -16,7 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class MapScreen extends Screen {
 	// constants
-	public final static int MARGIN = 3 * 16;
+	public final static int MARGIN = 0; // 3 * 16
 	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * MARGIN;
 
 	// map settings
@@ -105,9 +105,9 @@ public class MapScreen extends Screen {
 	 * @param centerY
 	 */
 	public void updateCamera(int centerX, int centerY) {
-		// ~15% of the screen is the
-		final int viewPaddingX = cameraSizeX / 7;
-		final int viewPaddingY = cameraSizeY / 7;
+		// 20% of the screen is the
+		final int viewPaddingX = cameraSizeX / 5;
+		final int viewPaddingY = cameraSizeY / 5;
 
 		if (centerX - viewPaddingX < cameraX) {
 			cameraX = centerX - viewPaddingX;

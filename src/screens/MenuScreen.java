@@ -39,7 +39,7 @@ public class MenuScreen extends Screen {
 		list = new ArrayList<>();
 		cur = 0;
 
-		logo = new Image("/resources/logo.png");
+		logo = new Image("/resources/graphics/logo.png");
 	}
 
 	public void tick(int ticks) {

@@ -3,11 +3,11 @@ package engine;
 import javafx.scene.image.Image;
 
 public enum TileSource{
-	MAP_TILES(new Image("/resources/roguelikeMap_transparent.png"), 16, 1),
-	INDOOR_TILES(new Image("/resources/roguelikeIndoor_transparent.png"), 16, 1),
-	CHAR_TILES(new Image("/resources/roguelikeChar_transparent.png"), 16, 1),
-	MONSTER_TILES(new Image("/resources/roguelikecreatures_noPadding.png"), 16, 0);
-//	MONSTER_TILES(new Image("/resources/roguelikecreatures.png"), 16, 1);
+	MAP_TILES(new Image("/resources/graphics/roguelikeMap_transparent.png"), 16, 1),
+	INDOOR_TILES(new Image("/resources/graphics/roguelikeIndoor_transparent.png"), 16, 1),
+	CHAR_TILES(new Image("/resources/graphics/roguelikeChar_transparent.png"), 16, 1),
+	MONSTER_TILES(new Image("/resources/graphics/roguelikecreatures_noPadding.png"), 16, 0);
+//	MONSTER_TILES(new Image("/resources/graphics/roguelikecreatures.png"), 16, 1);
 	
 	Image image;
 	int tileWidth, tileHeight, margin;

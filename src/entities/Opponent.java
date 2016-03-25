@@ -81,8 +81,9 @@ public class Opponent extends Entity {
 			
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-				ScreenControl.getCtrl().addScreen("combat", new Combat(this));
-				ScreenControl.getCtrl().setScreen("combat");
+				opponentDead = true;
+//				ScreenControl.getCtrl().addScreen("combat", new Combat(this));
+//				ScreenControl.getCtrl().setScreen("combat");
 			}
 			
 		}		

@@ -10,11 +10,6 @@ public class GameControl {
 	// singleton
 	private static GameControl singleton;
 
-	// class components
-	protected enum Views {
-		COMBAT, COMBO, MAP
-	};
-
 	private MapScreen map;
 	private PanelDecorator panel;
 	private AlertDecorator alert;
@@ -44,8 +39,8 @@ public class GameControl {
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
 		map = new MapScreen();
-		panel = new PanelDecorator(map);
-		alert = new AlertDecorator(panel);
+//		panel = new PanelDecorator(map);
+		alert = new AlertDecorator(map);
 		alert.push("Walk with WASD");
 		ctrl.addScreen("game", alert);
 	}

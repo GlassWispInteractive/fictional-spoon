@@ -110,8 +110,9 @@ public class Monster extends Entity implements IAttackable {
 			// check intersection
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-				ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[]{this}));
-				ScreenControl.getCtrl().setScreen("combat");
+				monsterDead = true;
+//				ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[]{this}));
+//				ScreenControl.getCtrl().setScreen("combat");
 			}
 		}
 	}
