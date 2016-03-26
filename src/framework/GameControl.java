@@ -1,5 +1,7 @@
 package framework;
 
+import combat.Goal;
+import combat.Objective;
 import entities.EntityFactory;
 import generation.Map;
 import screens.AlertDecorator;
@@ -10,6 +12,7 @@ public class GameControl {
 	// singleton
 	private static GameControl singleton;
 
+	private Objective objective;
 	private MapScreen map;
 	private PanelDecorator panel;
 	private AlertDecorator alert;
@@ -38,11 +41,16 @@ public class GameControl {
 		super();
 
 		ScreenControl ctrl = ScreenControl.getCtrl();
+
+		objective = new Objective(Goal.MONSTER, 5);
+
 		map = new MapScreen();
-//		panel = new PanelDecorator(map);
-		alert = new AlertDecorator(map);
+		panel = new PanelDecorator(map);
+		alert = new AlertDecorator(panel);
 		alert.push("Walk with WASD");
 		ctrl.addScreen("game", alert);
+
+		panel.updateProgress(objective.progress());
 	}
 
 	/**
@@ -59,6 +67,18 @@ public class GameControl {
 
 	public void alert(String string) {
 		alert.push(string);
+	}
+
+	public void updateGoal(Goal goal) {
+		// update objective reference
+		objective.add(goal);
+
+		// check if objective is reached
+		if (objective.progress() < 1) {
+			panel.updateProgress(objective.progress());
+		} else {
+			ScreenControl.getCtrl().setScreen("game won");
+		}
 	}
 
 }

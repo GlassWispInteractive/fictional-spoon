@@ -3,6 +3,7 @@ package entities;
 import java.util.ArrayList;
 
 import combat.Combo;
+import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
@@ -18,9 +19,9 @@ public class Chest extends Entity {
 	public Chest(int x, int y, Combo combo) {
 		super(x, y);
 		this.item = combo;
-		
+
 		chests.add(this);
-		
+
 		tileFac = TileFactory.getTilesFactory();
 	}
 
@@ -41,7 +42,13 @@ public class Chest extends Entity {
 		// check intersection
 		EntityFactory fac = EntityFactory.getFactory();
 		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY() && item != null) {
+			// alert
 			GameControl.getControl().alert("New combo: " + item.toString());
+
+			// goal update
+			GameControl.getControl().updateGoal(Goal.CHEST);
+
+			// game logic
 			item.activate();
 			item = null;
 		}

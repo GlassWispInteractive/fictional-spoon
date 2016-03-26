@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import combat.Combat;
+import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
@@ -15,6 +16,7 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
+import framework.GameControl;
 import framework.ScreenControl;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -81,6 +83,13 @@ public class Opponent extends Entity {
 			
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
+				// alert
+//				GameControl.getControl().alert("New combo: ");
+
+				// goal update
+				GameControl.getControl().updateGoal(Goal.OPPONENT);
+
+				// game logic
 				opponentDead = true;
 //				ScreenControl.getCtrl().addScreen("combat", new Combat(this));
 //				ScreenControl.getCtrl().setScreen("combat");

@@ -14,7 +14,7 @@ import javafx.scene.text.TextAlignment;
 public class AlertDecorator extends ScreenDecorator {
 	// constants
 
-	private final double REPETITIONS = 2, SPEED = 25, DURATION = Math.PI * SPEED * REPETITIONS;
+	private final double REPETITIONS = 1, SPEED = 20, DURATION = Math.PI * SPEED * REPETITIONS;
 
 	// class members
 	private Queue<String> alerts;
