@@ -63,9 +63,7 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setLineWidth(2);
 		gc.setStroke(Color.GREY);
 		for (int i = 5; i < 100; i += 5) {
-			gc.strokePolyline(
-					new double[] { 100 + i / 100.0 * (Window.SIZE_X - 200), 100 + i / 100.0 * (Window.SIZE_X - 200) },
-					new double[] { 5, 35 }, 2);
+			gc.strokeLine(100 + i / 100.0 * (Window.SIZE_X - 200),  5, 100 + i / 100.0 * (Window.SIZE_X - 200), 35);
 		}
 	}
 
