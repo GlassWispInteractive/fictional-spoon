@@ -66,7 +66,7 @@ public class Window extends Application {
 		ctrl.setScreen("menu", new SoulsDecorator(MenuScreen.getScreen()));
 		ctrl.addScreen("combo", new ComboScreen());
 		ctrl.addScreen("credits", new SoulsDecorator(CreditsScreen.getScreen()));
-		ctrl.addScreen("help", new SoulsDecorator(HelpScreen.getScreen()));
+		ctrl.addScreen("help", new SoulsDecorator(new HelpScreen("menu")));
 
 		ctrl.addScreen("game won", new SoulsDecorator(new FinishScreen(true)));
 		ctrl.addScreen("game over", new SoulsDecorator(new FinishScreen(false)));

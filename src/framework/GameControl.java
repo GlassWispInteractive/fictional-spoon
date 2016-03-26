@@ -5,6 +5,7 @@ import combat.Objective;
 import entities.EntityFactory;
 import generation.Map;
 import screens.AlertDecorator;
+import screens.HelpScreen;
 import screens.MapScreen;
 import screens.PanelDecorator;
 
@@ -51,6 +52,11 @@ public class GameControl {
 		ctrl.addScreen("game", alert);
 
 		panel.updateProgress(objective.progress());
+		
+		
+		
+//		start with intro screen
+		ctrl.addScreen("intro", new HelpScreen("game"));
 	}
 
 	/**
