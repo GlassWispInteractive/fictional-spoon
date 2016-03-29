@@ -113,7 +113,7 @@ public class Monster extends Entity implements IAttackable {
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
 				// alert
-				GameControl.getControl().alert("0 Experience gained ");
+				GameControl.getControl().alert("exp gained");
 
 				// goal update
 				GameControl.getControl().updateGoal(Goal.MONSTER);

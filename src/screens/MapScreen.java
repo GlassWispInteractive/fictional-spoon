@@ -10,7 +10,6 @@ import framework.Screen;
 import framework.ScreenControl;
 import framework.Window;
 import generation.Ground;
-import generation.LevelBuilder;
 import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -30,15 +29,14 @@ public class MapScreen extends Screen {
 	// variables
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
-	public MapScreen() {
+	public MapScreen(Map map) {
 		// call parent constructor
 		super();
 
-		// generate fresh map
-		map = LevelBuilder.newRandomLevel(350, 225);
+		this.map = map;
 
 		// set layout
-		addLayer("map", 0, 0, 350 * size, 225 * size);
+		addLayer("map", 0, 0, map.getN() * size, map.getM() * size);
 		addLayer("entities", 0, 0, WIDTH, HEIGHT);
 
 		// render the map prior every other rendering and keep it cached

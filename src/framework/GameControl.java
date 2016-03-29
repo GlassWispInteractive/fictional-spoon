@@ -3,6 +3,7 @@ package framework;
 import combat.Goal;
 import combat.Objective;
 import entities.EntityFactory;
+import generation.LevelBuilder;
 import generation.Map;
 import screens.AlertDecorator;
 import screens.HelpScreen;
@@ -17,6 +18,7 @@ public class GameControl {
 	private MapScreen map;
 	private PanelDecorator panel;
 	private AlertDecorator alert;
+	private int level;
 
 	/**
 	 * static method to get the singleton class object
@@ -41,22 +43,52 @@ public class GameControl {
 		// call the very important state constructor
 		super();
 
+		// settings
+		ScreenControl.getCtrl().addScreen("intro", new HelpScreen("game", 200));
+		ScreenControl.getCtrl().addScreen("level complete", new HelpScreen("game", 200));
+		level = 1;
+		loadObjective(level);
+
+	}
+
+	private void loadObjective(int level) {
+		//
 		ScreenControl ctrl = ScreenControl.getCtrl();
+		ctrl.setScreen("intro");
 
-		objective = new Objective(Goal.MONSTER, 5);
+		// reset EntityFactory
+		EntityFactory.resetGame();
 
-		map = new MapScreen();
+		// set the appropriate objective
+		switch (level) {
+		case 1:
+			objective = new Objective(Goal.MONSTER, 1);
+			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			break;
+		case 2:
+			objective = new Objective(Goal.MONSTER, 5);
+			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			break;
+		case 3:
+			objective = new Objective(Goal.MONSTER, 5);
+			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			break;
+		case 4:
+			objective = new Objective(Goal.MONSTER, 5);
+			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			break;
+		case 5:
+			objective = new Objective(Goal.MONSTER, 5);
+			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			break;
+		default:
+
+		}
+
+		// update game screens
 		panel = new PanelDecorator(map);
 		alert = new AlertDecorator(panel);
-		alert.push("Walk with WASD");
-		ctrl.addScreen("game", alert);
-
-		panel.updateProgress(objective.progress());
-		
-		
-		
-//		start with intro screen
-		ctrl.addScreen("intro", new HelpScreen("game", 200));
+		ScreenControl.getCtrl().addScreen("game", alert);
 	}
 
 	/**
@@ -79,11 +111,17 @@ public class GameControl {
 		// update objective reference
 		objective.add(goal);
 
-		// check if objective is reached
 		if (objective.progress() < 1) {
+			// update panel, game is going
 			panel.updateProgress(objective.progress());
 		} else {
-			ScreenControl.getCtrl().setScreen("game won");
+			// objective is reached
+			if (level == 5) {
+				ScreenControl.getCtrl().setScreen("game won");
+			} else {
+				level++;
+				loadObjective(level);
+			}
 		}
 	}
 

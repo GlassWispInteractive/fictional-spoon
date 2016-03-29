@@ -36,8 +36,9 @@ public class HelpScreen extends Screen {
 			remaining -= ticks;
 		} else {
 			ScreenControl.getCtrl().setScreen(next);
+			remaining = duration;
 		}
-	}j
+	}
 
 	@Override
 	protected void render() {
