@@ -11,17 +11,17 @@ import javafx.scene.text.TextAlignment;
 
 public class HelpScreen extends Screen {
 	// class members
-	private final int DURATION = 1000;
-	private int remaining;
+	private int duration, remaining;
 	
 	private String next;
 
-	public HelpScreen(String next) {
+	public HelpScreen(String next, int duration) {
 		super();
 		
+		this.duration = duration;
 		this.next = next;
 		
-		remaining = DURATION;
+		remaining = this.duration;
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class HelpScreen extends Screen {
 		} else {
 			ScreenControl.getCtrl().setScreen(next);
 		}
-	}
+	}j
 
 	@Override
 	protected void render() {
@@ -58,12 +58,12 @@ public class HelpScreen extends Screen {
 		gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
 
 		// single elements
-		final String credits[] = new String[] { "Move with WASD", "Kill 5 monsters to complete this level", "",
+		final String text[] = new String[] { "Move with WASD", "Kill 5 monsters to complete this level", "",
 				"Good luck" };
 
 		gc.setFont(Window.DEFAULT_FONT);
-		for (int i = 0; i < credits.length; i++) {
-			gc.fillText(credits[i], Window.SIZE_X / 2, 200 + i * 100);
+		for (int i = 0; i < text.length; i++) {
+			gc.fillText(text[i], Window.SIZE_X / 2, 200 + i * 100);
 		}
 	}
 }

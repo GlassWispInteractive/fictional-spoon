@@ -56,7 +56,7 @@ public class GameControl {
 		
 		
 //		start with intro screen
-		ctrl.addScreen("intro", new HelpScreen("game"));
+		ctrl.addScreen("intro", new HelpScreen("game", 200));
 	}
 
 	/**
