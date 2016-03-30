@@ -58,7 +58,7 @@ public class MenuScreen extends Screen {
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
 			case "Start":
-				ScreenControl.getCtrl().setScreen("intro");
+				ScreenControl.getCtrl().setScreen("game intro");
 				break;
 			case "Credits":
 				ScreenControl.getCtrl().setScreen("credits");

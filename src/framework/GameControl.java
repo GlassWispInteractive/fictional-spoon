@@ -14,6 +14,8 @@ public class GameControl {
 	// singleton
 	private static GameControl singleton;
 
+	private HelpScreen screen;
+
 	private Objective objective;
 	private MapScreen map;
 	private PanelDecorator panel;
@@ -44,8 +46,8 @@ public class GameControl {
 		super();
 
 		// settings
-		ScreenControl.getCtrl().addScreen("intro", new HelpScreen("game", 200));
-		ScreenControl.getCtrl().addScreen("level complete", new HelpScreen("game", 200));
+		screen = new HelpScreen("game", 200);
+		ScreenControl.getCtrl().addScreen("game intro", screen);
 		level = 1;
 		loadObjective(level);
 
@@ -54,31 +56,46 @@ public class GameControl {
 	private void loadObjective(int level) {
 		//
 		ScreenControl ctrl = ScreenControl.getCtrl();
-		ctrl.setScreen("intro");
 
-		// reset EntityFactory
-		EntityFactory.resetGame();
+		if (level > 1) {
+			// reset stuff
+			EntityFactory.resetGame();
+		}
 
 		// set the appropriate objective
 		switch (level) {
 		case 1:
-			objective = new Objective(Goal.MONSTER, 1);
+			screen.setText(new String[] { "Welcome", "Quest: Kill 2 monsters" });
+			objective = new Objective(Goal.MONSTER, 2);
+
 			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		case 2:
 			objective = new Objective(Goal.MONSTER, 5);
+			screen.setText(new String[] { "Quest completed", "Quest: Kill 5 monsters" });
+			ctrl.setScreen("game intro");
+
 			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		case 3:
 			objective = new Objective(Goal.MONSTER, 5);
+			screen.setText(new String[] { "Quest completed", "Quest: Kill 5 monsters" });
+			ctrl.setScreen("game intro");
+
 			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		case 4:
 			objective = new Objective(Goal.MONSTER, 5);
+			screen.setText(new String[] { "Quest completed", "Quest: Kill 5 monsters" });
+			ctrl.setScreen("game intro");
+
 			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		case 5:
 			objective = new Objective(Goal.MONSTER, 5);
+			screen.setText(new String[] { "Quest completed", "Quest: Kill 5 monsters" });
+			ctrl.setScreen("game intro");
+
 			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		default:
@@ -88,7 +105,7 @@ public class GameControl {
 		// update game screens
 		panel = new PanelDecorator(map);
 		alert = new AlertDecorator(panel);
-		ScreenControl.getCtrl().addScreen("game", alert);
+		ctrl.addScreen("game", alert);
 	}
 
 	/**

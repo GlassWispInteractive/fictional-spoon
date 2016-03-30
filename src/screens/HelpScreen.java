@@ -12,15 +12,17 @@ import javafx.scene.text.TextAlignment;
 public class HelpScreen extends Screen {
 	// class members
 	private int duration, remaining;
-	
-	private String next;
+	private String nextScreen;
+	private String text[];
+	private int index;
 
 	public HelpScreen(String next, int duration) {
 		super();
-		
+
+		text = new String[] { "" };
 		this.duration = duration;
-		this.next = next;
-		
+		this.nextScreen = next;
+
 		remaining = this.duration;
 	}
 
@@ -33,9 +35,11 @@ public class HelpScreen extends Screen {
 		}
 
 		if (remaining > 0) {
+			index = (int) Math.floor((double) text.length * (duration - remaining) / duration);
+
 			remaining -= ticks;
 		} else {
-			ScreenControl.getCtrl().setScreen(next);
+			ScreenControl.getCtrl().setScreen(nextScreen);
 			remaining = duration;
 		}
 	}
@@ -52,19 +56,20 @@ public class HelpScreen extends Screen {
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
 
-		// Title
+		// text
 		gc.setFill(Color.RED);
 		gc.setStroke(Color.RED);
-		gc.fillText(Window.TITLE, Window.SIZE_X / 2, 75);
-		gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
 
-		// single elements
-		final String text[] = new String[] { "Move with WASD", "Kill 5 monsters to complete this level", "",
-				"Good luck" };
+		gc.fillText(text[index], Window.SIZE_X / 2, Window.SIZE_Y * 0.4);
+		// gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
 
-		gc.setFont(Window.DEFAULT_FONT);
-		for (int i = 0; i < text.length; i++) {
-			gc.fillText(text[i], Window.SIZE_X / 2, 200 + i * 100);
-		}
+		// gc.setFont(Window.DEFAULT_FONT);
+		// for (int i = 0; i < text.length; i++) {
+		// gc.fillText(text[i], Window.SIZE_X / 2, 200 + i * 100);
+		// }
+	}
+
+	public void setText(String[] text) {
+		this.text = text;
 	}
 }
