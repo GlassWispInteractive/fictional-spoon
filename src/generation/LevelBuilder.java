@@ -52,16 +52,7 @@ public class LevelBuilder {
 	 * @return
 	 */
 	public static Map newRandomLevel(int n, int m) {
-		return new LevelBuilder(n, m).genMap().genRandomEntities().create();
-	}
-
-	/**
-	 * general method to generate a random map
-	 * 
-	 */
-	public LevelBuilder genMap() {
-
-		return genRooms().genMaze().clearDeadends().genLoops().clearDeadends().genPlayer();
+		return new LevelBuilder(n, m).genRooms().genLoopedMaze().genPlayer().genRandomEntities().create();
 	}
 
 	/**
@@ -253,7 +244,12 @@ public class LevelBuilder {
 		return this;
 	}
 
-	public LevelBuilder genLoops() {
+	public LevelBuilder genLoopedMaze() {
+		// gen maze with no dead ends at first
+		genMaze();
+		clearDeadends();
+
+		// add for rooms which only one floor connection a connected component
 		DisjointSet<Cell> cc = new DisjointSet<>();
 
 		for (int i = 0; i < roomNum; i++) {
@@ -295,7 +291,7 @@ public class LevelBuilder {
 			}
 		}
 
-		// after settings up the correct CC we just run the maze generation
+		// after settings up the correct CC we just run the maze generation again
 		genMaze();
 		clearDeadends();
 
@@ -344,8 +340,7 @@ public class LevelBuilder {
 		// return updated builder object
 		return this;
 	}
-	
-	
+
 	/**
 	 * internal helper function
 	 */

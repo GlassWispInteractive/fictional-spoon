@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
-import screens.MapScreen;
 
 public class TileFactory {
 
@@ -64,7 +63,7 @@ public class TileFactory {
 		}
 
 		gc.drawImage(subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()], x * size,
-				MapScreen.MARGIN + y * size);
+				y * size);
 	}
 
 	public Image scale(ImageSource imgSource, int scaling) {

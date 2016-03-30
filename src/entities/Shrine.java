@@ -32,7 +32,7 @@ public class Shrine extends Entity {
 	}
 
 	@Override
-	public void tick(double elapsedTime) {
+	public void tick(int ticks) {
 		// check intersection
 		if (x == player.getX() && y == player.getY() && blocked == 0) {
 			// alert
@@ -47,7 +47,7 @@ public class Shrine extends Entity {
 		}
 
 		if (blocked > 0) {
-			blocked--;
+			blocked -= ticks;
 		}
 	}
 

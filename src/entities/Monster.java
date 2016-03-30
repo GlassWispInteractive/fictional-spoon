@@ -100,7 +100,7 @@ public class Monster extends Entity implements IAttackable {
 	}
 
 	@Override
-	public void tick(double elapsedTime) {
+	public void tick(int ticks) {
 		
 		//monster walk
 		if(!monsterDead){

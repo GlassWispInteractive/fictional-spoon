@@ -15,8 +15,8 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class MapScreen extends Screen {
 	// constants
-	public final static int MARGIN = 0; // 3 * 16
-	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * MARGIN;
+	public final static int SPACE = 3 * 16; // 3 * 16
+	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * SPACE;
 
 	// map settings
 	private final int size = 16;
@@ -37,7 +37,7 @@ public class MapScreen extends Screen {
 
 		// set layout
 		addLayer("map", 0, 0, map.getN() * size, map.getM() * size);
-		addLayer("entities", 0, 0, WIDTH, HEIGHT);
+		addLayer("entities", 0, SPACE, WIDTH, HEIGHT);
 
 		// render the map prior every other rendering and keep it cached
 		prerenderMap();
@@ -76,7 +76,7 @@ public class MapScreen extends Screen {
 
 		fac.smartAdd();
 		fac.smartDelete();
-		
+
 		if (EventControl.getEvents().isC()) {
 			ScreenControl.getCtrl().setScreen("combo");
 		}
@@ -145,7 +145,7 @@ public class MapScreen extends Screen {
 	@Override
 	public void render() {
 		// shift prerendered map
-		layers.get("map").relocate(-16 * cameraX, -16 * cameraY);
+		layers.get("map").relocate(-16 * cameraX, SPACE - 16 * cameraY);
 
 		// render entities
 		renderEntities();

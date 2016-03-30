@@ -56,7 +56,7 @@ public class Opponent extends Entity {
 		
 		if(opponentDead){
 			gc.setFill(Color.RED);
-			gc.fillRect((x - offsetX) * size, MapScreen.MARGIN + (y - offsetY) * size, size, size);
+			gc.fillRect((x - offsetX) * size, (y - offsetY) * size, size, size);
 			tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
 		} else {
 			tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
@@ -64,7 +64,7 @@ public class Opponent extends Entity {
 	}
 
 	@Override
-	public void tick(double elapsedTime) {
+	public void tick(int ticks) {
 		
 		if(!opponentDead){
 			

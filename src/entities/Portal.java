@@ -33,15 +33,15 @@ public class Portal extends Entity{
 	}
 
 	@Override
-	public void tick(double elapsedTime) {
+	public void tick(int ticks) {
 		
 		if (blocked >= 0) {
-			blocked--;
+			blocked -= ticks;
 		}
 		
 		if (blocked < 0) {
 			
-			blocked = delayTicks - 1;
+			blocked = delayTicks;
 			
 			spawnMonster();
 			

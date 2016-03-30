@@ -45,13 +45,13 @@ public class Player extends Entity implements IAttackable{
 	}
 
 	@Override
-	public void tick(double elapsedTime) {
+	public void tick(int ticks) {
 		EventControl e = EventControl.getEvents();
 		int newX = x, newY = y;
 		boolean moved = false;
 
 		if (blocked >= 0) {
-			blocked--;
+			blocked -= ticks;
 		}
 
 		if (e.isLeft()) {
@@ -75,7 +75,7 @@ public class Player extends Entity implements IAttackable{
 
 		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
 
-			blocked = delayTicks - 1;
+			blocked = delayTicks;
 
 			x = newX;
 			y = newY;

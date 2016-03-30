@@ -14,7 +14,7 @@ public class PanelDecorator extends ScreenDecorator {
 		super(decoratedScreen);
 
 		addLayer("top panel", 0, 0, Window.SIZE_X, 3 * 16);
-		addLayer("bottom panel", 0, Window.SIZE_Y - MapScreen.MARGIN, Window.SIZE_X, MapScreen.MARGIN);
+		addLayer("bottom panel", 0, Window.SIZE_Y - MapScreen.SPACE, Window.SIZE_X, MapScreen.SPACE);
 		progress = 0;
 	}
 
@@ -47,7 +47,7 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setFill(Paint.valueOf("#212121"));
 		gc.fillRect(0, 0, layers.get("top panel").getWidth(), layers.get("top panel").getHeight());
 		gc.setFill(Color.ANTIQUEWHITE);
-		gc.fillRect(0, MapScreen.MARGIN - 7, layers.get("top panel").getWidth(), 2);
+		gc.fillRect(0, MapScreen.SPACE - 5, layers.get("top panel").getWidth(), 2);
 
 		// draw objective progress
 		gc.setLineWidth(3);
@@ -63,7 +63,7 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setLineWidth(2);
 		gc.setStroke(Color.GREY);
 		for (int i = 5; i < 100; i += 5) {
-			gc.strokeLine(100 + i / 100.0 * (Window.SIZE_X - 200),  5, 100 + i / 100.0 * (Window.SIZE_X - 200), 35);
+			gc.strokeLine(100 + i / 100.0 * (Window.SIZE_X - 200), 5, 100 + i / 100.0 * (Window.SIZE_X - 200), 35);
 		}
 	}
 
@@ -73,9 +73,8 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.clearRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
 
 		// draw background
-		// gc.setFill(Paint.valueOf("#212121"));
-		// gc.fillRect(0, 0, layers.get("bottom panel").getWidth(),
-		// layers.get("bottom panel").getHeight());
+		gc.setFill(Paint.valueOf("#212121"));
+		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
 		gc.setFill(Color.ANTIQUEWHITE);
 		gc.fillRect(0, 5, layers.get("bottom panel").getWidth(), 2);
 	}

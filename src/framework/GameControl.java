@@ -66,9 +66,9 @@ public class GameControl {
 		switch (level) {
 		case 1:
 			screen.setText(new String[] { "Welcome", "Quest: Kill 2 monsters" });
-			objective = new Objective(Goal.MONSTER, 2);
+			objective = new Objective(Goal.MONSTER, 2000);
 
-			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			map = new MapScreen(LevelBuilder.newRandomLevel(150, 50));
 			break;
 		case 2:
 			objective = new Objective(Goal.MONSTER, 5);
