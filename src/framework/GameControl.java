@@ -46,7 +46,7 @@ public class GameControl {
 		super();
 
 		// settings
-		screen = new HelpScreen("game", 200);
+		screen = new HelpScreen("game", 100);
 		ScreenControl.getCtrl().addScreen("game intro", screen);
 		level = 1;
 		loadObjective(level);
@@ -65,38 +65,40 @@ public class GameControl {
 		// set the appropriate objective
 		switch (level) {
 		case 1:
-			screen.setText(new String[] { "Welcome", "Quest: Kill 2 monsters" });
+			screen.setText(new String[] { "Quest: Kill 2 monsters" });
 			objective = new Objective(Goal.MONSTER, 2000);
 
-			map = new MapScreen(LevelBuilder.newRandomLevel(150, 50));
+			map = new MapScreen(new LevelBuilder(150, 50, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1, 20)
+					.genPortal(0.05).genChest(0.2, 0).genShrine(0.1, 0).create());
+
 			break;
 		case 2:
 			objective = new Objective(Goal.MONSTER, 5);
 			screen.setText(new String[] { "Quest completed", "Quest: Kill 5 monsters" });
 			ctrl.setScreen("game intro");
 
-			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			// map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		case 3:
 			objective = new Objective(Goal.MONSTER, 5);
 			screen.setText(new String[] { "Quest completed", "Quest: Kill 5 monsters" });
 			ctrl.setScreen("game intro");
 
-			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			// map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		case 4:
 			objective = new Objective(Goal.MONSTER, 5);
 			screen.setText(new String[] { "Quest completed", "Quest: Kill 5 monsters" });
 			ctrl.setScreen("game intro");
 
-			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			// map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		case 5:
 			objective = new Objective(Goal.MONSTER, 5);
 			screen.setText(new String[] { "Quest completed", "Quest: Kill 5 monsters" });
 			ctrl.setScreen("game intro");
 
-			map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
+			// map = new MapScreen(LevelBuilder.newRandomLevel(350, 225));
 			break;
 		default:
 

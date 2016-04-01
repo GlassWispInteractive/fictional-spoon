@@ -103,7 +103,7 @@ public class Monster extends Entity implements IAttackable {
 	public void tick(int ticks) {
 		
 		//monster walk
-		if(!monsterDead){
+		if(monsterDead){
 			Point newPosition = currentWalkStrategy.walk(x, y);
 
 			x = newPosition.x;
@@ -112,9 +112,6 @@ public class Monster extends Entity implements IAttackable {
 			// check intersection
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-				// alert
-				GameControl.getControl().alert("exp gained");
-
 				// goal update
 				GameControl.getControl().updateGoal(Goal.MONSTER);
 

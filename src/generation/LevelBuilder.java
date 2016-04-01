@@ -19,20 +19,29 @@ import entities.EntityFactory;
  *
  */
 public class LevelBuilder {
+	// layout types
+	public enum Layout {
+		MAZE, MAZE_WITH_ROOMS, SINGLE_CONN_ROOMS, LOOPED_ROOMS, DOUBLE_CONN_ROOMS
+	};
+
 	// class constants
 	final int ROOM_LIMIT = 300;
 	final int[][] NEIGHS_ALL = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 	final int[][] NEIGHS_ODD = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
 	final int POWER = 3;
 
+	// setting vars
+	private boolean hasRooms = false, hasFloor = true;
+
 	// class members
 	private Map map;
 	private Random rnd;
-	private int rooms[][], roomNum = 0;
+	private Room[] rooms;
+	private int roomNum = 0;
 	private EntityFactory fac = EntityFactory.getFactory();
-	private ArrayList<int[]> spawnPoints;
+	private ArrayList<int[]> floors;
 
-	public LevelBuilder(int n, int m) {
+	public LevelBuilder(int n, int m, Layout layout) {
 		n = n - (n + 1) % 2;
 		m = m - (m + 1) % 2;
 		map = new Map(n, m);
@@ -40,30 +49,445 @@ public class LevelBuilder {
 		// get random object
 		rnd = new Random();
 
+		switch (layout) {
+		case MAZE:
+			// gen maze with no dead ends at first
+			genMaze(ccFromNoRooms());
+
+			break;
+		case MAZE_WITH_ROOMS:
+			// gen maze with no dead ends at first
+			genMaze(ccFromNoRooms());
+
+			break;
+
+		case SINGLE_CONN_ROOMS:
+			// gen rooms
+			genRooms();
+
+			// gen maze with no dead ends at first
+			genMaze(ccFromAllRooms());
+			clearDeadends();
+
+			break;
+
+		case LOOPED_ROOMS:
+			// gen rooms
+			genRooms();
+
+			// gen maze with no dead ends at first
+			genMaze(ccFromAllRooms());
+			clearDeadends();
+
+			// add another maze for loops
+			genMaze(ccFromEndRooms());
+
+			// remove the dead ends finally
+			clearDeadends();
+
+			break;
+		case DOUBLE_CONN_ROOMS:
+			// gen rooms
+			genRooms();
+
+			// gen maze with no dead ends at first
+			genMaze(ccFromAllRooms());
+			clearDeadends();
+
+			// add another maze for loops
+			genMaze(ccFromAllRooms());
+
+			// remove the dead ends finally
+			clearDeadends();
+
+			break;
+		}
+
+		// init floors for all layouts (every layout has floors)
+		floorSetup();
+
+		// set up player
+		genPlayer();
+	}
+
+	private LevelBuilder genRooms() {
+		// set room flag
+		hasRooms = true;
+
 		// init room super array
-		rooms = new int[ROOM_LIMIT][];
+		rooms = new Room[ROOM_LIMIT];
+
+		// declare vars
+		int xLen, yLen, xStart, yStart;
+
+		// try to put up a new room in each iteration
+		for (int i = 0; i < ROOM_LIMIT; i++) {
+			// make sure to have valid room sizes
+			// random num n transforms into 2n+1 -> odd
+			do {
+				xLen = (int) (4 + 2 * rnd.nextGaussian());
+				xLen = 2 * xLen + 1;
+				yLen = (int) (4 + 2 * rnd.nextGaussian());
+				yLen = 2 * yLen + 1;
+			} while (xLen < 4 || yLen < 4);
+
+			// gen a position in the level
+			// increment number if its even -> odd
+			xStart = rnd.nextInt(map.getN() - xLen);
+			xStart = xStart + (xStart + 1) % 2;
+			yStart = rnd.nextInt(map.getM() - yLen);
+			yStart = yStart + (yStart + 1) % 2;
+
+			// check whether the position is valid
+			if (!checkRoom(xStart, yStart, xLen, yLen)) {
+				continue;
+			}
+
+			// place room
+			map.setNewRoom(xStart, xLen, yStart, yLen);
+
+			// insert room into memory
+			rooms[roomNum] = new Room(xStart, xLen, yStart, yLen);
+			roomNum++;
+
+		}
+
+		// return updated builder object
+		return this;
 	}
 
 	/**
-	 * static method to create a nice map
+	 * helper function to check for valid room positions
 	 * 
-	 * @param n
-	 * @param m
+	 * @param xStart
+	 * @param yStart
+	 * @param xLen
+	 * @param yLen
 	 * @return
 	 */
-	public static Map newRandomLevel(int n, int m) {
-		return new LevelBuilder(n, m).genRooms().genLoopedMaze().genPlayer().genRandomEntities().create();
+	private boolean checkRoom(int xStart, int yStart, int xLen, int yLen) {
+		// be sure to only check for odd numbers (xStart, yStart are odd)
+		for (int i = 0; i <= xLen; i += 2) {
+			for (int j = 0; j <= yLen; j += 2) {
+
+				if (map.getGround(xStart + i, yStart + j) != WALL) {
+					return false;
+				}
+			}
+		}
+
+		// no collision -> valid placement
+		return true;
 	}
 
 	/**
-	 * final method which is called to make a Map from a MapBuilder
+	 * create a disjoint set with a connected component for each room
+	 * 
+	 * @return
 	 */
-	public Map create() {
-		placeTiles();
-		return map;
+	private DisjointSet<Cell> ccFromAllRooms() {
+		// create connected compontents
+		DisjointSet<Cell> cc = new DisjointSet<>();
+
+		for (int i = 0; i < roomNum; i++) {
+			cc.makeSet(map.getCell(rooms[i].getXStart(), rooms[i].getYStart()));
+
+			for (int x = rooms[i].getXStart(); x < rooms[i].getXStart() + rooms[i].getXLen(); x += 2) {
+				for (int y = rooms[i].getYStart(); y < rooms[i].getYStart() + rooms[i].getYLen(); y += 2) {
+					if (x == rooms[i].getXStart() && y == rooms[i].getYStart())
+						continue;
+
+					cc.makeSet(map.getCell(x, y));
+					cc.union(map.getCell(rooms[i].getXStart(), rooms[i].getYStart()), map.getCell(x, y));
+				}
+			}
+		}
+
+		return cc;
 	}
 
-	private void placeTiles() {
+	/**
+	 * create a disjoint set with a connected component for each room
+	 * 
+	 * @return
+	 */
+	private DisjointSet<Cell> ccFromEndRooms() {
+		// add for rooms which only one floor connection a connected component
+		DisjointSet<Cell> cc = new DisjointSet<>();
+
+		for (int i = 0; i < roomNum; i++) {
+			// declare variables
+			final int xStart = rooms[i].getXStart(), xLen = rooms[i].getXLen(), yStart = rooms[i].getYStart(),
+					yLen = rooms[i].getYLen();
+
+			// check if room only has one floor connection
+			int count = 0;
+			for (int x = 0; x < xLen; x++) {
+				if (map.getGround(xStart + x, yStart - 1) == FLOOR)
+					count++;
+
+				if (map.getGround(xStart + x, yStart + yLen) == FLOOR)
+					count++;
+			}
+
+			for (int y = 0; y < yLen; y++) {
+				if (map.getGround(xStart - 1, yStart + y) == FLOOR)
+					count++;
+
+				if (map.getGround(xStart + xLen, yStart + y) == FLOOR)
+					count++;
+			}
+
+			// skip the room on break condition
+			if (count > 1) {
+				continue;
+			}
+
+			// create a connected component for each room
+			cc.makeSet(map.getCell(xStart, yStart));
+			for (int x = xStart; x < xStart + xLen; x += 2) {
+				for (int y = yStart; y < yStart + yLen; y += 2) {
+					if (x == xStart && y == yStart)
+						continue;
+
+					cc.makeSet(map.getCell(x, y));
+					cc.union(map.getCell(xStart, yStart), map.getCell(x, y));
+				}
+			}
+		}
+
+		return cc;
+	}
+
+	private DisjointSet<Cell> ccFromNoRooms() {
+		return new DisjointSet<>();
+	}
+
+	/**
+	 * internal function to generate a maze around the rooms this is done by a
+	 * floodfill algorithm instead of some overengineering with MST
+	 * 
+	 * @return
+	 */
+	private void genMaze(DisjointSet<Cell> cc) {
+		ArrayList<int[]> q = new ArrayList<>();
+
+		for (int i = 1; i < map.getN(); i += 2) {
+			for (int j = 1; j < map.getM(); j += 2) {
+				// fill in fixed cells on odd / odd coordinates
+				if (map.getGround(i, j) == WALL) {
+					map.setGround(i, j, FLOOR);
+					cc.makeSet(map.getCell(i, j));
+				}
+
+				// queue neighbours when one corner is not a room
+				if (i + 2 < map.getN() && map.getGround(i + 1, j) != ROOM)
+					q.add(new int[] { i, j, i + 2, j });
+				if (j + 2 < map.getM() && map.getGround(i, j + 1) != ROOM)
+					q.add(new int[] { i, j, i, j + 2 });
+			}
+		}
+
+		// choose connector in a random order
+		Collections.shuffle(q);
+
+		for (int[] e : q) {
+			// rename array
+			final int x1 = e[0], y1 = e[1], x2 = e[2], y2 = e[3];
+
+			if (cc.findSet(map.getCell(x1, y1)) == null)
+				continue;
+
+			if (cc.findSet(map.getCell(x2, y2)) == null)
+				continue;
+
+			// check if two cells are already connected
+			if (cc.findSet(map.getCell(x1, y1)) == cc.findSet(map.getCell(x2, y2)))
+				continue;
+
+			// merge two components by adding a connector
+			cc.union(map.getCell(x1, y1), map.getCell(x2, y2));
+			map.setGround((x1 + x2) / 2, (y1 + y2) / 2, FLOOR);
+		}
+	}
+
+	public LevelBuilder clearDeadends() {
+		int count;
+		boolean repeat = true, deadend[][];
+
+		while (repeat) {
+			// fresh inits for single execution of elemination
+			deadend = new boolean[map.getN()][map.getM()];
+			repeat = false;
+
+			// dead end iff 3 neighbours are walls
+			for (int x = 0; x < map.getN(); x++) {
+				for (int y = 0; y < map.getM(); y++) {
+					if (map.getGround(x, y) == WALL) {
+						continue;
+					}
+
+					count = 0;
+					for (int j = 0; j < 4; j++) {
+						if (map.getGround(x + NEIGHS_ALL[j][0], y + NEIGHS_ALL[j][1]) == WALL)
+							count++;
+					}
+
+					if (count >= 3) {
+						deadend[x][y] = true;
+						repeat = true;
+					}
+				}
+			}
+
+			// remove dead ends
+			for (int x = 0; x < map.getN(); x++) {
+				for (int y = 0; y < map.getM(); y++) {
+					if (deadend[x][y])
+						map.setGround(x, y, WALL);
+				}
+			}
+		}
+
+		// return updated builder object
+		return this;
+	}
+
+	/**
+	 * internal helper function
+	 */
+	private void floorSetup() {
+		// set floor flag
+		hasFloor = true;
+
+		// create new array
+		floors = new ArrayList<>();
+
+		// fill in all the floor cells
+		for (int i = 1; i < map.getN(); i += 2) {
+			for (int j = 1; j < map.getM(); j += 2) {
+				if (map.getGround(i, j) == Ground.FLOOR) {
+					floors.add(new int[] { i, j });
+				}
+			}
+		}
+
+		// spawn points is a random permuation
+		Collections.shuffle(floors);
+	}
+
+	public LevelBuilder genPlayer() {
+		// declare int array
+		int[] newSpwan;
+
+		if (hasRooms) {
+			// make player
+			newSpwan = rooms[0].getUnusedRandomCell();
+			fac.makePlayer(newSpwan[0], newSpwan[1]);
+
+			// make two chests
+			newSpwan = rooms[0].getUnusedRandomCell();
+			fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2));
+
+			newSpwan = rooms[0].getUnusedRandomCell();
+			fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2));
+		} else if (hasFloor) {
+			newSpwan = floors.get(0);
+			fac.makePlayer(newSpwan[0], newSpwan[1]);
+		}
+
+		return this;
+	}
+
+	private LevelBuilder genEntity(double perRoom, int adds, EntityCreator creator) {
+		// room counter
+		int[] newSpwan;
+		double ctr = 0;
+
+		// skip the first room => i = 1
+		if (hasRooms) {
+			for (int i = 1, j = i - 1; i < roomNum; i++) {
+				ctr += perRoom;
+
+				if (ctr < 1) {
+					continue;
+				} else {
+					ctr -= 1;
+					j += 1;
+				}
+
+				// put up monster at a random room cell
+				newSpwan = rooms[j].getUnusedRandomCell();
+				creator.run(newSpwan[0], newSpwan[1]);
+			}
+		}
+
+		if (hasFloor) {
+			for (int i = 0; i < adds; i++) {
+				// put up monster at a random floor cells
+				newSpwan = floors.get(0);
+				creator.run(newSpwan[0], newSpwan[1]);
+				floors.remove(0);
+			}
+		}
+
+		return this;
+	}
+
+	public LevelBuilder genMonster(double perRoom, int adds) {
+		return genEntity(perRoom, adds, (x, y) -> {
+			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
+
+			// monsters can be of the given power or at most 2 points higher
+			used += rnd.nextInt(3);
+
+			// create monster of random type
+			type = rnd.nextInt(5);
+			powers[type] = used;
+			used -= used;
+
+			// make monster at (x, y)
+			fac.makeMonster(x, y, 100, powers, "monster");
+		});
+	}
+
+	public LevelBuilder genPortal(double perRoom) {
+		genEntity(perRoom, 0, (x, y) -> {
+			fac.makePortal(x, y, "Informatiker");
+		});
+
+		return this;
+	}
+
+	public LevelBuilder genOpponent(double perRoom, int adds) {
+		genEntity(perRoom, adds, (x, y) -> {
+			fac.makeOpponent(x, y, "Informatiker");
+		});
+
+		return this;
+	}
+
+	public LevelBuilder genChest(double perRoom, int adds) {
+		genEntity(perRoom, adds, (x, y) -> {
+			int len = rnd.nextInt(3);
+			fac.makeChest(x, y, Combo.generate(2 + len));
+		});
+
+		return this;
+	}
+
+	public LevelBuilder genShrine(double perRoom, int adds) {
+		genEntity(perRoom, 0, (x, y) -> {
+			fac.makeShrine(x, y);
+		});
+
+		return this;
+	}
+
+	/**
+	 * compute the files
+	 */
+	private void computeTiles() {
 		// b_0 b_1 b_2 b_3 -> left right top bottom
 		// binary counting with 1 means that area is walkable
 		final int[] tileNumber = new int[] { 9 + 57 * 9, // fail
@@ -112,392 +536,11 @@ public class LevelBuilder {
 
 	}
 
-	public LevelBuilder genRooms() {
-		// declare vars
-		int xLen, yLen, xStart, yStart;
-
-		// try to put up a new room in each iteration
-		for (int i = 0; i < ROOM_LIMIT; i++) {
-			// make sure to have valid room sizes
-			// random num n transforms into 2n+1 -> odd
-			do {
-				xLen = (int) (4 + 2 * rnd.nextGaussian());
-				xLen = 2 * xLen + 1;
-				yLen = (int) (4 + 2 * rnd.nextGaussian());
-				yLen = 2 * yLen + 1;
-			} while (xLen < 4 || yLen < 4);
-
-			// gen a position in the level
-			// increment number if its even -> odd
-			xStart = rnd.nextInt(map.getN() - xLen);
-			xStart = xStart + (xStart + 1) % 2;
-			yStart = rnd.nextInt(map.getM() - yLen);
-			yStart = yStart + (yStart + 1) % 2;
-
-			// check whether the position is valid
-			if (!checkRoom(xStart, yStart, xLen, yLen)) {
-				continue;
-			}
-
-			// place room
-			map.setNewRoom(xStart, xLen, yStart, yLen);
-
-			// insert room into memory
-			rooms[roomNum] = new int[] { xStart, xLen, yStart, yLen };
-			roomNum++;
-
-		}
-
-		// return updated builder object
-		return this;
-	}
-
 	/**
-	 * helper function to check for valid room positions
-	 * 
-	 * @param xStart
-	 * @param yStart
-	 * @param xLen
-	 * @param yLen
-	 * @return
+	 * final method which is called to make a Map from a MapBuilder
 	 */
-	private boolean checkRoom(int xStart, int yStart, int xLen, int yLen) {
-		// be sure to only check for odd numbers (xStart, yStart are odd)
-		for (int i = 0; i <= xLen; i += 2) {
-			for (int j = 0; j <= yLen; j += 2) {
-
-				if (map.getGround(xStart + i, yStart + j) != WALL) {
-					return false;
-				}
-			}
-		}
-
-		// no collision -> valid placement
-		return true;
-	}
-
-	/**
-	 * internal function to generate a maze around the rooms this is done by a
-	 * floodfill algorithm instead of some overengineering with MST
-	 * 
-	 * @return
-	 */
-	public LevelBuilder genMaze() {
-		// create connected compontents
-		DisjointSet<Cell> cc = new DisjointSet<>();
-
-		for (int i = 0; i < roomNum; i++) {
-			final int xStart = rooms[i][0], xLen = rooms[i][1], yStart = rooms[i][2], yLen = rooms[i][3];
-			cc.makeSet(map.getCell(xStart, yStart));
-			for (int x = xStart; x < xStart + xLen; x += 2) {
-				for (int y = yStart; y < yStart + yLen; y += 2) {
-					if (x == xStart && y == yStart)
-						continue;
-
-					cc.makeSet(map.getCell(x, y));
-					cc.union(map.getCell(xStart, yStart), map.getCell(x, y));
-				}
-			}
-		}
-
-		ArrayList<int[]> q = new ArrayList<>();
-
-		for (int i = 1; i < map.getN(); i += 2) {
-			for (int j = 1; j < map.getM(); j += 2) {
-				// fill in fixed cells on odd / odd coordinates
-				if (map.getGround(i, j) == WALL) {
-					map.setGround(i, j, FLOOR);
-					cc.makeSet(map.getCell(i, j));
-				}
-
-				// queue neighbours when one corner is not a room
-				if (i + 2 < map.getN() && map.getGround(i + 1, j) != ROOM)
-					q.add(new int[] { i, j, i + 2, j });
-				if (j + 2 < map.getM() && map.getGround(i, j + 1) != ROOM)
-					q.add(new int[] { i, j, i, j + 2 });
-			}
-		}
-
-		// choose connector in a random order
-		Collections.shuffle(q);
-
-		for (int[] e : q) {
-			// rename array
-			final int x1 = e[0], y1 = e[1], x2 = e[2], y2 = e[3];
-
-			if (cc.findSet(map.getCell(x1, y1)) == null)
-				continue;
-
-			if (cc.findSet(map.getCell(x2, y2)) == null)
-				continue;
-
-			// check if two cells are already connected
-			if (cc.findSet(map.getCell(x1, y1)) == cc.findSet(map.getCell(x2, y2)))
-				continue;
-
-			// merge two components by adding a connector
-			cc.union(map.getCell(x1, y1), map.getCell(x2, y2));
-			map.setGround((x1 + x2) / 2, (y1 + y2) / 2, FLOOR);
-		}
-
-		// return updated builder object
-		return this;
-	}
-
-	public LevelBuilder genLoopedMaze() {
-		// gen maze with no dead ends at first
-		genMaze();
-		clearDeadends();
-
-		// add for rooms which only one floor connection a connected component
-		DisjointSet<Cell> cc = new DisjointSet<>();
-
-		for (int i = 0; i < roomNum; i++) {
-			// declare variables
-			final int xStart = rooms[i][0], xLen = rooms[i][1], yStart = rooms[i][2], yLen = rooms[i][3];
-
-			// check if room only has one floor connection
-			int count = 0;
-			for (int x = 0; x < xLen; x++) {
-				if (map.getGround(xStart + x, yStart - 1) == FLOOR)
-					count++;
-
-				if (map.getGround(xStart + x, yStart + yLen) == FLOOR)
-					count++;
-			}
-
-			for (int y = 0; y < yLen; y++) {
-				if (map.getGround(xStart - 1, yStart + y) == FLOOR)
-					count++;
-
-				if (map.getGround(xStart + xLen, yStart + y) == FLOOR)
-					count++;
-			}
-
-			if (count > 1) {
-				continue;
-			}
-
-			// create a connected component for each room
-			cc.makeSet(map.getCell(xStart, yStart));
-			for (int x = xStart; x < xStart + xLen; x += 2) {
-				for (int y = yStart; y < yStart + yLen; y += 2) {
-					if (x == xStart && y == yStart)
-						continue;
-
-					cc.makeSet(map.getCell(x, y));
-					cc.union(map.getCell(xStart, yStart), map.getCell(x, y));
-				}
-			}
-		}
-
-		// after settings up the correct CC we just run the maze generation again
-		genMaze();
-		clearDeadends();
-
-		// return updated builder object
-		return this;
-	}
-
-	public LevelBuilder clearDeadends() {
-		int count;
-		boolean repeat = true, deadend[][];
-
-		while (repeat) {
-			// fresh inits for single execution of elemination
-			deadend = new boolean[map.getN()][map.getM()];
-			repeat = false;
-
-			// dead end iff 3 neighbours are walls
-			for (int x = 0; x < map.getN(); x++) {
-				for (int y = 0; y < map.getM(); y++) {
-					if (map.getGround(x, y) == WALL) {
-						continue;
-					}
-
-					count = 0;
-					for (int j = 0; j < 4; j++) {
-						if (map.getGround(x + NEIGHS_ALL[j][0], y + NEIGHS_ALL[j][1]) == WALL)
-							count++;
-					}
-
-					if (count >= 3) {
-						deadend[x][y] = true;
-						repeat = true;
-					}
-				}
-			}
-
-			// remove dead ends
-			for (int x = 0; x < map.getN(); x++) {
-				for (int y = 0; y < map.getM(); y++) {
-					if (deadend[x][y])
-						map.setGround(x, y, WALL);
-				}
-			}
-		}
-
-		// return updated builder object
-		return this;
-	}
-
-	/**
-	 * internal helper function
-	 */
-	private void initSpawnPoints() {
-		spawnPoints = new ArrayList<>();
-		for (int i = 1; i < map.getN(); i += 2) {
-			for (int j = 1; j < map.getM(); j += 2) {
-
-				if (map.isWalkable(i, j)) {
-					spawnPoints.add(new int[] { i, j });
-				}
-			}
-		}
-
-		// spawn points is a random permuation
-		Collections.shuffle(spawnPoints);
-	}
-
-	private int[] getSpawnPoint() {
-		return getSpawnPoint(false);
-	}
-
-	private int[] getSpawnPoint(boolean roomOnly) {
-
-		if (spawnPoints == null) {
-			initSpawnPoints();
-		}
-
-		// Collections.shuffle(spawnPoints);
-
-		int[] newSpawnPoint = null;
-
-		if (roomOnly) {
-			for (int[] p : spawnPoints) {
-
-				if (map.isWalkableRoom(p[0], p[1])) {
-					newSpawnPoint = p;
-					spawnPoints.remove(p);
-
-					return newSpawnPoint;
-				}
-			}
-		}
-
-		newSpawnPoint = spawnPoints.get(0);
-		spawnPoints.remove(0);
-
-		return newSpawnPoint;
-	}
-
-	public LevelBuilder genPlayer() {
-
-		int[] newSpwan;
-
-		newSpwan = getSpawnPoint(true);
-		fac.makePlayer(newSpwan[0], newSpwan[1]);
-
-		return this;
-	}
-
-	public LevelBuilder genRandomEntities() {
-
-		final int roomNum100 = roomNum;
-		final int roomNum050 = (int) (roomNum * 0.4);
-		final int roomNum020 = (int) (roomNum * 0.2);
-		final int roomNum010 = (int) (roomNum * 0.1);
-		final int roomNum005 = (int) (roomNum * 0.05);
-		final int roomNum003 = (int) (roomNum * 0.03);
-
-		int monsterNum = roomNum100 + rnd.nextInt(roomNum050);
-		int portalNum = roomNum005 + rnd.nextInt(roomNum003);
-		int opponentNum = roomNum010 + rnd.nextInt(roomNum005);
-		int chestNum = roomNum020 + rnd.nextInt(roomNum005);
-		int shrineNum = roomNum010 + rnd.nextInt(roomNum005);
-
-		return genMonster(monsterNum).genPortal(portalNum).genOpponent(opponentNum).genChest(chestNum)
-				.genShrine(shrineNum);
-	}
-
-	public LevelBuilder genMonster(int num) {
-
-		int[] newSpwan;
-		boolean roomOnly = true;
-
-		for (int i = 0; i < num; i++) {
-
-			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
-			// monsters can be of the given power or at most 2 points higher
-			used += rnd.nextInt(3);
-
-			// create monster of random type
-			type = rnd.nextInt(5);
-			powers[type] = used;
-			used -= used;
-
-			newSpwan = getSpawnPoint(roomOnly);
-			fac.makeMonster(newSpwan[0], newSpwan[1], 100, powers, "monster");
-
-			// last 30% can be in random positions
-			if (i > num * 0.7) {
-				// roomOnly = false;
-			}
-		}
-
-		return this;
-	}
-
-	public LevelBuilder genPortal(int num) {
-
-		int[] newSpwan;
-
-		for (int i = 0; i < num; i++) {
-
-			newSpwan = getSpawnPoint();
-			fac.makePortal(newSpwan[0], newSpwan[1], "Informatiker");
-		}
-
-		return this;
-	}
-
-	public LevelBuilder genOpponent(int num) {
-
-		int[] newSpwan;
-
-		for (int i = 0; i < num; i++) {
-
-			newSpwan = getSpawnPoint();
-			fac.makeOpponent(newSpwan[0], newSpwan[1], "Informatiker");
-		}
-
-		return this;
-	}
-
-	public LevelBuilder genChest(int num) {
-
-		int[] newSpwan;
-
-		for (int i = 0; i < num; i++) {
-
-			newSpwan = getSpawnPoint();
-			int len = rnd.nextInt(3);
-			fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2 + len));
-		}
-
-		return this;
-	}
-
-	public LevelBuilder genShrine(int num) {
-
-		int[] newSpwan;
-
-		for (int i = 0; i < num; i++) {
-
-			newSpwan = getSpawnPoint();
-			fac.makeShrine(newSpwan[0], newSpwan[1]);
-		}
-
-		return this;
+	public Map create() {
+		computeTiles();
+		return map;
 	}
 }

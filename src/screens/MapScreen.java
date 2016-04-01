@@ -15,7 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class MapScreen extends Screen {
 	// constants
-	public final static int SPACE = 3 * 16; // 3 * 16
+	public final static int SPACE = 3 * 16;
 	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * SPACE;
 
 	// map settings
