@@ -1,5 +1,6 @@
 package entities;
 
+import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
@@ -10,7 +11,6 @@ public class Shrine extends Entity {
 	private int blocked = 0;
 	private TileFactory tileFac;
 	private Player player = (Player) EntityFactory.getFactory().getPlayer();
-	
 
 	public Shrine(int x, int y) {
 		super(x, y);
@@ -32,16 +32,22 @@ public class Shrine extends Entity {
 	}
 
 	@Override
-	public void tick(double elapsedTime) {
+	public void tick(int ticks) {
 		// check intersection
 		if (x == player.getX() && y == player.getY() && blocked == 0) {
+			// alert
 			GameControl.getControl().alert("Player health restored");
+
+			// goal update
+			GameControl.getControl().updateGoal(Goal.SHRINE);
+
+			// game logic
 			player.heal();
 			blocked = delayTicks;
 		}
 
 		if (blocked > 0) {
-			blocked--;
+			blocked -= ticks;
 		}
 	}
 

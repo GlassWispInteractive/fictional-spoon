@@ -1,19 +1,30 @@
 package screens;
 
+import entities.EntityFactory;
 import framework.Screen;
 import framework.ScreenDecorator;
 import framework.Window;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.TextAlignment;
 
 public class PanelDecorator extends ScreenDecorator {
+	private double progress;
+	private int life;
 
 	public PanelDecorator(Screen decoratedScreen) {
 		super(decoratedScreen);
 
-		addLayer("top panel", 0, 0, Window.SIZE_X, MapScreen.MARGIN);
-		addLayer("bottom panel", 0, Window.SIZE_Y - MapScreen.MARGIN, Window.SIZE_X, MapScreen.MARGIN);
+		addLayer("top panel", 0, 0, Window.SIZE_X, 3 * 16);
+		addLayer("bottom panel", 0, Window.SIZE_Y - MapScreen.SPACE, Window.SIZE_X, MapScreen.SPACE);
+		progress = 0;
+	}
+
+	public void updateProgress(double progress) {
+		this.progress = progress;
+		this.life = EntityFactory.getFactory().getPlayer().getHp();
 	}
 
 	@Override
@@ -41,11 +52,8 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setFill(Paint.valueOf("#212121"));
 		gc.fillRect(0, 0, layers.get("top panel").getWidth(), layers.get("top panel").getHeight());
 		gc.setFill(Color.ANTIQUEWHITE);
-		gc.fillRect(0, MapScreen.MARGIN - 7, layers.get("top panel").getWidth(), 2);
+		gc.fillRect(0, MapScreen.SPACE - 5, layers.get("top panel").getWidth(), 2);
 
-		
-		final double progress = 0.66;
-		
 		// draw objective progress
 		gc.setLineWidth(3);
 		gc.setStroke(Color.GREY);
@@ -60,15 +68,8 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setLineWidth(2);
 		gc.setStroke(Color.GREY);
 		for (int i = 5; i < 100; i += 5) {
-			gc.strokePolyline(new double[] { 110 + i/100.0 * (Window.SIZE_X - 220), 110 + i/100.0 * (Window.SIZE_X - 220) },
-					new double[] { 5, 35 }, 2);
+			gc.strokeLine(100 + i / 100.0 * (Window.SIZE_X - 200), 5, 100 + i / 100.0 * (Window.SIZE_X - 200), 35);
 		}
-
-		//
-		// gc.strokePolyline(
-		// new double[] { 110 + upperBound * (Window.SIZE_X - 220), 110 +
-		// upperBound * (Window.SIZE_X - 220) },
-		// new double[] { 5, 35 }, 2);
 	}
 
 	private void renderBottomPanel() {
@@ -81,6 +82,13 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
 		gc.setFill(Color.ANTIQUEWHITE);
 		gc.fillRect(0, 5, layers.get("bottom panel").getWidth(), 2);
+
+		// show life points
+		gc.setFont(Window.DEFAULT_FONT);
+		gc.setTextAlign(TextAlignment.LEFT);
+		gc.setTextBaseline(VPos.CENTER);
+
+		gc.fillText("life points " + life, 100, 5 + (MapScreen.SPACE - 5) / 2);
 	}
 
 }

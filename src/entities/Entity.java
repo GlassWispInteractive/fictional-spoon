@@ -29,7 +29,7 @@ public abstract class Entity {
 	 * 
 	 * @param elapsedTime
 	 */
-	public abstract void tick(double elapsedTime);
+	public abstract void tick(int ticks);
 
 	/**
 	 * @return the x

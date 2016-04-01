@@ -15,15 +15,15 @@ import framework.GameControl;
 import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Player extends Entity implements IAttackable{
+public class Player extends Entity implements IAttackable {
 
-	private int hp = 100;
-	private final int maxHp;
+	private int maxHp = 100, hp;
 	private String name = "Spieler";
 	private Combat combat;
-	
-	private ArrayList<Soul> souls = new ArrayList<Soul>(Arrays.asList(new Soul[]{new Soul("Earth (1)"), new Soul("Fire (2)"), new Soul("Air (3)"), new Soul("Water (4)")}));
-	
+
+	private ArrayList<Soul> souls = new ArrayList<Soul>(Arrays.asList(
+			new Soul[] { new Soul("Earth (1)"), new Soul("Fire (2)"), new Soul("Air (3)"), new Soul("Water (4)") }));
+
 	// for speed
 	private int blocked = 0;
 
@@ -32,7 +32,7 @@ public class Player extends Entity implements IAttackable{
 	public Player(int x, int y) {
 		super(x, y);
 		delayTicks = 4;
-		this.maxHp = hp;
+		this.hp = maxHp;
 
 		tileFac = TileFactory.getTilesFactory();
 	}
@@ -45,13 +45,13 @@ public class Player extends Entity implements IAttackable{
 	}
 
 	@Override
-	public void tick(double elapsedTime) {
+	public void tick(int ticks) {
 		EventControl e = EventControl.getEvents();
 		int newX = x, newY = y;
 		boolean moved = false;
 
 		if (blocked >= 0) {
-			blocked--;
+			blocked -= ticks;
 		}
 
 		if (e.isLeft()) {
@@ -75,7 +75,7 @@ public class Player extends Entity implements IAttackable{
 
 		if (moved && map.isWalkable(newX, newY) && blocked <= 0) {
 
-			blocked = delayTicks - 1;
+			blocked = delayTicks;
 
 			x = newX;
 			y = newY;
@@ -85,19 +85,29 @@ public class Player extends Entity implements IAttackable{
 
 	}
 	
-	public String getPlayerInfo() {
-		return ""+name+" ["+hp+" / "+maxHp+"]";
+	/**
+	 * @return the hp
+	 */
+	public int getHp() {
+		return hp;
 	}
-	
+
+	public String getPlayerInfo() {
+		return "" + name + " [" + hp + " / " + maxHp + "]";
+	}
+
 	public boolean isDead() {
 		return hp <= 0;
 	}
+
 	public ArrayList<Soul> getSouls() {
 		return souls;
 	}
+
 	public void setCombat(Combat combat) {
 		this.combat = combat;
 	}
+
 	public void heal() {
 		this.hp = maxHp;
 	}
@@ -106,12 +116,12 @@ public class Player extends Entity implements IAttackable{
 	public void getDmg(int dmg) {
 		hp -= dmg;
 	}
-	
+
 	@Override
-	public void doAttack(IAttackable focus){
+	public void doAttack(IAttackable focus) {
 		souls.get(combat.getCurSoul()).getAttack().doAttack(focus);
 	}
-	
+
 	@Override
 	public void doAttack(IAttackable focus, Combo combo) {
 		souls.get(combat.getCurSoul()).getAttack().doAttack(focus, combo);

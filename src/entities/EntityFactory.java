@@ -15,7 +15,7 @@ public class EntityFactory {
 	private ArrayList<Entity> ents;
 	private ArrayList<Entity> deletEnts;
 	private ArrayList<Entity> addEnts;
-	private Entity player;
+	private Player player;
 
 	/**
 	 * private constructor
@@ -47,7 +47,7 @@ public class EntityFactory {
 		return ents;
 	}
 
-	public Entity getPlayer() {
+	public Player getPlayer() {
 		return player;
 	}
 

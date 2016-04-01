@@ -11,10 +11,12 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
+import framework.GameControl;
 import framework.ScreenControl;
 import combat.Attacks;
 import combat.Combat;
 import combat.Combo;
+import combat.Goal;
 import combat.IAttackable;
 import engine.ImageSource;
 import engine.TileFactory;
@@ -30,11 +32,10 @@ public class Monster extends Entity implements IAttackable {
 
 	// 2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new
 	// Point2D(1,8)};
-	
-	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(
-			new WalkStrategy[] {new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new FloorWalk(), new RectangleWalk()}));
+
+	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(new WalkStrategy[] {
+			new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new FloorWalk(), new RectangleWalk() }));
 	private WalkStrategy currentWalkStrategy;
-	
 
 	private int hp;
 	private final int maxHp;
@@ -46,7 +47,6 @@ public class Monster extends Entity implements IAttackable {
 	private String name;
 	private boolean monsterDead = false;
 	private TileFactory tileFac = TileFactory.getTilesFactory();
-	
 
 	public Monster(int x, int y, int hp, int[] power, String name) {
 		super(x, y);
@@ -59,12 +59,11 @@ public class Monster extends Entity implements IAttackable {
 
 		int chosenStrategy = new Random().nextInt(walkStrategies.size());
 		this.currentWalkStrategy = walkStrategies.get(chosenStrategy);
-//		this.currentWalkStrategy = new RandomWalk();
-//		this.currentWalkStrategy = new HorizontalWalk();
-//		this.currentWalkStrategy = new VerticalWalk();
-//		this.currentWalkStrategy = new RectangleWalk();
-		
-		
+		// this.currentWalkStrategy = new RandomWalk();
+		// this.currentWalkStrategy = new HorizontalWalk();
+		// this.currentWalkStrategy = new VerticalWalk();
+		// this.currentWalkStrategy = new RectangleWalk();
+
 		maxType = -1;
 		int max = -1;
 		for (int i = 0; i < this.power.length; i++) {
@@ -79,12 +78,13 @@ public class Monster extends Entity implements IAttackable {
 	public String getName() {
 		return name;
 	}
-	
-	public boolean isDead(){
+
+	public boolean isDead() {
 		return monsterDead;
 	}
+
 	public String getHpInfo() {
-		return "["+hp+" / "+maxHp+"]";
+		return "[" + hp + " / " + maxHp + "]";
 	}
 
 	@Override
@@ -98,20 +98,26 @@ public class Monster extends Entity implements IAttackable {
 	}
 
 	@Override
-	public void tick(double elapsedTime) {
-		
-		//monster walk
-		if(!monsterDead){
-			Point newPosition = currentWalkStrategy.walk(x, y);
+	public void tick(int ticks) {
 
-			x = newPosition.x;
-			y = newPosition.y;
-			
+		// monster walk
+		if (!monsterDead) {
+//			Point newPosition = currentWalkStrategy.walk(x, y);
+//
+//			x = newPosition.x;
+//			y = newPosition.y;
+
 			// check intersection
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-				ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[]{this}));
-				ScreenControl.getCtrl().setScreen("combat");
+				// goal update
+				GameControl.getControl().updateGoal(Goal.MONSTER);
+
+				// game logic
+//				monsterDead = true; // debug
+				 ScreenControl.getCtrl().addScreen("combat", new Combat(new
+				 Monster[] { this }));
+				 ScreenControl.getCtrl().setScreen("combat");
 			}
 		}
 	}
@@ -119,21 +125,21 @@ public class Monster extends Entity implements IAttackable {
 	public ImageSource getImageSource() {
 		return tileType[maxType];
 	}
-	
+
 	@Override
-	public void getDmg(int dmg){
+	public void getDmg(int dmg) {
 		hp -= dmg;
-		
-		if(hp <= 0){
+
+		if (hp <= 0) {
 			monsterDead = true;
 		}
 	}
-	
+
 	@Override
-	public void doAttack(IAttackable focus){
+	public void doAttack(IAttackable focus) {
 		attack.doAttack(focus);
 	}
-	
+
 	@Override
 	public void doAttack(IAttackable focus, Combo combo) {
 		attack.doAttack(focus, combo);

@@ -9,7 +9,6 @@ public abstract class ScreenDecorator extends Screen {
 		scene = decoratedScreen.scene;
 		layers = decoratedScreen.layers;
 		gcs = decoratedScreen.gcs;
-		
 	}
 	
 	protected void tick(int ticks) {

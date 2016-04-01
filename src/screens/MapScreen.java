@@ -10,14 +10,13 @@ import framework.Screen;
 import framework.ScreenControl;
 import framework.Window;
 import generation.Ground;
-import generation.LevelBuilder;
 import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 
 public class MapScreen extends Screen {
 	// constants
-	public final static int MARGIN = 3 * 16;
-	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * MARGIN;
+	public final static int SPACE = 3 * 16;
+	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * SPACE;
 
 	// map settings
 	private final int size = 16;
@@ -30,16 +29,15 @@ public class MapScreen extends Screen {
 	// variables
 	private int cameraX, cameraY, cameraSizeX, cameraSizeY;
 
-	public MapScreen() {
+	public MapScreen(Map map) {
 		// call parent constructor
 		super();
 
-		// generate fresh map
-		map = LevelBuilder.newRandomLevel(350, 225);
+		this.map = map;
 
 		// set layout
-		addLayer("map", 0, 0, 350 * size, 225 * size);
-		addLayer("entities", 0, 0, WIDTH, HEIGHT);
+		addLayer("map", 0, 0, map.getN() * size, map.getM() * size);
+		addLayer("entities", 0, SPACE, WIDTH, HEIGHT);
 
 		// render the map prior every other rendering and keep it cached
 		prerenderMap();
@@ -78,7 +76,7 @@ public class MapScreen extends Screen {
 
 		fac.smartAdd();
 		fac.smartDelete();
-		
+
 		if (EventControl.getEvents().isC()) {
 			ScreenControl.getCtrl().setScreen("combo");
 		}
@@ -105,9 +103,9 @@ public class MapScreen extends Screen {
 	 * @param centerY
 	 */
 	public void updateCamera(int centerX, int centerY) {
-		// ~15% of the screen is the
-		final int viewPaddingX = cameraSizeX / 7;
-		final int viewPaddingY = cameraSizeY / 7;
+		// 20% of the screen is the
+		final int viewPaddingX = cameraSizeX / 5;
+		final int viewPaddingY = cameraSizeY / 5;
 
 		if (centerX - viewPaddingX < cameraX) {
 			cameraX = centerX - viewPaddingX;
@@ -147,7 +145,7 @@ public class MapScreen extends Screen {
 	@Override
 	public void render() {
 		// shift prerendered map
-		layers.get("map").relocate(-16 * cameraX, -16 * cameraY);
+		layers.get("map").relocate(-16 * cameraX, SPACE - 16 * cameraY);
 
 		// render entities
 		renderEntities();

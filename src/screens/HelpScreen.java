@@ -1,37 +1,75 @@
 package screens;
 
+import framework.EventControl;
 import framework.Screen;
+import framework.ScreenControl;
+import framework.Window;
+import javafx.geometry.VPos;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 public class HelpScreen extends Screen {
-	// singleton
-	private static HelpScreen singleton;
+	// class members
+	private int duration, remaining;
+	private String nextScreen;
+	private String text[];
+	private int index;
 
-	private HelpScreen() {
+	public HelpScreen(String next, int duration) {
 		super();
-	}
-	
-	/**
-	 * static method to get the singleton class object
-	 * 
-	 * @return
-	 */
-	public static HelpScreen getScreen() {
-		if (singleton == null) {
-			singleton = new HelpScreen();
-		}
-		return singleton;
+
+		text = new String[] { "" };
+		this.duration = duration;
+		this.nextScreen = next;
+
+		remaining = this.duration;
 	}
 
 	@Override
 	protected void tick(int ticks) {
-		// TODO Auto-generated method stub
+		// on enter skip the screen
+		if (EventControl.getEvents().isEnter()) {
+			remaining = 0;
+			EventControl.getEvents().clear();
+		}
 
+		if (remaining > 0) {
+			index = (int) Math.floor((double) text.length * (duration - remaining) / duration);
+
+			remaining -= ticks;
+		} else {
+			ScreenControl.getCtrl().setScreen(nextScreen);
+			remaining = duration;
+		}
 	}
 
 	@Override
 	protected void render() {
-		// TODO Auto-generated method stub
+		// start from clean screen
+		GraphicsContext gc = gcs.get("main");
+		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
 
+		// font settings
+		gc.setFont(Window.HUGE_FONT);
+		gc.setTextAlign(TextAlignment.CENTER);
+		gc.setTextBaseline(VPos.BASELINE);
+		// gc.setLineWidth(1);
+
+		// text
+		gc.setFill(Color.RED);
+		gc.setStroke(Color.RED);
+
+		gc.fillText(text[index], Window.SIZE_X / 2, Window.SIZE_Y * 0.4);
+		// gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
+
+		// gc.setFont(Window.DEFAULT_FONT);
+		// for (int i = 0; i < text.length; i++) {
+		// gc.fillText(text[i], Window.SIZE_X / 2, 200 + i * 100);
+		// }
 	}
 
+	public void setText(String[] text) {
+		this.text = text;
+	}
 }

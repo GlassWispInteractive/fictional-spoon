@@ -26,17 +26,14 @@ public class CreditsScreen extends Screen {
 
 	@Override
 	protected void tick(int ticks) {
-//		SpookingSouls.getObject().tick(ticks);
+		// SpookingSouls.getObject().tick(ticks);
 	}
 
 	@Override
 	protected void render() {
-
 		// start from clean screen
 		GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
-
-//		SpookingSouls.getObject().render(gc);
+		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
 
 		// font settings
 		gc.setFont(Window.HUGE_FONT);
@@ -49,6 +46,15 @@ public class CreditsScreen extends Screen {
 		gc.setStroke(Color.RED);
 		gc.fillText(Window.TITLE, Window.SIZE_X / 2, 75);
 		gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
+
+		// single elements
+		final String credits[] = new String[] { "coding by dhaunac", "coding by garax91", "tile sets by kenney.nl",
+				"element pictures from Korra" };
+
+		gc.setFont(Window.DEFAULT_FONT);
+		for (int i = 0; i < credits.length; i++) {
+			gc.fillText(credits[i], Window.SIZE_X / 2, 200 + i * 100);
+		}
 
 	}
 
