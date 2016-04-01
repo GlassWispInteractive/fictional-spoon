@@ -46,9 +46,9 @@ public class GameControl {
 		super();
 
 		// settings
-		screen = new HelpScreen("game", 100);
+		screen = new HelpScreen("game", 180);
 		ScreenControl.getCtrl().addScreen("game intro", screen);
-		level = 2;
+		level = 1;
 		loadObjective(level);
 
 	}
@@ -66,48 +66,48 @@ public class GameControl {
 		switch (level) {
 		case 1:
 			// basic level
-			screen.setText(new String[] { "Quest: Kill 15 Monster" });
-			objective = new Objective(Goal.MONSTER, 15);
+			screen.setText(new String[] { "Quest: Search the shrine" });
 			map = new MapScreen(
 					new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.SINGLE_CONN_ROOMS)
 							.genMonster(1, 0.01).genShrine(0.1, 0).create());
+			objective = new Objective(Goal.SHRINE, 1);
 			break;
 		case 2:
 			// default level
-			screen.setText(new String[] { "Quest: Kill 30 Monster" });
-			objective = new Objective(Goal.MONSTER, 30);
+			screen.setText(new String[] { "Quest completed", "Quest: Kill 30 Monster" });
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
+			objective = new Objective(Goal.MONSTER, 30);
 			break;
 		case 3:
 			// deactivate portals
-			screen.setText(new String[] { "Quest: Destroy every portal" });
-			objective = new Objective(Goal.PORTAL, 1);
+			screen.setText(new String[] { "Quest completed", "Quest: Destroy every portal" });
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(
 					new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.MAZE_WITH_ROOMS)
 							.genMonster(2, 20).genChest(0, 10).genShrine(0, 2).genPortal(1, 0).create());
+			objective = new Objective(Goal.PORTAL, 1); // calculate the number of portals created
 			break;
 		case 4:
 			// default level
-			screen.setText(new String[] { "Quest: Kill 50 Monster" });
-			objective = new Objective(Goal.MONSTER, 50);
+			screen.setText(new String[] { "Quest completed", "Quest: Kill 50 Monster" });
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
+			objective = new Objective(Goal.MONSTER, 50);
 			break;
 		case 5:
 			// boss maze
 			screen.setText(new String[] { "Quest completed", "Quest: Kill the BOSS" });
-			objective = new Objective(Goal.OPPONENT, 1);
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.MAZE)
-					.genChest(0, 10).genShrine(0, 2).genOpponent(0.02, 0).create());
+					.genChest(0, 0.01).genOpponent(0, 0.005).create());
+			objective = new Objective(Goal.OPPONENT, 1);
 			break;
 		default:
 
@@ -145,7 +145,7 @@ public class GameControl {
 			panel.updateProgress(objective.progress());
 		} else {
 			// objective is reached
-			if (level == 2) {
+			if (level == 6) {
 				ScreenControl.getCtrl().setScreen("game won");
 			} else {
 				level++;

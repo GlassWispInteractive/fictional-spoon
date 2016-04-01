@@ -13,6 +13,7 @@ import entities.Monster;
 import entities.Opponent;
 import entities.Player;
 import framework.EventControl;
+import framework.GameControl;
 import framework.Screen;
 import framework.ScreenControl;
 import framework.Window;
@@ -86,7 +87,7 @@ public class Combat extends Screen {
 
 	@Override
 	public void tick(int ticks) {
-//		SpookingSouls.getObject().tick(ticks);
+		// SpookingSouls.getObject().tick(ticks);
 
 		status = Math.min(1, status + ticks / 40.0);
 		// System.out.println(status);
@@ -207,12 +208,15 @@ public class Combat extends Screen {
 			if (opponent != null) {
 				opponent.setDead(true);
 			}
-			
-			System.out.println(monster.size());
+
+			// goal update
+			GameControl.getControl().updateGoal(Goal.MONSTER);
+
+			// set screens
 			ScreenControl.getCtrl().removeScreen("combat");
 			ScreenControl.getCtrl().setScreen("game");
-			
-//			this.stop();
+
+			// this.stop();
 		}
 
 		if (player.isDead()) {
@@ -320,7 +324,7 @@ public class Combat extends Screen {
 		GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
 
-//		SpookingSouls.getObject().render(gc);
+		// SpookingSouls.getObject().render(gc);
 
 		renderElements();
 		renderMonsters();

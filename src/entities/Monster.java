@@ -102,22 +102,22 @@ public class Monster extends Entity implements IAttackable {
 
 		// monster walk
 		if (!monsterDead) {
-//			Point newPosition = currentWalkStrategy.walk(x, y);
-//
-//			x = newPosition.x;
-//			y = newPosition.y;
+			Point newPosition = currentWalkStrategy.walk(x, y);
+
+			x = newPosition.x;
+			y = newPosition.y;
 
 			// check intersection
 			EntityFactory fac = EntityFactory.getFactory();
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
 				// goal update
-				GameControl.getControl().updateGoal(Goal.MONSTER);
+				// moved to Combat class - stays here for debugging
+				// GameControl.getControl().updateGoal(Goal.MONSTER);
 
 				// game logic
-//				monsterDead = true; // debug
-				 ScreenControl.getCtrl().addScreen("combat", new Combat(new
-				 Monster[] { this }));
-				 ScreenControl.getCtrl().setScreen("combat");
+				// monsterDead = true; // debug
+				ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[] { this }));
+				ScreenControl.getCtrl().setScreen("combat");
 			}
 		}
 	}
