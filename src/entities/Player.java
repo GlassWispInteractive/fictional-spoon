@@ -17,8 +17,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 public class Player extends Entity implements IAttackable {
 
-	private int hp = 100;
-	private final int maxHp;
+	private int maxHp = 100, hp;
 	private String name = "Spieler";
 	private Combat combat;
 
@@ -33,7 +32,7 @@ public class Player extends Entity implements IAttackable {
 	public Player(int x, int y) {
 		super(x, y);
 		delayTicks = 4;
-		this.maxHp = hp;
+		this.hp = maxHp;
 
 		tileFac = TileFactory.getTilesFactory();
 	}
@@ -84,6 +83,13 @@ public class Player extends Entity implements IAttackable {
 			GameControl.getControl().updateCamera(x, y);
 		}
 
+	}
+	
+	/**
+	 * @return the hp
+	 */
+	public int getHp() {
+		return hp;
 	}
 
 	public String getPlayerInfo() {

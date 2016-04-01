@@ -1,14 +1,18 @@
 package screens;
 
+import entities.EntityFactory;
 import framework.Screen;
 import framework.ScreenDecorator;
 import framework.Window;
+import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.TextAlignment;
 
 public class PanelDecorator extends ScreenDecorator {
 	private double progress;
+	private int life;
 
 	public PanelDecorator(Screen decoratedScreen) {
 		super(decoratedScreen);
@@ -20,6 +24,7 @@ public class PanelDecorator extends ScreenDecorator {
 
 	public void updateProgress(double progress) {
 		this.progress = progress;
+		this.life = EntityFactory.getFactory().getPlayer().getHp();
 	}
 
 	@Override
@@ -77,6 +82,13 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
 		gc.setFill(Color.ANTIQUEWHITE);
 		gc.fillRect(0, 5, layers.get("bottom panel").getWidth(), 2);
+
+		// show life points
+		gc.setFont(Window.DEFAULT_FONT);
+		gc.setTextAlign(TextAlignment.LEFT);
+		gc.setTextBaseline(VPos.CENTER);
+
+		gc.fillText("life points " + life, 100, 5 + (MapScreen.SPACE - 5) / 2);
 	}
 
 }

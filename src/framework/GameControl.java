@@ -117,6 +117,7 @@ public class GameControl {
 		panel = new PanelDecorator(map);
 		alert = new AlertDecorator(panel);
 		ctrl.addScreen("game", alert);
+		panel.updateProgress(objective.progress());
 	}
 
 	/**
