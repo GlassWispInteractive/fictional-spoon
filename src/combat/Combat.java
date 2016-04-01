@@ -208,6 +208,7 @@ public class Combat extends Screen {
 				opponent.setDead(true);
 			}
 			
+			System.out.println(monster.size());
 			ScreenControl.getCtrl().removeScreen("combat");
 			ScreenControl.getCtrl().setScreen("game");
 			

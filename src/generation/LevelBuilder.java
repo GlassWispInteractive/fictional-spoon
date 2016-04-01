@@ -25,7 +25,7 @@ public class LevelBuilder {
 	};
 
 	// class constants
-	final int ROOM_LIMIT = 300;
+	int ROOM_LIMIT = 300;
 	final int[][] NEIGHS_ALL = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
 	final int[][] NEIGHS_ODD = new int[][] { { 2, 0 }, { -2, 0 }, { 0, 2 }, { 0, -2 } };
 	final int POWER = 3;
@@ -52,35 +52,41 @@ public class LevelBuilder {
 		switch (layout) {
 		case MAZE:
 			// gen maze with no dead ends at first
-			genMaze(ccFromNoRooms());
+			genFloors(ccFromNoRooms());
 
 			break;
 		case MAZE_WITH_ROOMS:
+			// gen rooms
+			genRooms(5);
+
 			// gen maze with no dead ends at first
-			genMaze(ccFromNoRooms());
+			genFloors(ccFromAllRooms());
+			clearDeadends();
+			genFloors(ccFromAllRooms());
+			clearDeadends();
 
 			break;
 
 		case SINGLE_CONN_ROOMS:
 			// gen rooms
-			genRooms();
+			genRooms(ROOM_LIMIT);
 
 			// gen maze with no dead ends at first
-			genMaze(ccFromAllRooms());
+			genFloors(ccFromAllRooms());
 			clearDeadends();
 
 			break;
 
 		case LOOPED_ROOMS:
 			// gen rooms
-			genRooms();
+			genRooms(ROOM_LIMIT);
 
 			// gen maze with no dead ends at first
-			genMaze(ccFromAllRooms());
+			genFloors(ccFromAllRooms());
 			clearDeadends();
 
 			// add another maze for loops
-			genMaze(ccFromEndRooms());
+			genFloors(ccFromEndRooms());
 
 			// remove the dead ends finally
 			clearDeadends();
@@ -88,14 +94,14 @@ public class LevelBuilder {
 			break;
 		case DOUBLE_CONN_ROOMS:
 			// gen rooms
-			genRooms();
+			genRooms(ROOM_LIMIT);
 
 			// gen maze with no dead ends at first
-			genMaze(ccFromAllRooms());
+			genFloors(ccFromAllRooms());
 			clearDeadends();
 
 			// add another maze for loops
-			genMaze(ccFromAllRooms());
+			genFloors(ccFromAllRooms());
 
 			// remove the dead ends finally
 			clearDeadends();
@@ -103,25 +109,26 @@ public class LevelBuilder {
 			break;
 		}
 
-		// init floors for all layouts (every layout has floors)
-		floorSetup();
+		// complete floors computation for all layouts
+		// (every layout so far has floors)
+		completeFloors();
 
 		// set up player
 		genPlayer();
 	}
 
-	private LevelBuilder genRooms() {
+	private LevelBuilder genRooms(int limit) {
 		// set room flag
 		hasRooms = true;
 
 		// init room super array
-		rooms = new Room[ROOM_LIMIT];
+		rooms = new Room[limit];
 
 		// declare vars
 		int xLen, yLen, xStart, yStart;
 
 		// try to put up a new room in each iteration
-		for (int i = 0; i < ROOM_LIMIT; i++) {
+		for (int i = 0; i < limit; i++) {
 			// make sure to have valid room sizes
 			// random num n transforms into 2n+1 -> odd
 			do {
@@ -259,6 +266,11 @@ public class LevelBuilder {
 		return cc;
 	}
 
+	/**
+	 * create a disjoint set with no connected components at all
+	 * 
+	 * @return
+	 */
 	private DisjointSet<Cell> ccFromNoRooms() {
 		return new DisjointSet<>();
 	}
@@ -269,7 +281,7 @@ public class LevelBuilder {
 	 * 
 	 * @return
 	 */
-	private void genMaze(DisjointSet<Cell> cc) {
+	private void genFloors(DisjointSet<Cell> cc) {
 		ArrayList<int[]> q = new ArrayList<>();
 
 		for (int i = 1; i < map.getN(); i += 2) {
@@ -311,7 +323,12 @@ public class LevelBuilder {
 		}
 	}
 
-	public LevelBuilder clearDeadends() {
+	/**
+	 * internal function which deletes all dead ends of a maze
+	 * 
+	 * @return
+	 */
+	private void clearDeadends() {
 		int count;
 		boolean repeat = true, deadend[][];
 
@@ -348,15 +365,12 @@ public class LevelBuilder {
 				}
 			}
 		}
-
-		// return updated builder object
-		return this;
 	}
 
 	/**
 	 * internal helper function
 	 */
-	private void floorSetup() {
+	private void completeFloors() {
 		// set floor flag
 		hasFloor = true;
 
@@ -391,51 +405,78 @@ public class LevelBuilder {
 
 			newSpwan = rooms[0].getUnusedRandomCell();
 			fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2));
+
+			// make a shrine to rescue
+			newSpwan = rooms[0].getUnusedRandomCell();
+			fac.makeShrine(newSpwan[0], newSpwan[1]);
 		} else if (hasFloor) {
 			newSpwan = floors.get(0);
 			fac.makePlayer(newSpwan[0], newSpwan[1]);
+			floors.remove(0);
 		}
 
 		return this;
 	}
 
-	private LevelBuilder genEntity(double perRoom, int adds, EntityCreator creator) {
+	private LevelBuilder genEntity(double perRoom, double perFloor, EntityCreator creator) {
 		// room counter
 		int[] newSpwan;
 		double ctr = 0;
 
+		// add one entity in a room when the quotient adding up exceeds 1
 		// skip the first room => i = 1
 		if (hasRooms) {
 			for (int i = 1, j = i - 1; i < roomNum; i++) {
 				ctr += perRoom;
 
+				// break condition
 				if (ctr < 1) {
 					continue;
-				} else {
-					ctr -= 1;
-					j += 1;
 				}
 
-				// put up monster at a random room cell
-				newSpwan = rooms[j].getUnusedRandomCell();
-				creator.run(newSpwan[0], newSpwan[1]);
+				// set correct room
+				j += 1;
+
+				// loop is true at least once
+				while (ctr >= 1) {
+					// update j
+					ctr -= 1;
+
+					// put up monster at a random room cell
+					newSpwan = rooms[j].getUnusedRandomCell();
+					creator.run(newSpwan[0], newSpwan[1]);
+				}
 			}
 		}
 
+		// add one entity at a floor cell when the quotient adding up exceeds 1
 		if (hasFloor) {
-			for (int i = 0; i < adds; i++) {
-				// put up monster at a random floor cells
-				newSpwan = floors.get(0);
-				creator.run(newSpwan[0], newSpwan[1]);
-				floors.remove(0);
+			for (int i = 0; i < floors.size(); i++) {
+				ctr += perFloor;
+
+				// break condition
+				if (ctr < 1) {
+					continue;
+				}
+
+				// loop is true at least once
+				while (ctr >= 1) {
+					// update j
+					ctr -= 1;
+
+					// put up monster at a random floor cells
+					newSpwan = floors.get(0);
+					creator.run(newSpwan[0], newSpwan[1]);
+					floors.remove(0);
+				}
 			}
 		}
 
 		return this;
 	}
 
-	public LevelBuilder genMonster(double perRoom, int adds) {
-		return genEntity(perRoom, adds, (x, y) -> {
+	public LevelBuilder genMonster(double perRoom, double perFloor) {
+		return genEntity(perRoom, perFloor, (x, y) -> {
 			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
 
 			// monsters can be of the given power or at most 2 points higher
@@ -451,24 +492,24 @@ public class LevelBuilder {
 		});
 	}
 
-	public LevelBuilder genPortal(double perRoom) {
-		genEntity(perRoom, 0, (x, y) -> {
+	public LevelBuilder genPortal(double perRoom, double perFloor) {
+		genEntity(perRoom, perFloor, (x, y) -> {
 			fac.makePortal(x, y, "Informatiker");
 		});
 
 		return this;
 	}
 
-	public LevelBuilder genOpponent(double perRoom, int adds) {
-		genEntity(perRoom, adds, (x, y) -> {
+	public LevelBuilder genOpponent(double perRoom, double perFloor) {
+		genEntity(perRoom, perFloor, (x, y) -> {
 			fac.makeOpponent(x, y, "Informatiker");
 		});
 
 		return this;
 	}
 
-	public LevelBuilder genChest(double perRoom, int adds) {
-		genEntity(perRoom, adds, (x, y) -> {
+	public LevelBuilder genChest(double perRoom, double perFloor) {
+		genEntity(perRoom, perFloor, (x, y) -> {
 			int len = rnd.nextInt(3);
 			fac.makeChest(x, y, Combo.generate(2 + len));
 		});
@@ -476,8 +517,8 @@ public class LevelBuilder {
 		return this;
 	}
 
-	public LevelBuilder genShrine(double perRoom, int adds) {
-		genEntity(perRoom, 0, (x, y) -> {
+	public LevelBuilder genShrine(double perRoom, double perFloor) {
+		genEntity(perRoom, perFloor, (x, y) -> {
 			fac.makeShrine(x, y);
 		});
 

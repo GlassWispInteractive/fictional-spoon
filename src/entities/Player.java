@@ -15,15 +15,16 @@ import framework.GameControl;
 import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Player extends Entity implements IAttackable{
+public class Player extends Entity implements IAttackable {
 
 	private int hp = 100;
 	private final int maxHp;
 	private String name = "Spieler";
 	private Combat combat;
-	
-	private ArrayList<Soul> souls = new ArrayList<Soul>(Arrays.asList(new Soul[]{new Soul("Earth (1)"), new Soul("Fire (2)"), new Soul("Air (3)"), new Soul("Water (4)")}));
-	
+
+	private ArrayList<Soul> souls = new ArrayList<Soul>(Arrays.asList(
+			new Soul[] { new Soul("Earth (1)"), new Soul("Fire (2)"), new Soul("Air (3)"), new Soul("Water (4)") }));
+
 	// for speed
 	private int blocked = 0;
 
@@ -84,20 +85,23 @@ public class Player extends Entity implements IAttackable{
 		}
 
 	}
-	
+
 	public String getPlayerInfo() {
-		return ""+name+" ["+hp+" / "+maxHp+"]";
+		return "" + name + " [" + hp + " / " + maxHp + "]";
 	}
-	
+
 	public boolean isDead() {
 		return hp <= 0;
 	}
+
 	public ArrayList<Soul> getSouls() {
 		return souls;
 	}
+
 	public void setCombat(Combat combat) {
 		this.combat = combat;
 	}
+
 	public void heal() {
 		this.hp = maxHp;
 	}
@@ -106,12 +110,12 @@ public class Player extends Entity implements IAttackable{
 	public void getDmg(int dmg) {
 		hp -= dmg;
 	}
-	
+
 	@Override
-	public void doAttack(IAttackable focus){
+	public void doAttack(IAttackable focus) {
 		souls.get(combat.getCurSoul()).getAttack().doAttack(focus);
 	}
-	
+
 	@Override
 	public void doAttack(IAttackable focus, Combo combo) {
 		souls.get(combat.getCurSoul()).getAttack().doAttack(focus, combo);
