@@ -88,7 +88,7 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.CENTER);
 
-		gc.fillText("life points " + life, 100, 5 + (MapScreen.SPACE - 5) / 2);
+		gc.fillText("Life points " + life, 100, 5 + (MapScreen.SPACE - 5) / 2);
 	}
 
 }

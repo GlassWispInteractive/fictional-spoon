@@ -60,5 +60,10 @@ public abstract class Entity {
 	public void setY(int y) {
 		this.y = y;
 	}
+	
+	protected boolean intersectsWithPlayer() {
+	    EntityFactory fac = EntityFactory.getFactory();
+	    return (x == fac.getPlayer().getX() && y == fac.getPlayer().getY());
+	}
 
 }

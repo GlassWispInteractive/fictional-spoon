@@ -55,8 +55,7 @@ public class Portal extends Entity{
 			
 		}
 		
-		EntityFactory fac = EntityFactory.getFactory();
-		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
+		if (intersectsWithPlayer()) {
 
 		    destroyed = true;
 		    

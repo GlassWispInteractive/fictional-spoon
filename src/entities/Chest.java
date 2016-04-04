@@ -40,8 +40,7 @@ public class Chest extends Entity {
 	@Override
 	public void tick(int ticks) {
 		// check intersection
-		EntityFactory fac = EntityFactory.getFactory();
-		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY() && item != null) {
+		if (intersectsWithPlayer() && item != null) {
 			// alert
 			GameControl.getControl().alert("New combo: " + item.toString());
 

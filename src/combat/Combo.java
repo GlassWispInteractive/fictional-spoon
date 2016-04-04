@@ -90,4 +90,9 @@ public class Combo {
 		// toString().substring(0, 1) to get the first char
 		return Arrays.stream(elements).map(e -> "" + (1 + e.ordinal())).collect(Collectors.joining("-"));
 	}
+	
+	public static void resetCombos() {
+	    combos.clear();
+	    combosInUse.clear();
+	}
 }

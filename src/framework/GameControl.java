@@ -1,5 +1,6 @@
 package framework;
 
+import combat.Combo;
 import combat.Goal;
 import combat.Objective;
 import entities.EntityFactory;
@@ -37,6 +38,7 @@ public class GameControl {
 	public static void resetGame() {
 		// reset EntityFactory
 		EntityFactory.resetGame();
+		Combo.resetCombos();
 
 		singleton = new GameControl();
 	}

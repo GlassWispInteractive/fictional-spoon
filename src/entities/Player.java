@@ -32,7 +32,7 @@ public class Player extends Entity implements IAttackable {
 	public Player(int x, int y) {
 		super(x, y);
 		delayTicks = 4;
-		this.hp = 20;
+		this.hp = 100;
 
 		tileFac = TileFactory.getTilesFactory();
 	}

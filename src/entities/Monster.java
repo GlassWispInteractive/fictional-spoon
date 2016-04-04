@@ -11,12 +11,10 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
-import framework.GameControl;
 import framework.ScreenControl;
 import combat.Attacks;
 import combat.Combat;
 import combat.Combo;
-import combat.Goal;
 import combat.IAttackable;
 import engine.ImageSource;
 import engine.TileFactory;
@@ -118,12 +116,21 @@ public class Monster extends Entity implements IAttackable {
 	@Override
 	public void tick(int ticks) {
 	    
+	    	if(monsterDead) {
+			return;
+	    	}
+	    	
+	    	//check intersection before AND after moving
+	    	// check intersection
+	    	if (intersectsWithPlayer()) {
+	    		startCombat();
+	    	}
+	    
 		if (blocked >= 0) {
 			blocked -= ticks;
 		}
 		
 		if (!monsterDead) {
-
 		    	
 		    	if(blocked <= 0) {
         		    	blocked += delayTicks;
@@ -135,19 +142,22 @@ public class Monster extends Entity implements IAttackable {
 		    	}
 
 			// check intersection
-			EntityFactory fac = EntityFactory.getFactory();
-			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
-				// goal update
-				// moved to Combat class - stays here for debugging
-//				 GameControl.getControl().updateGoal(Goal.MONSTER);
-
-				// game logic
-//				monsterDead = true; // debug
-				ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[] { this }));
-				ScreenControl.getCtrl().setScreen("combat");
+			if (intersectsWithPlayer()) {
+			    	startCombat();
 			}
 		}
 
+	}
+	
+	private void startCombat() {
+		// goal update
+		// moved to Combat class - stays here for debugging
+//		 GameControl.getControl().updateGoal(Goal.MONSTER);
+
+		// game logic
+//		monsterDead = true; // debug
+		ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[] { this }));
+		ScreenControl.getCtrl().setScreen("combat");
 	}
 
 	public ImageSource getImageSource() {

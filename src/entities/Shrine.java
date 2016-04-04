@@ -34,7 +34,7 @@ public class Shrine extends Entity {
 	@Override
 	public void tick(int ticks) {
 		// check intersection
-		if (x == player.getX() && y == player.getY() && blocked == 0) {
+		if (intersectsWithPlayer()) {
 			// game logic
 			player.heal();
 			blocked = delayTicks;
