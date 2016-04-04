@@ -71,8 +71,9 @@ public class LevelBuilder {
 
 			// gen maze with no dead ends at first
 			genFloors(ccFromAllRooms());
-			clearDeadends();
 
+			// remove the following lines to receive a huge amout of errors
+			clearDeadends();
 			genFloors(ccFromAllRooms());
 			clearDeadends();
 

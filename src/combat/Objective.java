@@ -34,4 +34,24 @@ public class Objective {
 		// calculate the progess
 		return (double) current / total;
 	}
+	
+	@Override
+	public String toString() {
+		switch (goal) {
+		case MONSTER:
+			return "Kill " + total + " monster";
+		case OPPONENT:
+			return "Kill " + total + " opponent";
+		case BOSS:
+			return "Kill the boss";
+		case PORTAL:
+			return "Destroy " + total + " portals";
+		case CHEST:
+			return "Collect " + total + " chests";
+		case SHRINE:
+			return "Activate " + total + " shrines";
+		}
+		
+		return "";
+	}
 }

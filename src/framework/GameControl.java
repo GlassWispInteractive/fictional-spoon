@@ -34,6 +34,9 @@ public class GameControl {
 		return singleton;
 	}
 
+	/**
+	 * reset the game state
+	 */
 	public static void resetGame() {
 		// reset EntityFactory
 		EntityFactory.resetGame();
@@ -49,16 +52,17 @@ public class GameControl {
 		screen = new HelpScreen("game", 180);
 		ScreenControl.getCtrl().addScreen("game intro", screen);
 		level = 3;
-		loadObjective(level);
+		startArcade(level);
 
 	}
 
-	private void loadObjective(int level) {
+	private void startArcade(int level) {
 		//
 		ScreenControl ctrl = ScreenControl.getCtrl();
 
 		if (level > 1) {
 			// reset stuff
+			ctrl.setScreen("game intro");
 			EntityFactory.resetGame();
 		}
 
@@ -66,8 +70,6 @@ public class GameControl {
 		switch (level) {
 		case 1:
 			// basic level
-			screen.setText(new String[] { "Quest: Kill 5 monster" });
-			
 			map = new MapScreen(
 					new LevelBuilder(MapScreen.WIDTH / 16, MapScreen.HEIGHT / 16, LevelBuilder.Layout.SINGLE_CONN_ROOMS)
 							.genMonster(1, 0.01).genShrine(0.1, 0).create());
@@ -75,8 +77,7 @@ public class GameControl {
 			break;
 		case 2:
 			// default level
-			screen.setText(new String[] { "Quest completed", "Quest: Kill 30 Monster" });
-			ctrl.setScreen("game intro");
+			
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
@@ -84,7 +85,6 @@ public class GameControl {
 			break;
 		case 3:
 			// deactivate portals
-			screen.setText(new String[] { "Quest completed", "Quest: Destroy every portal" });
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(
@@ -94,7 +94,6 @@ public class GameControl {
 			break;
 		case 4:
 			// default level
-			screen.setText(new String[] { "Quest completed", "Quest: Kill 50 Monster" });
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
@@ -103,7 +102,6 @@ public class GameControl {
 			break;
 		case 5:
 			// boss maze
-			screen.setText(new String[] { "Quest completed", "Quest: Kill the BOSS" });
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.MAZE)
@@ -113,6 +111,8 @@ public class GameControl {
 		default:
 
 		}
+		
+		screen.setText(new String[] { "Next Level", "Quest: " + objective });
 
 		// update game screens
 		panel = new PanelDecorator(map);
@@ -150,7 +150,7 @@ public class GameControl {
 				ScreenControl.getCtrl().setScreen("game won");
 			} else {
 				level++;
-				loadObjective(level);
+				startArcade(level);
 			}
 		}
 	}
