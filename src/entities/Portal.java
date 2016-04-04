@@ -60,6 +60,12 @@ public class Portal extends Entity{
 
 		    destroyed = true;
 		    
+		    // alert
+		    GameControl.getControl().alert("YKWTBI");
+
+		    // goal update
+		    GameControl.getControl().updateGoal(Goal.PORTAL);
+		    
 		}
 		
 	}
