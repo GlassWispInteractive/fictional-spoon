@@ -35,7 +35,7 @@ public class FloorWalk extends WalkStrategy{
 		    directionIndex = (++directionIndex) % Direction.values().length;
 		    
 		}
-
+		
 		return randomWalk(oldX, oldY);
 		
 	}

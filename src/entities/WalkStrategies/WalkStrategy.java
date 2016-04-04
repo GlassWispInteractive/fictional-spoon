@@ -15,8 +15,6 @@ public abstract class WalkStrategy {
 	protected Map map;
 	
 	protected Random rnd = new Random();
-	private int blocked = 0;
-	private int delayTicks = 20;
 	
 	private boolean playerFarAway = true;
 	private int area = 8;
@@ -42,8 +40,6 @@ public abstract class WalkStrategy {
 		map = GameControl.getControl().getMap();
 		    
 		Point newPoint = choseStrategy(oldX, oldY);
-						
-		blocked = delayTicks - 1;
 			
 		if(!map.isWalkable(newPoint.x, oldY)){
 			newPoint.x = oldX;
@@ -150,11 +146,11 @@ public abstract class WalkStrategy {
 	
 	protected Point walkStrategy(int oldX, int oldY) {
 	    
-	    	if(map.isWalkableRoom(oldX, oldY)) {
+		if(map.isWalkableRoom(oldX, oldY)) {
 	    	    return walkWithStrategy(oldX, oldY);
 	    	}
 	        
-		Point newPoint;		
+		Point newPoint;	
 		
 		int directionIndex = rnd.nextInt(Direction.values().length);
 		
@@ -174,10 +170,15 @@ public abstract class WalkStrategy {
 		    
 		}
 		
+		newPoint = randomWalk(oldX, oldY);
+		
+		if(newPoint != null) {
+		    return newPoint;
+		}
+		
 		System.err.println("No walkable field");
 
-		newPoint = null;
-		return newPoint;
+		return new Point(oldX, oldY);
 	}
 	
 	protected abstract Point walkWithStrategy(int oldX, int oldY);
