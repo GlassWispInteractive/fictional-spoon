@@ -8,6 +8,8 @@ import framework.GameControl;
 import java.awt.Point;
 import java.util.Random;
 
+import combat.Goal;
+
 import javafx.scene.canvas.GraphicsContext;
 
 public class Portal extends Entity{
@@ -16,9 +18,11 @@ public class Portal extends Entity{
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 //	private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 23, 7); //alternative
 	private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 40, 9);
+	private ImageSource imgSourceDestroyed = new ImageSource(TileSource.MAP_TILES, 44, 9);
 //	private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 36, 1); //alternative
 	private int blocked = 0;
 	private int maxMonsterSpawn = 3;
+	private boolean destroyed = false;
 
 	public Portal(int x, int y, String name) {
 		super(x, y);
@@ -29,7 +33,11 @@ public class Portal extends Entity{
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 
-		tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
+	    	if(destroyed) {
+	    	    tileFac.drawTile(gc, imgSourceDestroyed, (x - offsetX), (y - offsetY), size);
+	    	} else {
+	    	    tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
+	    	}
 	}
 
 	@Override
@@ -39,12 +47,19 @@ public class Portal extends Entity{
 			blocked -= ticks;
 		}
 		
-		if (blocked < 0) {
+		if (blocked < 0 && !destroyed) {
 			
 			blocked = delayTicks;
-			
+						
 			spawnMonster();
 			
+		}
+		
+		EntityFactory fac = EntityFactory.getFactory();
+		if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
+
+		    destroyed = true;
+		    
 		}
 		
 	}

@@ -89,7 +89,7 @@ public class GameControl {
 
 			map = new MapScreen(
 					new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.MAZE_WITH_ROOMS)
-							.genMonster(2, 20).genChest(0, 10).genShrine(0, 2).genPortal(1, 0).create());
+					.genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01).genPortal(1, 0).create());
 			objective = new Objective(Goal.PORTAL, 1); // calculate the number of portals created
 			break;
 		case 4:
