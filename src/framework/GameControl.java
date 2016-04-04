@@ -71,7 +71,7 @@ public class GameControl {
 		case 1:
 			// basic level
 			map = new MapScreen(
-					new LevelBuilder(MapScreen.WIDTH / 16, MapScreen.HEIGHT / 16, LevelBuilder.Layout.SINGLE_CONN_ROOMS)
+					new LevelBuilder(Consts.WIDTH / 16, Consts.HEIGHT / 16, LevelBuilder.Layout.SINGLE_CONN_ROOMS)
 							.genMonster(1, 0.01).genShrine(0.1, 0).create());
 			objective = new Objective(Goal.MONSTER, 5);
 			break;
@@ -88,7 +88,7 @@ public class GameControl {
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(
-					new LevelBuilder(MapScreen.WIDTH / 16, MapScreen.HEIGHT / 16, LevelBuilder.Layout.MAZE_WITH_ROOMS)
+					new LevelBuilder(Consts.WIDTH / 16, Consts.HEIGHT / 16, LevelBuilder.Layout.MAZE_WITH_ROOMS)
 							.genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01).genPortal(1, 0).create());
 			objective = new Objective(Goal.PORTAL, 1); // calculate the number of portals created
 			break;
@@ -104,7 +104,7 @@ public class GameControl {
 			// boss maze
 			ctrl.setScreen("game intro");
 
-			map = new MapScreen(new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.MAZE)
+			map = new MapScreen(new LevelBuilder(Consts.WIDTH / 16, Consts.HEIGHT / 16, LevelBuilder.Layout.MAZE)
 					.genChest(0, 0.01).genOpponent(0, 0.005).create());
 			objective = new Objective(Goal.OPPONENT, 1);
 			break;

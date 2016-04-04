@@ -6,6 +6,7 @@ import engine.TileSource;
 import entities.Entity;
 import entities.EntityFactory;
 import framework.EventControl;
+import framework.Consts;
 import framework.Screen;
 import framework.ScreenControl;
 import framework.Window;
@@ -14,9 +15,6 @@ import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 
 public class MapScreen extends Screen {
-	// constants
-	public final static int SPACE = 3 * 16;
-	public final static int WIDTH = Window.SIZE_X, HEIGHT = Window.SIZE_Y - 2 * SPACE;
 
 	// map settings
 	private final int size = 16;
@@ -37,7 +35,7 @@ public class MapScreen extends Screen {
 
 		// set layout
 		addLayer("map", 0, 0, map.getN() * size, map.getM() * size);
-		addLayer("entities", 0, SPACE, WIDTH, HEIGHT);
+		addLayer("entities", 0, Consts.PANEL_SIZE, Consts.WIDTH, Consts.HEIGHT);
 
 		// render the map prior every other rendering and keep it cached
 		prerenderMap();
@@ -47,8 +45,8 @@ public class MapScreen extends Screen {
 		fac = EntityFactory.getFactory();
 
 		// set view size and be sure to be smaller than the map
-		cameraSizeX = Math.min(WIDTH / size, map.getN());
-		cameraSizeY = Math.min(HEIGHT / size, map.getM());
+		cameraSizeX = Math.min(Consts.WIDTH / size, map.getN());
+		cameraSizeY = Math.min(Consts.HEIGHT / size, map.getM());
 
 		// set view
 		Entity player = EntityFactory.getFactory().getPlayer();
@@ -145,7 +143,7 @@ public class MapScreen extends Screen {
 	@Override
 	public void render() {
 		// shift prerendered map
-		layers.get("map").relocate(-16 * cameraX, SPACE - 16 * cameraY);
+		layers.get("map").relocate(-16 * cameraX, Consts.PANEL_SIZE - 16 * cameraY);
 
 		// render entities
 		renderEntities();

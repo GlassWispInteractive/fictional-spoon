@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import framework.EventControl;
+import framework.Consts;
 import framework.Screen;
 import framework.ScreenControl;
-import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 //import static game.State.*;
@@ -81,7 +80,7 @@ public class MenuScreen extends Screen {
 	public void render() {
 		// start from clean screen
 		final GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+		gc.clearRect(0, 0, Consts.SIZE_X, Consts.SIZE_Y);
 
 		// canvas settings
 		final double w = gc.getCanvas().getWidth();
@@ -93,7 +92,7 @@ public class MenuScreen extends Screen {
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
-		gc.setFont(Window.DEFAULT_FONT);
+		gc.setFont(Consts.DEFAULT_FONT);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
@@ -101,22 +100,14 @@ public class MenuScreen extends Screen {
 
 		for (int i = 0; i < list.size(); i++) {
 			// render box
-			gc.setFill(Color.DARKGRAY.deriveColor(0, 1.2, 1, 0.6));
-			gc.setStroke(Color.DARKGRAY);
+			gc.setFill(Consts.WHITE.deriveColor(0, 1.2, 1, 0.8));
+			gc.setStroke(Consts.WHITE.brighter());
 			gc.fillRoundRect((w - 200) / 2, 200 + 100 * (i + 1), 200, 60, 60, 200);
-			// gc.strokeRect((w - 200) / 2, 200 + 100 * (i + 1), 200, 60);
+			gc.strokeRoundRect((w - 200) / 2, 200 + 100 * (i + 1), 200, 60, 60, 200);
 
 			// render text on box
-			if (i != cur) {
-				gc.setFill(Color.DARKRED.deriveColor(0, 1.2, 1, 0.6));
-				gc.setStroke(Color.DARKRED);
-			} else {
-				gc.setFill(Color.RED.deriveColor(0, 1.2, 1, 0.6));
-				gc.setStroke(Color.RED);
-			}
-
+			gc.setFill(i != cur ? Consts.DARKRED : Consts.DARKRED.brighter());
 			gc.fillText(list.get(i), w / 2, 200 + 100 * (i + 1) + 30);
-			gc.strokeText(list.get(i), w / 2, 200 + 100 * (i + 1) + 30);
 		}
 
 	}

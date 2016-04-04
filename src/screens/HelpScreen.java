@@ -1,12 +1,11 @@
 package screens;
 
 import framework.EventControl;
+import framework.Consts;
 import framework.Screen;
 import framework.ScreenControl;
-import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class HelpScreen extends Screen {
@@ -51,16 +50,16 @@ public class HelpScreen extends Screen {
 		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
 
 		// font settings
-		gc.setFont(Window.HUGE_FONT);
+		gc.setFont(Consts.HUGE_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
 
 		// text
-		gc.setFill(Color.RED);
-		gc.setStroke(Color.RED);
+		gc.setFill(Consts.RED);
+		gc.setStroke(Consts.RED);
 
-		gc.fillText(text[index], Window.SIZE_X / 2, Window.SIZE_Y * 0.4);
+		gc.fillText(text[index], Consts.SIZE_X / 2, Consts.SIZE_Y * 0.4);
 		// gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
 
 		// gc.setFont(Window.DEFAULT_FONT);
