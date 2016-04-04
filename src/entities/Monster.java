@@ -107,14 +107,17 @@ public class Monster extends Entity implements IAttackable {
 			blocked -= ticks;
 		}
 		
-		if (!monsterDead && blocked <= 0) {
+		if (!monsterDead) {
 
-			blocked += delayTicks;
-
-			Point newPosition = currentWalkStrategy.walk(x, y);
-
-			x = newPosition.x;
-			y = newPosition.y;
+		    	
+		    	if(blocked <= 0) {
+        		    	blocked += delayTicks;
+        
+        			Point newPosition = currentWalkStrategy.walk(x, y);
+        
+        			x = newPosition.x;
+        			y = newPosition.y;
+		    	}
 
 			// check intersection
 			EntityFactory fac = EntityFactory.getFactory();
