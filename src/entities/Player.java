@@ -57,16 +57,13 @@ public class Player extends Entity implements IAttackable {
 		if (e.isLeft()) {
 			newX--;
 			moved = true;
-		}
-		if (e.isRight()) {
+		} else if (e.isRight()) {
 			newX++;
 			moved = true;
-		}
-		if (e.isUp()) {
+		} else if (e.isUp()) {
 			newY--;
 			moved = true;
-		}
-		if (e.isDown()) {
+		} else if (e.isDown()) {
 			newY++;
 			moved = true;
 		}

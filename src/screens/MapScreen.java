@@ -68,11 +68,12 @@ public class MapScreen extends Screen {
 	 * @param ticks
 	 */
 	public void tick(int ticks) {
-		fac.getPlayer().tick(ticks);
 
 		for (Entity mob : fac.getMobs()) {
 			mob.tick(ticks);
 		}
+
+		fac.getPlayer().tick(ticks);
 
 		fac.smartAdd();
 		fac.smartDelete();
