@@ -9,19 +9,17 @@ import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
-import entities.Monster.MonsterType;
-import entities.WalkStrategies.FloorWalk;
-import entities.WalkStrategies.HorizontalWalk;
-import entities.WalkStrategies.RandomWalk;
-import entities.WalkStrategies.RectangleWalk;
-import entities.WalkStrategies.VerticalWalk;
-import entities.WalkStrategies.WalkStrategy;
+import entities.walk_strategies.FloorWalk;
+import entities.walk_strategies.HorizontalWalk;
+import entities.walk_strategies.RandomWalk;
+import entities.walk_strategies.RectangleWalk;
+import entities.walk_strategies.VerticalWalk;
+import entities.walk_strategies.WalkStrategy;
 import framework.GameControl;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Opponent extends Entity {
-
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 	private ImageSource imgSource = new ImageSource(TileSource.CHAR_TILES, 0, 11);
 	private int blocked = 0;
@@ -34,7 +32,7 @@ public class Opponent extends Entity {
 
 	private ArrayList<Monster> monsterList = new ArrayList<Monster>();
 
-	public Opponent(int x, int y, String name) {
+	public Opponent(int x, int y, boolean spawnIsInRoom) {
 		super(x, y);
 
 		this.delayTicks = 10;
@@ -43,14 +41,26 @@ public class Opponent extends Entity {
 
 		// hard coded monster
 		for (int i = 0; i < 3; i++) {
-		    	//generate monster parameter
-			MonsterType type = MonsterType.values()[rnd.nextInt(MonsterType.values().length - 1)];
-			int dmg = rnd.nextInt(3) + 1;
+			// generate monster parameter
+			// MonsterType type =
+			// MonsterType.values()[rnd.nextInt(MonsterType.values().length -
+			// 1)];
+			// int dmg = rnd.nextInt(3) + 1;
 
 			// make monster at (x, y)
-			boolean spawnIsInRoom = GameControl.getControl().getMap().isWalkableRoom(x, y);
-			EntityFactory.getFactory().makeMonster(x, y, spawnIsInRoom, 100, type, dmg, "monster");
+			Monster.generate(x, y, spawnIsInRoom);
 		}
+	}
+	
+	/**
+	 * function generates a monster at a specified place
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spawnIsInRoom
+	 */
+	public static void generate(int x, int y, boolean spawnIsInRoom) {
+		new Opponent(x, y, spawnIsInRoom);
 	}
 
 	@Override

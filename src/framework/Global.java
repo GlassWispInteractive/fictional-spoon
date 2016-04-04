@@ -5,15 +5,18 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class Consts {
+public class Global {
 	// game title
 	public static final String TITLE = "fictional spoon";
 
 	// sizes
-	public static final int SIZE_X = 1200, SIZE_Y = 800;
-	public final static int PANEL_SIZE = 3 * 16;
-	public final static int WIDTH = SIZE_X;
-	public final static int HEIGHT = SIZE_Y - 2 * PANEL_SIZE;
+	public static final int WINDOW_WIDTH = 1200;
+	public static final int WINDOW_HEIGHT = 800;
+	
+	private final static int TILE_SIZE = 16;
+	public final static int PANEL_HEIGHT = 3 * TILE_SIZE;
+	public final static int GAME_WIDTH = WINDOW_WIDTH;
+	public final static int GAME_HEIGHT = WINDOW_HEIGHT - 2 * PANEL_HEIGHT;
 
 	// fonts
 	public static final Font HUGE_FONT = Font.font("Helvetica", FontWeight.BOLD, 64);
@@ -28,7 +31,7 @@ public class Consts {
 	public static final Color DARKRED = (Color) Paint.valueOf("#801B1B");;
 	
 	
-	private Consts() {
+	private Global() {
 		throw new AssertionError();
 	}
 

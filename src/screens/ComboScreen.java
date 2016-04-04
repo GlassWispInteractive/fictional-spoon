@@ -6,7 +6,7 @@ import com.sun.javafx.tk.Toolkit;
 
 import combat.Combo;
 import framework.EventControl;
-import framework.Consts;
+import framework.Global;
 import framework.Screen;
 import framework.ScreenControl;
 import javafx.geometry.VPos;
@@ -33,7 +33,7 @@ public class ComboScreen extends Screen {
 		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
 
 		// font settings
-		gc.setFont(Consts.DEFAULT_FONT);
+		gc.setFont(Global.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
@@ -42,22 +42,22 @@ public class ComboScreen extends Screen {
 
 		int textHeight = (int) Toolkit.getToolkit().getFontLoader().getFontMetrics(gc.getFont()).getLineHeight();
 		int padding = 10;
-		int width = Consts.SIZE_X / Math.max(1, comboNames.length);
+		int width = Global.WINDOW_WIDTH / Math.max(1, comboNames.length);
 		int height = (int) (1.5 * textHeight);
 		int startY = 50;
 		int rowY;
 		int columnX = 0;
 
 		// draw title
-		gc.setFill(Consts.RED);
-		gc.setStroke(Consts.RED);
-		gc.setFont(Consts.BIG_FONT);
+		gc.setFill(Global.RED);
+		gc.setStroke(Global.RED);
+		gc.setFont(Global.BIG_FONT);
 		if (comboNames.length == 0) {
-			gc.fillText("No Combos", Consts.SIZE_X / 2, startY);
+			gc.fillText("No Combos", Global.WINDOW_WIDTH / 2, startY);
 		} else {
-			gc.fillText("List of all Combo attacks", Consts.SIZE_X / 2, 50);
+			gc.fillText("List of all Combo attacks", Global.WINDOW_WIDTH / 2, 50);
 		}
-		gc.strokeLine(0, startY + padding, Consts.SIZE_X, startY + padding);
+		gc.strokeLine(0, startY + padding, Global.WINDOW_WIDTH, startY + padding);
 
 		// draw all combos in use
 		for (int i = 0; i < comboNames.length; i++) {
@@ -66,7 +66,7 @@ public class ComboScreen extends Screen {
 
 			for (int j = 0; j < comboNames[i].length; j++) {
 
-				gc.setFill(Consts.RED);
+				gc.setFill(Global.RED);
 				if (comboNames[i][j] != null) {
 					gc.fillText(comboNames[i][j].toString(), columnX + width / 2, rowY, width - 2 * padding);
 				}

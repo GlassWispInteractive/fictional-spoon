@@ -3,7 +3,11 @@ package framework;
 import combat.Combo;
 import combat.Goal;
 import combat.Objective;
-import entities.EntityFactory;
+import entities.Chest;
+import entities.Monster;
+import entities.Opponent;
+import entities.Portal;
+import entities.Shrine;
 import generation.LevelBuilder;
 import generation.Map;
 import screens.AlertDecorator;
@@ -40,7 +44,11 @@ public class GameControl {
 	 */
 	public static void resetGame() {
 		// reset EntityFactory
-		EntityFactory.resetGame();
+		Chest.reset();
+		Shrine.reset();
+		Monster.reset();
+		Opponent.reset();
+		Portal.reset();
 		Combo.resetCombos();
 
 		singleton = new GameControl();
@@ -53,7 +61,7 @@ public class GameControl {
 		// settings
 		screen = new HelpScreen("game", 180);
 		ScreenControl.getCtrl().addScreen("game intro", screen);
-		level = 3;
+		level = 1;
 		startArcade(level);
 
 	}
@@ -65,21 +73,19 @@ public class GameControl {
 		if (level > 1) {
 			// reset stuff
 			ctrl.setScreen("game intro");
-			EntityFactory.resetGame();
+			// EntityFactory.resetGame();
 		}
 
 		// set the appropriate objective by level
 		switch (level) {
 		case 1:
 			// basic level
-			map = new MapScreen(
-					new LevelBuilder(Consts.WIDTH / 16, Consts.HEIGHT / 16, LevelBuilder.Layout.SINGLE_CONN_ROOMS)
-							.genMonster(1, 0.01).genShrine(0.1, 0).create());
+			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
+					LevelBuilder.Layout.SINGLE_CONN_ROOMS).genMonster(1, 0.01).genShrine(0.1, 0).create());
 			objective = new Objective(Goal.MONSTER, 5);
 			break;
 		case 2:
 			// default level
-			
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
@@ -89,9 +95,11 @@ public class GameControl {
 			// deactivate portals
 			ctrl.setScreen("game intro");
 
-			map = new MapScreen(new LevelBuilder(Consts.WIDTH / 16, Consts.HEIGHT / 16, LevelBuilder.Layout.MAZE_WITH_ROOMS)
-							.genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01).genPortal(1, 0).create());
-			objective = new Objective(Goal.PORTAL, 1); // calculate the number of portals created
+			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
+					LevelBuilder.Layout.MAZE_WITH_ROOMS).genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01)
+							.genPortal(1, 0).create());
+			objective = new Objective(Goal.PORTAL, 1); // calculate the number
+														// of portals created
 			break;
 		case 4:
 			// default level
@@ -105,14 +113,15 @@ public class GameControl {
 			// boss maze
 			ctrl.setScreen("game intro");
 
-			map = new MapScreen(new LevelBuilder(Consts.WIDTH / 16, Consts.HEIGHT / 16, LevelBuilder.Layout.MAZE)
-					.genChest(0, 0.01).genOpponent(0, 0.005).create());
+			map = new MapScreen(
+					new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16, LevelBuilder.Layout.MAZE)
+							.genChest(0, 0.01).genOpponent(0, 0.005).create());
 			objective = new Objective(Goal.OPPONENT, 1);
 			break;
 		default:
 
 		}
-		
+
 		screen.setText(new String[] { "Next Level", "Quest: " + objective });
 
 		// update game screens

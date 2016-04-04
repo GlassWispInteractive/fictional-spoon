@@ -1,8 +1,8 @@
-package entities.WalkStrategies;
+package entities.walk_strategies;
 
 import entities.Direction;
 import entities.Entity;
-import entities.EntityFactory;
+import entities.Player;
 import framework.GameControl;
 import generation.Map;
 
@@ -67,7 +67,7 @@ public abstract class WalkStrategy {
 			return walkStrategy(oldX, oldY);
 		}
 		
-		Entity player = EntityFactory.getFactory().getPlayer();
+		Entity player = Player.getNewest();
 		int playerX = player.getX();
 		int playerY = player.getY();
 		playerFarAway = Math.abs(oldX - playerX) > area || Math.abs(oldY - playerY) > area;
@@ -103,7 +103,7 @@ public abstract class WalkStrategy {
 	
 	protected Point aggroWalk(int oldX, int oldY) {
 		
-		Entity player = EntityFactory.getFactory().getPlayer();
+		Entity player = Player.getNewest();
 		int playerX = player.getX();
 		int playerY = player.getY();
 		

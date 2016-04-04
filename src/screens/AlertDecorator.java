@@ -3,7 +3,7 @@ package screens;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import framework.Consts;
+import framework.Global;
 import framework.Screen;
 import framework.ScreenDecorator;
 import javafx.geometry.VPos;
@@ -26,7 +26,7 @@ public class AlertDecorator extends ScreenDecorator {
 		// inits
 		super(decoratedScreen);
 
-		addLayer("alert", 0, Consts.SIZE_Y / 2 - 50, Consts.SIZE_X, 100);
+		addLayer("alert", 0, Global.WINDOW_HEIGHT / 2 - 50, Global.WINDOW_WIDTH, 100);
 		alerts = new LinkedList<>();
 	}
 
@@ -60,7 +60,7 @@ public class AlertDecorator extends ScreenDecorator {
 		}
 
 		// font settings to be set
-		gc.setFont(Consts.BIG_FONT);
+		gc.setFont(Global.BIG_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
 		gc.setLineWidth(1);

@@ -3,7 +3,7 @@ package screens;
 import java.util.ArrayList;
 import java.util.Random;
 
-import framework.Consts;
+import framework.Global;
 import framework.Screen;
 import framework.ScreenDecorator;
 import javafx.scene.canvas.GraphicsContext;
@@ -21,11 +21,11 @@ public class SoulsDecorator extends ScreenDecorator {
 		soulWait = 0;
 
 		for (int i = 0; i < 10; i++) {
-			final int x = rand.nextInt(Consts.SIZE_X - 200), y = rand.nextInt(Consts.SIZE_Y - 200);
+			final int x = rand.nextInt(Global.WINDOW_WIDTH - 200), y = rand.nextInt(Global.WINDOW_HEIGHT - 200);
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
 
-		addLayer("souls", 0, 0, Consts.SIZE_X, Consts.SIZE_Y);
+		addLayer("souls", 0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
 	}
 
 	public void tick(int ticks) {
@@ -42,14 +42,14 @@ public class SoulsDecorator extends ScreenDecorator {
 				soul[0] += (-1) + rand.nextInt(3);
 				if (soul[0] < 50)
 					soul[0] = 50;
-				if (soul[0] > Consts.SIZE_X - 50)
-					soul[0] = Consts.SIZE_X - 50;
+				if (soul[0] > Global.WINDOW_WIDTH - 50)
+					soul[0] = Global.WINDOW_WIDTH - 50;
 
 				soul[1] += (-1) + rand.nextInt(3);
 				if (soul[1] < 50)
 					soul[1] = 50;
-				if (soul[1] > Consts.SIZE_Y - 50)
-					soul[1] = Consts.SIZE_Y - 50;
+				if (soul[1] > Global.WINDOW_HEIGHT - 50)
+					soul[1] = Global.WINDOW_HEIGHT - 50;
 			}
 		}
 	}
@@ -64,7 +64,7 @@ public class SoulsDecorator extends ScreenDecorator {
 
 		// render background souls
 		for (double[] soul : souls) {
-			gc.setFill(Consts.RED.deriveColor(2, 1.2, 1, 0.3));
+			gc.setFill(Global.RED.deriveColor(2, 1.2, 1, 0.3));
 			gc.fillOval(soul[0], soul[1], 25, 25);
 		}
 	}

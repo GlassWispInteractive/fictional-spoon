@@ -8,13 +8,12 @@ import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 
 import engine.TileFactory;
-import entities.EntityFactory;
 import entities.Monster;
 import entities.Opponent;
 import entities.Player;
 import framework.EventControl;
 import framework.GameControl;
-import framework.Consts;
+import framework.Global;
 import framework.Screen;
 import framework.ScreenControl;
 import javafx.geometry.VPos;
@@ -28,7 +27,7 @@ public class Combat extends Screen {
 	private ArrayList<Soul> souls;
 	private ArrayList<Monster> monster;
 	private Opponent opponent = null; // null = only monster
-	private Player player = (Player) EntityFactory.getFactory().getPlayer();
+	private Player player = Player.getNewest();
 
 	// class member
 	private int curSoul, curFocus;
@@ -71,12 +70,12 @@ public class Combat extends Screen {
 		info = "Use 1, 2, 3 or 4 to attack";
 		streak = new ArrayList<>();
 
-		addLayer("elems", 0, Consts.SIZE_Y * 0.65, Consts.SIZE_X, 300);
-		addLayer("monster", 0, 0, Consts.SIZE_X, 300);
-		addLayer("bar", 0, Consts.SIZE_Y * 0.4, Consts.SIZE_X, 100);
-		addLayer("info", 0, Consts.SIZE_Y * 0.3, Consts.SIZE_X, 100);
-		addLayer("info2", 0, Consts.SIZE_Y * 0.85, Consts.SIZE_X, 100);
-		addLayer("combo", 0, Consts.SIZE_Y - 510, Consts.SIZE_X, 510);
+		addLayer("elems", 0, Global.WINDOW_HEIGHT * 0.65, Global.WINDOW_WIDTH, 300);
+		addLayer("monster", 0, 0, Global.WINDOW_WIDTH, 300);
+		addLayer("bar", 0, Global.WINDOW_HEIGHT * 0.4, Global.WINDOW_WIDTH, 100);
+		addLayer("info", 0, Global.WINDOW_HEIGHT * 0.3, Global.WINDOW_WIDTH, 100);
+		addLayer("info2", 0, Global.WINDOW_HEIGHT * 0.85, Global.WINDOW_WIDTH, 100);
+		addLayer("combo", 0, Global.WINDOW_HEIGHT - 510, Global.WINDOW_WIDTH, 510);
 
 		player.setCombat(this);
 		this.souls = player.getSouls();
@@ -260,7 +259,7 @@ public class Combat extends Screen {
 	public void render() {
 		// start from clean screen
 		GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, Consts.SIZE_X, Consts.SIZE_Y);
+		gc.clearRect(0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
 
 		// SpookingSouls.getObject().render(gc);
 
@@ -278,7 +277,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("elems").getWidth(), layers.get("elems").getHeight());
 
 		for (int i = 0; i < souls.size(); i++) {
-			gc.setFill(Consts.WHITE);
+			gc.setFill(Global.WHITE);
 			gc.fillText(souls.get(i).getName(), 80 + i * 180, 25, 80);
 
 			gc.drawImage(ELEMS[i], 50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
@@ -286,7 +285,7 @@ public class Combat extends Screen {
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
 			if (curSoul == i && streakCount > 0) {
-				gc.setStroke(Consts.WHITE);
+				gc.setStroke(Global.WHITE);
 				gc.setLineWidth(3);
 				gc.strokeRect(50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 			}
@@ -302,17 +301,17 @@ public class Combat extends Screen {
 
 			Image image = TileFactory.getTilesFactory().getImage(monster.get(i).getImageSource());
 
-			gc.setFill(Consts.RED);
+			gc.setFill(Global.RED);
 			gc.fillText(monster.get(i).getName() + " " + monster.get(i).getHpInfo(),
-					Consts.SIZE_X - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
+					Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
 
-			gc.drawImage(image, Consts.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
+			gc.drawImage(image, Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			// gc.fillRect(Window.SIZE_X - 150 - i * 120, 50, 80, 80);
 
 			if (curFocus % monster.size() == i) {
-				gc.setStroke(Consts.RED);
+				gc.setStroke(Global.RED);
 				gc.setLineWidth(4);
-				gc.strokeRect(Consts.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
+				gc.strokeRect(Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			}
 		}
 
@@ -326,22 +325,22 @@ public class Combat extends Screen {
 		// fancy line at 40%
 		gc.setLineWidth(3);
 		gc.setStroke(Color.GREY);
-		gc.strokeRoundRect(100, 5, Consts.SIZE_X - 200, 30, 30, 30);
+		gc.strokeRoundRect(100, 5, Global.WINDOW_WIDTH - 200, 30, 30, 30);
 
 		// progress bar
 		gc.setFill(Color.ORANGE);
 		// +5 to be lower than outer rect
 		// +2 to have the left border over the delimeter
-		gc.fillRoundRect(110, 10, status * (Consts.SIZE_X - 220) + 2, 20, 20, 20);
+		gc.fillRoundRect(110, 10, status * (Global.WINDOW_WIDTH - 220) + 2, 20, 20, 20);
 
 		// draw the delimters
-		gc.setStroke(Consts.DARKGRAY.brighter());
+		gc.setStroke(Global.DARKGRAY.brighter());
 		gc.strokePolyline(
-				new double[] { 110 + lowerBound * (Consts.SIZE_X - 220), 110 + lowerBound * (Consts.SIZE_X - 220) },
+				new double[] { 110 + lowerBound * (Global.WINDOW_WIDTH - 220), 110 + lowerBound * (Global.WINDOW_WIDTH - 220) },
 				new double[] { 5, 35 }, 2);
 
 		gc.strokePolyline(
-				new double[] { 110 + upperBound * (Consts.SIZE_X - 220), 110 + upperBound * (Consts.SIZE_X - 220) },
+				new double[] { 110 + upperBound * (Global.WINDOW_WIDTH - 220), 110 + upperBound * (Global.WINDOW_WIDTH - 220) },
 				new double[] { 5, 35 }, 2);
 	}
 
@@ -351,7 +350,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("info").getWidth(), layers.get("info").getHeight());
 
 		// font settings
-		gc.setFont(Consts.DEFAULT_FONT);
+		gc.setFont(Global.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 
@@ -359,7 +358,7 @@ public class Combat extends Screen {
 		gc.setFill(Color.ORANGE);
 		// gc.setLineWidth(1);
 
-		gc.fillText(info, Consts.SIZE_X / 2, 50);
+		gc.fillText(info, Global.WINDOW_WIDTH / 2, 50);
 
 		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
@@ -371,7 +370,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("info2").getWidth(), layers.get("info2").getHeight());
 
 		// font settings
-		gc.setFont(Consts.DEFAULT_FONT);
+		gc.setFont(Global.DEFAULT_FONT);
 		// gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		gc.setFill(Color.ORANGE);
@@ -386,7 +385,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("combo").getWidth(), layers.get("combo").getHeight());
 
 		// font settings
-		gc.setFont(Consts.DEFAULT_FONT);
+		gc.setFont(Global.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);

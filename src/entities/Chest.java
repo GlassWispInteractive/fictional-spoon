@@ -11,18 +11,44 @@ import framework.GameControl;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chest extends Entity {
-	private static ArrayList<Chest> chests = new ArrayList<>();;
+	private static ArrayList<Chest> collection = new ArrayList<>();;
 
 	private Combo item;
 	TileFactory tileFac;
 
-	public Chest(int x, int y, Combo combo) {
+	private Chest(int x, int y, Combo combo) {
 		super(x, y);
 		this.item = combo;
 
-		chests.add(this);
-
 		tileFac = TileFactory.getTilesFactory();
+	}
+
+	/**
+	 * function generates a monster at a specified place
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spawnIsInRoom
+	 */
+	public static void generate(int x, int y) {
+		Chest obj = new Chest(x, y, Combo.generate(3));
+		collection.add(obj);
+	}
+
+	/**
+	 * function returns every existing monster
+	 * 
+	 * @return
+	 */
+	public static Chest[] getObjects() {
+		return collection.toArray(new Chest[] {});
+	}
+
+	/**
+	 * function resets the state
+	 */
+	public static void reset() {
+		collection = new ArrayList<>();
 	}
 
 	@Override

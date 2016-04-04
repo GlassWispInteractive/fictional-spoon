@@ -1,7 +1,7 @@
 package screens;
 
-import entities.EntityFactory;
-import framework.Consts;
+import entities.Player;
+import framework.Global;
 import framework.Screen;
 import framework.ScreenDecorator;
 import javafx.geometry.VPos;
@@ -16,14 +16,14 @@ public class PanelDecorator extends ScreenDecorator {
 	public PanelDecorator(Screen decoratedScreen) {
 		super(decoratedScreen);
 
-		addLayer("top panel", 0, 0, Consts.SIZE_X, 3 * 16);
-		addLayer("bottom panel", 0, Consts.SIZE_Y - Consts.PANEL_SIZE, Consts.SIZE_X, Consts.PANEL_SIZE);
+		addLayer("top panel", 0, 0, Global.WINDOW_WIDTH, 3 * 16);
+		addLayer("bottom panel", 0, Global.WINDOW_HEIGHT - Global.PANEL_HEIGHT, Global.WINDOW_WIDTH, Global.PANEL_HEIGHT);
 		progress = 0;
 	}
 
 	public void updateProgress(double progress) {
 		this.progress = progress;
-		this.life = EntityFactory.getFactory().getPlayer().getHp();
+		this.life = Player.getNewest().getHp();
 	}
 
 	@Override
@@ -48,32 +48,32 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.clearRect(0, 0, layers.get("top panel").getWidth(), layers.get("top panel").getHeight());
 
 		// draw background
-		gc.setFill(Consts.DARKGRAY);
+		gc.setFill(Global.DARKGRAY);
 		gc.fillRect(0, 0, layers.get("top panel").getWidth(), layers.get("top panel").getHeight());
-		gc.setFill(Consts.WHITE);
-		gc.fillRect(0, Consts.PANEL_SIZE - 5, layers.get("top panel").getWidth(), 2);
+		gc.setFill(Global.WHITE);
+		gc.fillRect(0, Global.PANEL_HEIGHT - 5, layers.get("top panel").getWidth(), 2);
 
 		// print out label
-		gc.setFont(Consts.DEFAULT_FONT);
+		gc.setFont(Global.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.fillText("quest progress", 125, -5 + (Consts.PANEL_SIZE - 5) / 2);
+		gc.fillText("quest progress", 125, -5 + (Global.PANEL_HEIGHT - 5) / 2);
 
 		// draw objective progress
 		gc.setLineWidth(3);
-		gc.setStroke(Consts.WHITE);
-		gc.strokeRect(250, 5, Consts.SIZE_X - 300, 30);
+		gc.setStroke(Global.WHITE);
+		gc.strokeRect(250, 5, Global.WINDOW_WIDTH - 300, 30);
 
 		// progress bar
 		gc.setFill(Color.DARKGREEN.deriveColor(1, progress, 2, 1));
-		gc.fillRect(250, 10, progress * (Consts.SIZE_X - 300), 20);
+		gc.fillRect(250, 10, progress * (Global.WINDOW_WIDTH - 300), 20);
 
 		// draw the delimters each 5 percents
 		// use ints, because of double problems with exact numbers
 		gc.setLineWidth(2);
-		gc.setStroke(Consts.WHITE);
+		gc.setStroke(Global.WHITE);
 		for (int i = 5; i < 100; i += 5) {
-			gc.strokeLine(250 + i / 100.0 * (Consts.SIZE_X - 300), 5, 250 + i / 100.0 * (Consts.SIZE_X - 300), 35);
+			gc.strokeLine(250 + i / 100.0 * (Global.WINDOW_WIDTH - 300), 5, 250 + i / 100.0 * (Global.WINDOW_WIDTH - 300), 35);
 		}
 	}
 
@@ -83,20 +83,20 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.clearRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
 
 		// draw background
-		gc.setFill(Consts.DARKGRAY);
+		gc.setFill(Global.DARKGRAY);
 		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
-		gc.setFill(Consts.WHITE);
+		gc.setFill(Global.WHITE);
 		gc.fillRect(0, 5, layers.get("bottom panel").getWidth(), 2);
 
 		// font settings
-		gc.setFont(Consts.DEFAULT_FONT);
+		gc.setFont(Global.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
 
 		// print out text boxes
-		gc.fillText("life points " + life, Consts.WIDTH * .25, 5 + (Consts.PANEL_SIZE - 5) / 2);
-		gc.fillText("view combos (C)", Consts.WIDTH * .5, 5 + (Consts.PANEL_SIZE - 5) / 2);
-		gc.fillText("view quest (Q)", Consts.WIDTH * .75, 5 + (Consts.PANEL_SIZE - 5) / 2);
+		gc.fillText("life points " + life, Global.GAME_WIDTH * .25, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+		gc.fillText("view combos (C)", Global.GAME_WIDTH * .5, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+		gc.fillText("view quest (Q)", Global.GAME_WIDTH * .75, 5 + (Global.PANEL_HEIGHT - 5) / 2);
 	}
 
 }

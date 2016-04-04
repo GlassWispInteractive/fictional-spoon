@@ -32,7 +32,7 @@ public class Window extends Application {
 	@Override
 	public void start(Stage stage) {
 		// stage settings
-		stage.setTitle(Consts.TITLE);
+		stage.setTitle(Global.TITLE);
 		stage.setResizable(false);
 		stage.centerOnScreen();
 
@@ -79,7 +79,6 @@ public class Window extends Application {
 					newStage = false;
 
 					stage.setScene(scene);
-
 				}
 
 				if (EventControl.getEvents().isESC()) {

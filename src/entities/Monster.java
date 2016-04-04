@@ -5,12 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import entities.WalkStrategies.FloorWalk;
-import entities.WalkStrategies.HorizontalWalk;
-import entities.WalkStrategies.RandomWalk;
-import entities.WalkStrategies.RectangleWalk;
-import entities.WalkStrategies.VerticalWalk;
-import entities.WalkStrategies.WalkStrategy;
 import framework.GameControl;
 import combat.Attacks;
 import combat.Combo;
@@ -19,58 +13,74 @@ import combat.IAttackable;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
+import entities.walk_strategies.FloorWalk;
+import entities.walk_strategies.HorizontalWalk;
+import entities.walk_strategies.RandomWalk;
+import entities.walk_strategies.RectangleWalk;
+import entities.walk_strategies.VerticalWalk;
+import entities.walk_strategies.WalkStrategy;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Monster extends Entity implements IAttackable {
-
 	private ImageSource[] tileType = { new ImageSource(TileSource.MONSTER_TILES, 2, 5),
 			new ImageSource(TileSource.MONSTER_TILES, 0, 5), new ImageSource(TileSource.MONSTER_TILES, 0, 1),
 			new ImageSource(TileSource.MONSTER_TILES, 5, 4), new ImageSource(TileSource.MONSTER_TILES, 1, 8),
 			new ImageSource(TileSource.MONSTER_TILES, 0, 7) };
-	
+
 	public enum MonsterType {
 		EARTH, FIRE, AIR, WATER, MYSTIC
 	};
 
-	private ArrayList<WalkStrategy> walkStrategiesInRoom = new ArrayList<WalkStrategy>(Arrays.asList(new WalkStrategy[] {
-			new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk() }));
+	private ArrayList<WalkStrategy> walkStrategiesInRoom = new ArrayList<WalkStrategy>(Arrays.asList(
+			new WalkStrategy[] { new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk() }));
 	private WalkStrategy currentWalkStrategy;
-	
+
 	// for speed
 	private int blocked = 0;
 
 	private int hp;
 	private final int maxHp;
-	
+
 	MonsterType type;
 	int dmg;
 	// earth, fire, air, water, mystic #korra
-//	private int[] power = new int[5];
+	// private int[] power = new int[5];
 	private Attacks attack;
-//
-//	private int maxType = -1;
+	//
+	// private int maxType = -1;
 	private String name;
 	private boolean monsterDead = false;
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 
-	public Monster(int x, int y, boolean spawnIsInRoom, int hp, MonsterType type, int dmg, String name) {
+	private Monster(int x, int y, boolean spawnIsInRoom) {
 		super(x, y);
 
-		this.hp = hp;
-		this.maxHp = hp;
-		this.name = name;
+		// this.hp = hp;
+		this.maxHp = 10;
+		// this.name = name;
 		this.delayTicks = 20;
-		
-		this.type = type;
-		this.dmg = dmg;
+
+		 this.type = MonsterType.AIR;
+		// this.dmg = dmg;
 		this.attack = new Attacks(dmg);
 
-		if(spawnIsInRoom) {
+		if (spawnIsInRoom) {
 			int chosenStrategy = new Random().nextInt(walkStrategiesInRoom.size());
 			this.currentWalkStrategy = walkStrategiesInRoom.get(chosenStrategy);
 		} else {
-		    	this.currentWalkStrategy = new FloorWalk();
+			this.currentWalkStrategy = new FloorWalk();
 		}
+	}
+
+	/**
+	 * function generates a monster at a specified place
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spawnIsInRoom
+	 */
+	public static void generate(int x, int y, boolean spawnIsInRoom) {
+		new Monster(x, y, spawnIsInRoom);
 	}
 
 	public String getName() {
@@ -97,49 +107,50 @@ public class Monster extends Entity implements IAttackable {
 
 	@Override
 	public void tick(int ticks) {
-	    
-	    	if(monsterDead) {
+
+		if (monsterDead) {
 			return;
-	    	}
-	    	
-	    	//check intersection before AND after moving
-	    	// check intersection
-	    	if (intersectsWithPlayer()) {
-	    		startCombat();
-	    	}
-	    
+		}
+
+		// check intersection before AND after moving
+		// check intersection
+		if (intersectsWithPlayer()) {
+			startCombat();
+		}
+
 		if (blocked >= 0) {
 			blocked -= ticks;
 		}
-		
+
 		if (!monsterDead) {
-		    	
-		    	if(blocked <= 0) {
-        		    	blocked += delayTicks;
-        
-        			Point newPosition = currentWalkStrategy.walk(x, y);
-        
-        			x = newPosition.x;
-        			y = newPosition.y;
-		    	}
+
+			if (blocked <= 0) {
+				blocked += delayTicks;
+
+				Point newPosition = currentWalkStrategy.walk(x, y);
+
+				x = newPosition.x;
+				y = newPosition.y;
+			}
 
 			// check intersection
 			if (intersectsWithPlayer()) {
-			    	startCombat();
+				startCombat();
 			}
 		}
 
 	}
-	
+
 	private void startCombat() {
 		// goal update
 		// moved to Combat class - stays here for debugging
-		 GameControl.getControl().updateGoal(Goal.MONSTER);
+		GameControl.getControl().updateGoal(Goal.MONSTER);
 
 		// game logic
 		monsterDead = true; // debug
-//		ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[] { this }));
-//		ScreenControl.getCtrl().setScreen("combat");
+		// ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[]
+		// { this }));
+		// ScreenControl.getCtrl().setScreen("combat");
 	}
 
 	public ImageSource getImageSource() {

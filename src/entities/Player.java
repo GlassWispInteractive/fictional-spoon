@@ -16,7 +16,8 @@ import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Player extends Entity implements IAttackable {
-
+	private static Player instance;
+	
 	private int maxHp = 100, hp;
 	private String name = "Spieler";
 	private Combat combat;
@@ -35,6 +36,12 @@ public class Player extends Entity implements IAttackable {
 		this.hp = 100;
 
 		tileFac = TileFactory.getTilesFactory();
+		instance = this;
+		Entity.remove(this);
+	}
+	
+	public static Player getNewest() {
+		return instance;
 	}
 
 	@Override

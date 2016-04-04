@@ -1,7 +1,7 @@
 package screens;
 
 import framework.EventControl;
-import framework.Consts;
+import framework.Global;
 import framework.Screen;
 import framework.ScreenControl;
 import javafx.geometry.VPos;
@@ -50,16 +50,16 @@ public class HelpScreen extends Screen {
 		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
 
 		// font settings
-		gc.setFont(Consts.HUGE_FONT);
+		gc.setFont(Global.HUGE_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
 
 		// text
-		gc.setFill(Consts.RED);
-		gc.setStroke(Consts.RED);
+		gc.setFill(Global.RED);
+		gc.setStroke(Global.RED);
 
-		gc.fillText(text[index], Consts.SIZE_X / 2, Consts.SIZE_Y * 0.4);
+		gc.fillText(text[index], Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT * 0.4);
 		// gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
 
 		// gc.setFont(Window.DEFAULT_FONT);

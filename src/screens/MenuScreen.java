@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import framework.EventControl;
-import framework.Consts;
+import framework.Global;
 import framework.Screen;
 import framework.ScreenControl;
 import javafx.geometry.VPos;
@@ -80,7 +80,7 @@ public class MenuScreen extends Screen {
 	public void render() {
 		// start from clean screen
 		final GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, Consts.SIZE_X, Consts.SIZE_Y);
+		gc.clearRect(0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
 
 		// canvas settings
 		final double w = gc.getCanvas().getWidth();
@@ -92,7 +92,7 @@ public class MenuScreen extends Screen {
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
-		gc.setFont(Consts.DEFAULT_FONT);
+		gc.setFont(Global.DEFAULT_FONT);
 
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
@@ -100,13 +100,13 @@ public class MenuScreen extends Screen {
 
 		for (int i = 0; i < list.size(); i++) {
 			// render box
-			gc.setFill(Consts.WHITE.deriveColor(0, 1.2, 1, 0.8));
-			gc.setStroke(Consts.WHITE.brighter());
+			gc.setFill(Global.WHITE.deriveColor(0, 1.2, 1, 0.8));
+			gc.setStroke(Global.WHITE.brighter());
 			gc.fillRoundRect((w - 200) / 2, 200 + 100 * (i + 1), 200, 60, 60, 200);
 			gc.strokeRoundRect((w - 200) / 2, 200 + 100 * (i + 1), 200, 60, 60, 200);
 
 			// render text on box
-			gc.setFill(i != cur ? Consts.DARKRED : Consts.DARKRED.brighter());
+			gc.setFill(i != cur ? Global.DARKRED : Global.DARKRED.brighter());
 			gc.fillText(list.get(i), w / 2, 200 + 100 * (i + 1) + 30);
 		}
 

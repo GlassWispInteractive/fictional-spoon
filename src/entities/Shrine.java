@@ -8,14 +8,16 @@ import framework.GameControl;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Shrine extends Entity {
+
 	private int blocked = 0;
 	private TileFactory tileFac;
-	private Player player = (Player) EntityFactory.getFactory().getPlayer();
+	private Player player = Player.getNewest();
 
 	public Shrine(int x, int y) {
 		super(x, y);
 		delayTicks = 1500;
 		tileFac = TileFactory.getTilesFactory();
+
 	}
 
 	@Override
@@ -33,12 +35,17 @@ public class Shrine extends Entity {
 
 	@Override
 	public void tick(int ticks) {
+		if (blocked > 0) {
+			blocked -= ticks;
+			return;
+		}
+		
 		// check intersection
 		if (intersectsWithPlayer()) {
 			// game logic
 			player.heal();
 			blocked = delayTicks;
-			
+
 			// alert
 			GameControl.getControl().alert("Player health restored");
 
@@ -46,9 +53,7 @@ public class Shrine extends Entity {
 			GameControl.getControl().updateGoal(Goal.SHRINE);
 		}
 
-		if (blocked > 0) {
-			blocked -= ticks;
-		}
+		
 	}
 
 }

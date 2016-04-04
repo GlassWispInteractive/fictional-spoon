@@ -8,9 +8,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import combat.Combo;
-import entities.EntityFactory;
-import entities.Monster.MonsterType;
+import entities.Chest;
+import entities.Monster;
+import entities.Opponent;
+import entities.Player;
+import entities.Portal;
+import entities.Shrine;
 
 /**
  * builder pattern class to generate level maps source:
@@ -39,7 +42,6 @@ public class LevelBuilder {
 	private Random rnd;
 	private Room[] rooms;
 	private int roomNum = 0;
-	private EntityFactory fac = EntityFactory.getFactory();
 	private ArrayList<int[]> floors;
 
 	/**
@@ -72,11 +74,6 @@ public class LevelBuilder {
 
 			// gen maze with no dead ends at first
 			genFloors(ccFromAllRooms());
-			
-			// remove the following lines to receive a huge amout of errors
-			clearDeadends();
-			genFloors(ccFromAllRooms());
-			clearDeadends();
 
 			break;
 
@@ -424,21 +421,21 @@ public class LevelBuilder {
 		if (hasRooms) {
 			// make player
 			newSpwan = rooms[0].getUnusedRandomCell();
-			fac.makePlayer(newSpwan[0], newSpwan[1]);
+			new Player(newSpwan[0], newSpwan[1]);
 
 			// make two chests
 			newSpwan = rooms[0].getUnusedRandomCell();
-			fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2));
+			Chest.generate(newSpwan[0], newSpwan[1]);
 
 			newSpwan = rooms[0].getUnusedRandomCell();
-			fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2));
+			Chest.generate(newSpwan[0], newSpwan[1]);
 
 			// make a shrine to rescue
 			newSpwan = rooms[0].getUnusedRandomCell();
-			fac.makeShrine(newSpwan[0], newSpwan[1]);
+			new Shrine(newSpwan[0], newSpwan[1]);
 		} else if (hasFloor) {
 			newSpwan = floors.get(0);
-			fac.makePlayer(newSpwan[0], newSpwan[1]);
+			new Player(newSpwan[0], newSpwan[1]);
 			floors.remove(0);
 		}
 
@@ -455,7 +452,7 @@ public class LevelBuilder {
 	 * @param creator
 	 * @return
 	 */
-	private LevelBuilder genEntity(double perRoom, double perFloor, EntityCreator creator) {
+	private LevelBuilder genEntity(double perRoom, double perFloor, Creatable creator) {
 		// room counter
 		int[] newSpwan;
 		double ctr = 0;
@@ -481,7 +478,7 @@ public class LevelBuilder {
 
 					// put up monster at a random room cell
 					newSpwan = rooms[j].getUnusedRandomCell();
-					creator.run(newSpwan[0], newSpwan[1]);
+					creator.generate(newSpwan[0], newSpwan[1]);
 				}
 			}
 		}
@@ -503,7 +500,7 @@ public class LevelBuilder {
 
 					// put up monster at a random floor cells
 					newSpwan = floors.get(0);
-					creator.run(newSpwan[0], newSpwan[1]);
+					creator.generate(newSpwan[0], newSpwan[1]);
 					floors.remove(0);
 				}
 			}
@@ -521,14 +518,15 @@ public class LevelBuilder {
 	 */
 	public LevelBuilder genMonster(double perRoom, double perFloor) {
 		return genEntity(perRoom, perFloor, (x, y) -> {
-		    	
-		    	//generate monster parameter
-			MonsterType type = MonsterType.values()[rnd.nextInt(MonsterType.values().length - 1)];
-			int dmg = rnd.nextInt(3) + 1;
+
+			// generate monster parameter
+			// MonsterType type =
+			// MonsterType.values()[rnd.nextInt(MonsterType.values().length -
+			// 1)];
+			// int dmg = rnd.nextInt(3) + 1;
 
 			// make monster at (x, y)
-			boolean spawnIsInRoom = map.isWalkableRoom(x, y);
-			fac.makeMonster(x, y, spawnIsInRoom, 100, type, dmg, "monster");
+			Monster.generate(x, y, map.isWalkable(x, y));
 		});
 	}
 
@@ -541,7 +539,7 @@ public class LevelBuilder {
 	 */
 	public LevelBuilder genPortal(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
-			fac.makePortal(x, y, "Informatiker");
+			new Portal(x, y);
 		});
 
 		return this;
@@ -556,7 +554,7 @@ public class LevelBuilder {
 	 */
 	public LevelBuilder genOpponent(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
-			fac.makeOpponent(x, y, "Informatiker");
+			Opponent.generate(x, y, map.isWalkable(x, y));
 		});
 
 		return this;
@@ -571,8 +569,7 @@ public class LevelBuilder {
 	 */
 	public LevelBuilder genChest(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
-			int len = rnd.nextInt(3);
-			fac.makeChest(x, y, Combo.generate(2 + len));
+			Chest.generate(x, y);
 		});
 
 		return this;
@@ -587,7 +584,7 @@ public class LevelBuilder {
 	 */
 	public LevelBuilder genShrine(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
-			fac.makeShrine(x, y);
+			new Shrine(x, y);
 		});
 
 		return this;

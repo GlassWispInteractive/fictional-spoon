@@ -4,9 +4,9 @@ import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import entities.Entity;
-import entities.EntityFactory;
+import entities.Player;
 import framework.EventControl;
-import framework.Consts;
+import framework.Global;
 import framework.Screen;
 import framework.ScreenControl;
 import generation.Ground;
@@ -20,7 +20,6 @@ public class MapScreen extends Screen {
 
 	// class components
 	private Map map;
-	private EntityFactory fac;
 	private TileFactory tileFac = TileFactory.getTilesFactory();;
 
 	// variables
@@ -34,21 +33,20 @@ public class MapScreen extends Screen {
 
 		// set layout
 		addLayer("map", 0, 0, map.getN() * size, map.getM() * size);
-		addLayer("entities", 0, Consts.PANEL_SIZE, Consts.WIDTH, Consts.HEIGHT);
+		addLayer("entities", 0, Global.PANEL_HEIGHT, Global.GAME_WIDTH, Global.GAME_HEIGHT);
 
 		// render the map prior every other rendering and keep it cached
 		prerenderMap();
 
 		// load factories
 		tileFac = TileFactory.getTilesFactory();
-		fac = EntityFactory.getFactory();
 
 		// set view size and be sure to be smaller than the map
-		cameraSizeX = Math.min(Consts.WIDTH / size, map.getN());
-		cameraSizeY = Math.min(Consts.HEIGHT / size, map.getM());
+		cameraSizeX = Math.min(Global.GAME_WIDTH / size, map.getN());
+		cameraSizeY = Math.min(Global.GAME_HEIGHT / size, map.getM());
 
 		// set view
-		Entity player = EntityFactory.getFactory().getPlayer();
+		Entity player = Player.getNewest();
 		initCamera(player.getX(), player.getY());
 	}
 
@@ -66,14 +64,16 @@ public class MapScreen extends Screen {
 	 */
 	public void tick(int ticks) {
 
-		fac.getPlayer().tick(ticks);
-		
-		for (Entity mob : fac.getMobs()) {
+		Player.getNewest().tick(ticks);
+
+		// let all the entities tick
+		for (Entity mob : Entity.getObjects()) {
 			mob.tick(ticks);
 		}
 
-		fac.smartAdd();
-		fac.smartDelete();
+		//
+		// fac.smartAdd();
+		// fac.smartDelete();
 
 		if (EventControl.getEvents().isC()) {
 			ScreenControl.getCtrl().setScreen("combo");
@@ -143,7 +143,7 @@ public class MapScreen extends Screen {
 	@Override
 	public void render() {
 		// shift prerendered map
-		layers.get("map").relocate(-16 * cameraX, Consts.PANEL_SIZE - 16 * cameraY);
+		layers.get("map").relocate(-16 * cameraX, Global.PANEL_HEIGHT - 16 * cameraY);
 
 		// render entities
 		renderEntities();
@@ -180,10 +180,13 @@ public class MapScreen extends Screen {
 		final GraphicsContext gc = gcs.get("entities");
 		gc.clearRect(0, 0, layers.get("entities").getWidth(), layers.get("entities").getHeight());
 
-		for (Entity mob : fac.getMobs()) {
+		// render all entities
+		for (Entity mob : Entity.getObjects()) {
 			mob.render(gc, size, cameraX, cameraY);
 		}
-		fac.getPlayer().render(gc, size, cameraX, cameraY);
+
+		// render player
+		Player.getNewest().render(gc, size, cameraX, cameraY);
 	}
 
 	/**
