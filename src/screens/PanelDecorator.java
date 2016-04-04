@@ -11,7 +11,7 @@ import javafx.scene.text.TextAlignment;
 
 public class PanelDecorator extends ScreenDecorator {
 	private double progress;
-	private int life;
+	private int level, life;
 
 	public PanelDecorator(Screen decoratedScreen) {
 		super(decoratedScreen);
@@ -21,7 +21,8 @@ public class PanelDecorator extends ScreenDecorator {
 		progress = 0;
 	}
 
-	public void updateProgress(double progress) {
+	public void updateProgress(int level, double progress) {
+		this.level = level;
 		this.progress = progress;
 		this.life = Player.getNewest().getHp();
 	}
@@ -94,9 +95,10 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setTextBaseline(VPos.CENTER);
 
 		// print out text boxes
-		gc.fillText("life points " + life, Global.GAME_WIDTH * .25, 5 + (Global.PANEL_HEIGHT - 5) / 2);
-		gc.fillText("view combos (C)", Global.GAME_WIDTH * .5, 5 + (Global.PANEL_HEIGHT - 5) / 2);
-		gc.fillText("view quest (Q)", Global.GAME_WIDTH * .75, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+		gc.fillText("level " + level, Global.GAME_WIDTH * .2, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+		gc.fillText(life + " life", Global.GAME_WIDTH * .4, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+		gc.fillText("combos (C)", Global.GAME_WIDTH * .6, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+		gc.fillText("quest (Q)", Global.GAME_WIDTH * .8, 5 + (Global.PANEL_HEIGHT - 5) / 2);
 	}
 
 }

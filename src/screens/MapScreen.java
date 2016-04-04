@@ -6,6 +6,7 @@ import engine.TileSource;
 import entities.Entity;
 import entities.Player;
 import framework.EventControl;
+import framework.GameControl;
 import framework.Global;
 import framework.Screen;
 import framework.ScreenControl;
@@ -63,7 +64,6 @@ public class MapScreen extends Screen {
 	 * @param ticks
 	 */
 	public void tick(int ticks) {
-
 		Player.getNewest().tick(ticks);
 
 		// let all the entities tick
@@ -77,6 +77,12 @@ public class MapScreen extends Screen {
 
 		if (EventControl.getEvents().isC()) {
 			ScreenControl.getCtrl().setScreen("combo");
+			EventControl.getEvents().clear();
+		}
+
+		if (EventControl.getEvents().isQ()) {
+			GameControl.getControl().alert("Quest: " + GameControl.getControl().getQuest());
+			EventControl.getEvents().clear();
 		}
 	}
 

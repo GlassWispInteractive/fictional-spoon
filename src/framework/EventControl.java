@@ -53,9 +53,12 @@ public class EventControl {
 	public boolean isDown() {
 		return input.contains("DOWN") || input.contains("S");
 	}
-	
+
 	public boolean isC() {
 		return input.contains("C");
+	}
+	public boolean isQ() {
+		return input.contains("Q");
 	}
 
 	public boolean isEnter() {

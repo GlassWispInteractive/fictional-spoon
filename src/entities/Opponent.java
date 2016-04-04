@@ -48,7 +48,7 @@ public class Opponent extends Entity {
 			// int dmg = rnd.nextInt(3) + 1;
 
 			// make monster at (x, y)
-			Monster.generate(x, y, spawnIsInRoom);
+			new Monster(x, y, spawnIsInRoom);
 		}
 	}
 	

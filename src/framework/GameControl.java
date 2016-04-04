@@ -3,11 +3,7 @@ package framework;
 import combat.Combo;
 import combat.Goal;
 import combat.Objective;
-import entities.Chest;
-import entities.Monster;
-import entities.Opponent;
-import entities.Portal;
-import entities.Shrine;
+import entities.Entity;
 import generation.LevelBuilder;
 import generation.Map;
 import screens.AlertDecorator;
@@ -27,6 +23,25 @@ public class GameControl {
 	private AlertDecorator alert;
 	private int level;
 
+	private GameControl() {
+		// call the very important state constructor
+		super();
+
+		// settings
+		screen = new HelpScreen("game", 180);
+		ScreenControl.getCtrl().addScreen("game intro", screen);
+		level = 1;
+		startArcade(level);
+
+	}
+	
+	/**
+	 * @return the objective
+	 */
+	public String getQuest() {
+		return objective.toString();
+	}
+
 	/**
 	 * static method to get the singleton class object
 	 * 
@@ -44,26 +59,10 @@ public class GameControl {
 	 */
 	public static void resetGame() {
 		// reset EntityFactory
-		Chest.reset();
-		Shrine.reset();
-		Monster.reset();
-		Opponent.reset();
-		Portal.reset();
+		Entity.reset();
 		Combo.resetCombos();
 
 		singleton = new GameControl();
-	}
-
-	private GameControl() {
-		// call the very important state constructor
-		super();
-
-		// settings
-		screen = new HelpScreen("game", 180);
-		ScreenControl.getCtrl().addScreen("game intro", screen);
-		level = 1;
-		startArcade(level);
-
 	}
 
 	private void startArcade(int level) {
@@ -73,7 +72,9 @@ public class GameControl {
 		if (level > 1) {
 			// reset stuff
 			ctrl.setScreen("game intro");
-			// EntityFactory.resetGame();
+
+			Entity.reset();
+			Combo.resetCombos();
 		}
 
 		// set the appropriate objective by level
@@ -82,7 +83,7 @@ public class GameControl {
 			// basic level
 			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
 					LevelBuilder.Layout.SINGLE_CONN_ROOMS).genMonster(1, 0.01).genShrine(0.1, 0).create());
-			objective = new Objective(Goal.MONSTER, 5);
+			objective = new Objective(Goal.SHRINE, 1);
 			break;
 		case 2:
 			// default level
@@ -122,13 +123,13 @@ public class GameControl {
 
 		}
 
-		screen.setText(new String[] { "Next Level", "Quest: " + objective });
+		screen.setText(new String[] { "Quest: " + objective });
 
 		// update game screens
 		panel = new PanelDecorator(map);
 		alert = new AlertDecorator(panel);
 		ctrl.addScreen("game", alert);
-		panel.updateProgress(objective.progress());
+		panel.updateProgress(level, objective.progress());
 	}
 
 	/**
@@ -153,7 +154,7 @@ public class GameControl {
 
 		if (objective.progress() < 1) {
 			// update panel, game is going
-			panel.updateProgress(objective.progress());
+			panel.updateProgress(level, objective.progress());
 		} else {
 			// objective is reached
 			if (level == 6) {

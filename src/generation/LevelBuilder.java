@@ -525,8 +525,7 @@ public class LevelBuilder {
 			// 1)];
 			// int dmg = rnd.nextInt(3) + 1;
 
-			// make monster at (x, y)
-			Monster.generate(x, y, map.isWalkable(x, y));
+			new Monster(x, y, map.isWalkable(x, y));
 		});
 	}
 

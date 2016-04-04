@@ -105,7 +105,7 @@ public class Portal extends Entity {
 
 			// make monster at (x, y)
 			boolean spawnIsInRoom = GameControl.getControl().getMap().isWalkableRoom(x, y);
-			Monster.generate(x, y, spawnIsInRoom);
+			new Monster(x, y, spawnIsInRoom);
 		}
 	}
 

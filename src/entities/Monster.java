@@ -52,7 +52,7 @@ public class Monster extends Entity implements IAttackable {
 	private boolean monsterDead = false;
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 
-	private Monster(int x, int y, boolean spawnIsInRoom) {
+	public Monster(int x, int y, boolean spawnIsInRoom) {
 		super(x, y);
 
 		// this.hp = hp;
@@ -60,7 +60,7 @@ public class Monster extends Entity implements IAttackable {
 		// this.name = name;
 		this.delayTicks = 20;
 
-		 this.type = MonsterType.AIR;
+		this.type = MonsterType.AIR;
 		// this.dmg = dmg;
 		this.attack = new Attacks(dmg);
 
@@ -70,17 +70,6 @@ public class Monster extends Entity implements IAttackable {
 		} else {
 			this.currentWalkStrategy = new FloorWalk();
 		}
-	}
-
-	/**
-	 * function generates a monster at a specified place
-	 * 
-	 * @param x
-	 * @param y
-	 * @param spawnIsInRoom
-	 */
-	public static void generate(int x, int y, boolean spawnIsInRoom) {
-		new Monster(x, y, spawnIsInRoom);
 	}
 
 	public String getName() {
