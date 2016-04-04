@@ -24,11 +24,11 @@ public class Combo {
 	/**
 	 * Random generatedable object
 	 * 
-	 * @param lenT
+	 * @param len
 	 * @return
 	 */
-	public static Combo generate(int lenT) {
-		Element[] elements = new Element[lenT];
+	public static Combo generate(int len) {
+		Element[] elements = new Element[len];
 		elements = Arrays.stream(elements).map(e -> Element.values()[random.nextInt(Element.values().length)])
 				.toArray(Element[]::new);
 

@@ -42,6 +42,16 @@ public class LevelBuilder {
 	private EntityFactory fac = EntityFactory.getFactory();
 	private ArrayList<int[]> floors;
 
+	/**
+	 * constuctor
+	 * 
+	 * @param n
+	 *            the width
+	 * @param m
+	 *            the height
+	 * @param layout
+	 *            the layout
+	 */
 	public LevelBuilder(int n, int m, Layout layout) {
 		n = n - (n + 1) % 2;
 		m = m - (m + 1) % 2;
@@ -62,6 +72,8 @@ public class LevelBuilder {
 
 			// gen maze with no dead ends at first
 			genFloors(ccFromAllRooms());
+			
+			// remove the following lines to receive a huge amout of errors
 			clearDeadends();
 			genFloors(ccFromAllRooms());
 			clearDeadends();
@@ -118,6 +130,13 @@ public class LevelBuilder {
 		genPlayer();
 	}
 
+	/**
+	 * internal function which generated a random number of rooms the limit is
+	 * just an upper bound and its not expected to be reached
+	 * 
+	 * @param limit
+	 * @return
+	 */
 	private LevelBuilder genRooms(int limit) {
 		// set room flag
 		hasRooms = true;
@@ -165,7 +184,7 @@ public class LevelBuilder {
 	}
 
 	/**
-	 * helper function to check for valid room positions
+	 * helper function to check for valid room coordinates
 	 * 
 	 * @param xStart
 	 * @param yStart
@@ -277,8 +296,10 @@ public class LevelBuilder {
 	}
 
 	/**
-	 * internal function to generate a maze around the rooms this is done by a
-	 * floodfill algorithm instead of some overengineering with MST
+	 * internal function to generate a maze around the rooms
+	 * 
+	 * this is done by a floodfill algorithm instead of some overengineering
+	 * with MST
 	 * 
 	 * @return
 	 */
@@ -391,7 +412,12 @@ public class LevelBuilder {
 		Collections.shuffle(floors);
 	}
 
-	public LevelBuilder genPlayer() {
+	/**
+	 * internal function to generate the player
+	 * 
+	 * @return
+	 */
+	private LevelBuilder genPlayer() {
 		// declare int array
 		int[] newSpwan;
 
@@ -419,6 +445,16 @@ public class LevelBuilder {
 		return this;
 	}
 
+	/**
+	 * helper function to generate entities on the map
+	 * 
+	 * the function itself is only called by other functions.
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @param creator
+	 * @return
+	 */
 	private LevelBuilder genEntity(double perRoom, double perFloor, EntityCreator creator) {
 		// room counter
 		int[] newSpwan;
@@ -476,6 +512,13 @@ public class LevelBuilder {
 		return this;
 	}
 
+	/**
+	 * generate monsters in the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genMonster(double perRoom, double perFloor) {
 		return genEntity(perRoom, perFloor, (x, y) -> {
 		    	
@@ -489,6 +532,13 @@ public class LevelBuilder {
 		});
 	}
 
+	/**
+	 * generate portals in the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genPortal(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
 			fac.makePortal(x, y, "Informatiker");
@@ -497,6 +547,13 @@ public class LevelBuilder {
 		return this;
 	}
 
+	/**
+	 * generate elite on the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genOpponent(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
 			fac.makeOpponent(x, y, "Informatiker");
@@ -505,6 +562,13 @@ public class LevelBuilder {
 		return this;
 	}
 
+	/**
+	 * generate a chest on the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genChest(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
 			int len = rnd.nextInt(3);
@@ -514,6 +578,13 @@ public class LevelBuilder {
 		return this;
 	}
 
+	/**
+	 * generate a shrine on the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genShrine(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
 			fac.makeShrine(x, y);
@@ -575,7 +646,7 @@ public class LevelBuilder {
 	}
 
 	/**
-	 * final method which is called to make a Map from a MapBuilder
+	 * function which is called finally to make a Map from a MapBuilder
 	 */
 	public Map create() {
 		computeTiles();

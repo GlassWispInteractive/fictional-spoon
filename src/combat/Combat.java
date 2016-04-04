@@ -14,9 +14,9 @@ import entities.Opponent;
 import entities.Player;
 import framework.EventControl;
 import framework.GameControl;
+import framework.Consts;
 import framework.Screen;
 import framework.ScreenControl;
-import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -71,12 +71,12 @@ public class Combat extends Screen {
 		info = "Use 1, 2, 3 or 4 to attack";
 		streak = new ArrayList<>();
 
-		addLayer("elems", 0, Window.SIZE_Y * 0.65, Window.SIZE_X, 300);
-		addLayer("monster", 0, 0, Window.SIZE_X, 300);
-		addLayer("bar", 0, Window.SIZE_Y * 0.4, Window.SIZE_X, 100);
-		addLayer("info", 0, Window.SIZE_Y * 0.3, Window.SIZE_X, 100);
-		addLayer("info2", 0, Window.SIZE_Y * 0.85, Window.SIZE_X, 100);
-		addLayer("combo", 0, Window.SIZE_Y - 510, Window.SIZE_X, 510);
+		addLayer("elems", 0, Consts.SIZE_Y * 0.65, Consts.SIZE_X, 300);
+		addLayer("monster", 0, 0, Consts.SIZE_X, 300);
+		addLayer("bar", 0, Consts.SIZE_Y * 0.4, Consts.SIZE_X, 100);
+		addLayer("info", 0, Consts.SIZE_Y * 0.3, Consts.SIZE_X, 100);
+		addLayer("info2", 0, Consts.SIZE_Y * 0.85, Consts.SIZE_X, 100);
+		addLayer("combo", 0, Consts.SIZE_Y - 510, Consts.SIZE_X, 510);
 
 		player.setCombat(this);
 		this.souls = player.getSouls();
@@ -325,7 +325,7 @@ public class Combat extends Screen {
 	public void render() {
 		// start from clean screen
 		GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, Window.SIZE_X, Window.SIZE_Y);
+		gc.clearRect(0, 0, Consts.SIZE_X, Consts.SIZE_Y);
 
 		// SpookingSouls.getObject().render(gc);
 
@@ -350,7 +350,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("elems").getWidth(), layers.get("elems").getHeight());
 
 		for (int i = 0; i < souls.size(); i++) {
-			gc.setFill(Color.ANTIQUEWHITE);
+			gc.setFill(Consts.WHITE);
 			gc.fillText(souls.get(i).getName(), 80 + i * 180, 25, 80);
 
 			gc.drawImage(ELEMS[i], 50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
@@ -358,7 +358,7 @@ public class Combat extends Screen {
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
 			if (curSoul == i && streakCount > 0) {
-				gc.setStroke(Color.ANTIQUEWHITE);
+				gc.setStroke(Consts.WHITE);
 				gc.setLineWidth(3);
 				gc.strokeRect(50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 			}
@@ -374,17 +374,17 @@ public class Combat extends Screen {
 
 			Image image = TileFactory.getTilesFactory().getImage(monster.get(i).getImageSource());
 
-			gc.setFill(Color.RED);
+			gc.setFill(Consts.RED);
 			gc.fillText(monster.get(i).getName() + " " + monster.get(i).getHpInfo(),
-					Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
+					Consts.SIZE_X - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
 
-			gc.drawImage(image, Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
+			gc.drawImage(image, Consts.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			// gc.fillRect(Window.SIZE_X - 150 - i * 120, 50, 80, 80);
 
 			if (curFocus % monster.size() == i) {
-				gc.setStroke(Color.RED);
+				gc.setStroke(Consts.RED);
 				gc.setLineWidth(4);
-				gc.strokeRect(Window.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
+				gc.strokeRect(Consts.SIZE_X - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			}
 		}
 
@@ -398,22 +398,22 @@ public class Combat extends Screen {
 		// fancy line at 40%
 		gc.setLineWidth(3);
 		gc.setStroke(Color.GREY);
-		gc.strokeRoundRect(100, 5, Window.SIZE_X - 200, 30, 30, 30);
+		gc.strokeRoundRect(100, 5, Consts.SIZE_X - 200, 30, 30, 30);
 
 		// progress bar
 		gc.setFill(Color.ORANGE);
 		// +5 to be lower than outer rect
 		// +2 to have the left border over the delimeter
-		gc.fillRoundRect(110, 10, status * (Window.SIZE_X - 220) + 2, 20, 20, 20);
+		gc.fillRoundRect(110, 10, status * (Consts.SIZE_X - 220) + 2, 20, 20, 20);
 
 		// draw the delimters
-		gc.setStroke(Color.GREY);
+		gc.setStroke(Consts.DARKGRAY.brighter());
 		gc.strokePolyline(
-				new double[] { 110 + lowerBound * (Window.SIZE_X - 220), 110 + lowerBound * (Window.SIZE_X - 220) },
+				new double[] { 110 + lowerBound * (Consts.SIZE_X - 220), 110 + lowerBound * (Consts.SIZE_X - 220) },
 				new double[] { 5, 35 }, 2);
 
 		gc.strokePolyline(
-				new double[] { 110 + upperBound * (Window.SIZE_X - 220), 110 + upperBound * (Window.SIZE_X - 220) },
+				new double[] { 110 + upperBound * (Consts.SIZE_X - 220), 110 + upperBound * (Consts.SIZE_X - 220) },
 				new double[] { 5, 35 }, 2);
 	}
 
@@ -423,7 +423,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("info").getWidth(), layers.get("info").getHeight());
 
 		// font settings
-		gc.setFont(Window.DEFAULT_FONT);
+		gc.setFont(Consts.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 
@@ -431,7 +431,7 @@ public class Combat extends Screen {
 		gc.setFill(Color.ORANGE);
 		// gc.setLineWidth(1);
 
-		gc.fillText(info, Window.SIZE_X / 2, 50);
+		gc.fillText(info, Consts.SIZE_X / 2, 50);
 
 		// gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
 
@@ -443,7 +443,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("info2").getWidth(), layers.get("info2").getHeight());
 
 		// font settings
-		gc.setFont(Window.DEFAULT_FONT);
+		gc.setFont(Consts.DEFAULT_FONT);
 		// gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		gc.setFill(Color.ORANGE);
@@ -458,7 +458,7 @@ public class Combat extends Screen {
 		gc.clearRect(0, 0, layers.get("combo").getWidth(), layers.get("combo").getHeight());
 
 		// font settings
-		gc.setFont(Window.DEFAULT_FONT);
+		gc.setFont(Consts.DEFAULT_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
