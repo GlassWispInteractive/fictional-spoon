@@ -54,21 +54,27 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setFill(Color.ANTIQUEWHITE);
 		gc.fillRect(0, MapScreen.SPACE - 5, layers.get("top panel").getWidth(), 2);
 
+		// print out label
+		gc.setFont(Window.DEFAULT_FONT);
+		gc.setTextAlign(TextAlignment.CENTER);
+		gc.setTextBaseline(VPos.CENTER);
+		gc.fillText("quest progress", 125, -5 + (MapScreen.SPACE - 5) / 2);
+
 		// draw objective progress
 		gc.setLineWidth(3);
 		gc.setStroke(Color.GREY);
-		gc.strokeRect(100, 5, Window.SIZE_X - 200, 30);
+		gc.strokeRect(250, 5, Window.SIZE_X - 300, 30);
 
 		// progress bar
 		gc.setFill(Color.DARKGREEN.deriveColor(1, progress, 2, 1));
-		gc.fillRect(100, 10, progress * (Window.SIZE_X - 200), 20);
+		gc.fillRect(250, 10, progress * (Window.SIZE_X - 300), 20);
 
 		// draw the delimters each 5 percents
 		// use ints, because of double problems with exact numbers
 		gc.setLineWidth(2);
 		gc.setStroke(Color.GREY);
 		for (int i = 5; i < 100; i += 5) {
-			gc.strokeLine(100 + i / 100.0 * (Window.SIZE_X - 200), 5, 100 + i / 100.0 * (Window.SIZE_X - 200), 35);
+			gc.strokeLine(250 + i / 100.0 * (Window.SIZE_X - 300), 5, 250 + i / 100.0 * (Window.SIZE_X - 300), 35);
 		}
 	}
 
@@ -83,12 +89,16 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setFill(Color.ANTIQUEWHITE);
 		gc.fillRect(0, 5, layers.get("bottom panel").getWidth(), 2);
 
-		// show life points
+		// font settings
 		gc.setFont(Window.DEFAULT_FONT);
-		gc.setTextAlign(TextAlignment.LEFT);
+		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
 
-		gc.fillText("life points " + life, 100, 5 + (MapScreen.SPACE - 5) / 2);
+		// print out text boxes
+		gc.fillText("life points " + life, MapScreen.WIDTH * .25, 5 + (MapScreen.SPACE - 5) / 2);
+		gc.fillText("view combos (C)", MapScreen.WIDTH * .5, 5 + (MapScreen.SPACE - 5) / 2);
+		gc.fillText("view quest (Q)", MapScreen.WIDTH * .75, 5 + (MapScreen.SPACE - 5) / 2);
+
 	}
 
 }
