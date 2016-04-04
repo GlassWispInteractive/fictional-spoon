@@ -9,7 +9,6 @@ import framework.EventControl;
 import framework.Consts;
 import framework.Screen;
 import framework.ScreenControl;
-import framework.Window;
 import generation.Ground;
 import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
