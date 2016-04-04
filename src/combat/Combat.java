@@ -228,6 +228,9 @@ public class Combat extends Screen {
 			blocked = delayTicks - 1;
 
 			Random rnd = new Random();
+			if(monster.size() <= 0) {
+			    return; //something is wrong here, shouldnt be possible that monster.size <= 0
+			}
 			int rndMonsterIndex = rnd.nextInt(monster.size());
 
 			Monster attackMonster = monster.get(rndMonsterIndex);

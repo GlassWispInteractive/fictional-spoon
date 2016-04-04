@@ -10,6 +10,7 @@ import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
+import entities.Monster.MonsterType;
 import entities.WalkStrategies.FloorWalk;
 import entities.WalkStrategies.HorizontalWalk;
 import entities.WalkStrategies.RandomWalk;
@@ -45,9 +46,13 @@ public class Opponent extends Entity {
 
 		// hard coded monster
 		for (int i = 0; i < 3; i++) {
-			int[] power = new int[] { 0, 0, 0, 0, 0 };
-			power[rnd.nextInt(power.length)] = 5;
-			monsterList.add(new Monster(x, y, false, 100, power, "myMonster"));
+		    	//generate monster parameter
+			MonsterType type = MonsterType.values()[rnd.nextInt(MonsterType.values().length - 1)];
+			int dmg = rnd.nextInt(3) + 1;
+
+			// make monster at (x, y)
+			boolean spawnIsInRoom = GameControl.getControl().getMap().isWalkableRoom(x, y);
+			EntityFactory.getFactory().makeMonster(x, y, spawnIsInRoom, 100, type, dmg, "monster");
 		}
 	}
 

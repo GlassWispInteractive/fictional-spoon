@@ -10,6 +10,7 @@ import java.util.Random;
 
 import combat.Combo;
 import entities.EntityFactory;
+import entities.Monster.MonsterType;
 
 /**
  * builder pattern class to generate level maps source:
@@ -477,19 +478,14 @@ public class LevelBuilder {
 
 	public LevelBuilder genMonster(double perRoom, double perFloor) {
 		return genEntity(perRoom, perFloor, (x, y) -> {
-			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
-
-			// monsters can be of the given power or at most 2 points higher
-			used += rnd.nextInt(3);
-
-			// create monster of random type
-			type = rnd.nextInt(5);
-			powers[type] = used;
-			used -= used;
+		    	
+		    	//generate monster parameter
+			MonsterType type = MonsterType.values()[rnd.nextInt(MonsterType.values().length - 1)];
+			int dmg = rnd.nextInt(3) + 1;
 
 			// make monster at (x, y)
 			boolean spawnIsInRoom = map.isWalkableRoom(x, y);
-			fac.makeMonster(x, y, spawnIsInRoom, 100, powers, "monster");
+			fac.makeMonster(x, y, spawnIsInRoom, 100, type, dmg, "monster");
 		});
 	}
 

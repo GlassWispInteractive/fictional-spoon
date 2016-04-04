@@ -3,13 +3,13 @@ package entities;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
+import entities.Monster.MonsterType;
 import framework.GameControl;
 
 import java.awt.Point;
 import java.util.Random;
 
 import combat.Goal;
-
 import javafx.scene.canvas.GraphicsContext;
 
 public class Portal extends Entity{
@@ -84,11 +84,13 @@ public class Portal extends Entity{
 		
 		// let the generator generate the params ?
 		if(maxMonsterSpawn > 0){
-			maxMonsterSpawn--;
-			int[] power = new int[]{0, 0, 0, 0, 0};
-			power[rnd.nextInt(power.length)] = 5;
-			boolean spawnIsInRoom = GameControl.getControl().getMap().isWalkableRoom(spawnPoint.x, spawnPoint.y);
-			EntityFactory.getFactory().makeMonster(spawnPoint.x, spawnPoint.y, spawnIsInRoom, 100, power, "test");
+		    	//generate monster parameter
+			MonsterType type = MonsterType.values()[rnd.nextInt(MonsterType.values().length - 1)];
+			int dmg = rnd.nextInt(3) + 1;
+
+			// make monster at (x, y)
+			boolean spawnIsInRoom = GameControl.getControl().getMap().isWalkableRoom(x, y);
+			EntityFactory.getFactory().makeMonster(x, y, spawnIsInRoom, 100, type, dmg, "monster");
 		}
 	}
 

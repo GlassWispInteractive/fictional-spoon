@@ -3,6 +3,7 @@ package entities;
 import java.util.ArrayList;
 
 import combat.Combo;
+import entities.Monster.MonsterType;
 
 /**
  * Factory for MobileObject objects
@@ -68,8 +69,8 @@ public class EntityFactory {
 		return player;
 	}
 
-	public Monster makeMonster(int x, int y, boolean spawnIsInRoom, int hp, int[] power, String name) {
-		Monster monster = new Monster(x, y, spawnIsInRoom, hp, power, name);
+	public Monster makeMonster(int x, int y, boolean spawnIsInRoom, int hp, MonsterType type, int dmg, String name) {
+		Monster monster = new Monster(x, y, spawnIsInRoom, hp, type, dmg, name);
 		addEnts.add(monster);
 		return monster;
 	}

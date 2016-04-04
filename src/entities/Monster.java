@@ -29,6 +29,10 @@ public class Monster extends Entity implements IAttackable {
 			new ImageSource(TileSource.MONSTER_TILES, 0, 5), new ImageSource(TileSource.MONSTER_TILES, 0, 1),
 			new ImageSource(TileSource.MONSTER_TILES, 5, 4), new ImageSource(TileSource.MONSTER_TILES, 1, 8),
 			new ImageSource(TileSource.MONSTER_TILES, 0, 7) };
+	
+	public enum MonsterType {
+		EARTH, FIRE, AIR, WATER, MYSTIC
+	};
 
 	// 2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new
 	// Point2D(1,8)};
@@ -42,23 +46,29 @@ public class Monster extends Entity implements IAttackable {
 
 	private int hp;
 	private final int maxHp;
+	
+	MonsterType type;
+	int dmg;
 	// earth, fire, air, water, mystic #korra
-	private int[] power = new int[5];
+//	private int[] power = new int[5];
 	private Attacks attack;
-
-	private int maxType = -1;
+//
+//	private int maxType = -1;
 	private String name;
 	private boolean monsterDead = false;
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 
-	public Monster(int x, int y, boolean spawnIsInRoom, int hp, int[] power, String name) {
+	public Monster(int x, int y, boolean spawnIsInRoom, int hp, MonsterType type, int dmg, String name) {
 		super(x, y);
 
 		this.hp = hp;
 		this.maxHp = hp;
 		this.name = name;
-		this.power = power;
 		this.delayTicks = 20;
+		
+		this.type = type;
+		this.dmg = dmg;
+		this.attack = new Attacks(dmg);
 
 		if(spawnIsInRoom) {
 			int chosenStrategy = new Random().nextInt(walkStrategiesInRoom.size());
@@ -71,15 +81,16 @@ public class Monster extends Entity implements IAttackable {
 		    	this.currentWalkStrategy = new FloorWalk();
 		}
 
-		maxType = -1;
-		int max = -1;
-		for (int i = 0; i < this.power.length; i++) {
-			if (this.power[i] > max) {
-				maxType = i;
-				max = this.power[i];
-			}
-		}
-		this.attack = new Attacks(max);
+		
+//		maxType = -1;
+//		int max = -1;
+//		for (int i = 0; i < this.power.length; i++) {
+//			if (this.power[i] > max) {
+//				maxType = i;
+//				max = this.power[i];
+//			}
+//		}
+		
 	}
 
 	public String getName() {
@@ -100,7 +111,7 @@ public class Monster extends Entity implements IAttackable {
 		if (monsterDead) {
 			tileFac.drawTile(gc, tileType[tileType.length - 1], (x - offsetX), (y - offsetY), size);
 		} else {
-			tileFac.drawTile(gc, tileType[maxType], (x - offsetX), (y - offsetY), size);
+			tileFac.drawTile(gc, tileType[type.ordinal()], (x - offsetX), (y - offsetY), size);
 		}
 	}
 
@@ -140,7 +151,7 @@ public class Monster extends Entity implements IAttackable {
 	}
 
 	public ImageSource getImageSource() {
-		return tileType[maxType];
+		return tileType[type.ordinal()];
 	}
 
 	@Override
