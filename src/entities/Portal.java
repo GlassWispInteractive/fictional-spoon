@@ -12,6 +12,8 @@ import combat.Goal;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Portal extends Entity {
+	private static int count = 0;
+
 	private Random rnd = new Random();
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 	// private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 23,
@@ -28,17 +30,8 @@ public class Portal extends Entity {
 		super(x, y);
 
 		delayTicks = 1000;
-	}
 
-	/**
-	 * function generates a monster at a specified place
-	 * 
-	 * @param x
-	 * @param y
-	 * @param spawnIsInRoom
-	 */
-	public static void generate(int x, int y) {
-		new Portal(x, y);
+		count += 1;
 	}
 
 	@Override
@@ -53,30 +46,29 @@ public class Portal extends Entity {
 
 	@Override
 	public void tick(int ticks) {
-
 		if (blocked >= 0) {
 			blocked -= ticks;
 		}
 
 		if (blocked < 0 && !destroyed) {
-
 			blocked = delayTicks;
 
 			spawnMonster();
-
-			if (intersectsWithPlayer() && !destroyed) {
-
-				destroyed = true;
-
-				// alert
-				GameControl.getControl().alert("YKWTBI");
-
-				// goal update
-				GameControl.getControl().updateGoal(Goal.PORTAL);
-
-			}
 		}
 
+		if (intersectsWithPlayer() && !destroyed) {
+			destroyed = true;
+
+			// alert
+			GameControl.getControl().alert("YKWTBI");
+
+			// goal update
+			GameControl.getControl().updateGoal(Goal.PORTAL);
+		}
+	}
+	
+	protected static void resetCount() {
+		count = 0;
 	}
 
 	private void spawnMonster() {
@@ -107,6 +99,10 @@ public class Portal extends Entity {
 			boolean spawnIsInRoom = GameControl.getControl().getMap().isWalkableRoom(x, y);
 			new Monster(x, y, spawnIsInRoom);
 		}
+	}
+
+	public static int getCount() {
+		return count;
 	}
 
 }

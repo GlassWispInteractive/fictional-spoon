@@ -4,6 +4,7 @@ import combat.Combo;
 import combat.Goal;
 import combat.Objective;
 import entities.Entity;
+import entities.Portal;
 import generation.LevelBuilder;
 import generation.Map;
 import screens.AlertDecorator;
@@ -30,11 +31,11 @@ public class GameControl {
 		// settings
 		screen = new HelpScreen("game", 180);
 		ScreenControl.getCtrl().addScreen("game intro", screen);
-		level = 1;
+		level = 3;
 		startArcade(level);
 
 	}
-	
+
 	/**
 	 * @return the objective
 	 */
@@ -99,7 +100,7 @@ public class GameControl {
 			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
 					LevelBuilder.Layout.MAZE_WITH_ROOMS).genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01)
 							.genPortal(1, 0).create());
-			objective = new Objective(Goal.PORTAL, 1); // calculate the number
+			objective = new Objective(Goal.PORTAL, Portal.getCount()); // calculate the number
 														// of portals created
 			break;
 		case 4:

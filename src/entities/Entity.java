@@ -38,6 +38,8 @@ public abstract class Entity {
 	 */
 	public static void reset() {
 		collection = new ArrayList<>();
+		
+		Portal.resetCount();
 	}
 
 	/**
