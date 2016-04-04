@@ -47,7 +47,7 @@ public class Opponent extends Entity {
 		for (int i = 0; i < 3; i++) {
 			int[] power = new int[] { 0, 0, 0, 0, 0 };
 			power[rnd.nextInt(power.length)] = 5;
-			monsterList.add(new Monster(x, y, 100, power, "myMonster"));
+			monsterList.add(new Monster(x, y, false, 100, power, "myMonster"));
 		}
 	}
 

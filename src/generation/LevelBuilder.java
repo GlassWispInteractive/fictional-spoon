@@ -488,7 +488,8 @@ public class LevelBuilder {
 			used -= used;
 
 			// make monster at (x, y)
-			fac.makeMonster(x, y, 100, powers, "monster");
+			boolean spawnIsInRoom = map.isWalkableRoom(x, y);
+			fac.makeMonster(x, y, spawnIsInRoom, 100, powers, "monster");
 		});
 	}
 

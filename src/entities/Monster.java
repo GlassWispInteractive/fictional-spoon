@@ -33,8 +33,8 @@ public class Monster extends Entity implements IAttackable {
 	// 2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new
 	// Point2D(1,8)};
 
-	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(new WalkStrategy[] {
-			new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new FloorWalk(), new RectangleWalk() }));
+	private ArrayList<WalkStrategy> walkStrategiesInRoom = new ArrayList<WalkStrategy>(Arrays.asList(new WalkStrategy[] {
+			new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk() }));
 	private WalkStrategy currentWalkStrategy;
 	
 	// for speed
@@ -51,7 +51,7 @@ public class Monster extends Entity implements IAttackable {
 	private boolean monsterDead = false;
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 
-	public Monster(int x, int y, int hp, int[] power, String name) {
+	public Monster(int x, int y, boolean spawnIsInRoom, int hp, int[] power, String name) {
 		super(x, y);
 
 		this.hp = hp;
@@ -60,12 +60,16 @@ public class Monster extends Entity implements IAttackable {
 		this.power = power;
 		this.delayTicks = 20;
 
-		int chosenStrategy = new Random().nextInt(walkStrategies.size());
-		this.currentWalkStrategy = walkStrategies.get(chosenStrategy);
-		// this.currentWalkStrategy = new RandomWalk();
-		// this.currentWalkStrategy = new HorizontalWalk();
-		// this.currentWalkStrategy = new VerticalWalk();
-		// this.currentWalkStrategy = new RectangleWalk();
+		if(spawnIsInRoom) {
+			int chosenStrategy = new Random().nextInt(walkStrategiesInRoom.size());
+			this.currentWalkStrategy = walkStrategiesInRoom.get(chosenStrategy);
+			// this.currentWalkStrategy = new RandomWalk();
+			// this.currentWalkStrategy = new HorizontalWalk();
+			// this.currentWalkStrategy = new VerticalWalk();
+			// this.currentWalkStrategy = new RectangleWalk();
+		} else {
+		    	this.currentWalkStrategy = new FloorWalk();
+		}
 
 		maxType = -1;
 		int max = -1;

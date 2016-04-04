@@ -87,7 +87,8 @@ public class Portal extends Entity{
 			maxMonsterSpawn--;
 			int[] power = new int[]{0, 0, 0, 0, 0};
 			power[rnd.nextInt(power.length)] = 5;
-			EntityFactory.getFactory().makeMonster(spawnPoint.x, spawnPoint.y, 100, power, "test");
+			boolean spawnIsInRoom = GameControl.getControl().getMap().isWalkableRoom(spawnPoint.x, spawnPoint.y);
+			EntityFactory.getFactory().makeMonster(spawnPoint.x, spawnPoint.y, spawnIsInRoom, 100, power, "test");
 		}
 	}
 

@@ -68,8 +68,8 @@ public class EntityFactory {
 		return player;
 	}
 
-	public Monster makeMonster(int x, int y, int hp, int[] power, String name) {
-		Monster monster = new Monster(x, y, hp, power, name);
+	public Monster makeMonster(int x, int y, boolean spawnIsInRoom, int hp, int[] power, String name) {
+		Monster monster = new Monster(x, y, spawnIsInRoom, hp, power, name);
 		addEnts.add(monster);
 		return monster;
 	}
