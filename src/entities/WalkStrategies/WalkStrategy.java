@@ -40,33 +40,26 @@ public abstract class WalkStrategy {
 		}
 		
 		map = GameControl.getControl().getMap();
-		
-		if(blocked > 0){
-			blocked--;
-		}
-		
-		if(blocked <= 0){
 		    
-			Point newPoint = choseStrategy(oldX, oldY);
+		Point newPoint = choseStrategy(oldX, oldY);
 						
-			blocked = delayTicks - 1;
+		blocked = delayTicks - 1;
 			
-			if(!map.isWalkable(newPoint.x, oldY)){
-				newPoint.x = oldX;
-			}
-			if(!map.isWalkable(oldX, newPoint.y)){
-				newPoint.y = oldY;
-			}
+		if(!map.isWalkable(newPoint.x, oldY)){
+			newPoint.x = oldX;
+		}
+		if(!map.isWalkable(oldX, newPoint.y)){
+			newPoint.y = oldY;
+		}
 
-			if(map.isWalkable(newPoint.x, newPoint.y)){
-				//update last two points
-				oldPoints[1].x = oldPoints[0].x;
-				oldPoints[1].y = oldPoints[0].y;
-				oldPoints[0].x = newPoint.x;
-				oldPoints[0].y = newPoint.y;
+		if(map.isWalkable(newPoint.x, newPoint.y)){
+			//update last two points
+			oldPoints[1].x = oldPoints[0].x;
+			oldPoints[1].y = oldPoints[0].y;
+			oldPoints[0].x = newPoint.x;
+			oldPoints[0].y = newPoint.y;
 			    
-				return newPoint;
-			}
+			return newPoint;
 		}
 		
 		return new Point(oldX, oldY);

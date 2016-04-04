@@ -11,10 +11,12 @@ import entities.WalkStrategies.RandomWalk;
 import entities.WalkStrategies.RectangleWalk;
 import entities.WalkStrategies.VerticalWalk;
 import entities.WalkStrategies.WalkStrategy;
+import framework.GameControl;
 import framework.ScreenControl;
 import combat.Attacks;
 import combat.Combat;
 import combat.Combo;
+import combat.Goal;
 import combat.IAttackable;
 import engine.ImageSource;
 import engine.TileFactory;
@@ -34,6 +36,9 @@ public class Monster extends Entity implements IAttackable {
 	private ArrayList<WalkStrategy> walkStrategies = new ArrayList<WalkStrategy>(Arrays.asList(new WalkStrategy[] {
 			new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new FloorWalk(), new RectangleWalk() }));
 	private WalkStrategy currentWalkStrategy;
+	
+	// for speed
+	private int blocked = 0;
 
 	private int hp;
 	private final int maxHp;
@@ -53,7 +58,7 @@ public class Monster extends Entity implements IAttackable {
 		this.maxHp = hp;
 		this.name = name;
 		this.power = power;
-		this.delayTicks = 10;
+		this.delayTicks = 20;
 
 		int chosenStrategy = new Random().nextInt(walkStrategies.size());
 		this.currentWalkStrategy = walkStrategies.get(chosenStrategy);
@@ -97,9 +102,15 @@ public class Monster extends Entity implements IAttackable {
 
 	@Override
 	public void tick(int ticks) {
+	    
+		if (blocked >= 0) {
+			blocked -= ticks;
+		}
+		
+		if (!monsterDead && blocked <= 0) {
 
-		// monster walk
-		if (!monsterDead) {
+			blocked += delayTicks;
+
 			Point newPosition = currentWalkStrategy.walk(x, y);
 
 			x = newPosition.x;
@@ -110,14 +121,15 @@ public class Monster extends Entity implements IAttackable {
 			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
 				// goal update
 				// moved to Combat class - stays here for debugging
-				// GameControl.getControl().updateGoal(Goal.MONSTER);
+//				 GameControl.getControl().updateGoal(Goal.MONSTER);
 
 				// game logic
-				// monsterDead = true; // debug
+//				monsterDead = true; // debug
 				ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[] { this }));
 				ScreenControl.getCtrl().setScreen("combat");
 			}
 		}
+
 	}
 
 	public ImageSource getImageSource() {
