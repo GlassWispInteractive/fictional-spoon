@@ -66,11 +66,12 @@ public class GameControl {
 		switch (level) {
 		case 1:
 			// basic level
-			screen.setText(new String[] { "Quest: Search the shrine" });
+			screen.setText(new String[] { "Quest: Kill 5 monster" });
+			
 			map = new MapScreen(
 					new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.SINGLE_CONN_ROOMS)
 							.genMonster(1, 0.01).genShrine(0.1, 0).create());
-			objective = new Objective(Goal.SHRINE, 1);
+			objective = new Objective(Goal.MONSTER, 5);
 			break;
 		case 2:
 			// default level
