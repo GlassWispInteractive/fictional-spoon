@@ -54,7 +54,7 @@ public class SoulsDecorator extends ScreenDecorator {
 		}
 	}
 
-	public void render() {
+	public void render() { 
 		// call decorated screen
 		super.render();
 
