@@ -34,9 +34,6 @@ public class Monster extends Entity implements IAttackable {
 		EARTH, FIRE, AIR, WATER, MYSTIC
 	};
 
-	// 2,5), new Point2D(0,5), new Point2D(0,1), new Point2D(5,4), new
-	// Point2D(1,8)};
-
 	private ArrayList<WalkStrategy> walkStrategiesInRoom = new ArrayList<WalkStrategy>(Arrays.asList(new WalkStrategy[] {
 			new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk() }));
 	private WalkStrategy currentWalkStrategy;
@@ -73,24 +70,9 @@ public class Monster extends Entity implements IAttackable {
 		if(spawnIsInRoom) {
 			int chosenStrategy = new Random().nextInt(walkStrategiesInRoom.size());
 			this.currentWalkStrategy = walkStrategiesInRoom.get(chosenStrategy);
-			// this.currentWalkStrategy = new RandomWalk();
-			// this.currentWalkStrategy = new HorizontalWalk();
-			// this.currentWalkStrategy = new VerticalWalk();
-			// this.currentWalkStrategy = new RectangleWalk();
 		} else {
 		    	this.currentWalkStrategy = new FloorWalk();
 		}
-
-		
-//		maxType = -1;
-//		int max = -1;
-//		for (int i = 0; i < this.power.length; i++) {
-//			if (this.power[i] > max) {
-//				maxType = i;
-//				max = this.power[i];
-//			}
-//		}
-		
 	}
 
 	public String getName() {

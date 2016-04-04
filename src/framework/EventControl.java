@@ -38,12 +38,6 @@ public class EventControl {
 		input.clear();
 	}
 
-	// public void tick() {
-	// for (String s : delete) {
-	// input.remove(s);
-	// }
-	// }
-
 	public boolean isLeft() {
 		return input.contains("LEFT") || input.contains("A");
 	}

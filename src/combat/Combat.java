@@ -98,14 +98,6 @@ public class Combat extends Screen {
 			curFocus = monster.size() - 1;
 		}
 
-		// if (e.isLeft()) {
-		// curSoul = (curSoul + souls.size() - 1) % souls.size();
-		// }
-		// if (e.isRight()) {
-		// curSoul = (curSoul + 1) % souls.size();
-		// }
-		//
-
 		// arrow pressed
 		if (e.isLeft()) {
 			curFocus = (curFocus + 1) % monster.size();
@@ -141,50 +133,6 @@ public class Combat extends Screen {
 		}
 
 		setBounds();
-
-		// case CHOOSE_ATTACK:
-		// if (e.isLeft()) {
-		// if (curAttackRow <= 1) {
-		// curAttackColum = Math.max(--curAttackColum, 0);
-		// } else {
-		// curAttackColum = Math.max(--curAttackColum, 1);
-		// }
-		// }
-		// if (e.isRight()) {
-		// curAttackColum = Math.min(++curAttackColum, 1);
-		// }
-		// if (e.isUp()) {
-		// curAttackRow = Math.max(--curAttackRow, 0);
-		// }
-		// if (e.isDown()) {
-		// if (curAttackColum == 0) {
-		// curAttackRow = Math.min(++curAttackRow, 1);
-		// } else {
-		// curAttackRow = Math.min(++curAttackRow, 2);
-		// }
-		// }
-		// if (e.isEnter()) {
-		// if (curAttackRow == 2 && curAttackColum == 1) {
-		// // back buton
-		// combatState = CombatState.CHOOSE_SOUL;
-		// } else {
-		// // choose attack focus
-		// combatState = CombatState.CHOOSE_FOCUS;
-		// }
-		// }
-		// break;
-		//
-		// case CHOOSE_FOCUS:
-		// if (e.isLeft()) {
-		// curFocus = (curFocus + 1) % monster.size();
-		// }
-		// if (e.isRight()) {
-		// curFocus = (curFocus + monster.size() - 1) % monster.size();
-		// }
-		// if (e.isEnter()) {
-		// // attack
-		// }
-		// break;
 
 		EventControl.getEvents().clear();
 
@@ -289,19 +237,6 @@ public class Combat extends Screen {
 		status = 0;
 	}
 
-	// public void eval(Element[] streakElem) {
-	// // System.out.println(Arrays.toString(combo));
-	//
-	// for (Combo combo : Combo.getCombosInUse()) {
-	// if (Arrays.equals(streakElem, combo.getCombo())) {
-	// info = "Combo completed!";
-	// player.doAttack(monster.get(curFocus), combo);
-	// streak.clear();
-	// }
-	// }
-	//
-	// }
-
 	private void eval(Element[] streakElem) {
 
 		for (Combo combo : Combo.getCombosInUse()) {
@@ -335,13 +270,6 @@ public class Combat extends Screen {
 		renderInfo();
 		renderPlayerInfo();
 		renderComboOverview();
-
-		// int textboxWidth = 600;
-		// int textboxHeight = 240;
-		// renderTextboxes(gc, (int) (width - textboxWidth), (int) (height -
-		// textboxHeight), textboxWidth, textboxHeight,
-		// souls.get(curSoul));
-
 	}
 
 	private void renderElements() {
@@ -504,62 +432,4 @@ public class Combat extends Screen {
 			rowY += height;
 		}
 	}
-
-	// @SuppressWarnings("unused")
-	// private void renderTextboxes(GraphicsContext gc, int x, int y, int width,
-	// int height, Soul currentSoul) {
-	//
-	// int rowY = y;
-	// int columX = x;
-	//
-	// Attacks[][] attacks = currentSoul.getAttacks();
-	//
-	// // attack fields
-	// for (int i = 0; i < attacks.length; i++) {
-	//
-	// columX = x;
-	//
-	// for (int j = 0; j < attacks[i].length; j++) {
-	//
-	// int boxWidth = width / attacks.length;
-	// int boxHeight = height / (attacks[i].length + 1);
-	//
-	// gc.setFill(Color.WHITE);
-	// if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow == i &&
-	// curAttackColum == j) {
-	// gc.setFill(Color.GRAY);
-	// }
-	// gc.fillRect(columX, rowY, boxWidth, boxHeight);
-	//
-	// gc.setStroke(Color.BLACK);
-	// gc.strokeRect(columX, rowY, boxWidth, boxHeight);
-	// gc.setFill(Color.BLACK);
-	// gc.fillText(attacks[i][j].getName(), columX, rowY + boxHeight / 2);
-	//
-	// columX += width / attacks.length;
-	// }
-	//
-	// rowY += height / (attacks[i].length + 1);
-	// }
-	//
-	// // back button
-	// gc.setFill(Color.WHITE);
-	// if (combatState == CombatState.CHOOSE_ATTACK && curAttackRow ==
-	// attacks.length
-	// && curAttackColum == attacks[attacks.length - 1].length - 1) {
-	// gc.setFill(Color.GRAY);
-	// }
-	// gc.fillRect(columX - width / attacks.length, rowY, width /
-	// attacks.length,
-	// height / (attacks[attacks.length - 1].length + 1));
-	//
-	// gc.setStroke(Color.BLACK);
-	// gc.strokeRect(columX - width / attacks.length, rowY, width /
-	// attacks.length,
-	// height / (attacks[attacks.length - 1].length + 1));
-	// gc.setFill(Color.BLACK);
-	// gc.fillText("BACK", columX - width / attacks.length,
-	// rowY + height / (attacks[attacks.length - 1].length + 1) / 2);
-	// }
-
 }
