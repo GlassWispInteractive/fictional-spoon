@@ -2,59 +2,69 @@ package combat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 public class Combo {
-	private static Random random = new Random();
-
-	private static ArrayList<Combo> combos = new ArrayList<>();
-	private static HashSet<Combo> combosInUse = new HashSet<>();
+	// members
+	private static HashSet<Combo> combos = new HashSet<>();
+	private static ArrayList<Element[]> all;
 
 	private Element[] combo;
 
-	private Combo(Element[] combo) {
+	public Combo() {
+		this.combo = all.get(0);
+
 		this.setCombo(combo);
-		combos.add(this);
-		// combosInUse.add(this);
-		// System.out.println(Arrays.toString(combo));
+		all.remove(0);
 	}
 
 	/**
-	 * Random generatedable object
+	 * set the level to generate a list of combinations by some hardness factor
 	 * 
 	 * @param len
-	 * @return
 	 */
-	public static Combo generate(int len) {
-		Element[] elements = new Element[len];
-		elements = Arrays.stream(elements).map(e -> Element.values()[random.nextInt(Element.values().length)])
-				.toArray(Element[]::new);
+	public static void setLength(int len) {
+		// get number of elements and permutations with repetitions
+		final int m = Element.values().length;
+		final int n = (int) Math.pow(m, len);
+		all = new ArrayList<>();
 
-		return new Combo(elements);
-	}
+		for (int i = 0; i < n; i++) {
+			Element[] elements = new Element[len];
 
-	/**
-	 * @return the combos
-	 */
-	public static ArrayList<Combo> getCombos() {
-		return combos;
+			// calculate the notation of the number in the m-ary numberal system
+			char[] s = Integer.toString(i, m).toCharArray();
+
+			// add leading 0 to s
+			if (s.length < len) {
+				char[] s_new = new char[len];
+				for (int k = 0; k < len - s.length; k++)
+					s_new[k] = '0';
+				for (int k = 0; k < s.length; k++)
+					s_new[k + len - s.length] = s[k];
+				s = s_new;
+			}
+
+			// convert char array to Combo
+			for (int j = 0; j < len; j++) {
+				elements[j] = Element.values()[s[j] - '0'];
+			}
+
+			// add next element to the list
+			all.add(elements);
+		}
+
+		// shuffle the list of possible combos
+		Collections.shuffle(all);
 	}
 
 	/**
 	 * @return the combosInUse
 	 */
 	public static HashSet<Combo> getCombosInUse() {
-		return combosInUse;
-	}
-
-	/**
-	 * clear the combo list
-	 */
-	public static void clear() {
-		// delete every combo which is not yet activated
-		combos = (ArrayList<Combo>) combos.stream().filter(e -> combosInUse.contains(e)).collect(Collectors.toList());
+		return combos;
 	}
 
 	/**
@@ -76,7 +86,7 @@ public class Combo {
 	 * activate the combo for the player
 	 */
 	public void activate() {
-		combosInUse.add(this);
+		combos.add(this);
 	}
 
 	@Override
@@ -90,9 +100,8 @@ public class Combo {
 		// toString().substring(0, 1) to get the first char
 		return Arrays.stream(elements).map(e -> "" + (1 + e.ordinal())).collect(Collectors.joining("-"));
 	}
-	
+
 	public static void resetCombos() {
-	    combos.clear();
-	    combosInUse.clear();
+		combos.clear();
 	}
 }

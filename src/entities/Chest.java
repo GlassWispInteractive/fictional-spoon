@@ -31,7 +31,7 @@ public class Chest extends Entity {
 	 * @param spawnIsInRoom
 	 */
 	public static void generate(int x, int y) {
-		Chest obj = new Chest(x, y, Combo.generate(3));
+		Chest obj = new Chest(x, y, new Combo());
 		collection.add(obj);
 	}
 

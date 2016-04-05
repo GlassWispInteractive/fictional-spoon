@@ -71,4 +71,11 @@ public class HelpScreen extends Screen {
 	public void setText(String[] text) {
 		this.text = text;
 	}
+
+	/**
+	 * @param nextScreen the nextScreen to set
+	 */
+	public void setNextScreen(String nextScreen) {
+		this.nextScreen = nextScreen;
+	}
 }

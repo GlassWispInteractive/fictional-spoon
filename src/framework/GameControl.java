@@ -2,8 +2,9 @@ package framework;
 
 import combat.Combo;
 import combat.Goal;
-import combat.Objective;
+import combat.Quest;
 import entities.Entity;
+import entities.Monster;
 import entities.Portal;
 import generation.LevelBuilder;
 import generation.Map;
@@ -18,7 +19,7 @@ public class GameControl {
 
 	private HelpScreen screen;
 
-	private Objective objective;
+	private Quest objective;
 	private MapScreen map;
 	private PanelDecorator panel;
 	private AlertDecorator alert;
@@ -31,8 +32,8 @@ public class GameControl {
 		// settings
 		screen = new HelpScreen("game", 180);
 		ScreenControl.getCtrl().addScreen("game intro", screen);
-		level = 3;
-		startArcade(level);
+		level = 1;
+		classicMode(level);
 
 	}
 
@@ -66,7 +67,12 @@ public class GameControl {
 		singleton = new GameControl();
 	}
 
-	private void startArcade(int level) {
+	/**
+	 * starts the classMode at a given level
+	 * 
+	 * @param level
+	 */
+	private void classicMode(int level) {
 		//
 		ScreenControl ctrl = ScreenControl.getCtrl();
 
@@ -78,59 +84,79 @@ public class GameControl {
 			Combo.resetCombos();
 		}
 
+		// set up generator power to level
+		Monster.setPower(level);
+		Combo.setLength(1 + level);
+
 		// set the appropriate objective by level
 		switch (level) {
+
+		// basic level
 		case 1:
-			// basic level
 			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
 					LevelBuilder.Layout.SINGLE_CONN_ROOMS).genMonster(1, 0.01).genShrine(0.1, 0).create());
-			objective = new Objective(Goal.SHRINE, 1);
+			objective = new Quest(Goal.MONSTER, 3);
+
 			break;
+
+		// default level
 		case 2:
-			// default level
+			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
-			objective = new Objective(Goal.MONSTER, 30);
+			objective = new Quest(Goal.MONSTER, 30);
 			break;
+
+		// deactivate portals
 		case 3:
-			// deactivate portals
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
 					LevelBuilder.Layout.MAZE_WITH_ROOMS).genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01)
 							.genPortal(1, 0).create());
-			objective = new Objective(Goal.PORTAL, Portal.getCount()); // calculate the number
-														// of portals created
+			// calculate the number of portals created
+			objective = new Quest(Goal.PORTAL, Portal.getCount());
+
 			break;
+
+		// default level
 		case 4:
-			// default level
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
-			objective = new Objective(Goal.MONSTER, 50);
+			objective = new Quest(Goal.MONSTER, 50);
 			break;
+
+		// boss maze
 		case 5:
-			// boss maze
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(
 					new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16, LevelBuilder.Layout.MAZE)
 							.genChest(0, 0.01).genOpponent(0, 0.005).create());
-			objective = new Objective(Goal.OPPONENT, 1);
+			objective = new Quest(Goal.OPPONENT, 1);
 			break;
-		default:
-
 		}
 
-		screen.setText(new String[] { "Quest: " + objective });
-
 		// update game screens
+		screen.setText(new String[] { "Quest: " + objective });
 		panel = new PanelDecorator(map);
 		alert = new AlertDecorator(panel);
 		ctrl.addScreen("game", alert);
+
+		// update references
 		panel.updateProgress(level, objective.progress());
+	}
+
+	/**
+	 * starts the arcade mode to fight againsts bosses only
+	 * 
+	 * @param level
+	 */
+	public void arcadeMode(int level) {
+		// see issue for more information
 	}
 
 	/**
@@ -162,7 +188,7 @@ public class GameControl {
 				ScreenControl.getCtrl().setScreen("game won");
 			} else {
 				level++;
-				startArcade(level);
+				classicMode(level);
 			}
 		}
 	}

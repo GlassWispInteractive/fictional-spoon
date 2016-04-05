@@ -1,22 +1,22 @@
 package combat;
 
-public class Objective {
+public class Quest {
 	private Goal goal;
 	private int current, total;
 	
 	/**
-	 * constructs a new objective
+	 * constructs a new quest
 	 * @param goal
 	 * @param total
 	 */
-	public Objective(Goal goal, int total) {
+	public Quest(Goal goal, int total) {
 		this.goal = goal;
 		current = 0;
 		this.total = total;
 	}
 	
 	/**
-	 * adds a point towards the objective
+	 * adds a point towards the quest
 	 * @param goal
 	 */
 	public void add(Goal goal) {

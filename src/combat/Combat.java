@@ -2,7 +2,6 @@ package combat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
@@ -24,7 +23,7 @@ import javafx.scene.text.TextAlignment;
 
 public class Combat extends Screen {
 	// lists
-	private ArrayList<Soul> souls;
+	private String[] attacks;
 	private ArrayList<Monster> monster;
 	private Opponent opponent = null; // null = only monster
 	private Player player = Player.getNewest();
@@ -77,9 +76,8 @@ public class Combat extends Screen {
 		addLayer("info2", 0, Global.WINDOW_HEIGHT * 0.85, Global.WINDOW_WIDTH, 100);
 		addLayer("combo", 0, Global.WINDOW_HEIGHT - 510, Global.WINDOW_WIDTH, 510);
 
-		player.setCombat(this);
-		this.souls = player.getSouls();
-		// setMonster(getHardCodedMonster());
+		this.attacks = new String[] { "Earth (1)", "Fire (2)", "Air (3)", "Water (4)" };
+
 		this.monster = monster;
 
 	}
@@ -139,11 +137,11 @@ public class Combat extends Screen {
 		// monster
 		ArrayList<Monster> dyingMonster = new ArrayList<Monster>();
 		for (Monster mon : monster) {
-			if (mon.isDead()) {
+			if (!mon.isAlive()) {
 				dyingMonster.add(mon);
 			}
 		}
-		// smart delete
+		// soft delete
 		for (Monster dyingMon : dyingMonster) {
 			monster.remove(dyingMon);
 		}
@@ -162,27 +160,19 @@ public class Combat extends Screen {
 			// set screens
 			ScreenControl.getCtrl().removeScreen("combat");
 			ScreenControl.getCtrl().setScreen("game");
-
-			// this.stop();
 		}
 
-		if (player.isDead()) {
+		if (!player.isAlive()) {
 			ScreenControl.getCtrl().setScreen("game over");
 		}
 
-		// let monster attack
+		// let all monster attack
 		if (blocked < 0) {
 			blocked = delayTicks - 1;
 
-			Random rnd = new Random();
-			if(monster.size() <= 0) {
-			    return; //something is wrong here, shouldnt be possible that monster.size <= 0
+			for (Monster attackMonster : monster) {
+				attackMonster.attack(player);
 			}
-			int rndMonsterIndex = rnd.nextInt(monster.size());
-
-			Monster attackMonster = monster.get(rndMonsterIndex);
-
-			attackMonster.doAttack(player);
 		} else {
 			blocked--;
 		}
@@ -219,7 +209,7 @@ public class Combat extends Screen {
 			streak.add(Element.values()[curSoul]);
 			info = "current hit streak: " + Combo.toString(streak.toArray(new Element[] {}));
 
-			player.doAttack(monster.get(curFocus));
+			player.attack(monster.get(curFocus));
 		} else {
 			// adjust level
 			streakCount = 0;
@@ -247,7 +237,7 @@ public class Combat extends Screen {
 					}
 					if (i == elements.length) {
 						info = "Combo completed!";
-						player.doAttack(monster.get(curFocus), combo);
+						player.attack(monster.get(curFocus), elements.length);
 						streak.clear();
 					}
 				}
@@ -276,9 +266,9 @@ public class Combat extends Screen {
 		final GraphicsContext gc = gcs.get("elems");
 		gc.clearRect(0, 0, layers.get("elems").getWidth(), layers.get("elems").getHeight());
 
-		for (int i = 0; i < souls.size(); i++) {
+		for (int i = 0; i < attacks.length; i++) {
 			gc.setFill(Global.WHITE);
-			gc.fillText(souls.get(i).getName(), 80 + i * 180, 25, 80);
+			gc.fillText(attacks[i], 80 + i * 180, 25, 80);
 
 			gc.drawImage(ELEMS[i], 50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
 
@@ -335,13 +325,11 @@ public class Combat extends Screen {
 
 		// draw the delimters
 		gc.setStroke(Global.DARKGRAY.brighter());
-		gc.strokePolyline(
-				new double[] { 110 + lowerBound * (Global.WINDOW_WIDTH - 220), 110 + lowerBound * (Global.WINDOW_WIDTH - 220) },
-				new double[] { 5, 35 }, 2);
+		gc.strokePolyline(new double[] { 110 + lowerBound * (Global.WINDOW_WIDTH - 220),
+				110 + lowerBound * (Global.WINDOW_WIDTH - 220) }, new double[] { 5, 35 }, 2);
 
-		gc.strokePolyline(
-				new double[] { 110 + upperBound * (Global.WINDOW_WIDTH - 220), 110 + upperBound * (Global.WINDOW_WIDTH - 220) },
-				new double[] { 5, 35 }, 2);
+		gc.strokePolyline(new double[] { 110 + upperBound * (Global.WINDOW_WIDTH - 220),
+				110 + upperBound * (Global.WINDOW_WIDTH - 220) }, new double[] { 5, 35 }, 2);
 	}
 
 	private void renderInfo() {
@@ -376,7 +364,7 @@ public class Combat extends Screen {
 		gc.setFill(Color.ORANGE);
 		// gc.setLineWidth(1);
 
-		gc.fillText(player.getPlayerInfo(), 50, 50);
+		gc.fillText(player.toString(), 50, 50);
 	}
 
 	private void renderComboOverview() {

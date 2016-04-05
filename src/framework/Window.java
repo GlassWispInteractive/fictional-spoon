@@ -60,8 +60,6 @@ public class Window extends Application {
 		ctrl.addScreen("game over", new SoulsDecorator(new FinishScreen(false)));
 		// ctrl.addScreen("", );
 
-		MenuScreen.getScreen().setList(new String[] { "Start", "Credits", "Help", "Exit" });
-
 		// precompute the game initialization
 		GameControl.getControl();
 

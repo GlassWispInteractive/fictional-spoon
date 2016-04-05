@@ -24,7 +24,7 @@ public class PanelDecorator extends ScreenDecorator {
 	public void updateProgress(int level, double progress) {
 		this.level = level;
 		this.progress = progress;
-		this.life = Player.getNewest().getHp();
+		this.life = Player.getNewest().getLife();
 	}
 
 	@Override

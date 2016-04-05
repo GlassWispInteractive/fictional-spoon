@@ -6,10 +6,8 @@ import java.util.Arrays;
 import java.util.Random;
 
 import framework.GameControl;
-import combat.Attacks;
-import combat.Combo;
 import combat.Goal;
-import combat.IAttackable;
+import combat.CombatEntity;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
@@ -21,7 +19,7 @@ import entities.walk_strategies.VerticalWalk;
 import entities.walk_strategies.WalkStrategy;
 import javafx.scene.canvas.GraphicsContext;
 
-public class Monster extends Entity implements IAttackable {
+public class Monster extends CombatEntity {
 	private ImageSource[] tileType = { new ImageSource(TileSource.MONSTER_TILES, 2, 5),
 			new ImageSource(TileSource.MONSTER_TILES, 0, 5), new ImageSource(TileSource.MONSTER_TILES, 0, 1),
 			new ImageSource(TileSource.MONSTER_TILES, 5, 4), new ImageSource(TileSource.MONSTER_TILES, 1, 8),
@@ -31,6 +29,11 @@ public class Monster extends Entity implements IAttackable {
 		EARTH, FIRE, AIR, WATER, MYSTIC
 	};
 
+	// class members
+	private static TileFactory tileFac = TileFactory.getTilesFactory();
+	private static int level;
+
+	// object
 	private ArrayList<WalkStrategy> walkStrategiesInRoom = new ArrayList<WalkStrategy>(Arrays.asList(
 			new WalkStrategy[] { new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new RectangleWalk() }));
 	private WalkStrategy currentWalkStrategy;
@@ -38,56 +41,53 @@ public class Monster extends Entity implements IAttackable {
 	// for speed
 	private int blocked = 0;
 
-	private int hp;
-	private final int maxHp;
-
 	MonsterType type;
-	int dmg;
-	// earth, fire, air, water, mystic #korra
-	// private int[] power = new int[5];
-	private Attacks attack;
-	//
-	// private int maxType = -1;
-	private String name;
-	private boolean monsterDead = false;
-	private TileFactory tileFac = TileFactory.getTilesFactory();
+	int damage;
+	private String name = "noname";
 
 	public Monster(int x, int y, boolean spawnIsInRoom) {
-		super(x, y);
+		super(x, y, 2 + 1 * (level - 1), 1);
 
-		// this.hp = hp;
-		this.maxHp = 10;
-		// this.name = name;
-		this.delayTicks = 20;
-
-		this.type = MonsterType.AIR;
-		// this.dmg = dmg;
-		this.attack = new Attacks(dmg);
-
+		// set walk strategy
 		if (spawnIsInRoom) {
 			int chosenStrategy = new Random().nextInt(walkStrategiesInRoom.size());
 			this.currentWalkStrategy = walkStrategiesInRoom.get(chosenStrategy);
 		} else {
 			this.currentWalkStrategy = new FloorWalk();
 		}
+
+		// generate monster attribute values
+		this.damage = 1 + level / 5;
+
+		// this.name = name;
+		this.delayTicks = 30;
+
+		this.type = MonsterType.AIR;
+		// this.attack = new Attacks(damage);
+
+	}
+
+	/**
+	 * set the level to generate monster by some hardness factor
+	 * 
+	 * @param level
+	 */
+	public static void setPower(int level) {
+		Monster.level = level;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public boolean isDead() {
-		return monsterDead;
-	}
-
 	public String getHpInfo() {
-		return "[" + hp + " / " + maxHp + "]";
+		return "[" + life + " / " + maxLife + "]";
 	}
 
 	@Override
 	public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
 
-		if (monsterDead) {
+		if (!isAlive()) {
 			tileFac.drawTile(gc, tileType[tileType.length - 1], (x - offsetX), (y - offsetY), size);
 		} else {
 			tileFac.drawTile(gc, tileType[type.ordinal()], (x - offsetX), (y - offsetY), size);
@@ -97,7 +97,7 @@ public class Monster extends Entity implements IAttackable {
 	@Override
 	public void tick(int ticks) {
 
-		if (monsterDead) {
+		if (!isAlive()) {
 			return;
 		}
 
@@ -111,7 +111,7 @@ public class Monster extends Entity implements IAttackable {
 			blocked -= ticks;
 		}
 
-		if (!monsterDead) {
+		if (isAlive()) {
 
 			if (blocked <= 0) {
 				blocked += delayTicks;
@@ -136,7 +136,7 @@ public class Monster extends Entity implements IAttackable {
 		GameControl.getControl().updateGoal(Goal.MONSTER);
 
 		// game logic
-		monsterDead = true; // debug
+		life = 0; // debug
 		// ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[]
 		// { this }));
 		// ScreenControl.getCtrl().setScreen("combat");
@@ -145,24 +145,4 @@ public class Monster extends Entity implements IAttackable {
 	public ImageSource getImageSource() {
 		return tileType[type.ordinal()];
 	}
-
-	@Override
-	public void getDmg(int dmg) {
-		hp -= dmg;
-
-		if (hp <= 0) {
-			monsterDead = true;
-		}
-	}
-
-	@Override
-	public void doAttack(IAttackable focus) {
-		attack.doAttack(focus);
-	}
-
-	@Override
-	public void doAttack(IAttackable focus, Combo combo) {
-		attack.doAttack(focus, combo);
-	}
-
 }
