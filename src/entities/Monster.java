@@ -6,7 +6,9 @@ import java.util.Arrays;
 import java.util.Random;
 
 import framework.GameControl;
+import framework.ScreenControl;
 import combat.Goal;
+import combat.Combat;
 import combat.CombatEntity;
 import engine.ImageSource;
 import engine.TileFactory;
@@ -62,7 +64,7 @@ public class Monster extends CombatEntity {
 		// this.name = name;
 		this.delayTicks = 30;
 
-		this.type = MonsterType.AIR;
+		this.type = MonsterType.FIRE;
 		// this.attack = new Attacks(damage);
 
 	}
@@ -133,13 +135,12 @@ public class Monster extends CombatEntity {
 	private void startCombat() {
 		// goal update
 		// moved to Combat class - stays here for debugging
-		GameControl.getControl().updateGoal(Goal.MONSTER);
+//		GameControl.getControl().updateGoal(Goal.MONSTER);
 
 		// game logic
-		life = 0; // debug
-		// ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[]
-		// { this }));
-		// ScreenControl.getCtrl().setScreen("combat");
+//		life = 0; // debug
+		ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[] { this }));
+		ScreenControl.getCtrl().setScreen("combat");
 	}
 
 	public ImageSource getImageSource() {
