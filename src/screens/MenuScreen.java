@@ -35,17 +35,13 @@ public class MenuScreen extends Screen {
 		super();
 
 		// init
-		list = new ArrayList<>();
-		cur = 0;
+		setList(new String[] { "Classic Mode", "Arcade Mode", "Credits", "Help", "Exit" });
 
 		logo = new Image("/resources/graphics/logo.png");
 	}
 
 	public void tick(int ticks) {
 		EventControl e = EventControl.getEvents();
-
-		// soul computation
-		// SpookingSouls.getObject().tick(ticks);
 
 		// event handling
 		if (e.isUp())
@@ -56,15 +52,18 @@ public class MenuScreen extends Screen {
 
 		if (e.isEnter()) {
 			switch (list.get(cur)) {
-			case "Start":
+			case "Classic Mode":
 				ScreenControl.getCtrl().setScreen("game intro");
 				break;
+				
 			case "Credits":
 				ScreenControl.getCtrl().setScreen("credits");
 				break;
+				
 			case "Help":
 				ScreenControl.getCtrl().setScreen("help");
 				break;
+				
 			case "Exit":
 				System.exit(0);
 				break;
@@ -85,34 +84,31 @@ public class MenuScreen extends Screen {
 		// canvas settings
 		final double w = gc.getCanvas().getWidth();
 
-		// render backGround souls
-		// SpookingSouls.getObject().render(gc);
-
 		// render logo image
 		gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
 
 		// font type
 		gc.setFont(Global.DEFAULT_FONT);
-
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.CENTER);
+
 		gc.setLineWidth(1);
 
 		for (int i = 0; i < list.size(); i++) {
 			// render box
-			gc.setFill(Global.WHITE.deriveColor(0, 1.2, 1, 0.8));
-			gc.setStroke(Global.WHITE.brighter());
-			gc.fillRoundRect((w - 200) / 2, 200 + 100 * (i + 1), 200, 60, 60, 200);
-			gc.strokeRoundRect((w - 200) / 2, 200 + 100 * (i + 1), 200, 60, 60, 200);
+			gc.setFill(Global.WHITE.deriveColor(0, 1, 1, 0.5));
+			gc.setStroke(Global.WHITE.brighter().deriveColor(0, 1, 1, 0.5));
+			gc.fillRoundRect((w - 200) / 2, 150 + 90 * (i + 1), 200, 60, 60, 200);
+			gc.strokeRoundRect((w - 200) / 2, 150 + 90 * (i + 1), 200, 60, 60, 200);
 
 			// render text on box
 			gc.setFill(i != cur ? Global.DARKRED : Global.DARKRED.brighter());
-			gc.fillText(list.get(i), w / 2, 200 + 100 * (i + 1) + 30);
+			gc.fillText(list.get(i), w / 2, 150 + 90 * (i + 1) + 30);
 		}
 
 	}
 
-	public void setList(String[] strings) {
+	private void setList(String[] strings) {
 		list = new ArrayList<String>(Arrays.asList(strings));
 		cur = 0;
 	}
