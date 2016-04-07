@@ -1,29 +1,25 @@
-package entities;
+package game.entities;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import combat.Combat;
-import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
-import entities.WalkStrategies.FloorWalk;
-import entities.WalkStrategies.HorizontalWalk;
-import entities.WalkStrategies.RandomWalk;
-import entities.WalkStrategies.RectangleWalk;
-import entities.WalkStrategies.VerticalWalk;
-import entities.WalkStrategies.WalkStrategy;
-import framework.GameControl;
 import framework.ScreenControl;
+import game.walk_strategies.FloorWalk;
+import game.walk_strategies.HorizontalWalk;
+import game.walk_strategies.RandomWalk;
+import game.walk_strategies.RectangleWalk;
+import game.walk_strategies.VerticalWalk;
+import game.walk_strategies.WalkStrategy;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import screens.MapScreen;
+import screens.CombatScreen;
 
 public class Opponent extends Entity {
-
 	private TileFactory tileFac = TileFactory.getTilesFactory();
 	private ImageSource imgSource = new ImageSource(TileSource.CHAR_TILES, 0, 11);
 	private int blocked = 0;
@@ -34,9 +30,9 @@ public class Opponent extends Entity {
 			new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new FloorWalk(), new RectangleWalk() }));
 	private WalkStrategy currentWalkStrategy;
 
-	private ArrayList<Monster> monsterList = new ArrayList<Monster>();
+	private ArrayList<Monster> monsterList = new ArrayList<>();
 
-	public Opponent(int x, int y, String name) {
+	public Opponent(int x, int y, boolean spawnIsInRoom) {
 		super(x, y);
 
 		this.delayTicks = 10;
@@ -45,10 +41,26 @@ public class Opponent extends Entity {
 
 		// hard coded monster
 		for (int i = 0; i < 3; i++) {
-			int[] power = new int[] { 0, 0, 0, 0, 0 };
-			power[rnd.nextInt(power.length)] = 5;
-			monsterList.add(new Monster(x, y, 100, power, "myMonster"));
+			// generate monster parameter
+			// MonsterType type =
+			// MonsterType.values()[rnd.nextInt(MonsterType.values().length -
+			// 1)];
+			// int dmg = rnd.nextInt(3) + 1;
+
+			// make monster at (x, y)
+			new Monster(x, y, spawnIsInRoom);
 		}
+	}
+
+	/**
+	 * function generates a monster at a specified place
+	 * 
+	 * @param x
+	 * @param y
+	 * @param spawnIsInRoom
+	 */
+	public static void generate(int x, int y, boolean spawnIsInRoom) {
+		new Opponent(x, y, spawnIsInRoom);
 	}
 
 	@Override
@@ -81,34 +93,27 @@ public class Opponent extends Entity {
 				y = newPosition.y;
 			}
 
-			EntityFactory fac = EntityFactory.getFactory();
-			if (x == fac.getPlayer().getX() && y == fac.getPlayer().getY()) {
+			if (intersectsWithPlayer()) {
 				// alert
 				// GameControl.getControl().alert("New combo: ");
 
 				// goal update
-				GameControl.getControl().updateGoal(Goal.OPPONENT);
+				// GameControl.getControl().updateGoal(Goal.OPPONENT);
 
 				// game logic
-				opponentDead = true; // debug
-				// ScreenControl.getCtrl().addScreen("combat", new
-				// Combat(this));
-				// ScreenControl.getCtrl().setScreen("combat");
+				ScreenControl.getCtrl().addScreen("combat", new CombatScreen(monsterList));
+				ScreenControl.getCtrl().setScreen("combat");
 			}
 
 		}
+	}
+	
+//	@Override
+	public boolean isAlive() {
+		return monsterList.size() > 0;
 	}
 
 	public ArrayList<Monster> getMonsterList() {
 		return monsterList;
 	}
-
-	public boolean isDead() {
-		return opponentDead;
-	}
-
-	public void setDead(boolean dead) {
-		this.opponentDead = dead;
-	}
-
 }

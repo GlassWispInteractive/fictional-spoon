@@ -1,9 +1,9 @@
-package entities.WalkStrategies;
+package game.walk_strategies;
 
-import entities.Direction;
-import entities.Entity;
-import entities.EntityFactory;
 import framework.GameControl;
+import game.entities.Direction;
+import game.entities.Entity;
+import game.entities.Player;
 import generation.Map;
 
 import java.awt.Point;
@@ -15,8 +15,6 @@ public abstract class WalkStrategy {
 	protected Map map;
 	
 	protected Random rnd = new Random();
-	private int blocked = 0;
-	private int delayTicks = 20;
 	
 	private boolean playerFarAway = true;
 	private int area = 8;
@@ -40,33 +38,24 @@ public abstract class WalkStrategy {
 		}
 		
 		map = GameControl.getControl().getMap();
-		
-		if(blocked > 0){
-			blocked--;
-		}
-		
-		if(blocked <= 0){
 		    
-			Point newPoint = choseStrategy(oldX, oldY);
-						
-			blocked = delayTicks - 1;
+		Point newPoint = choseStrategy(oldX, oldY);
 			
-			if(!map.isWalkable(newPoint.x, oldY)){
-				newPoint.x = oldX;
-			}
-			if(!map.isWalkable(oldX, newPoint.y)){
-				newPoint.y = oldY;
-			}
+		if(!map.isWalkable(newPoint.x, oldY)){
+			newPoint.x = oldX;
+		}
+		if(!map.isWalkable(oldX, newPoint.y)){
+			newPoint.y = oldY;
+		}
 
-			if(map.isWalkable(newPoint.x, newPoint.y)){
-				//update last two points
-				oldPoints[1].x = oldPoints[0].x;
-				oldPoints[1].y = oldPoints[0].y;
-				oldPoints[0].x = newPoint.x;
-				oldPoints[0].y = newPoint.y;
+		if(map.isWalkable(newPoint.x, newPoint.y)){
+			//update last two points
+			oldPoints[1].x = oldPoints[0].x;
+			oldPoints[1].y = oldPoints[0].y;
+			oldPoints[0].x = newPoint.x;
+			oldPoints[0].y = newPoint.y;
 			    
-				return newPoint;
-			}
+			return newPoint;
 		}
 		
 		return new Point(oldX, oldY);
@@ -78,7 +67,7 @@ public abstract class WalkStrategy {
 			return walkStrategy(oldX, oldY);
 		}
 		
-		Entity player = EntityFactory.getFactory().getPlayer();
+		Entity player = Player.getNewest();
 		int playerX = player.getX();
 		int playerY = player.getY();
 		playerFarAway = Math.abs(oldX - playerX) > area || Math.abs(oldY - playerY) > area;
@@ -114,7 +103,7 @@ public abstract class WalkStrategy {
 	
 	protected Point aggroWalk(int oldX, int oldY) {
 		
-		Entity player = EntityFactory.getFactory().getPlayer();
+		Entity player = Player.getNewest();
 		int playerX = player.getX();
 		int playerY = player.getY();
 		
@@ -157,11 +146,11 @@ public abstract class WalkStrategy {
 	
 	protected Point walkStrategy(int oldX, int oldY) {
 	    
-	    	if(map.isWalkableRoom(oldX, oldY)) {
+		if(map.isWalkableRoom(oldX, oldY)) {
 	    	    return walkWithStrategy(oldX, oldY);
 	    	}
 	        
-		Point newPoint;		
+		Point newPoint;	
 		
 		int directionIndex = rnd.nextInt(Direction.values().length);
 		
@@ -181,10 +170,15 @@ public abstract class WalkStrategy {
 		    
 		}
 		
+		newPoint = randomWalk(oldX, oldY);
+		
+		if(newPoint != null) {
+		    return newPoint;
+		}
+		
 		System.err.println("No walkable field");
 
-		newPoint = null;
-		return newPoint;
+		return new Point(oldX, oldY);
 	}
 	
 	protected abstract Point walkWithStrategy(int oldX, int oldY);

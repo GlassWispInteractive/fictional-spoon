@@ -1,8 +1,10 @@
 package framework;
 
-import combat.Goal;
-import combat.Objective;
-import entities.EntityFactory;
+import game.combat.ComboAttack;
+import game.combat.Quest;
+import game.entities.Entity;
+import game.entities.Monster;
+import game.entities.Portal;
 import generation.LevelBuilder;
 import generation.Map;
 import screens.AlertDecorator;
@@ -16,11 +18,30 @@ public class GameControl {
 
 	private HelpScreen screen;
 
-	private Objective objective;
+	private Quest objective;
 	private MapScreen map;
 	private PanelDecorator panel;
 	private AlertDecorator alert;
 	private int level;
+
+	private GameControl() {
+		// call the very important state constructor
+		super();
+
+		// settings
+		screen = new HelpScreen("game", 180);
+		ScreenControl.getCtrl().addScreen("game intro", screen);
+		level = 1;
+		classicMode(level);
+
+	}
+
+	/**
+	 * @return the objective
+	 */
+	public String getQuest() {
+		return objective.toString();
+	}
 
 	/**
 	 * static method to get the singleton class object
@@ -34,91 +55,107 @@ public class GameControl {
 		return singleton;
 	}
 
+	/**
+	 * reset the game state
+	 */
 	public static void resetGame() {
 		// reset EntityFactory
-		EntityFactory.resetGame();
+		Entity.reset();
+		ComboAttack.resetCombos();
 
 		singleton = new GameControl();
 	}
 
-	private GameControl() {
-		// call the very important state constructor
-		super();
-
-		// settings
-		screen = new HelpScreen("game", 180);
-		ScreenControl.getCtrl().addScreen("game intro", screen);
-		level = 1;
-		loadObjective(level);
-
-	}
-
-	private void loadObjective(int level) {
+	/**
+	 * starts the classMode at a given level
+	 * 
+	 * @param level
+	 */
+	private void classicMode(int level) {
 		//
 		ScreenControl ctrl = ScreenControl.getCtrl();
 
 		if (level > 1) {
 			// reset stuff
-			EntityFactory.resetGame();
+			ctrl.setScreen("game intro");
+
+			Entity.reset();
+			ComboAttack.resetCombos();
 		}
+
+		// set up generator power to level
+		Monster.setPower(level);
+		ComboAttack.setLength(1 + level);
 
 		// set the appropriate objective by level
 		switch (level) {
+
+		// basic level
 		case 1:
-			// basic level
-			screen.setText(new String[] { "Quest: Kill 5 monster" });
-			
-			map = new MapScreen(
-					new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.SINGLE_CONN_ROOMS)
-							.genMonster(1, 0.01).genShrine(0.1, 0).create());
-			objective = new Objective(Goal.MONSTER, 5);
+			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
+					LevelBuilder.Layout.SINGLE_CONN_ROOMS).genMonster(1, 0.01).genShrine(0.1, 0).create());
+			objective = new Quest(Quest.Goal.MONSTER, 3);
+
 			break;
+
+		// default level
 		case 2:
-			// default level
-			screen.setText(new String[] { "Quest completed", "Quest: Kill 30 Monster" });
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
-			objective = new Objective(Goal.MONSTER, 30);
+			objective = new Quest(Quest.Goal.MONSTER, 30);
 			break;
+
+		// deactivate portals
 		case 3:
-			// deactivate portals
-			screen.setText(new String[] { "Quest completed", "Quest: Destroy every portal" });
+			ctrl.setScreen("game intro");
+
+			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
+					LevelBuilder.Layout.MAZE_WITH_ROOMS).genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01)
+							.genPortal(1, 0).create());
+			// calculate the number of portals created
+			objective = new Quest(Quest.Goal.PORTAL, Portal.getCount());
+
+			break;
+
+		// default level
+		case 4:
+			ctrl.setScreen("game intro");
+
+			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
+					.genChest(0.2, 0.01).create());
+			objective = new Quest(Quest.Goal.MONSTER, 50);
+			break;
+
+		// boss maze
+		case 5:
 			ctrl.setScreen("game intro");
 
 			map = new MapScreen(
-					new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.MAZE_WITH_ROOMS)
-							.genMonster(2, 20).genChest(0, 10).genShrine(0, 2).genPortal(1, 0).create());
-			objective = new Objective(Goal.PORTAL, 1); // calculate the number of portals created
+					new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16, LevelBuilder.Layout.MAZE)
+							.genChest(0, 0.01).genOpponent(0, 0.005).create());
+			objective = new Quest(Quest.Goal.OPPONENT, 1);
 			break;
-		case 4:
-			// default level
-			screen.setText(new String[] { "Quest completed", "Quest: Kill 50 Monster" });
-			ctrl.setScreen("game intro");
-
-			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
-					.genChest(0.2, 0.01).create());
-			objective = new Objective(Goal.MONSTER, 50);
-			break;
-		case 5:
-			// boss maze
-			screen.setText(new String[] { "Quest completed", "Quest: Kill the BOSS" });
-			ctrl.setScreen("game intro");
-
-			map = new MapScreen(new LevelBuilder(Window.SIZE_X / 16, Window.SIZE_Y / 16 - 6, LevelBuilder.Layout.MAZE)
-					.genChest(0, 0.01).genOpponent(0, 0.005).create());
-			objective = new Objective(Goal.OPPONENT, 1);
-			break;
-		default:
-
 		}
 
 		// update game screens
+		screen.setText(new String[] { "Quest: " + objective });
 		panel = new PanelDecorator(map);
 		alert = new AlertDecorator(panel);
 		ctrl.addScreen("game", alert);
-		panel.updateProgress(objective.progress());
+
+		// update references
+		panel.updateProgress(level, objective.progress());
+	}
+
+	/**
+	 * starts the arcade mode to fight againsts bosses only
+	 * 
+	 * @param level
+	 */
+	public void arcadeMode(int level) {
+		// see issue for more information
 	}
 
 	/**
@@ -137,20 +174,20 @@ public class GameControl {
 		alert.push(string);
 	}
 
-	public void updateGoal(Goal goal) {
+	public void updateGoal(Quest.Goal goal) {
 		// update objective reference
 		objective.add(goal);
 
 		if (objective.progress() < 1) {
 			// update panel, game is going
-			panel.updateProgress(objective.progress());
+			panel.updateProgress(level, objective.progress());
 		} else {
 			// objective is reached
 			if (level == 6) {
 				ScreenControl.getCtrl().setScreen("game won");
 			} else {
 				level++;
-				loadObjective(level);
+				classicMode(level);
 			}
 		}
 	}

@@ -86,16 +86,6 @@ public class ScreenControl {
 		screen = screens.get(name);
 		Window.setScene(screen.getScene());
 
-		// FadeTransition ft = new FadeTransition(new Duration(150),
-		// screen.getScene().getRoot());
-		// ft.setFromValue(0);
-		// ft.setToValue(1);
-		// ft.play();
-		//
-		// ft.setOnFinished(e -> {
-		// ticking = true;
-		// });
-
 		screen.getScene().getRoot().setOpacity(1);
 		ticking = true;
 	}

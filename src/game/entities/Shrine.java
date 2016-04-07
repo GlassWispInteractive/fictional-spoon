@@ -1,21 +1,23 @@
-package entities;
+package game.entities;
 
-import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.GameControl;
+import game.combat.Quest;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Shrine extends Entity {
+
 	private int blocked = 0;
 	private TileFactory tileFac;
-	private Player player = (Player) EntityFactory.getFactory().getPlayer();
+	private Player player = Player.getNewest();
 
 	public Shrine(int x, int y) {
 		super(x, y);
 		delayTicks = 1500;
 		tileFac = TileFactory.getTilesFactory();
+
 	}
 
 	@Override
@@ -33,22 +35,25 @@ public class Shrine extends Entity {
 
 	@Override
 	public void tick(int ticks) {
+		if (blocked > 0) {
+			blocked -= ticks;
+			return;
+		}
+		
 		// check intersection
-		if (x == player.getX() && y == player.getY() && blocked == 0) {
+		if (intersectsWithPlayer()) {
 			// game logic
 			player.heal();
 			blocked = delayTicks;
-			
+
 			// alert
 			GameControl.getControl().alert("Player health restored");
 
 			// goal update
-			GameControl.getControl().updateGoal(Goal.SHRINE);
+			GameControl.getControl().updateGoal(Quest.Goal.SHRINE);
 		}
 
-		if (blocked > 0) {
-			blocked -= ticks;
-		}
+		
 	}
 
 }

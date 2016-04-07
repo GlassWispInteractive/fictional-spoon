@@ -1,4 +1,6 @@
-package entities;
+package game.entities;
+
+import java.util.ArrayList;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -9,12 +11,35 @@ import javafx.scene.canvas.GraphicsContext;
  *
  */
 public abstract class Entity {
+	private static ArrayList<Entity> collection = new ArrayList<>();
+	
+	// class members
 	protected int x, y;
 	protected int delayTicks;
 
 	public Entity(int x, int y) {
 		this.x = x;
 		this.y = y;
+		
+		collection.add(this);
+	}
+
+	/**
+	 * function returns every existing monster
+	 * 
+	 * @return
+	 */
+	public static Entity[] getObjects() {
+		return collection.toArray(new Entity[] {});
+	}
+
+	/**
+	 * function resets the state
+	 */
+	public static void reset() {
+		collection = new ArrayList<>();
+		
+		Portal.resetCount();
 	}
 
 	/**
@@ -59,6 +84,14 @@ public abstract class Entity {
 	 */
 	public void setY(int y) {
 		this.y = y;
+	}
+
+	protected boolean intersectsWithPlayer() {
+		return (x == Player.getNewest().getX() && y == Player.getNewest().getY());
+	}
+
+	public static void remove(Player player) {
+		collection.remove(player);
 	}
 
 }

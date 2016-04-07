@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import combat.Combo;
-import entities.EntityFactory;
+import game.entities.Chest;
+import game.entities.Monster;
+import game.entities.Opponent;
+import game.entities.Player;
+import game.entities.Portal;
+import game.entities.Shrine;
 
 /**
  * builder pattern class to generate level maps source:
@@ -38,9 +42,18 @@ public class LevelBuilder {
 	private Random rnd;
 	private Room[] rooms;
 	private int roomNum = 0;
-	private EntityFactory fac = EntityFactory.getFactory();
 	private ArrayList<int[]> floors;
 
+	/**
+	 * constuctor
+	 * 
+	 * @param n
+	 *            the width
+	 * @param m
+	 *            the height
+	 * @param layout
+	 *            the layout
+	 */
 	public LevelBuilder(int n, int m, Layout layout) {
 		n = n - (n + 1) % 2;
 		m = m - (m + 1) % 2;
@@ -61,9 +74,6 @@ public class LevelBuilder {
 
 			// gen maze with no dead ends at first
 			genFloors(ccFromAllRooms());
-			clearDeadends();
-			genFloors(ccFromAllRooms());
-			clearDeadends();
 
 			break;
 
@@ -117,6 +127,13 @@ public class LevelBuilder {
 		genPlayer();
 	}
 
+	/**
+	 * internal function which generated a random number of rooms the limit is
+	 * just an upper bound and its not expected to be reached
+	 * 
+	 * @param limit
+	 * @return
+	 */
 	private LevelBuilder genRooms(int limit) {
 		// set room flag
 		hasRooms = true;
@@ -164,7 +181,7 @@ public class LevelBuilder {
 	}
 
 	/**
-	 * helper function to check for valid room positions
+	 * helper function to check for valid room coordinates
 	 * 
 	 * @param xStart
 	 * @param yStart
@@ -276,8 +293,10 @@ public class LevelBuilder {
 	}
 
 	/**
-	 * internal function to generate a maze around the rooms this is done by a
-	 * floodfill algorithm instead of some overengineering with MST
+	 * internal function to generate a maze around the rooms
+	 * 
+	 * this is done by a floodfill algorithm instead of some overengineering
+	 * with MST
 	 * 
 	 * @return
 	 */
@@ -390,35 +409,50 @@ public class LevelBuilder {
 		Collections.shuffle(floors);
 	}
 
-	public LevelBuilder genPlayer() {
+	/**
+	 * internal function to generate the player
+	 * 
+	 * @return
+	 */
+	private LevelBuilder genPlayer() {
 		// declare int array
 		int[] newSpwan;
 
 		if (hasRooms) {
 			// make player
 			newSpwan = rooms[0].getUnusedRandomCell();
-			fac.makePlayer(newSpwan[0], newSpwan[1]);
+			new Player(newSpwan[0], newSpwan[1]);
 
 			// make two chests
 			newSpwan = rooms[0].getUnusedRandomCell();
-			fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2));
+			Chest.generate(newSpwan[0], newSpwan[1]);
 
 			newSpwan = rooms[0].getUnusedRandomCell();
-			fac.makeChest(newSpwan[0], newSpwan[1], Combo.generate(2));
+			Chest.generate(newSpwan[0], newSpwan[1]);
 
 			// make a shrine to rescue
 			newSpwan = rooms[0].getUnusedRandomCell();
-			fac.makeShrine(newSpwan[0], newSpwan[1]);
+			new Shrine(newSpwan[0], newSpwan[1]);
 		} else if (hasFloor) {
 			newSpwan = floors.get(0);
-			fac.makePlayer(newSpwan[0], newSpwan[1]);
+			new Player(newSpwan[0], newSpwan[1]);
 			floors.remove(0);
 		}
 
 		return this;
 	}
 
-	private LevelBuilder genEntity(double perRoom, double perFloor, EntityCreator creator) {
+	/**
+	 * helper function to generate entities on the map
+	 * 
+	 * the function itself is only called by other functions.
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @param creator
+	 * @return
+	 */
+	private LevelBuilder genEntity(double perRoom, double perFloor, Creatable creator) {
 		// room counter
 		int[] newSpwan;
 		double ctr = 0;
@@ -444,7 +478,7 @@ public class LevelBuilder {
 
 					// put up monster at a random room cell
 					newSpwan = rooms[j].getUnusedRandomCell();
-					creator.run(newSpwan[0], newSpwan[1]);
+					creator.generate(newSpwan[0], newSpwan[1]);
 				}
 			}
 		}
@@ -466,7 +500,7 @@ public class LevelBuilder {
 
 					// put up monster at a random floor cells
 					newSpwan = floors.get(0);
-					creator.run(newSpwan[0], newSpwan[1]);
+					creator.generate(newSpwan[0], newSpwan[1]);
 					floors.remove(0);
 				}
 			}
@@ -475,51 +509,81 @@ public class LevelBuilder {
 		return this;
 	}
 
+	/**
+	 * generate monsters in the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genMonster(double perRoom, double perFloor) {
 		return genEntity(perRoom, perFloor, (x, y) -> {
-			int used = POWER, type, powers[] = new int[] { 0, 0, 0, 0, 0 };
 
-			// monsters can be of the given power or at most 2 points higher
-			used += rnd.nextInt(3);
+			// generate monster parameter
+			// MonsterType type =
+			// MonsterType.values()[rnd.nextInt(MonsterType.values().length -
+			// 1)];
+			// int dmg = rnd.nextInt(3) + 1;
 
-			// create monster of random type
-			type = rnd.nextInt(5);
-			powers[type] = used;
-			used -= used;
-
-			// make monster at (x, y)
-			fac.makeMonster(x, y, 100, powers, "monster");
+			new Monster(x, y, map.isWalkable(x, y));
 		});
 	}
 
+	/**
+	 * generate portals in the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genPortal(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
-			fac.makePortal(x, y, "Informatiker");
+			new Portal(x, y);
 		});
 
 		return this;
 	}
 
+	/**
+	 * generate elite on the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genOpponent(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
-			fac.makeOpponent(x, y, "Informatiker");
+			Opponent.generate(x, y, map.isWalkable(x, y));
 		});
 
 		return this;
 	}
 
+	/**
+	 * generate a chest on the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genChest(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
-			int len = rnd.nextInt(3);
-			fac.makeChest(x, y, Combo.generate(2 + len));
+			Chest.generate(x, y);
 		});
 
 		return this;
 	}
 
+	/**
+	 * generate a shrine on the map
+	 * 
+	 * @param perRoom
+	 * @param perFloor
+	 * @return
+	 */
 	public LevelBuilder genShrine(double perRoom, double perFloor) {
 		genEntity(perRoom, perFloor, (x, y) -> {
-			fac.makeShrine(x, y);
+			new Shrine(x, y);
 		});
 
 		return this;
@@ -578,7 +642,7 @@ public class LevelBuilder {
 	}
 
 	/**
-	 * final method which is called to make a Map from a MapBuilder
+	 * function which is called finally to make a Map from a MapBuilder
 	 */
 	public Map create() {
 		computeTiles();

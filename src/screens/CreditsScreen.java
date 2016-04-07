@@ -1,10 +1,9 @@
 package screens;
 
+import framework.Global;
 import framework.Screen;
-import framework.Window;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class CreditsScreen extends Screen {
@@ -36,24 +35,24 @@ public class CreditsScreen extends Screen {
 		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
 
 		// font settings
-		gc.setFont(Window.HUGE_FONT);
+		gc.setFont(Global.HUGE_FONT);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BASELINE);
 		// gc.setLineWidth(1);
 
 		// Title
-		gc.setFill(Color.RED);
-		gc.setStroke(Color.RED);
-		gc.fillText(Window.TITLE, Window.SIZE_X / 2, 75);
-		gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
+		gc.setFill(Global.RED);
+		gc.setStroke(Global.RED);
+		gc.fillText(Global.TITLE, Global.WINDOW_WIDTH / 2, 75);
+		gc.strokeLine(0, 75 + 20, Global.WINDOW_WIDTH, 75 + 20);
 
 		// single elements
 		final String credits[] = new String[] { "coding by dhaunac", "coding by garax91", "tile sets by kenney.nl",
 				"element pictures from Korra" };
 
-		gc.setFont(Window.DEFAULT_FONT);
+		gc.setFont(Global.DEFAULT_FONT);
 		for (int i = 0; i < credits.length; i++) {
-			gc.fillText(credits[i], Window.SIZE_X / 2, 200 + i * 100);
+			gc.fillText(credits[i], Global.WINDOW_WIDTH / 2, 200 + i * 100);
 		}
 
 	}

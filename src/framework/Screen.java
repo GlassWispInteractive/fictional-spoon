@@ -22,11 +22,11 @@ public abstract class Screen {
 	protected Screen() {
 		// init group and scene as root of this scene
 		group = new Group();
-		scene = new Scene(group, Window.SIZE_X, Window.SIZE_Y, Paint.valueOf("#212121"));
+		scene = new Scene(group, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, Paint.valueOf("#212121"));
 
 		// create layers and extract their gc
 		layers = new HashMap<>();
-		layers.put("main", new Canvas(Window.SIZE_X, Window.SIZE_Y));
+		layers.put("main", new Canvas(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT));
 
 		gcs = new HashMap<>();
 		gcs.put("main", layers.get("main").getGraphicsContext2D());

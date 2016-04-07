@@ -1,8 +1,8 @@
-package entities.WalkStrategies;
+package game.walk_strategies;
 
 import java.awt.Point;
 
-import entities.Direction;
+import game.entities.Direction;
 import generation.Ground;
 
 public class FloorWalk extends WalkStrategy{
@@ -35,7 +35,7 @@ public class FloorWalk extends WalkStrategy{
 		    directionIndex = (++directionIndex) % Direction.values().length;
 		    
 		}
-
+		
 		return randomWalk(oldX, oldY);
 		
 	}
