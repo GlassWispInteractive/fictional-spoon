@@ -20,7 +20,6 @@ import game.entities.Player;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class CombatScreen extends Screen {
@@ -60,7 +59,6 @@ public class CombatScreen extends Screen {
 		addLayer("monster", 0, 0, Global.WINDOW_WIDTH, 300);
 		addLayer("bar", 0, Global.WINDOW_HEIGHT * 0.4, Global.WINDOW_WIDTH, 100);
 		addLayer("info", 0, Global.WINDOW_HEIGHT * 0.3, Global.WINDOW_WIDTH, 100);
-		addLayer("info2", 0, Global.WINDOW_HEIGHT * 0.85, Global.WINDOW_WIDTH, 100);
 		addLayer("combo", 0, Global.WINDOW_HEIGHT - 510, Global.WINDOW_WIDTH, 510);
 
 	}
@@ -229,10 +227,12 @@ public class CombatScreen extends Screen {
 		renderMonsters();
 		renderBar();
 		renderInfo();
-		renderPlayerInfo();
 		renderComboOverview();
 	}
 
+	/** 
+	 * render the attacks
+	 */
 	private void renderElements() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("elems");
@@ -253,8 +253,16 @@ public class CombatScreen extends Screen {
 						attackImg[markAttack].getHeight() / 3);
 			}
 		}
+		
+		// render the player name and status
+		gc.setFont(Global.DEFAULT_FONT);
+		gc.setTextBaseline(VPos.BASELINE);
+		gc.fillText(Player.getNewest().toString(), 50, 230);
 	}
 
+	/**
+	 * render the monsters
+	 */
 	private void renderMonsters() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("monster");
@@ -265,7 +273,7 @@ public class CombatScreen extends Screen {
 
 			Image image = TileFactory.getTilesFactory().getImage(enemy.getImageSource());
 
-			gc.setFill(Global.RED);
+			gc.setFill(Global.WHITE);
 			gc.fillText("no name" + " " + enemy.getLife() + " / " + enemy.getMaxLife(),
 					Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
 
@@ -273,7 +281,7 @@ public class CombatScreen extends Screen {
 			// gc.fillRect(Window.SIZE_X - 150 - i * 120, 50, 80, 80);
 
 			if (markTarget % enemies.size() == i) {
-				gc.setStroke(Global.RED);
+				gc.setStroke(Global.WHITE);
 				gc.setLineWidth(4);
 				gc.strokeRect(Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			}
@@ -302,7 +310,7 @@ public class CombatScreen extends Screen {
 		gc.strokeLine(magin + upperBound * width - 3, 5, magin + upperBound * width - 3, 35);
 
 		// small box - the progress bar
-		gc.setFill(Color.ORANGE);
+		gc.setFill(Global.ORANGE);
 		// +5 to be lower than outer rect
 		// +2 to have the left border over the delimeter
 		gc.fillRoundRect(magin, 10, status * width, 20, 20, 20);
@@ -323,7 +331,7 @@ public class CombatScreen extends Screen {
 		gc.setTextBaseline(VPos.BASELINE);
 
 		// print out current success
-		gc.setFill(Color.ORANGE);
+		gc.setFill(Global.ORANGE);
 		// gc.setLineWidth(1);
 
 		gc.fillText(info, Global.WINDOW_WIDTH / 2, 50);
@@ -332,21 +340,9 @@ public class CombatScreen extends Screen {
 
 	}
 
-	private void renderPlayerInfo() {
-		// initialize render screen
-		final GraphicsContext gc = gcs.get("info2");
-		gc.clearRect(0, 0, layers.get("info2").getWidth(), layers.get("info2").getHeight());
-
-		// font settings
-		gc.setFont(Global.DEFAULT_FONT);
-		// gc.setTextAlign(TextAlignment.CENTER);
-		gc.setTextBaseline(VPos.BASELINE);
-		gc.setFill(Color.ORANGE);
-		// gc.setLineWidth(1);
-
-		gc.fillText(Player.getNewest().toString(), 50, 50);
-	}
-
+	/**
+	 * render a legend for the learned combos
+	 */
 	private void renderComboOverview() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("combo");
@@ -389,10 +385,10 @@ public class CombatScreen extends Screen {
 
 			// only max 10 combos can be shown
 
-			gc.setStroke(Color.ORANGE);
+			gc.setStroke(Global.ORANGE);
 			gc.strokeRect(columnX, rowY, padding + width, height);
 
-			gc.setFill(Color.ORANGE);
+			gc.setFill(Global.ORANGE);
 			gc.fillText(comboNames.get(j).toString(), columnX + width / 2, rowY + height / 2 + textHeight / 4);
 
 			rowY += height;

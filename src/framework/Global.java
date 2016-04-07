@@ -29,6 +29,8 @@ public class Global {
 	public static final Color DARKGRAY = (Color) Paint.valueOf("#212121");
 	public static final Color RED = (Color) Paint.valueOf("#E62929");
 	public static final Color DARKRED = (Color) Paint.valueOf("#801B1B");;
+	public static final Color ORANGE = (Color) Paint.valueOf("#D1AC5C");
+	public static final Color GREEN = (Color) Paint.valueOf("#29E66B");
 	
 	
 	private Global() {
