@@ -1,10 +1,10 @@
-package entities;
+package game.entities;
 
-import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.GameControl;
+import game.combat.Quest;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Shrine extends Entity {
@@ -50,7 +50,7 @@ public class Shrine extends Entity {
 			GameControl.getControl().alert("Player health restored");
 
 			// goal update
-			GameControl.getControl().updateGoal(Goal.SHRINE);
+			GameControl.getControl().updateGoal(Quest.Goal.SHRINE);
 		}
 
 		

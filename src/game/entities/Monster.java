@@ -1,25 +1,23 @@
-package entities;
+package game.entities;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import framework.GameControl;
 import framework.ScreenControl;
-import combat.Goal;
-import combat.Combat;
-import combat.CombatEntity;
+import game.combat.CombatEntity;
+import game.walk_strategies.FloorWalk;
+import game.walk_strategies.HorizontalWalk;
+import game.walk_strategies.RandomWalk;
+import game.walk_strategies.RectangleWalk;
+import game.walk_strategies.VerticalWalk;
+import game.walk_strategies.WalkStrategy;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
-import entities.walk_strategies.FloorWalk;
-import entities.walk_strategies.HorizontalWalk;
-import entities.walk_strategies.RandomWalk;
-import entities.walk_strategies.RectangleWalk;
-import entities.walk_strategies.VerticalWalk;
-import entities.walk_strategies.WalkStrategy;
 import javafx.scene.canvas.GraphicsContext;
+import screens.CombatScreen;
 
 public class Monster extends CombatEntity {
 	private ImageSource[] tileType = { new ImageSource(TileSource.MONSTER_TILES, 2, 5),
@@ -139,7 +137,7 @@ public class Monster extends CombatEntity {
 
 		// game logic
 //		life = 0; // debug
-		ScreenControl.getCtrl().addScreen("combat", new Combat(new Monster[] { this }));
+		ScreenControl.getCtrl().addScreen("combat", new CombatScreen(this));
 		ScreenControl.getCtrl().setScreen("combat");
 	}
 

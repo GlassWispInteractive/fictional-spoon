@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 import com.sun.javafx.tk.Toolkit;
 
-import combat.Combo;
 import framework.EventControl;
 import framework.Global;
 import framework.Screen;
 import framework.ScreenControl;
+import game.combat.ComboAttack;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.TextAlignment;
@@ -82,7 +82,7 @@ public class ComboScreen extends Screen {
 
 		String[][] array;
 
-		ArrayList<Combo> combosInUse = new ArrayList<Combo>(Combo.getCombosInUse());
+		ArrayList<ComboAttack> combosInUse = new ArrayList<ComboAttack>(ComboAttack.getCombosInUse());
 
 		float rowNumber = 0f;
 		int columnNumber;

@@ -1,20 +1,20 @@
-package entities.walk_strategies;
+package game.walk_strategies;
 
 import java.awt.Point;
 
-import entities.Direction;
+import game.entities.Direction;
 
-public class VerticalWalk extends WalkStrategy {
+public class HorizontalWalk extends WalkStrategy{
 	
-	private int directionIndex = 0;
+	private int directionIndex = 1;
 	
-	public VerticalWalk() {
+	public HorizontalWalk() {
 		super();
 	}
-	public VerticalWalk(boolean canBeAggro) {
+	public HorizontalWalk(boolean canBeAggro) {
 		super(canBeAggro);
 	}
-	
+
 	@Override
 	public Point walkWithStrategy(int oldX, int oldY) {
 		
@@ -26,7 +26,7 @@ public class VerticalWalk extends WalkStrategy {
 		// make move
 		newPoint = dir.move(new Point(oldX, oldY));
 		
-		if(!map.isWalkableRoom(oldX, newPoint.y)){
+		if(!map.isWalkableRoom(newPoint.x, oldY)){
 			directionIndex = (directionIndex + 2) % Direction.values().length;
 		}
 		

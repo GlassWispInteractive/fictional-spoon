@@ -1,6 +1,10 @@
-package combat;
+package game.combat;
 
 public class Quest {
+	public enum Goal {
+		MONSTER, OPPONENT, CHEST, SHRINE, PORTAL, BOSS;
+	}
+
 	private Goal goal;
 	private int current, total;
 	

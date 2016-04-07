@@ -1,11 +1,11 @@
-package entities;
+package game.entities;
 
-import combat.CombatEntity;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.EventControl;
 import framework.GameControl;
+import game.combat.CombatEntity;
 import generation.Map;
 import javafx.scene.canvas.GraphicsContext;
 

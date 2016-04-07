@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
-import entities.Chest;
-import entities.Monster;
-import entities.Opponent;
-import entities.Player;
-import entities.Portal;
-import entities.Shrine;
+import game.entities.Chest;
+import game.entities.Monster;
+import game.entities.Opponent;
+import game.entities.Player;
+import game.entities.Portal;
+import game.entities.Shrine;
 
 /**
  * builder pattern class to generate level maps source:

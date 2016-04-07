@@ -1,14 +1,14 @@
-package entities;
+package game.entities;
 
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.GameControl;
+import game.combat.Quest;
 
 import java.awt.Point;
 import java.util.Random;
 
-import combat.Goal;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Portal extends Entity {
@@ -63,10 +63,10 @@ public class Portal extends Entity {
 			GameControl.getControl().alert("YKWTBI");
 
 			// goal update
-			GameControl.getControl().updateGoal(Goal.PORTAL);
+			GameControl.getControl().updateGoal(Quest.Goal.PORTAL);
 		}
 	}
-	
+
 	protected static void resetCount() {
 		count = 0;
 	}

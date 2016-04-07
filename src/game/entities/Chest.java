@@ -1,22 +1,22 @@
-package entities;
+package game.entities;
 
 import java.util.ArrayList;
 
-import combat.Combo;
-import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.GameControl;
+import game.combat.ComboAttack;
+import game.combat.Quest;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chest extends Entity {
 	private static ArrayList<Chest> collection = new ArrayList<>();;
 
-	private Combo item;
+	private ComboAttack item;
 	TileFactory tileFac;
 
-	private Chest(int x, int y, Combo combo) {
+	private Chest(int x, int y, ComboAttack combo) {
 		super(x, y);
 		this.item = combo;
 
@@ -31,7 +31,7 @@ public class Chest extends Entity {
 	 * @param spawnIsInRoom
 	 */
 	public static void generate(int x, int y) {
-		Chest obj = new Chest(x, y, new Combo());
+		Chest obj = new Chest(x, y, new ComboAttack());
 		collection.add(obj);
 	}
 
@@ -71,7 +71,7 @@ public class Chest extends Entity {
 			GameControl.getControl().alert("New combo: " + item.toString());
 
 			// goal update
-			GameControl.getControl().updateGoal(Goal.CHEST);
+			GameControl.getControl().updateGoal(Quest.Goal.CHEST);
 
 			// game logic
 			item.activate();

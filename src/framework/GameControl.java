@@ -1,11 +1,10 @@
 package framework;
 
-import combat.Combo;
-import combat.Goal;
-import combat.Quest;
-import entities.Entity;
-import entities.Monster;
-import entities.Portal;
+import game.combat.ComboAttack;
+import game.combat.Quest;
+import game.entities.Entity;
+import game.entities.Monster;
+import game.entities.Portal;
 import generation.LevelBuilder;
 import generation.Map;
 import screens.AlertDecorator;
@@ -62,7 +61,7 @@ public class GameControl {
 	public static void resetGame() {
 		// reset EntityFactory
 		Entity.reset();
-		Combo.resetCombos();
+		ComboAttack.resetCombos();
 
 		singleton = new GameControl();
 	}
@@ -81,12 +80,12 @@ public class GameControl {
 			ctrl.setScreen("game intro");
 
 			Entity.reset();
-			Combo.resetCombos();
+			ComboAttack.resetCombos();
 		}
 
 		// set up generator power to level
 		Monster.setPower(level);
-		Combo.setLength(1 + level);
+		ComboAttack.setLength(1 + level);
 
 		// set the appropriate objective by level
 		switch (level) {
@@ -95,7 +94,7 @@ public class GameControl {
 		case 1:
 			map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
 					LevelBuilder.Layout.SINGLE_CONN_ROOMS).genMonster(1, 0.01).genShrine(0.1, 0).create());
-			objective = new Quest(Goal.MONSTER, 3);
+			objective = new Quest(Quest.Goal.MONSTER, 3);
 
 			break;
 
@@ -105,7 +104,7 @@ public class GameControl {
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
-			objective = new Quest(Goal.MONSTER, 30);
+			objective = new Quest(Quest.Goal.MONSTER, 30);
 			break;
 
 		// deactivate portals
@@ -116,7 +115,7 @@ public class GameControl {
 					LevelBuilder.Layout.MAZE_WITH_ROOMS).genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01)
 							.genPortal(1, 0).create());
 			// calculate the number of portals created
-			objective = new Quest(Goal.PORTAL, Portal.getCount());
+			objective = new Quest(Quest.Goal.PORTAL, Portal.getCount());
 
 			break;
 
@@ -126,7 +125,7 @@ public class GameControl {
 
 			map = new MapScreen(new LevelBuilder(300, 200, LevelBuilder.Layout.LOOPED_ROOMS).genMonster(1.3, 0.1)
 					.genChest(0.2, 0.01).create());
-			objective = new Quest(Goal.MONSTER, 50);
+			objective = new Quest(Quest.Goal.MONSTER, 50);
 			break;
 
 		// boss maze
@@ -136,7 +135,7 @@ public class GameControl {
 			map = new MapScreen(
 					new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16, LevelBuilder.Layout.MAZE)
 							.genChest(0, 0.01).genOpponent(0, 0.005).create());
-			objective = new Quest(Goal.OPPONENT, 1);
+			objective = new Quest(Quest.Goal.OPPONENT, 1);
 			break;
 		}
 
@@ -175,7 +174,7 @@ public class GameControl {
 		alert.push(string);
 	}
 
-	public void updateGoal(Goal goal) {
+	public void updateGoal(Quest.Goal goal) {
 		// update objective reference
 		objective.add(goal);
 

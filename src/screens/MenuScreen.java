@@ -98,12 +98,12 @@ public class MenuScreen extends Screen {
 			// render box
 			gc.setFill(Global.WHITE.deriveColor(0, 1, 1, 0.5));
 			gc.setStroke(Global.WHITE.brighter().deriveColor(0, 1, 1, 0.5));
-			gc.fillRoundRect((w - 200) / 2, 150 + 90 * (i + 1), 200, 60, 60, 200);
-			gc.strokeRoundRect((w - 200) / 2, 150 + 90 * (i + 1), 200, 60, 60, 200);
+			gc.fillRoundRect((w - 200) / 2, 200 + 90 * (i + 1), 200, 60, 60, 200);
+			gc.strokeRoundRect((w - 200) / 2, 200 + 90 * (i + 1), 200, 60, 60, 200);
 
 			// render text on box
 			gc.setFill(i != cur ? Global.DARKRED : Global.DARKRED.brighter());
-			gc.fillText(list.get(i), w / 2, 150 + 90 * (i + 1) + 30);
+			gc.fillText(list.get(i), w / 2, 200 + 90 * (i + 1) + 30);
 		}
 
 	}

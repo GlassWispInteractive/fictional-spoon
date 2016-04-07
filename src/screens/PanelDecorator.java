@@ -1,9 +1,9 @@
 package screens;
 
-import entities.Player;
 import framework.Global;
 import framework.Screen;
 import framework.ScreenDecorator;
+import game.entities.Player;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

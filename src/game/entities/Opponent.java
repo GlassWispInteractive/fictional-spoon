@@ -1,23 +1,23 @@
-package entities;
+package game.entities;
 
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import combat.Goal;
 import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
-import entities.walk_strategies.FloorWalk;
-import entities.walk_strategies.HorizontalWalk;
-import entities.walk_strategies.RandomWalk;
-import entities.walk_strategies.RectangleWalk;
-import entities.walk_strategies.VerticalWalk;
-import entities.walk_strategies.WalkStrategy;
-import framework.GameControl;
+import framework.ScreenControl;
+import game.walk_strategies.FloorWalk;
+import game.walk_strategies.HorizontalWalk;
+import game.walk_strategies.RandomWalk;
+import game.walk_strategies.RectangleWalk;
+import game.walk_strategies.VerticalWalk;
+import game.walk_strategies.WalkStrategy;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import screens.CombatScreen;
 
 public class Opponent extends Entity {
 	private TileFactory tileFac = TileFactory.getTilesFactory();
@@ -30,7 +30,7 @@ public class Opponent extends Entity {
 			new RandomWalk(), new HorizontalWalk(), new VerticalWalk(), new FloorWalk(), new RectangleWalk() }));
 	private WalkStrategy currentWalkStrategy;
 
-	private ArrayList<Monster> monsterList = new ArrayList<Monster>();
+	private ArrayList<Monster> monsterList = new ArrayList<>();
 
 	public Opponent(int x, int y, boolean spawnIsInRoom) {
 		super(x, y);
@@ -51,7 +51,7 @@ public class Opponent extends Entity {
 			new Monster(x, y, spawnIsInRoom);
 		}
 	}
-	
+
 	/**
 	 * function generates a monster at a specified place
 	 * 
@@ -98,28 +98,22 @@ public class Opponent extends Entity {
 				// GameControl.getControl().alert("New combo: ");
 
 				// goal update
-				GameControl.getControl().updateGoal(Goal.OPPONENT);
+				// GameControl.getControl().updateGoal(Goal.OPPONENT);
 
 				// game logic
-				opponentDead = true; // debug
-				// ScreenControl.getCtrl().addScreen("combat", new
-				// Combat(this));
-				// ScreenControl.getCtrl().setScreen("combat");
+				ScreenControl.getCtrl().addScreen("combat", new CombatScreen(monsterList));
+				ScreenControl.getCtrl().setScreen("combat");
 			}
 
 		}
+	}
+	
+//	@Override
+	public boolean isAlive() {
+		return monsterList.size() > 0;
 	}
 
 	public ArrayList<Monster> getMonsterList() {
 		return monsterList;
 	}
-
-	public boolean isDead() {
-		return opponentDead;
-	}
-
-	public void setDead(boolean dead) {
-		this.opponentDead = dead;
-	}
-
 }

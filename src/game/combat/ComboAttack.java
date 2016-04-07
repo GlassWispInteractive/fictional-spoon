@@ -1,4 +1,4 @@
-package combat;
+package game.combat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,14 +6,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
-public class Combo {
+public class ComboAttack {
+	
+	
 	// members
-	private static HashSet<Combo> combos = new HashSet<>();
-	private static ArrayList<Element[]> all;
+	private static HashSet<ComboAttack> combos = new HashSet<>();
+	private static ArrayList<BasicAttack[]> all;
 
-	private Element[] combo;
+	private BasicAttack[] combo;
 
-	public Combo() {
+	public ComboAttack() {
 		this.combo = all.get(0);
 
 		this.setCombo(combo);
@@ -27,12 +29,12 @@ public class Combo {
 	 */
 	public static void setLength(int len) {
 		// get number of elements and permutations with repetitions
-		final int m = Element.values().length;
+		final int m = BasicAttack.values().length;
 		final int n = (int) Math.pow(m, len);
 		all = new ArrayList<>();
 
 		for (int i = 0; i < n; i++) {
-			Element[] elements = new Element[len];
+			BasicAttack[] elements = new BasicAttack[len];
 
 			// calculate the notation of the number in the m-ary numberal system
 			char[] s = Integer.toString(i, m).toCharArray();
@@ -49,7 +51,7 @@ public class Combo {
 
 			// convert char array to Combo
 			for (int j = 0; j < len; j++) {
-				elements[j] = Element.values()[s[j] - '0'];
+				elements[j] = BasicAttack.values()[s[j] - '0'];
 			}
 
 			// add next element to the list
@@ -63,14 +65,14 @@ public class Combo {
 	/**
 	 * @return the combosInUse
 	 */
-	public static HashSet<Combo> getCombosInUse() {
+	public static HashSet<ComboAttack> getCombosInUse() {
 		return combos;
 	}
 
 	/**
 	 * @return the combo
 	 */
-	public Element[] getCombo() {
+	public BasicAttack[] getCombo() {
 		return combo;
 	}
 
@@ -78,7 +80,7 @@ public class Combo {
 	 * @param combo
 	 *            the combo to set
 	 */
-	public void setCombo(Element[] combo) {
+	public void setCombo(BasicAttack[] combo) {
 		this.combo = combo;
 	}
 
@@ -95,7 +97,7 @@ public class Combo {
 
 	}
 
-	public static String toString(Element[] elements) {
+	public static String toString(BasicAttack[] elements) {
 		// write each element as the first latter
 		// toString().substring(0, 1) to get the first char
 		return Arrays.stream(elements).map(e -> "" + (1 + e.ordinal())).collect(Collectors.joining("-"));

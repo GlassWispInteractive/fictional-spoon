@@ -1,9 +1,9 @@
-package entities.walk_strategies;
+package game.walk_strategies;
 
-import entities.Direction;
-import entities.Entity;
-import entities.Player;
 import framework.GameControl;
+import game.entities.Direction;
+import game.entities.Entity;
+import game.entities.Player;
 import generation.Map;
 
 import java.awt.Point;

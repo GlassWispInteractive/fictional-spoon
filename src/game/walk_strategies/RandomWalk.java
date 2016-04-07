@@ -1,4 +1,4 @@
-package entities.walk_strategies;
+package game.walk_strategies;
 
 import java.awt.Point;
 

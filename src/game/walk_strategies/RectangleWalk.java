@@ -1,8 +1,8 @@
-package entities.walk_strategies;
+package game.walk_strategies;
 
 import java.awt.Point;
 
-import entities.Direction;
+import game.entities.Direction;
 
 public class RectangleWalk extends WalkStrategy {
 	

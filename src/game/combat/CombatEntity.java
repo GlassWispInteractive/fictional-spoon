@@ -1,6 +1,6 @@
-package combat;
+package game.combat;
 
-import entities.Entity;
+import game.entities.Entity;
 
 public abstract class CombatEntity extends Entity {
 	protected int maxLife, life, dmg;
@@ -43,10 +43,10 @@ public abstract class CombatEntity extends Entity {
 	}
 
 	/**
-	 * @return the life
+	 * @return the maxLife
 	 */
-	public int getLife() {
-		return life;
+	public int getMaxLife() {
+		return maxLife;
 	}
 
 	/**
@@ -55,6 +55,28 @@ public abstract class CombatEntity extends Entity {
 	 */
 	public void setMaxLife(int maxLife) {
 		this.maxLife = maxLife;
+	}
+
+	/**
+	 * @return the life
+	 */
+	public int getLife() {
+		return life;
+	}
+
+	/**
+	 * @param life
+	 *            the life to set
+	 */
+	public void setLife(int life) {
+		this.life = life;
+	}
+
+	/**
+	 * @return the dmg
+	 */
+	public int getDmg() {
+		return dmg;
 	}
 
 	/**

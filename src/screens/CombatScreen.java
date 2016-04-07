@@ -1,74 +1,61 @@
-package combat;
+package screens;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Iterator;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
-
 import engine.TileFactory;
-import entities.Monster;
-import entities.Opponent;
-import entities.Player;
 import framework.EventControl;
 import framework.GameControl;
 import framework.Global;
 import framework.Screen;
 import framework.ScreenControl;
+import game.combat.BasicAttack;
+import game.combat.CombatEntity;
+import game.combat.ComboAttack;
+import game.combat.Quest.Goal;
+import game.entities.Monster;
+import game.entities.Player;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class Combat extends Screen {
-	// lists
-	private String[] attacks;
-	private ArrayList<Monster> monster;
-	private Opponent opponent = null; // null = only monster
-	private Player player = Player.getNewest();
+public class CombatScreen extends Screen {
 
-	// class member
-	private int curSoul, curFocus;
-	@SuppressWarnings("unused")
-	private int curAttackRow, curAttackColum;
-	private int streakCount;
-	private ArrayList<Element> streak;
+	// vars for logic and controlling
+	private ArrayList<BasicAttack> streak;
+
+	// attributes
+	private ArrayList<Monster> enemies;
+	private int markAttack, markTarget;
 	private double status, lowerBound, upperBound;
 	private String info;
-	@SuppressWarnings("unused")
-	private CombatState combatState;
-
-	private int delayTicks = 100;
-	private int blocked = delayTicks;
-
-	// internal states
-	private enum CombatState {
-		CHOOSE_SOUL, CHOOSE_ATTACK, CHOOSE_FOCUS
-	}
 
 	// image array
-	private final Image ELEMS[] = new Image[] { new Image("/resources/elem/earth.png"),
+	private static String[] attackName = new String[] { "Earth (1)", "Fire (2)", "Air (3)", "Water (4)" };
+	private static final Image attackImg[] = new Image[] { new Image("/resources/elem/earth.png"),
 			new Image("/resources/elem/fire.png"), new Image("/resources/elem/wind.png"),
 			new Image("/resources/elem/water.png") };
 
-	public Combat(Opponent opponent) {
-		this(new ArrayList<Monster>(opponent.getMonsterList()));
-
-		this.opponent = opponent;
-	}
-
-	public Combat(Monster[] monsterArray) {
-		this(new ArrayList<Monster>(Arrays.asList(monsterArray)));
-	}
-
-	public Combat(ArrayList<Monster> monster) {
+	public CombatScreen(ArrayList<Monster> enemies) {
 		super();
 
-		// inits
-		info = "Use 1, 2, 3 or 4 to attack";
-		streak = new ArrayList<>();
+		this.info = "Use 1, 2, 3 or 4 to attack";
 
+		this.enemies = enemies;
+		this.markAttack = -1;
+		this.markTarget = 0;
+
+		this.streak = new ArrayList<>();
+		setBounds();
+
+		// enemy has one free action
+		enemyAction();
+
+		// design
 		addLayer("elems", 0, Global.WINDOW_HEIGHT * 0.65, Global.WINDOW_WIDTH, 300);
 		addLayer("monster", 0, 0, Global.WINDOW_WIDTH, 300);
 		addLayer("bar", 0, Global.WINDOW_HEIGHT * 0.4, Global.WINDOW_WIDTH, 100);
@@ -76,84 +63,67 @@ public class Combat extends Screen {
 		addLayer("info2", 0, Global.WINDOW_HEIGHT * 0.85, Global.WINDOW_WIDTH, 100);
 		addLayer("combo", 0, Global.WINDOW_HEIGHT - 510, Global.WINDOW_WIDTH, 510);
 
-		this.attacks = new String[] { "Earth (1)", "Fire (2)", "Air (3)", "Water (4)" };
+	}
 
-		this.monster = monster;
-
+	public CombatScreen(Monster enemy) {
+		this(new ArrayList<Monster>(Arrays.asList(new Monster[] { enemy })));
 	}
 
 	@Override
-	public void tick(int ticks) {
-		// SpookingSouls.getObject().tick(ticks);
-
+	protected void tick(int ticks) {
 		status = Math.min(1, status + ticks / 40.0);
-		// System.out.println(status);
 
 		EventControl e = EventControl.getEvents();
 
-		if (curFocus > monster.size() - 1) {
-			curFocus = monster.size() - 1;
+		if (markTarget > enemies.size() - 1) {
+			markTarget = enemies.size() - 1;
 		}
 
 		// arrow pressed
 		if (e.isLeft()) {
-			curFocus = (curFocus + 1) % monster.size();
+			markTarget = (markTarget + 1) % enemies.size();
 		}
 		if (e.isRight()) {
-			curFocus = (curFocus + monster.size() - 1) % monster.size();
+			markTarget = (markTarget + enemies.size() - 1) % enemies.size();
 		}
 
-		// number pressed
+		// check if a number pressed
 		if (e.isOne()) {
-			curSoul = 0;
-			attack();
+			usedAttack(0);
 		}
 
 		if (e.isTwo()) {
-			curSoul = 1;
-			attack();
+			usedAttack(1);
 		}
 
 		if (e.isThree()) {
-			curSoul = 2;
-			attack();
+			usedAttack(2);
 		}
 
 		if (e.isFour()) {
-			curSoul = 3;
-			attack();
+			usedAttack(3);
 		}
+		EventControl.getEvents().clear();
 
 		// nothing pressed
 		if (status == 1) {
-			attack();
+			failedAttack();
 		}
 
-		setBounds();
+		// delete dead monster
+		Iterator<Monster> i = enemies.iterator();
+		while (i.hasNext()) {
+			// get a monster from the iterator
+			Monster mob = i.next();
 
-		EventControl.getEvents().clear();
-
-		// check if all monsters are still alive and make smartDelete with dead
-		// monster
-		ArrayList<Monster> dyingMonster = new ArrayList<Monster>();
-		for (Monster mon : monster) {
-			if (!mon.isAlive()) {
-				dyingMonster.add(mon);
+			// finally delete if from list
+			if (!mob.isAlive()) {
+				i.remove();
 			}
 		}
-		// soft delete
-		for (Monster dyingMon : dyingMonster) {
-			monster.remove(dyingMon);
-		}
-		dyingMonster.clear();
 
-		// check, if alive monster exists
-		if (monster.size() == 0) {
-			// opponent dead
-			if (opponent != null) {
-				opponent.setDead(true);
-			}
-
+		// check if all enemies are killed
+		if (enemies.size() == 0) {
 			// goal update
 			GameControl.getControl().updateGoal(Goal.MONSTER);
 
@@ -161,34 +131,67 @@ public class Combat extends Screen {
 			ScreenControl.getCtrl().removeScreen("combat");
 			ScreenControl.getCtrl().setScreen("game");
 		}
+	}
 
-		if (!player.isAlive()) {
-			ScreenControl.getCtrl().setScreen("game over");
+	/**
+	 * enemies attack the player
+	 */
+	private void enemyAction() {
+		// enemies attack the players
+		for (CombatEntity attackMonster : enemies) {
+			attackMonster.attack(Player.getNewest());
 		}
 
-		// let all monster attack
-		if (blocked < 0) {
-			blocked = delayTicks - 1;
-
-			for (Monster attackMonster : monster) {
-				attackMonster.attack(player);
-			}
-		} else {
-			blocked--;
+		// check if the player die
+		if (!Player.getNewest().isAlive()) {
+			ScreenControl.getCtrl().setScreen("game over");
 		}
 	}
 
+	private void usedAttack(int id) {
+		if (status < lowerBound || status > upperBound) {
+			failedAttack();
+		}
+
+		// set visuals
+		markAttack = id;
+		streak.add(BasicAttack.values()[markAttack]);
+		info = "current hit streak: " + ComboAttack.toString(streak.toArray(new BasicAttack[] {}));
+
+		// execute attack
+		Player.getNewest().attack(enemies.get(markTarget));
+		evalStreakForCombo();
+
+		// reset bar
+		setBounds();
+	}
+
+	private void failedAttack() {
+		markAttack = -1;
+		streak.clear();
+		info = "miss";
+
+		// player gets attacked now
+		enemyAction();
+
+		// reset bar
+		setBounds();
+	}
+
 	private void setBounds() {
-		if (streakCount <= 1) {
+		// set status to 0
+		status = 0;
+
+		if (streak.size() <= 1) {
 			lowerBound = 0.5;
 			upperBound = 0.9;
-		} else if (streakCount <= 4) {
+		} else if (streak.size() <= 4) {
 			lowerBound = 0.6;
 			upperBound = 0.8;
-		} else if (streakCount <= 7) {
+		} else if (streak.size() <= 7) {
 			lowerBound = 0.65;
 			upperBound = 0.75;
-		} else if (streakCount <= 9) {
+		} else if (streak.size() <= 9) {
 			lowerBound = 0.68;
 			upperBound = 0.75;
 		} else {
@@ -197,61 +200,30 @@ public class Combat extends Screen {
 		}
 	}
 
-	public int getCurSoul() {
-		return curSoul;
-	}
+	private void evalStreakForCombo() {
+		for (ComboAttack combo : ComboAttack.getCombosInUse()) {
+			BasicAttack[] elements = combo.getCombo();
+			if (streak.size() >= elements.length) {
 
-	private void attack() {
-		// check whether timing is fine
-		if (status > lowerBound && status < upperBound) {
-			streakCount++;
-
-			streak.add(Element.values()[curSoul]);
-			info = "current hit streak: " + Combo.toString(streak.toArray(new Element[] {}));
-
-			player.attack(monster.get(curFocus));
-		} else {
-			// adjust level
-			streakCount = 0;
-
-			//
-			streak.clear();
-			info = "miss";
-
-		}
-
-		eval(streak.toArray(new Element[] {}));
-
-		// reset bar progress
-		status = 0;
-	}
-
-	private void eval(Element[] streakElem) {
-
-		for (Combo combo : Combo.getCombosInUse()) {
-			Element[] elements = combo.getCombo();
-			if (streakElem.length >= elements.length) {
 				for (int i = 1; i <= elements.length; i++) {
-					if (elements[elements.length - i] != streakElem[streakElem.length - i]) {
+					if (elements[elements.length - i] != streak.get(streak.size() - i)) {
 						break;
 					}
 					if (i == elements.length) {
 						info = "Combo completed!";
-						player.attack(monster.get(curFocus), elements.length);
+						Player.getNewest().attack(enemies.get(markTarget), elements.length);
 						streak.clear();
 					}
 				}
 			}
 		}
-
 	}
 
+	@Override
 	public void render() {
 		// start from clean screen
 		GraphicsContext gc = gcs.get("main");
 		gc.clearRect(0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
-
-		// SpookingSouls.getObject().render(gc);
 
 		renderElements();
 		renderMonsters();
@@ -266,18 +238,19 @@ public class Combat extends Screen {
 		final GraphicsContext gc = gcs.get("elems");
 		gc.clearRect(0, 0, layers.get("elems").getWidth(), layers.get("elems").getHeight());
 
-		for (int i = 0; i < attacks.length; i++) {
+		for (int i = 0; i < attackName.length; i++) {
 			gc.setFill(Global.WHITE);
-			gc.fillText(attacks[i], 80 + i * 180, 25, 80);
+			gc.fillText(attackName[i], 80 + i * 180, 25, 80);
 
-			gc.drawImage(ELEMS[i], 50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
+			gc.drawImage(attackImg[i], 50 + i * 180, 50, attackImg[i].getWidth() / 3, attackImg[i].getHeight() / 3);
 
 			// gc.fillRect(50 + i*120, height * 0.65, 80, 80);
 
-			if (curSoul == i && streakCount > 0) {
+			if (markAttack >= 0) {
 				gc.setStroke(Global.WHITE);
 				gc.setLineWidth(3);
-				gc.strokeRect(50 + i * 180, 50, ELEMS[i].getWidth() / 3, ELEMS[i].getHeight() / 3);
+				gc.strokeRect(50 + markAttack * 180, 50, attackImg[markAttack].getWidth() / 3,
+						attackImg[markAttack].getHeight() / 3);
 			}
 		}
 	}
@@ -287,18 +260,19 @@ public class Combat extends Screen {
 		final GraphicsContext gc = gcs.get("monster");
 		gc.clearRect(0, 0, layers.get("monster").getWidth(), layers.get("monster").getHeight());
 
-		for (int i = 0; i < monster.size(); i++) {
+		for (int i = 0; i < enemies.size(); i++) {
+			Monster enemy = enemies.get(i);
 
-			Image image = TileFactory.getTilesFactory().getImage(monster.get(i).getImageSource());
+			Image image = TileFactory.getTilesFactory().getImage(enemy.getImageSource());
 
 			gc.setFill(Global.RED);
-			gc.fillText(monster.get(i).getName() + " " + monster.get(i).getHpInfo(),
+			gc.fillText("no name" + " " + enemy.getLife() + " / " + enemy.getMaxLife(),
 					Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
 
 			gc.drawImage(image, Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
 			// gc.fillRect(Window.SIZE_X - 150 - i * 120, 50, 80, 80);
 
-			if (curFocus % monster.size() == i) {
+			if (markTarget % enemies.size() == i) {
 				gc.setStroke(Global.RED);
 				gc.setLineWidth(4);
 				gc.strokeRect(Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
@@ -307,31 +281,37 @@ public class Combat extends Screen {
 
 	}
 
+	/**
+	 * render the progress bar
+	 */
 	private void renderBar() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("bar");
 		gc.clearRect(0, 0, layers.get("bar").getWidth(), layers.get("bar").getHeight());
 
-		// fancy line at 40%
-		gc.setLineWidth(3);
-		gc.setStroke(Color.GREY);
-		gc.strokeRoundRect(100, 5, Global.WINDOW_WIDTH - 200, 30, 30, 30);
+		// settings
+		final int magin = 110, width = Global.WINDOW_WIDTH - 2 * magin;
 
-		// progress bar
+		// big box
+		gc.setLineWidth(3);
+		gc.setStroke(Global.WHITE.darker());
+		gc.strokeRoundRect(magin - 10, 5, width + 20, 30, 30, 30);
+
+		// draw the delimters
+		gc.strokeLine(magin + lowerBound * width - 3, 5, magin + lowerBound * width - 3, 35);
+		gc.strokeLine(magin + upperBound * width - 3, 5, magin + upperBound * width - 3, 35);
+
+		// small box - the progress bar
 		gc.setFill(Color.ORANGE);
 		// +5 to be lower than outer rect
 		// +2 to have the left border over the delimeter
-		gc.fillRoundRect(110, 10, status * (Global.WINDOW_WIDTH - 220) + 2, 20, 20, 20);
+		gc.fillRoundRect(magin, 10, status * width, 20, 20, 20);
 
-		// draw the delimters
-		gc.setStroke(Global.DARKGRAY.brighter());
-		gc.strokePolyline(new double[] { 110 + lowerBound * (Global.WINDOW_WIDTH - 220),
-				110 + lowerBound * (Global.WINDOW_WIDTH - 220) }, new double[] { 5, 35 }, 2);
-
-		gc.strokePolyline(new double[] { 110 + upperBound * (Global.WINDOW_WIDTH - 220),
-				110 + upperBound * (Global.WINDOW_WIDTH - 220) }, new double[] { 5, 35 }, 2);
 	}
 
+	/**
+	 * render the info label above the progress bar
+	 */
 	private void renderInfo() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("info");
@@ -364,7 +344,7 @@ public class Combat extends Screen {
 		gc.setFill(Color.ORANGE);
 		// gc.setLineWidth(1);
 
-		gc.fillText(player.toString(), 50, 50);
+		gc.fillText(Player.getNewest().toString(), 50, 50);
 	}
 
 	private void renderComboOverview() {
@@ -380,10 +360,10 @@ public class Combat extends Screen {
 
 		ArrayList<String> comboNames = new ArrayList<String>();
 		comboNames.add("Combos:");
-		for (Combo combo : Combo.getCombosInUse()) {
+		for (ComboAttack combo : ComboAttack.getCombosInUse()) {
 			comboNames.add(combo.toString());
 		}
-		if (Combo.getCombosInUse().size() == 0) {
+		if (ComboAttack.getCombosInUse().size() == 0) {
 			comboNames.clear();
 			comboNames.add("No Combos");
 		}
@@ -405,10 +385,9 @@ public class Combat extends Screen {
 		int rowY = (int) (layers.get("combo").getHeight() - height * Math.min(9, comboNames.size()) - padding);
 		int columnX = (int) (layers.get("combo").getWidth() - width - 2 * padding);
 
-		for (int j = 0; j < Math.min(9, comboNames.size()); j++) { // only max
-																	// 10 combos
-																	// can be
-																	// shown
+		for (int j = 0; j < Math.min(9, comboNames.size()); j++) {
+
+			// only max 10 combos can be shown
 
 			gc.setStroke(Color.ORANGE);
 			gc.strokeRect(columnX, rowY, padding + width, height);
