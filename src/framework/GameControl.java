@@ -80,7 +80,7 @@ public class GameControl {
 			ctrl.setScreen("game intro");
 
 			Entity.reset();
-			
+
 			ComboAttack.resetCombos();
 		}
 

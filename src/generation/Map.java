@@ -22,7 +22,7 @@ public class Map {
 		for (int i = 0; i < n; i++) {
 			tileNumber[i] = new int[m];
 			for (int j = 0; j < m; j++) {
-//				tileNumber[i] = new int[m][n];
+				// tileNumber[i] = new int[m][n];
 				map[i][j] = new Cell(i, j);
 				map[i][j].setGround(WALL);
 			}
@@ -99,12 +99,13 @@ public class Map {
 		if (x < 0 || x >= n || y < 0 || y >= m) {
 			return -1;
 		}
-		
+
 		return tileNumber[x][y];
 	}
 
 	/**
-	 * @param tileNumber the tileNumber to set
+	 * @param tileNumber
+	 *            the tileNumber to set
 	 */
 	public void setTileNumber(int x, int y, int tile) {
 		if (x < 0 || x >= n || y < 0 || y >= m) {
@@ -133,7 +134,7 @@ public class Map {
 	public boolean isWalkable(int x, int y) {
 		return getGround(x, y) != WALL && getGround(x, y) != ERROR;
 	}
-	
+
 	public boolean isWalkableRoom(int x, int y) {
 		return getGround(x, y) == ROOM && getGround(x, y) != ERROR;
 	}

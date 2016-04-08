@@ -17,7 +17,8 @@ public class PanelDecorator extends ScreenDecorator {
 		super(decoratedScreen);
 
 		addLayer("top panel", 0, 0, Global.WINDOW_WIDTH, 3 * 16);
-		addLayer("bottom panel", 0, Global.WINDOW_HEIGHT - Global.PANEL_HEIGHT, Global.WINDOW_WIDTH, Global.PANEL_HEIGHT);
+		addLayer("bottom panel", 0, Global.WINDOW_HEIGHT - Global.PANEL_HEIGHT, Global.WINDOW_WIDTH,
+				Global.PANEL_HEIGHT);
 		progress = 0;
 	}
 
@@ -74,7 +75,8 @@ public class PanelDecorator extends ScreenDecorator {
 		gc.setLineWidth(2);
 		gc.setStroke(Global.WHITE);
 		for (int i = 5; i < 100; i += 5) {
-			gc.strokeLine(250 + i / 100.0 * (Global.WINDOW_WIDTH - 300), 5, 250 + i / 100.0 * (Global.WINDOW_WIDTH - 300), 35);
+			gc.strokeLine(250 + i / 100.0 * (Global.WINDOW_WIDTH - 300), 5,
+					250 + i / 100.0 * (Global.WINDOW_WIDTH - 300), 35);
 		}
 	}
 

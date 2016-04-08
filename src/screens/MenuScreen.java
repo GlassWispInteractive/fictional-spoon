@@ -55,15 +55,15 @@ public class MenuScreen extends Screen {
 			case "Classic Mode":
 				ScreenControl.getCtrl().setScreen("game intro");
 				break;
-				
+
 			case "Credits":
 				ScreenControl.getCtrl().setScreen("credits");
 				break;
-				
+
 			case "Help":
 				ScreenControl.getCtrl().setScreen("help");
 				break;
-				
+
 			case "Exit":
 				System.exit(0);
 				break;

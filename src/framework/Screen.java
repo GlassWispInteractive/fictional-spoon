@@ -63,7 +63,7 @@ public abstract class Screen {
 		layers.put(name, layer);
 		gcs.put(name, layer.getGraphicsContext2D());
 	}
-	
+
 	public Scene getScene() {
 		return scene;
 	}

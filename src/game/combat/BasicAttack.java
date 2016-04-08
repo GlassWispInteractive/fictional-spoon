@@ -1,8 +1,5 @@
 package game.combat;
 
 public enum BasicAttack {
-	EARTH,
-	FIRE,
-	AIR,
-	WATER
+	EARTH, FIRE, AIR, WATER
 }

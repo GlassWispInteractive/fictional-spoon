@@ -7,9 +7,10 @@ public class Quest {
 
 	private Goal goal;
 	private int current, total;
-	
+
 	/**
 	 * constructs a new quest
+	 * 
 	 * @param goal
 	 * @param total
 	 */
@@ -18,9 +19,10 @@ public class Quest {
 		current = 0;
 		this.total = total;
 	}
-	
+
 	/**
 	 * adds a point towards the quest
+	 * 
 	 * @param goal
 	 */
 	public void add(Goal goal) {
@@ -28,17 +30,17 @@ public class Quest {
 			current += 1;
 		}
 	}
-	
+
 	/**
-	 * calculates the progress
-	 * 0 <= progess <= 1
+	 * calculates the progress 0 <= progess <= 1
+	 * 
 	 * @return
 	 */
 	public double progress() {
 		// calculate the progess
 		return (double) current / total;
 	}
-	
+
 	@Override
 	public String toString() {
 		switch (goal) {
@@ -55,7 +57,7 @@ public class Quest {
 		case SHRINE:
 			return "Activate " + total + " shrines";
 		}
-		
+
 		return "";
 	}
 }

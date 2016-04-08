@@ -133,10 +133,10 @@ public class Monster extends CombatEntity {
 	private void startCombat() {
 		// goal update
 		// moved to Combat class - stays here for debugging
-//		GameControl.getControl().updateGoal(Goal.MONSTER);
+		// GameControl.getControl().updateGoal(Goal.MONSTER);
 
 		// game logic
-//		life = 0; // debug
+		// life = 0; // debug
 		ScreenControl.getCtrl().addScreen("combat", new CombatScreen(this));
 		ScreenControl.getCtrl().setScreen("combat");
 	}

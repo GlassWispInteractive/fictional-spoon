@@ -12,7 +12,7 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public abstract class Entity {
 	private static ArrayList<Entity> collection = new ArrayList<>();
-	
+
 	// class members
 	protected int x, y;
 	protected int delayTicks;
@@ -20,7 +20,7 @@ public abstract class Entity {
 	public Entity(int x, int y) {
 		this.x = x;
 		this.y = y;
-		
+
 		collection.add(this);
 	}
 
@@ -38,7 +38,7 @@ public abstract class Entity {
 	 */
 	public static void reset() {
 		collection = new ArrayList<>();
-		
+
 		Portal.resetCount();
 	}
 

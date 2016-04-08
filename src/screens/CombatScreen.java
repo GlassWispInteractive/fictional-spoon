@@ -230,7 +230,7 @@ public class CombatScreen extends Screen {
 		renderComboOverview();
 	}
 
-	/** 
+	/**
 	 * render the attacks
 	 */
 	private void renderElements() {
@@ -253,7 +253,7 @@ public class CombatScreen extends Screen {
 						attackImg[markAttack].getHeight() / 3);
 			}
 		}
-		
+
 		// render the player name and status
 		gc.setFont(Global.DEFAULT_FONT);
 		gc.setTextBaseline(VPos.BASELINE);

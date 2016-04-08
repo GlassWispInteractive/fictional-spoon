@@ -7,8 +7,7 @@ import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class ComboAttack {
-	
-	
+
 	// members
 	private static HashSet<ComboAttack> combos = new HashSet<>();
 	private static ArrayList<BasicAttack[]> all;

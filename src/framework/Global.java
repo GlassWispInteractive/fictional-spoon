@@ -12,7 +12,7 @@ public class Global {
 	// sizes
 	public static final int WINDOW_WIDTH = 1200;
 	public static final int WINDOW_HEIGHT = 800;
-	
+
 	private final static int TILE_SIZE = 16;
 	public final static int PANEL_HEIGHT = 3 * TILE_SIZE;
 	public final static int GAME_WIDTH = WINDOW_WIDTH;
@@ -31,8 +31,7 @@ public class Global {
 	public static final Color DARKRED = (Color) Paint.valueOf("#801B1B");;
 	public static final Color ORANGE = (Color) Paint.valueOf("#D1AC5C");
 	public static final Color GREEN = (Color) Paint.valueOf("#29E66B");
-	
-	
+
 	private Global() {
 		throw new AssertionError();
 	}

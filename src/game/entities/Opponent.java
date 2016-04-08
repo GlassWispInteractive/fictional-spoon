@@ -107,8 +107,8 @@ public class Opponent extends Entity {
 
 		}
 	}
-	
-//	@Override
+
+	// @Override
 	public boolean isAlive() {
 		return monsterList.size() > 0;
 	}

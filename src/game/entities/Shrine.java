@@ -39,7 +39,7 @@ public class Shrine extends Entity {
 			blocked -= ticks;
 			return;
 		}
-		
+
 		// check intersection
 		if (intersectsWithPlayer()) {
 			// game logic
@@ -53,7 +53,6 @@ public class Shrine extends Entity {
 			GameControl.getControl().updateGoal(Quest.Goal.SHRINE);
 		}
 
-		
 	}
 
 }

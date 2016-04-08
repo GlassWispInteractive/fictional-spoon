@@ -17,7 +17,7 @@ public class Room {
 
 		// generate random cells
 		this.randomCells = new ArrayList<>();
-		
+
 		for (int x = 0; x < xLen; x++) {
 			for (int y = 0; y < yLen; y++) {
 				this.randomCells.add(new int[] { xStart + x, yStart + y });

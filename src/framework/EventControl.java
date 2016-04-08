@@ -57,6 +57,7 @@ public class EventControl {
 	public boolean isC() {
 		return input.contains("C");
 	}
+
 	public boolean isQ() {
 		return input.contains("Q");
 	}
