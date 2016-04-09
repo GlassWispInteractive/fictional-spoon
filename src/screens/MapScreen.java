@@ -11,10 +11,7 @@ import game.entities.Entity;
 import game.entities.Player;
 import generation.Ground;
 import generation.Map;
-import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.ImageView;
-import javafx.scene.shape.Rectangle;
 
 public class MapScreen extends Screen {
     
@@ -34,11 +31,12 @@ public class MapScreen extends Screen {
         
         this.map = map;
         
+        // set layout
+        addCanvas("map", 0, 0, size * map.getN(), size * map.getM());
+        addCanvas("entities", 0, Global.PANEL_HEIGHT, Global.GAME_WIDTH, Global.GAME_HEIGHT);
+        
         // render the map prior every other rendering and keep it cached
         prerenderMap();
-        
-        // set layout
-        addCanvas("entities", 0, Global.PANEL_HEIGHT, Global.GAME_WIDTH, Global.GAME_HEIGHT);
         
         // load factories
         tileFac = TileFactory.getTilesFactory();
@@ -164,28 +162,25 @@ public class MapScreen extends Screen {
      */
     private void prerenderMap() {
         // initialize render screen
-        Group tilemap = new Group();
-        group.getChildren().clear();
-        group.getChildren().add(tilemap);
-        nodes.put("map", tilemap);
-        
+        final GraphicsContext gc = gcs.get("map");
+        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         // full rendering of the map
         for (int x = 0; x < map.getN(); x++) {
             for (int y = 0; y < map.getM(); y++) {
                 if (map.getGround(x, y) != Ground.WALL) {
-                    int tile = 20 + 57 * 12 + map.getTileNumber(x, y);
-                    ImageView img = new ImageView(
-                            tileFac.getImage(TileSource.MAP_TILES, tile % 57, tile / 57));
-                    tilemap.getChildren().add(img);
-                    img.relocate(size * x, size * y);
-                } else {
-                    Rectangle rec = new Rectangle(size, size);
-                    rec.setFill(Global.DARKGRAY);
-                    tilemap.getChildren().add(rec);
-                    rec.relocate(size * x, size * y);
+                    final int tile = 20 + 57 * 12 + map.getTileNumber(x, y);
+                    
+                    // draw tile image
+                    gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, tile % 57, tile / 57), x * size, y * size);
                 }
             }
         }
+        
+        // // initialize render screen
+        // Group tilemap = new Group();
+        // group.getChildren().clear();
+        // group.getChildren().add(tilemap);
+        // nodes.put("map", tilemap);
     }
     
     /**
@@ -203,33 +198,5 @@ public class MapScreen extends Screen {
         
         // render player
         Player.getNewest().render(gc, size, cameraX, cameraY);
-    }
-    
-    /**
-     * helper function to draw tiles onto the gc object
-     * 
-     * @param gc
-     * @param x
-     * @param y
-     * @param ground
-     * @param tile
-     */
-    private void drawTile(GraphicsContext gc, int x, int y, Ground ground, int tile) {
-        
-        // offset in tile set
-        if (ground == Ground.FLOOR)
-            tile += 20 + 57 * 12;
-        if (ground == Ground.ROOM)
-            tile += 20 + 57 * 12;// +-7
-            
-        // System.out.println(tileFac);
-        // System.out.println(gc);
-        // System.out.println(imgsource);
-        // System.out.println(x);
-        // System.out.println(y);
-        // System.out.println(size);
-        // System.out.println();
-        
-        tileFac.drawTile(gc, TileSource.MAP_TILES, tile % 57, tile / 57, x, y, size);
     }
 }

@@ -67,9 +67,9 @@ public class Opponent extends Entity {
         if (opponentDead) {
             gc.setFill(Color.RED);
             gc.fillRect((x - offsetX) * size, (y - offsetY) * size, size, size);
-            tileFac.drawTile(gc, TileSource.CHAR_TILES, 0, 11, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.CHAR_TILES, 0, 11), size *(x - offsetX), size *(y - offsetY));
         } else {
-            tileFac.drawTile(gc, TileSource.CHAR_TILES, 0, 11, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.CHAR_TILES, 0, 11), size *(x - offsetX), size *(y - offsetY));
         }
     }
     

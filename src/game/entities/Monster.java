@@ -91,9 +91,9 @@ public class Monster extends CombatEntity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (!isAlive()) {
-            tileFac.drawTile(gc, TileSource.MONSTER_TILES, 0, 7, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.MONSTER_TILES, 0, 7), size * (x - offsetX), size *(y - offsetY));
         } else {
-            tileFac.drawTile(gc, TileSource.MONSTER_TILES, 1, 8, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.MONSTER_TILES, 1, 8), size * (x - offsetX), size *(y - offsetY));
         }
     }
     

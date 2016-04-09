@@ -23,9 +23,9 @@ public class Shrine extends Entity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (blocked == 0) {
-            tileFac.drawTile(gc, TileSource.MAP_TILES, 43, 10, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 43, 10), size *(x - offsetX), size *(y - offsetY));
         } else {
-            tileFac.drawTile(gc, TileSource.MAP_TILES, 41, 10, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 41, 10), size *(x - offsetX), size *(y - offsetY));
         }
         
     }

@@ -34,9 +34,9 @@ public class Portal extends Entity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (destroyed) {
-            tileFac.drawTile(gc, TileSource.MAP_TILES, 44, 9, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 44, 9), size *(x - offsetX), size *(y - offsetY));
         } else {
-            tileFac.drawTile(gc, TileSource.MAP_TILES, 40, 9, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 40, 9), size *(x - offsetX), size *(y - offsetY));
         }
     }
     

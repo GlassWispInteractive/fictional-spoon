@@ -36,7 +36,7 @@ public class Player extends CombatEntity {
     
     @Override
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-        tileFac.drawTile(gc, TileSource.CHAR_TILES, 0, 8, (x - offsetX), (y - offsetY), size);
+        gc.drawImage(tileFac.getImage(TileSource.CHAR_TILES, 0, 8), size *(x - offsetX), size *(y - offsetY));
     }
     
     @Override

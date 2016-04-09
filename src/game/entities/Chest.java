@@ -54,9 +54,9 @@ public class Chest extends Entity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (item == null) {
-            tileFac.drawTile(gc, TileSource.MAP_TILES, 15, 7, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 15, 7), size *(x - offsetX), size *(y - offsetY));
         } else {
-            tileFac.drawTile(gc, TileSource.MAP_TILES, 14, 6, (x - offsetX), (y - offsetY), size);
+            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 14, 6), size *(x - offsetX), size *(y - offsetY));
         }
     }
     
