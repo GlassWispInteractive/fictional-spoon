@@ -1,6 +1,5 @@
 package screens;
 
-import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.EventControl;
@@ -176,7 +175,7 @@ public class MapScreen extends Screen {
                 if (map.getGround(x, y) != Ground.WALL) {
                     int tile = 20 + 57 * 12 + map.getTileNumber(x, y);
                     ImageView img = new ImageView(
-                            tileFac.getImage(new ImageSource(TileSource.MAP_TILES, tile % 57, tile / 57)));
+                            tileFac.getImage(TileSource.MAP_TILES, tile % 57, tile / 57));
                     tilemap.getChildren().add(img);
                     img.relocate(size * x, size * y);
                 } else {
@@ -223,8 +222,6 @@ public class MapScreen extends Screen {
         if (ground == Ground.ROOM)
             tile += 20 + 57 * 12;// +-7
             
-        ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, tile % 57, tile / 57);
-        
         // System.out.println(tileFac);
         // System.out.println(gc);
         // System.out.println(imgsource);
@@ -233,6 +230,6 @@ public class MapScreen extends Screen {
         // System.out.println(size);
         // System.out.println();
         
-        tileFac.drawTile(gc, imgsource, x, y, size);
+        tileFac.drawTile(gc, TileSource.MAP_TILES, tile % 57, tile / 57, x, y, size);
     }
 }

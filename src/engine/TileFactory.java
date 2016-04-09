@@ -54,40 +54,17 @@ public class TileFactory {
      * @param tileY
      *            , choose tile with coordinate (starting at 0, 0)
      */
-    public void drawTile(GraphicsContext gc, ImageSource imgSource, int x, int y, int size) {
-        
-        if (subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()] == null) {
-            
-            loadImageSource(imgSource);
-        }
-        
-        gc.drawImage(subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()], x * size,
-                y * size);
+    public void drawTile(GraphicsContext gc, TileSource source, int tileX, int tileY, int x, int y, int size) {
+        Image img = getImage(source, tileX, tileY);
+        gc.drawImage(img, x * size, y * size);
     }
     
-    public Image getImage(ImageSource imgSource) {
-        
-        Image source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
-        
-        if (source == null) {
-            loadImageSource(imgSource);
-        }
-        
-        return subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
-        
-    }
-    
-    
-    private void loadImageSource(ImageSource imgSource) {
-        
-        TileSource source = TileSource.values()[imgSource.getTileSourceOrdinal()];
-        
+    public Image getImage(TileSource source, int tileX, int tileY) {
         PixelReader reader = source.getImage().getPixelReader();
-        WritableImage newImage = new WritableImage(reader,
-                (source.getTileWidth() + source.getMargin()) * imgSource.getTileX(),
-                (source.getTileHeight() + source.getMargin()) * imgSource.getTileY(), source.getTileWidth(),
-                source.getTileHeight());
+        WritableImage newImage = new WritableImage(reader, (source.getTileWidth() + source.getMargin()) * tileX,
+                (source.getTileHeight() + source.getMargin()) * tileY, source.getTileWidth(), source.getTileHeight());
                 
-        subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()] = newImage;
+        return newImage;
+        
     }
 }

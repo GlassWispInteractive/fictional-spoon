@@ -2,7 +2,6 @@ package game.entities;
 
 import java.util.ArrayList;
 
-import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.GameControl;
@@ -55,11 +54,9 @@ public class Chest extends Entity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (item == null) {
-            ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 15, 7);
-            tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
+            tileFac.drawTile(gc, TileSource.MAP_TILES, 15, 7, (x - offsetX), (y - offsetY), size);
         } else {
-            ImageSource imgsource = new ImageSource(TileSource.MAP_TILES, 14, 6);
-            tileFac.drawTile(gc, imgsource, (x - offsetX), (y - offsetY), size);
+            tileFac.drawTile(gc, TileSource.MAP_TILES, 14, 6, (x - offsetX), (y - offsetY), size);
         }
     }
     

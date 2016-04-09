@@ -271,12 +271,12 @@ public class CombatScreen extends Screen {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         for (int i = 0; i < enemies.size(); i++) {
-            Monster enemy = enemies.get(i);
+            Monster monster = enemies.get(i);
             
-            Image image = TileFactory.getTilesFactory().getImage(enemy.getImageSource());
+            Image image = monster.getImage();
             
             gc.setFill(Global.WHITE);
-            gc.fillText("no name" + " " + enemy.getLife() + " / " + enemy.getMaxLife(),
+            gc.fillText("no name" + " " + monster.getLife() + " / " + monster.getMaxLife(),
                     Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
                     
             gc.drawImage(image, Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);

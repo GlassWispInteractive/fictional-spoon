@@ -1,6 +1,5 @@
 package game.entities;
 
-import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.EventControl;
@@ -37,9 +36,7 @@ public class Player extends CombatEntity {
     
     @Override
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-        
-        ImageSource imgSource = new ImageSource(TileSource.CHAR_TILES, 0, 8);
-        tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
+        tileFac.drawTile(gc, TileSource.CHAR_TILES, 0, 8, (x - offsetX), (y - offsetY), size);
     }
     
     @Override

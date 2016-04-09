@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.ScreenControl;
@@ -21,7 +20,6 @@ import screens.CombatScreen;
 
 public class Opponent extends Entity {
     private TileFactory tileFac = TileFactory.getTilesFactory();
-    private ImageSource imgSource = new ImageSource(TileSource.CHAR_TILES, 0, 11);
     private int blocked = 0;
     private boolean opponentDead = false;
     Random rnd = new Random();
@@ -69,9 +67,9 @@ public class Opponent extends Entity {
         if (opponentDead) {
             gc.setFill(Color.RED);
             gc.fillRect((x - offsetX) * size, (y - offsetY) * size, size, size);
-            tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
+            tileFac.drawTile(gc, TileSource.CHAR_TILES, 0, 11, (x - offsetX), (y - offsetY), size);
         } else {
-            tileFac.drawTile(gc, imgSource, (x - offsetX), (y - offsetY), size);
+            tileFac.drawTile(gc, TileSource.CHAR_TILES, 0, 11, (x - offsetX), (y - offsetY), size);
         }
     }
     

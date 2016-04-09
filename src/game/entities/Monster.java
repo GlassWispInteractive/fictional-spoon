@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import engine.ImageSource;
 import engine.TileFactory;
 import engine.TileSource;
 import framework.ScreenControl;
@@ -17,14 +16,18 @@ import game.walk_strategies.RectangleWalk;
 import game.walk_strategies.VerticalWalk;
 import game.walk_strategies.WalkStrategy;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import screens.CombatScreen;
 
 public class Monster extends CombatEntity {
-    private ImageSource[] tileType = { new ImageSource(TileSource.MONSTER_TILES, 2, 5),
-            new ImageSource(TileSource.MONSTER_TILES, 0, 5), new ImageSource(TileSource.MONSTER_TILES, 0, 1),
-            new ImageSource(TileSource.MONSTER_TILES, 5, 4), new ImageSource(TileSource.MONSTER_TILES, 1, 8),
-            new ImageSource(TileSource.MONSTER_TILES, 0, 7) };
-            
+    // TileSource.MONSTER_TILES, 2, 5
+    // TileSource.MONSTER_TILES, 0, 5
+    // TileSource.MONSTER_TILES, 0, 1
+    // TileSource.MONSTER_TILES, 5, 4
+    // TileSource.MONSTER_TILES, 1, 8
+    // TileSource.MONSTER_TILES, 0, 7
+    // TileSource.MONSTER_TILES, 2, 7 --- NEW
+    
     public enum MonsterType {
         EARTH, FIRE, AIR, WATER, MYSTIC
     };
@@ -88,9 +91,9 @@ public class Monster extends CombatEntity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (!isAlive()) {
-            tileFac.drawTile(gc, tileType[tileType.length - 1], (x - offsetX), (y - offsetY), size);
+            tileFac.drawTile(gc, TileSource.MONSTER_TILES, 0, 7, (x - offsetX), (y - offsetY), size);
         } else {
-            tileFac.drawTile(gc, tileType[type.ordinal()], (x - offsetX), (y - offsetY), size);
+            tileFac.drawTile(gc, TileSource.MONSTER_TILES, 1, 8, (x - offsetX), (y - offsetY), size);
         }
     }
     
@@ -141,7 +144,7 @@ public class Monster extends CombatEntity {
         ScreenControl.getCtrl().setScreen("combat");
     }
     
-    public ImageSource getImageSource() {
-        return tileType[type.ordinal()];
+    public Image getImage() {
+        return tileFac.getImage(TileSource.MONSTER_TILES, 1, 8);
     }
 }
