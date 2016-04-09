@@ -30,7 +30,7 @@ public class ComboScreen extends Screen {
 	public void render() {
 		// start from clean screen
 		final GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// font settings
 		gc.setFont(Global.DEFAULT_FONT);

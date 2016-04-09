@@ -16,8 +16,8 @@ public class PanelDecorator extends ScreenDecorator {
 	public PanelDecorator(Screen decoratedScreen) {
 		super(decoratedScreen);
 
-		addLayer("top panel", 0, 0, Global.WINDOW_WIDTH, 3 * 16);
-		addLayer("bottom panel", 0, Global.WINDOW_HEIGHT - Global.PANEL_HEIGHT, Global.WINDOW_WIDTH,
+		addCanvas("top panel", 0, 0, Global.WINDOW_WIDTH, 3 * 16);
+		addCanvas("bottom panel", 0, Global.WINDOW_HEIGHT - Global.PANEL_HEIGHT, Global.WINDOW_WIDTH,
 				Global.PANEL_HEIGHT);
 		progress = 0;
 	}
@@ -47,13 +47,13 @@ public class PanelDecorator extends ScreenDecorator {
 	private void renderTopPanel() {
 		// clear screen
 		GraphicsContext gc = gcs.get("top panel");
-		gc.clearRect(0, 0, layers.get("top panel").getWidth(), layers.get("top panel").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// draw background
 		gc.setFill(Global.DARKGRAY);
-		gc.fillRect(0, 0, layers.get("top panel").getWidth(), layers.get("top panel").getHeight());
+		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setFill(Global.WHITE);
-		gc.fillRect(0, Global.PANEL_HEIGHT - 5, layers.get("top panel").getWidth(), 2);
+		gc.fillRect(0, Global.PANEL_HEIGHT - 5, gc.getCanvas().getWidth(), 2);
 
 		// print out label
 		gc.setFont(Global.DEFAULT_FONT);
@@ -83,13 +83,13 @@ public class PanelDecorator extends ScreenDecorator {
 	private void renderBottomPanel() {
 		// clear screen
 		GraphicsContext gc = gcs.get("bottom panel");
-		gc.clearRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// draw background
 		gc.setFill(Global.DARKGRAY);
-		gc.fillRect(0, 0, layers.get("bottom panel").getWidth(), layers.get("bottom panel").getHeight());
+		gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 		gc.setFill(Global.WHITE);
-		gc.fillRect(0, 5, layers.get("bottom panel").getWidth(), 2);
+		gc.fillRect(0, 5, gc.getCanvas().getWidth(), 2);
 
 		// font settings
 		gc.setFont(Global.DEFAULT_FONT);

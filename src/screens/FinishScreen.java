@@ -66,7 +66,7 @@ public class FinishScreen extends Screen {
 
 		// start from clean screen
 		GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// font settings
 		gc.setFont(Global.HUGE_FONT);

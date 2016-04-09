@@ -79,7 +79,7 @@ public class MenuScreen extends Screen {
 	public void render() {
 		// start from clean screen
 		final GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// canvas settings
 		final double w = gc.getCanvas().getWidth();

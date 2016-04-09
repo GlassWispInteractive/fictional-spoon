@@ -26,7 +26,7 @@ public class AlertDecorator extends ScreenDecorator {
 		// inits
 		super(decoratedScreen);
 
-		addLayer("alert", 0, Global.WINDOW_HEIGHT / 2 - 50, Global.WINDOW_WIDTH, 100);
+		addCanvas("alert", 0, Global.WINDOW_HEIGHT / 2 - 50, Global.WINDOW_WIDTH, 100);
 		alerts = new LinkedList<>();
 	}
 
@@ -52,7 +52,7 @@ public class AlertDecorator extends ScreenDecorator {
 
 		// clear screen
 		GraphicsContext gc = gcs.get("alert");
-		gc.clearRect(0, 0, layers.get("alert").getWidth(), layers.get("alert").getHeight());
+		gc.clearRect(0, 0, gcs.get("alert").getCanvas().getWidth(), gcs.get("alert").getCanvas().getHeight());
 
 		// dont render if the alert should not be viewed
 		if (remainingTicks <= 0) {
@@ -67,7 +67,7 @@ public class AlertDecorator extends ScreenDecorator {
 
 		// render text with alpha opcity
 		gc.setFill(Color.RED.deriveColor(0, 1.2, 1, alpha));
-		gc.fillText(alert, layers.get("alert").getWidth() / 2, 50);
+		gc.fillText(alert, gcs.get("alert").getCanvas().getWidth() / 2, 50);
 	}
 
 	public void push(String alert) {
