@@ -2,7 +2,6 @@ package engine;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 
@@ -66,19 +65,6 @@ public class TileFactory {
                 y * size);
     }
     
-    public Image scale(ImageSource imgSource, int scaling) {
-        
-        Image source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
-        
-        if (source == null) {
-            loadImageSource(imgSource);
-        }
-        
-        source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
-        
-        return scale(imgSource, (int) source.getWidth() * scaling, (int) source.getHeight() * scaling);
-    }
-    
     public Image getImage(ImageSource imgSource) {
         
         Image source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
@@ -91,22 +77,6 @@ public class TileFactory {
         
     }
     
-    public Image scale(ImageSource imgSource, int newWidth, int newHeight) {
-        
-        Image source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
-        
-        if (source == null) {
-            loadImageSource(imgSource);
-        }
-        
-        source = subTiles[imgSource.getTileSourceOrdinal()][imgSource.getTileX()][imgSource.getTileY()];
-        
-        ImageView imageView = new ImageView(source);
-        imageView.setPreserveRatio(true);
-        imageView.setFitWidth(newWidth);
-        imageView.setFitHeight(newHeight);
-        return imageView.snapshot(null, null);
-    }
     
     private void loadImageSource(ImageSource imgSource) {
         
