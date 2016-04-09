@@ -15,7 +15,6 @@ import generation.Map;
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class MapScreen extends Screen {
@@ -66,6 +65,7 @@ public class MapScreen extends Screen {
      * 
      * @param ticks
      */
+    @Override
     public void tick(int ticks) {
         Player.getNewest().tick(ticks);
         
