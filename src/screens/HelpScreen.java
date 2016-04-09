@@ -47,7 +47,7 @@ public class HelpScreen extends Screen {
 	protected void render() {
 		// start from clean screen
 		GraphicsContext gc = gcs.get("main");
-		gc.clearRect(0, 0, layers.get("main").getWidth(), layers.get("main").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// font settings
 		gc.setFont(Global.HUGE_FONT);

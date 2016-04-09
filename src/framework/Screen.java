@@ -3,11 +3,11 @@ package framework;
 import java.util.HashMap;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
 
 public abstract class Screen {
 	// singleton object
@@ -16,22 +16,23 @@ public abstract class Screen {
 	// class members
 	protected Group group;
 	protected Scene scene;
-	protected HashMap<String, Canvas> layers;
+	protected HashMap<String, Node> nodes;
 	protected HashMap<String, GraphicsContext> gcs;
 
 	protected Screen() {
 		// init group and scene as root of this scene
 		group = new Group();
-		scene = new Scene(group, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, Paint.valueOf("#212121"));
+		scene = new Scene(group, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, Global.DARKGRAY);
 
 		// create layers and extract their gc
-		layers = new HashMap<>();
-		layers.put("main", new Canvas(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT));
+		Canvas canvas = new Canvas(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
+		nodes = new HashMap<>();
+		nodes.put("main", canvas);
 
 		gcs = new HashMap<>();
-		gcs.put("main", layers.get("main").getGraphicsContext2D());
+		gcs.put("main", canvas.getGraphicsContext2D());
 
-		group.getChildren().add(layers.get("main"));
+		group.getChildren().add(nodes.get("main"));
 	}
 
 	/**
@@ -39,13 +40,13 @@ public abstract class Screen {
 	 * 
 	 * @param layer
 	 */
-	protected void addLayer(String name, double x, double y, double w, double h) {
+	protected void addCanvas(String name, double x, double y, double w, double h) {
 		Canvas layer = new Canvas(w, h);
 		group.getChildren().add(layer);
 		layer.relocate(x, y);
 
 		// update hash maps
-		layers.put(name, layer);
+		nodes.put(name, layer);
 		gcs.put(name, layer.getGraphicsContext2D());
 	}
 
@@ -60,7 +61,7 @@ public abstract class Screen {
 		layer.relocate(x, y);
 
 		// update hash maps
-		layers.put(name, layer);
+		nodes.put(name, layer);
 		gcs.put(name, layer.getGraphicsContext2D());
 	}
 

@@ -25,7 +25,7 @@ public class SoulsDecorator extends ScreenDecorator {
 			souls.add(new double[] { 100 + x, 100 + y });
 		}
 
-		addLayer("souls", 0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
+		addCanvas("souls", 0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
 	}
 
 	public void tick(int ticks) {
@@ -60,7 +60,7 @@ public class SoulsDecorator extends ScreenDecorator {
 
 		// render souls
 		GraphicsContext gc = gcs.get("souls");
-		gc.clearRect(0, 0, layers.get("souls").getWidth(), layers.get("souls").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// render background souls
 		for (double[] soul : souls) {

@@ -7,7 +7,7 @@ public abstract class ScreenDecorator extends Screen {
 		this.decoratedScreen = decoratedScreen;
 		group = decoratedScreen.group;
 		scene = decoratedScreen.scene;
-		layers = decoratedScreen.layers;
+		nodes = decoratedScreen.nodes;
 		gcs = decoratedScreen.gcs;
 	}
 

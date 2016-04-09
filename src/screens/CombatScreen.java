@@ -55,11 +55,11 @@ public class CombatScreen extends Screen {
 		enemyAction();
 
 		// design
-		addLayer("elems", 0, Global.WINDOW_HEIGHT * 0.65, Global.WINDOW_WIDTH, 300);
-		addLayer("monster", 0, 0, Global.WINDOW_WIDTH, 300);
-		addLayer("bar", 0, Global.WINDOW_HEIGHT * 0.4, Global.WINDOW_WIDTH, 100);
-		addLayer("info", 0, Global.WINDOW_HEIGHT * 0.3, Global.WINDOW_WIDTH, 100);
-		addLayer("combo", 0, Global.WINDOW_HEIGHT - 510, Global.WINDOW_WIDTH, 510);
+		addCanvas("elems", 0, Global.WINDOW_HEIGHT * 0.65, Global.WINDOW_WIDTH, 300);
+		addCanvas("monster", 0, 0, Global.WINDOW_WIDTH, 300);
+		addCanvas("bar", 0, Global.WINDOW_HEIGHT * 0.4, Global.WINDOW_WIDTH, 100);
+		addCanvas("info", 0, Global.WINDOW_HEIGHT * 0.3, Global.WINDOW_WIDTH, 100);
+		addCanvas("combo", 0, Global.WINDOW_HEIGHT - 510, Global.WINDOW_WIDTH, 510);
 
 	}
 
@@ -236,7 +236,7 @@ public class CombatScreen extends Screen {
 	private void renderElements() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("elems");
-		gc.clearRect(0, 0, layers.get("elems").getWidth(), layers.get("elems").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		for (int i = 0; i < attackName.length; i++) {
 			gc.setFill(Global.WHITE);
@@ -266,7 +266,7 @@ public class CombatScreen extends Screen {
 	private void renderMonsters() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("monster");
-		gc.clearRect(0, 0, layers.get("monster").getWidth(), layers.get("monster").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		for (int i = 0; i < enemies.size(); i++) {
 			Monster enemy = enemies.get(i);
@@ -295,7 +295,7 @@ public class CombatScreen extends Screen {
 	private void renderBar() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("bar");
-		gc.clearRect(0, 0, layers.get("bar").getWidth(), layers.get("bar").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// settings
 		final int magin = 110, width = Global.WINDOW_WIDTH - 2 * magin;
@@ -323,7 +323,7 @@ public class CombatScreen extends Screen {
 	private void renderInfo() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("info");
-		gc.clearRect(0, 0, layers.get("info").getWidth(), layers.get("info").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// font settings
 		gc.setFont(Global.DEFAULT_FONT);
@@ -346,7 +346,7 @@ public class CombatScreen extends Screen {
 	private void renderComboOverview() {
 		// initialize render screen
 		final GraphicsContext gc = gcs.get("combo");
-		gc.clearRect(0, 0, layers.get("combo").getWidth(), layers.get("combo").getHeight());
+		gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
 
 		// font settings
 		gc.setFont(Global.DEFAULT_FONT);
@@ -378,8 +378,8 @@ public class CombatScreen extends Screen {
 		int padding = 10;
 		int width = textWidth + 2 * padding;
 		int height = (int) (1.5 * textHeight);
-		int rowY = (int) (layers.get("combo").getHeight() - height * Math.min(9, comboNames.size()) - padding);
-		int columnX = (int) (layers.get("combo").getWidth() - width - 2 * padding);
+		int rowY = (int) (gc.getCanvas().getHeight() - height * Math.min(9, comboNames.size()) - padding);
+		int columnX = (int) (gc.getCanvas().getWidth() - width - 2 * padding);
 
 		for (int j = 0; j < Math.min(9, comboNames.size()); j++) {
 
