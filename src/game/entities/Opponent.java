@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import engine.TileFactory;
-import engine.TileSource;
+import engine.TileMaster;
 import framework.ScreenControl;
 import game.walk_strategies.FloorWalk;
 import game.walk_strategies.HorizontalWalk;
@@ -19,7 +18,7 @@ import javafx.scene.paint.Color;
 import screens.CombatScreen;
 
 public class Opponent extends Entity {
-    private TileFactory tileFac = TileFactory.getTilesFactory();
+    private TileMaster tileFac = TileMaster.getInstance();
     private int blocked = 0;
     private boolean opponentDead = false;
     Random rnd = new Random();
@@ -67,9 +66,9 @@ public class Opponent extends Entity {
         if (opponentDead) {
             gc.setFill(Color.RED);
             gc.fillRect((x - offsetX) * size, (y - offsetY) * size, size, size);
-            gc.drawImage(tileFac.getImage(TileSource.CHAR_TILES, 0, 11), size *(x - offsetX), size *(y - offsetY));
+            gc.drawImage(tileFac.getTile("char", 0, 11), size *(x - offsetX), size *(y - offsetY));
         } else {
-            gc.drawImage(tileFac.getImage(TileSource.CHAR_TILES, 0, 11), size *(x - offsetX), size *(y - offsetY));
+            gc.drawImage(tileFac.getTile("char", 0, 11), size *(x - offsetX), size *(y - offsetY));
         }
     }
     

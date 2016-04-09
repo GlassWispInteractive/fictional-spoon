@@ -37,7 +37,7 @@ public class MenuScreen extends Screen {
         // init
         setList(new String[] { "Classic Mode", "Arcade Mode", "Credits", "Help", "Exit" });
         
-        logo = new Image("/resources/graphics/logo.png");
+        logo = new Image("/resources/elem/logo.png");
     }
     
     @Override

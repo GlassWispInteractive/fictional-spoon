@@ -7,7 +7,6 @@ import java.util.Iterator;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 
-import engine.TileFactory;
 import framework.EventControl;
 import framework.GameControl;
 import framework.Global;

@@ -2,8 +2,7 @@ package game.entities;
 
 import java.util.ArrayList;
 
-import engine.TileFactory;
-import engine.TileSource;
+import engine.TileMaster;
 import framework.GameControl;
 import game.combat.ComboAttack;
 import game.combat.Quest;
@@ -13,13 +12,13 @@ public class Chest extends Entity {
     private static ArrayList<Chest> collection = new ArrayList<>();;
     
     private ComboAttack item;
-    TileFactory tileFac;
+    TileMaster tileFac;
     
     private Chest(int x, int y, ComboAttack combo) {
         super(x, y);
         this.item = combo;
         
-        tileFac = TileFactory.getTilesFactory();
+        tileFac = TileMaster.getInstance();
     }
     
     /**
@@ -54,9 +53,9 @@ public class Chest extends Entity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (item == null) {
-            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 15, 7), size *(x - offsetX), size *(y - offsetY));
+            gc.drawImage(tileFac.getTile("map", 15, 7), size *(x - offsetX), size *(y - offsetY));
         } else {
-            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 14, 6), size *(x - offsetX), size *(y - offsetY));
+            gc.drawImage(tileFac.getTile("map", 14, 6), size *(x - offsetX), size *(y - offsetY));
         }
     }
     

@@ -3,8 +3,7 @@ package game.entities;
 import java.awt.Point;
 import java.util.Random;
 
-import engine.TileFactory;
-import engine.TileSource;
+import engine.TileMaster;
 import framework.GameControl;
 import game.combat.Quest;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,7 +12,7 @@ public class Portal extends Entity {
     private static int count = 0;
     
     private Random rnd = new Random();
-    private TileFactory tileFac = TileFactory.getTilesFactory();
+    private TileMaster tileFac = TileMaster.getInstance();
     // private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 23,
     // 7); //alternative
     // private ImageSource imgSource = new ImageSource(TileSource.MAP_TILES, 36,
@@ -34,9 +33,9 @@ public class Portal extends Entity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (destroyed) {
-            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 44, 9), size *(x - offsetX), size *(y - offsetY));
+            gc.drawImage(tileFac.getTile("map", 44, 9), size *(x - offsetX), size *(y - offsetY));
         } else {
-            gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, 40, 9), size *(x - offsetX), size *(y - offsetY));
+            gc.drawImage(tileFac.getTile("map", 40, 9), size *(x - offsetX), size *(y - offsetY));
         }
     }
     

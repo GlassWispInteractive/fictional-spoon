@@ -1,7 +1,6 @@
 package screens;
 
-import engine.TileFactory;
-import engine.TileSource;
+import engine.TileMaster;
 import framework.EventControl;
 import framework.GameControl;
 import framework.Global;
@@ -20,7 +19,7 @@ public class MapScreen extends Screen {
     
     // class components
     private Map map;
-    private TileFactory tileFac = TileFactory.getTilesFactory();;
+    private TileMaster tileFac = TileMaster.getInstance();;
     
     // variables
     private int cameraX, cameraY, cameraSizeX, cameraSizeY;
@@ -39,7 +38,7 @@ public class MapScreen extends Screen {
         prerenderMap();
         
         // load factories
-        tileFac = TileFactory.getTilesFactory();
+        tileFac = TileMaster.getInstance();
         
         // set view size and be sure to be smaller than the map
         cameraSizeX = Math.min(Global.GAME_WIDTH / size, map.getN());
@@ -171,12 +170,12 @@ public class MapScreen extends Screen {
                     final int tile = 20 + 57 * 12 + map.getTileNumber(x, y);
                     
                     // draw tile image
-                    gc.drawImage(tileFac.getImage(TileSource.MAP_TILES, tile % 57, tile / 57), x * size, y * size);
+                    gc.drawImage(tileFac.getTile("map", tile % 57, tile / 57), x * size, y * size);
                 }
             }
         }
         
-        // // initialize render screen
+         // initialize render screen
         // Group tilemap = new Group();
         // group.getChildren().clear();
         // group.getChildren().add(tilemap);

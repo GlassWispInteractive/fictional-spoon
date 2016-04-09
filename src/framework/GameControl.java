@@ -31,7 +31,7 @@ public class GameControl {
         // settings
         screen = new HelpScreen("game", 180);
         ScreenControl.getCtrl().addScreen("game intro", screen);
-        level = 1;
+        level = 2;
         classicMode(level);
         
     }

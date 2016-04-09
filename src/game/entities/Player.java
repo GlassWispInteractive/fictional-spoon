@@ -1,7 +1,6 @@
 package game.entities;
 
-import engine.TileFactory;
-import engine.TileSource;
+import engine.TileMaster;
 import framework.EventControl;
 import framework.GameControl;
 import game.combat.CombatEntity;
@@ -16,7 +15,7 @@ public class Player extends CombatEntity {
     // for speed
     private int blocked = 0;
     
-    TileFactory tileFac;
+    TileMaster tileFac;
     
     public Player(int x, int y) {
         super(x, y, 15, 1);
@@ -25,7 +24,7 @@ public class Player extends CombatEntity {
         this.delayTicks = 4;
         
         // set references - not in entity list
-        tileFac = TileFactory.getTilesFactory();
+        tileFac = TileMaster.getInstance();
         newestInstance = this;
         Entity.remove(this);
     }
@@ -36,7 +35,7 @@ public class Player extends CombatEntity {
     
     @Override
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-        gc.drawImage(tileFac.getImage(TileSource.CHAR_TILES, 0, 8), size *(x - offsetX), size *(y - offsetY));
+        gc.drawImage(tileFac.getTile("char", 0, 8), size *(x - offsetX), size *(y - offsetY));
     }
     
     @Override

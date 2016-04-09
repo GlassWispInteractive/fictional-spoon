@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import engine.TileFactory;
-import engine.TileSource;
+import engine.TileMaster;
 import framework.ScreenControl;
 import game.combat.CombatEntity;
 import game.walk_strategies.FloorWalk;
@@ -33,7 +32,7 @@ public class Monster extends CombatEntity {
     };
     
     // class members
-    private static TileFactory tileFac = TileFactory.getTilesFactory();
+    private static TileMaster tileFac = TileMaster.getInstance();
     private static int level;
     
     // object
@@ -91,9 +90,9 @@ public class Monster extends CombatEntity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (!isAlive()) {
-            gc.drawImage(tileFac.getImage(TileSource.MONSTER_TILES, 0, 7), size * (x - offsetX), size *(y - offsetY));
+            gc.drawImage(tileFac.getTile("creatures", 0, 7), size * (x - offsetX), size *(y - offsetY));
         } else {
-            gc.drawImage(tileFac.getImage(TileSource.MONSTER_TILES, 1, 8), size * (x - offsetX), size *(y - offsetY));
+            gc.drawImage(tileFac.getTile("creatures", 1, 8), size * (x - offsetX), size *(y - offsetY));
         }
     }
     
@@ -145,6 +144,6 @@ public class Monster extends CombatEntity {
     }
     
     public Image getImage() {
-        return tileFac.getImage(TileSource.MONSTER_TILES, 1, 8);
+        return tileFac.getTile("creatures", 1, 8);
     }
 }
