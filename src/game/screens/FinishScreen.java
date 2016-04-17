@@ -6,7 +6,7 @@ import java.util.Arrays;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 
-import core.Context;
+import core.Global;
 import core.Events;
 import game.control.GameControl;
 import game.control.Screen;
@@ -68,7 +68,7 @@ public class FinishScreen extends Screen {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // font settings
-        gc.setFont(Context.HUGE_FONT);
+        gc.setFont(Global.HUGE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.BASELINE);
         // gc.setLineWidth(1);
@@ -76,13 +76,13 @@ public class FinishScreen extends Screen {
         // SpookingSouls.getObject().render(gc);
         
         // Game Over
-        gc.setFill(Context.RED);
-        gc.fillText(finish ? won : lost, Context.WINDOW_WIDTH / 2, Context.WINDOW_HEIGHT / 2);
+        gc.setFill(Global.RED);
+        gc.fillText(finish ? won : lost, Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT / 2);
         
         // List
         // calc textLength
         
-        gc.setFont(Context.DEFAULT_FONT);
+        gc.setFont(Global.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         gc.setLineWidth(1);
@@ -100,21 +100,21 @@ public class FinishScreen extends Screen {
         int padding = 10;
         int width = textWidth + 6 * padding;
         int height = (int) (1.5 * textHeight);
-        int rowY = (int) (Context.WINDOW_HEIGHT * 0.8);
-        int columnX = Context.WINDOW_WIDTH / 2 - list.size() * width / 2;
+        int rowY = (int) (Global.WINDOW_HEIGHT * 0.8);
+        int columnX = Global.WINDOW_WIDTH / 2 - list.size() * width / 2;
         
         for (int j = 0; j < Math.min(10, list.size()); j++) {
             
-            gc.setFill(Context.DARKGRAY.deriveColor(0, 1.2, 1, 0.6));
-            gc.setStroke(Context.DARKGRAY);
+            gc.setFill(Global.DARKGRAY.deriveColor(0, 1.2, 1, 0.6));
+            gc.setStroke(Global.DARKGRAY);
             gc.fillRoundRect(columnX + padding, rowY, width - padding, height, 60, 200);
             
             if (j != cur) {
-                gc.setFill(Context.DARKRED.deriveColor(0, 1.2, 1, 0.6));
-                gc.setStroke(Context.DARKRED);
+                gc.setFill(Global.DARKRED.deriveColor(0, 1.2, 1, 0.6));
+                gc.setStroke(Global.DARKRED);
             } else {
-                gc.setFill(Context.RED.deriveColor(0, 1.2, 1, 0.6));
-                gc.setStroke(Context.RED);
+                gc.setFill(Global.RED.deriveColor(0, 1.2, 1, 0.6));
+                gc.setStroke(Global.RED);
             }
             
             gc.fillText(list.get(j).toString(), columnX + width / 2, rowY + height / 2);

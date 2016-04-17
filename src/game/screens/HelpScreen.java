@@ -1,6 +1,6 @@
 package game.screens;
 
-import core.Context;
+import core.Global;
 import core.Events;
 import game.control.Screen;
 import game.control.ScreenControl;
@@ -50,16 +50,16 @@ public class HelpScreen extends Screen {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // font settings
-        gc.setFont(Context.HUGE_FONT);
+        gc.setFont(Global.HUGE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.BASELINE);
         // gc.setLineWidth(1);
         
         // text
-        gc.setFill(Context.RED);
-        gc.setStroke(Context.RED);
+        gc.setFill(Global.RED);
+        gc.setStroke(Global.RED);
         
-        gc.fillText(text[index], Context.WINDOW_WIDTH / 2, Context.WINDOW_HEIGHT * 0.4);
+        gc.fillText(text[index], Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT * 0.4);
         // gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
         
         // gc.setFont(Window.DEFAULT_FONT);

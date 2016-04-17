@@ -5,7 +5,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class Context {
+public class Global {
 	// game title
 	public static final String TITLE = "fictional spoon";
 
@@ -32,7 +32,7 @@ public class Context {
 	public static final Color ORANGE = (Color) Paint.valueOf("#D1AC5C");
 	public static final Color GREEN = (Color) Paint.valueOf("#29E66B");
 
-	private Context() {
+	private Global() {
 		throw new AssertionError("no objects of this class available");
 	}
 

@@ -1,6 +1,6 @@
 package game.screens;
 
-import core.Context;
+import core.Global;
 import game.control.Screen;
 import game.control.ScreenDecorator;
 import game.entities.Player;
@@ -16,9 +16,9 @@ public class PanelDecorator extends ScreenDecorator {
     public PanelDecorator(Screen decoratedScreen) {
         super(decoratedScreen);
         
-        addCanvas("top panel", 0, 0, Context.WINDOW_WIDTH, 3 * 16);
-        addCanvas("bottom panel", 0, Context.WINDOW_HEIGHT - Context.PANEL_HEIGHT, Context.WINDOW_WIDTH,
-                Context.PANEL_HEIGHT);
+        addCanvas("top panel", 0, 0, Global.WINDOW_WIDTH, 3 * 16);
+        addCanvas("bottom panel", 0, Global.WINDOW_HEIGHT - Global.PANEL_HEIGHT, Global.WINDOW_WIDTH,
+                Global.PANEL_HEIGHT);
         progress = 0;
     }
     
@@ -50,33 +50,33 @@ public class PanelDecorator extends ScreenDecorator {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // draw background
-        gc.setFill(Context.DARKGRAY);
+        gc.setFill(Global.DARKGRAY);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(Context.WHITE);
-        gc.fillRect(0, Context.PANEL_HEIGHT - 5, gc.getCanvas().getWidth(), 2);
+        gc.setFill(Global.WHITE);
+        gc.fillRect(0, Global.PANEL_HEIGHT - 5, gc.getCanvas().getWidth(), 2);
         
         // print out label
-        gc.setFont(Context.DEFAULT_FONT);
+        gc.setFont(Global.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
-        gc.fillText("quest progress", 125, -5 + (Context.PANEL_HEIGHT - 5) / 2);
+        gc.fillText("quest progress", 125, -5 + (Global.PANEL_HEIGHT - 5) / 2);
         
         // draw objective progress
         gc.setLineWidth(3);
-        gc.setStroke(Context.WHITE);
-        gc.strokeRect(250, 5, Context.WINDOW_WIDTH - 300, 30);
+        gc.setStroke(Global.WHITE);
+        gc.strokeRect(250, 5, Global.WINDOW_WIDTH - 300, 30);
         
         // progress bar
         gc.setFill(Color.DARKGREEN.deriveColor(1, progress, 2, 1));
-        gc.fillRect(250, 10, progress * (Context.WINDOW_WIDTH - 300), 20);
+        gc.fillRect(250, 10, progress * (Global.WINDOW_WIDTH - 300), 20);
         
         // draw the delimters each 5 percents
         // use ints, because of double problems with exact numbers
         gc.setLineWidth(2);
-        gc.setStroke(Context.WHITE);
+        gc.setStroke(Global.WHITE);
         for (int i = 5; i < 100; i += 5) {
-            gc.strokeLine(250 + i / 100.0 * (Context.WINDOW_WIDTH - 300), 5,
-                    250 + i / 100.0 * (Context.WINDOW_WIDTH - 300), 35);
+            gc.strokeLine(250 + i / 100.0 * (Global.WINDOW_WIDTH - 300), 5,
+                    250 + i / 100.0 * (Global.WINDOW_WIDTH - 300), 35);
         }
     }
     
@@ -86,21 +86,21 @@ public class PanelDecorator extends ScreenDecorator {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // draw background
-        gc.setFill(Context.DARKGRAY);
+        gc.setFill(Global.DARKGRAY);
         gc.fillRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        gc.setFill(Context.WHITE);
+        gc.setFill(Global.WHITE);
         gc.fillRect(0, 5, gc.getCanvas().getWidth(), 2);
         
         // font settings
-        gc.setFont(Context.DEFAULT_FONT);
+        gc.setFont(Global.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         
         // print out text boxes
-        gc.fillText("level " + level, Context.GAME_WIDTH * .2, 5 + (Context.PANEL_HEIGHT - 5) / 2);
-        gc.fillText(life + " life", Context.GAME_WIDTH * .4, 5 + (Context.PANEL_HEIGHT - 5) / 2);
-        gc.fillText("combos (C)", Context.GAME_WIDTH * .6, 5 + (Context.PANEL_HEIGHT - 5) / 2);
-        gc.fillText("quest (Q)", Context.GAME_WIDTH * .8, 5 + (Context.PANEL_HEIGHT - 5) / 2);
+        gc.fillText("level " + level, Global.GAME_WIDTH * .2, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+        gc.fillText(life + " life", Global.GAME_WIDTH * .4, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+        gc.fillText("combos (C)", Global.GAME_WIDTH * .6, 5 + (Global.PANEL_HEIGHT - 5) / 2);
+        gc.fillText("quest (Q)", Global.GAME_WIDTH * .8, 5 + (Global.PANEL_HEIGHT - 5) / 2);
     }
     
 }

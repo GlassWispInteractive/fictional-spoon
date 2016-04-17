@@ -1,6 +1,6 @@
 package game.screens;
 
-import core.Context;
+import core.Global;
 import core.Events;
 import core.Tiles;
 import game.control.GameControl;
@@ -31,15 +31,15 @@ public class MapScreen extends Screen {
         
         // set layout
         addCanvas("map", 0, 0, size * map.getN(), size * map.getM());
-        addCanvas("entities", 0, Context.PANEL_HEIGHT, Context.GAME_WIDTH, Context.GAME_HEIGHT);
+        addCanvas("entities", 0, Global.PANEL_HEIGHT, Global.GAME_WIDTH, Global.GAME_HEIGHT);
         
         // render the map prior every other rendering and keep it cached
         prerenderMap();
         
         
         // set view size and be sure to be smaller than the map
-        cameraSizeX = Math.min(Context.GAME_WIDTH / size, map.getN());
-        cameraSizeY = Math.min(Context.GAME_HEIGHT / size, map.getM());
+        cameraSizeX = Math.min(Global.GAME_WIDTH / size, map.getN());
+        cameraSizeY = Math.min(Global.GAME_HEIGHT / size, map.getM());
         
         // set view
         Entity player = Player.getNewest();
@@ -145,7 +145,7 @@ public class MapScreen extends Screen {
     @Override
     public void render() {
         // shift prerendered map
-        nodes.get("map").relocate(-16 * cameraX, Context.PANEL_HEIGHT - 16 * cameraY);
+        nodes.get("map").relocate(-16 * cameraX, Global.PANEL_HEIGHT - 16 * cameraY);
         
         // render entities
         renderEntities();

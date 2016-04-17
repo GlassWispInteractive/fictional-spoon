@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.sun.javafx.tk.Toolkit;
 
-import core.Context;
+import core.Global;
 import core.Events;
 import game.combat.ComboAttack;
 import game.control.Screen;
@@ -35,7 +35,7 @@ public class ComboScreen extends Screen {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // font settings
-        gc.setFont(Context.DEFAULT_FONT);
+        gc.setFont(Global.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.BASELINE);
         // gc.setLineWidth(1);
@@ -44,22 +44,22 @@ public class ComboScreen extends Screen {
         
         int textHeight = (int) Toolkit.getToolkit().getFontLoader().getFontMetrics(gc.getFont()).getLineHeight();
         int padding = 10;
-        int width = Context.WINDOW_WIDTH / Math.max(1, comboNames.length);
+        int width = Global.WINDOW_WIDTH / Math.max(1, comboNames.length);
         int height = (int) (1.5 * textHeight);
         int startY = 50;
         int rowY;
         int columnX = 0;
         
         // draw title
-        gc.setFill(Context.RED);
-        gc.setStroke(Context.RED);
-        gc.setFont(Context.BIG_FONT);
+        gc.setFill(Global.RED);
+        gc.setStroke(Global.RED);
+        gc.setFont(Global.BIG_FONT);
         if (comboNames.length == 0) {
-            gc.fillText("No Combos", Context.WINDOW_WIDTH / 2, startY);
+            gc.fillText("No Combos", Global.WINDOW_WIDTH / 2, startY);
         } else {
-            gc.fillText("List of all Combo attacks", Context.WINDOW_WIDTH / 2, 50);
+            gc.fillText("List of all Combo attacks", Global.WINDOW_WIDTH / 2, 50);
         }
-        gc.strokeLine(0, startY + padding, Context.WINDOW_WIDTH, startY + padding);
+        gc.strokeLine(0, startY + padding, Global.WINDOW_WIDTH, startY + padding);
         
         // draw all combos in use
         for (int i = 0; i < comboNames.length; i++) {
@@ -68,7 +68,7 @@ public class ComboScreen extends Screen {
             
             for (int j = 0; j < comboNames[i].length; j++) {
                 
-                gc.setFill(Context.RED);
+                gc.setFill(Global.RED);
                 if (comboNames[i][j] != null) {
                     gc.fillText(comboNames[i][j].toString(), columnX + width / 2, rowY, width - 2 * padding);
                 }

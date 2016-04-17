@@ -3,7 +3,7 @@ package game.screens;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import core.Context;
+import core.Global;
 import core.Events;
 import core.Images;
 import game.control.Screen;
@@ -89,7 +89,7 @@ public class MenuScreen extends Screen {
         gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
         
         // font type
-        gc.setFont(Context.DEFAULT_FONT);
+        gc.setFont(Global.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         
@@ -97,13 +97,13 @@ public class MenuScreen extends Screen {
         
         for (int i = 0; i < list.size(); i++) {
             // render box
-            gc.setFill(Context.WHITE.deriveColor(0, 1, 1, 0.5));
-            gc.setStroke(Context.WHITE.brighter().deriveColor(0, 1, 1, 0.5));
+            gc.setFill(Global.WHITE.deriveColor(0, 1, 1, 0.5));
+            gc.setStroke(Global.WHITE.brighter().deriveColor(0, 1, 1, 0.5));
             gc.fillRoundRect((w - 200) / 2, 200 + 90 * (i + 1), 200, 60, 60, 200);
             gc.strokeRoundRect((w - 200) / 2, 200 + 90 * (i + 1), 200, 60, 60, 200);
             
             // render text on box
-            gc.setFill(i != cur ? Context.DARKRED : Context.DARKRED.brighter());
+            gc.setFill(i != cur ? Global.DARKRED : Global.DARKRED.brighter());
             gc.fillText(list.get(i), w / 2, 200 + 90 * (i + 1) + 30);
         }
         

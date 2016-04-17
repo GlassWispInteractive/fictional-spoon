@@ -2,7 +2,7 @@ package game.control;
 
 import java.util.HashMap;
 
-import core.Context;
+import core.Global;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -23,10 +23,10 @@ public abstract class Screen {
     protected Screen() {
         // init group and scene as root of this scene
         group = new Group();
-        scene = new Scene(group, Context.WINDOW_WIDTH, Context.WINDOW_HEIGHT, Context.DARKGRAY);
+        scene = new Scene(group, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, Global.DARKGRAY);
         
         // create layers and extract their gc
-        Canvas canvas = new Canvas(Context.WINDOW_WIDTH, Context.WINDOW_HEIGHT);
+        Canvas canvas = new Canvas(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
         nodes = new HashMap<>();
         nodes.put("main", canvas);
         

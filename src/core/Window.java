@@ -34,7 +34,7 @@ public class Window extends Application {
     @Override
     public void start(Stage stage) {
         // stage settings
-        stage.setTitle(Context.TITLE);
+        stage.setTitle(Global.TITLE);
         stage.setResizable(false);
         stage.centerOnScreen();
         
