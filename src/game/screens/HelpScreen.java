@@ -1,9 +1,9 @@
-package screens;
+package game.screens;
 
-import framework.EventControl;
-import framework.Global;
-import framework.Screen;
-import framework.ScreenControl;
+import core.Context;
+import core.Events;
+import game.control.Screen;
+import game.control.ScreenControl;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.TextAlignment;
@@ -26,11 +26,11 @@ public class HelpScreen extends Screen {
     }
     
     @Override
-    protected void tick(int ticks) {
+    public void tick(int ticks) {
         // on enter skip the screen
-        if (EventControl.getEvents().isEnter()) {
+        if (Events.isEnter()) {
             remaining = 0;
-            EventControl.getEvents().clear();
+            Events.clear();
         }
         
         if (remaining > 0) {
@@ -44,22 +44,22 @@ public class HelpScreen extends Screen {
     }
     
     @Override
-    protected void render() {
+    public void render() {
         // start from clean screen
         GraphicsContext gc = gcs.get("main");
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // font settings
-        gc.setFont(Global.HUGE_FONT);
+        gc.setFont(Context.HUGE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.BASELINE);
         // gc.setLineWidth(1);
         
         // text
-        gc.setFill(Global.RED);
-        gc.setStroke(Global.RED);
+        gc.setFill(Context.RED);
+        gc.setStroke(Context.RED);
         
-        gc.fillText(text[index], Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT * 0.4);
+        gc.fillText(text[index], Context.WINDOW_WIDTH / 2, Context.WINDOW_HEIGHT * 0.4);
         // gc.strokeLine(0, 75 + 20, Window.SIZE_X, 75 + 20);
         
         // gc.setFont(Window.DEFAULT_FONT);

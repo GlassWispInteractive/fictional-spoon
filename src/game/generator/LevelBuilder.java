@@ -1,8 +1,8 @@
-package generation;
+package game.generator;
 
-import static generation.Ground.FLOOR;
-import static generation.Ground.ROOM;
-import static generation.Ground.WALL;
+import static game.generator.Ground.FLOOR;
+import static game.generator.Ground.ROOM;
+import static game.generator.Ground.WALL;
 
 import java.util.ArrayList;
 import java.util.Collections;

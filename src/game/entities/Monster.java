@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import engine.TileMaster;
-import framework.ScreenControl;
+import core.Tiles;
 import game.combat.CombatEntity;
+import game.control.ScreenControl;
+import game.screens.CombatScreen;
 import game.walk_strategies.FloorWalk;
 import game.walk_strategies.HorizontalWalk;
 import game.walk_strategies.RandomWalk;
@@ -16,7 +17,6 @@ import game.walk_strategies.VerticalWalk;
 import game.walk_strategies.WalkStrategy;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import screens.CombatScreen;
 
 public class Monster extends CombatEntity {
     // TileSource.MONSTER_TILES, 2, 5
@@ -32,7 +32,6 @@ public class Monster extends CombatEntity {
     };
     
     // class members
-    private static TileMaster tileFac = TileMaster.getInstance();
     private static int level;
     
     // object
@@ -90,9 +89,9 @@ public class Monster extends CombatEntity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (!isAlive()) {
-            gc.drawImage(tileFac.getTile("creatures", 0, 7), size * (x - offsetX), size *(y - offsetY));
+            gc.drawImage(Tiles.get("creatures", 0, 7), size * (x - offsetX), size *(y - offsetY));
         } else {
-            gc.drawImage(tileFac.getTile("creatures", 1, 8), size * (x - offsetX), size *(y - offsetY));
+            gc.drawImage(Tiles.get("creatures", 1, 8), size * (x - offsetX), size *(y - offsetY));
         }
     }
     
@@ -144,6 +143,6 @@ public class Monster extends CombatEntity {
     }
     
     public Image getImage() {
-        return tileFac.getTile("creatures", 1, 8);
+        return Tiles.get("creatures", 1, 8);
     }
 }

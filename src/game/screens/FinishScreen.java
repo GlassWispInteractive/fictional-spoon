@@ -1,4 +1,4 @@
-package screens;
+package game.screens;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,11 +6,11 @@ import java.util.Arrays;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 
-import framework.EventControl;
-import framework.GameControl;
-import framework.Global;
-import framework.Screen;
-import framework.ScreenControl;
+import core.Context;
+import core.Events;
+import game.control.GameControl;
+import game.control.Screen;
+import game.control.ScreenControl;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.TextAlignment;
@@ -27,18 +27,17 @@ public class FinishScreen extends Screen {
     }
     
     @Override
-    protected void tick(int ticks) {
-        EventControl e = EventControl.getEvents();
+    public void tick(int ticks) {
         
         // SpookingSouls.getObject().tick(ticks);
         // event handling
-        if (e.isLeft())
+        if (Events.isLeft())
             cur = (cur + list.size() - 1) % list.size();
             
-        if (e.isRight())
+        if (Events.isRight())
             cur = (cur + 1) % list.size();
             
-        if (e.isEnter()) {
+        if (Events.isEnter()) {
             // TODO: put resetgame properly
             GameControl.resetGame();
             
@@ -58,18 +57,18 @@ public class FinishScreen extends Screen {
         }
         
         // no double key activation
-        EventControl.getEvents().clear();
+        Events.clear();
     }
     
     @Override
-    protected void render() {
+    public void render() {
         
         // start from clean screen
         GraphicsContext gc = gcs.get("main");
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // font settings
-        gc.setFont(Global.HUGE_FONT);
+        gc.setFont(Context.HUGE_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.BASELINE);
         // gc.setLineWidth(1);
@@ -77,13 +76,13 @@ public class FinishScreen extends Screen {
         // SpookingSouls.getObject().render(gc);
         
         // Game Over
-        gc.setFill(Global.RED);
-        gc.fillText(finish ? won : lost, Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT / 2);
+        gc.setFill(Context.RED);
+        gc.fillText(finish ? won : lost, Context.WINDOW_WIDTH / 2, Context.WINDOW_HEIGHT / 2);
         
         // List
         // calc textLength
         
-        gc.setFont(Global.DEFAULT_FONT);
+        gc.setFont(Context.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         gc.setLineWidth(1);
@@ -101,21 +100,21 @@ public class FinishScreen extends Screen {
         int padding = 10;
         int width = textWidth + 6 * padding;
         int height = (int) (1.5 * textHeight);
-        int rowY = (int) (Global.WINDOW_HEIGHT * 0.8);
-        int columnX = Global.WINDOW_WIDTH / 2 - list.size() * width / 2;
+        int rowY = (int) (Context.WINDOW_HEIGHT * 0.8);
+        int columnX = Context.WINDOW_WIDTH / 2 - list.size() * width / 2;
         
         for (int j = 0; j < Math.min(10, list.size()); j++) {
             
-            gc.setFill(Global.DARKGRAY.deriveColor(0, 1.2, 1, 0.6));
-            gc.setStroke(Global.DARKGRAY);
+            gc.setFill(Context.DARKGRAY.deriveColor(0, 1.2, 1, 0.6));
+            gc.setStroke(Context.DARKGRAY);
             gc.fillRoundRect(columnX + padding, rowY, width - padding, height, 60, 200);
             
             if (j != cur) {
-                gc.setFill(Global.DARKRED.deriveColor(0, 1.2, 1, 0.6));
-                gc.setStroke(Global.DARKRED);
+                gc.setFill(Context.DARKRED.deriveColor(0, 1.2, 1, 0.6));
+                gc.setStroke(Context.DARKRED);
             } else {
-                gc.setFill(Global.RED.deriveColor(0, 1.2, 1, 0.6));
-                gc.setStroke(Global.RED);
+                gc.setFill(Context.RED.deriveColor(0, 1.2, 1, 0.6));
+                gc.setStroke(Context.RED);
             }
             
             gc.fillText(list.get(j).toString(), columnX + width / 2, rowY + height / 2);

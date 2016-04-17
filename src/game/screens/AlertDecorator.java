@@ -1,11 +1,11 @@
-package screens;
+package game.screens;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-import framework.Global;
-import framework.Screen;
-import framework.ScreenDecorator;
+import core.Context;
+import game.control.Screen;
+import game.control.ScreenDecorator;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -26,7 +26,7 @@ public class AlertDecorator extends ScreenDecorator {
         // inits
         super(decoratedScreen);
         
-        addCanvas("alert", 0, Global.WINDOW_HEIGHT / 2 - 50, Global.WINDOW_WIDTH, 100);
+        addCanvas("alert", 0, Context.WINDOW_HEIGHT / 2 - 50, Context.WINDOW_WIDTH, 100);
         alerts = new LinkedList<>();
     }
     
@@ -60,7 +60,7 @@ public class AlertDecorator extends ScreenDecorator {
         }
         
         // font settings to be set
-        gc.setFont(Global.BIG_FONT);
+        gc.setFont(Context.BIG_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         gc.setLineWidth(1);

@@ -1,16 +1,17 @@
-package framework;
+package game.control;
 
+import core.Context;
 import game.combat.ComboAttack;
 import game.combat.Quest;
 import game.entities.Entity;
 import game.entities.Monster;
 import game.entities.Portal;
-import generation.LevelBuilder;
-import generation.Map;
-import screens.AlertDecorator;
-import screens.HelpScreen;
-import screens.MapScreen;
-import screens.PanelDecorator;
+import game.generator.LevelBuilder;
+import game.generator.Map;
+import game.screens.AlertDecorator;
+import game.screens.HelpScreen;
+import game.screens.MapScreen;
+import game.screens.PanelDecorator;
 
 public class GameControl {
     // singleton
@@ -31,7 +32,7 @@ public class GameControl {
         // settings
         screen = new HelpScreen("game", 180);
         ScreenControl.getCtrl().addScreen("game intro", screen);
-        level = 2;
+        level = 1;
         classicMode(level);
         
     }
@@ -93,7 +94,7 @@ public class GameControl {
         
         // basic level
         case 1:
-            map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
+            map = new MapScreen(new LevelBuilder(Context.GAME_WIDTH / 16, Context.GAME_HEIGHT / 16,
                     LevelBuilder.Layout.SINGLE_CONN_ROOMS).genMonster(1, 0.01).genShrine(0.1, 0).create());
             objective = new Quest(Quest.Goal.MONSTER, 3);
             
@@ -112,7 +113,7 @@ public class GameControl {
         case 3:
             ctrl.setScreen("game intro");
             
-            map = new MapScreen(new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16,
+            map = new MapScreen(new LevelBuilder(Context.GAME_WIDTH / 16, Context.GAME_HEIGHT / 16,
                     LevelBuilder.Layout.MAZE_WITH_ROOMS).genMonster(2, 0.1).genChest(0, 0.05).genShrine(0, 0.01)
                             .genPortal(1, 0).create());
             // calculate the number of portals created
@@ -134,7 +135,7 @@ public class GameControl {
             ctrl.setScreen("game intro");
             
             map = new MapScreen(
-                    new LevelBuilder(Global.GAME_WIDTH / 16, Global.GAME_HEIGHT / 16, LevelBuilder.Layout.MAZE)
+                    new LevelBuilder(Context.GAME_WIDTH / 16, Context.GAME_HEIGHT / 16, LevelBuilder.Layout.MAZE)
                             .genChest(0, 0.01).genOpponent(0, 0.005).create());
             objective = new Quest(Quest.Goal.OPPONENT, 1);
             break;

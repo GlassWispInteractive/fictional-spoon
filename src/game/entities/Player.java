@@ -1,10 +1,10 @@
 package game.entities;
 
-import engine.TileMaster;
-import framework.EventControl;
-import framework.GameControl;
+import core.Events;
+import core.Tiles;
 import game.combat.CombatEntity;
-import generation.Map;
+import game.control.GameControl;
+import game.generator.Map;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Player extends CombatEntity {
@@ -15,7 +15,6 @@ public class Player extends CombatEntity {
     // for speed
     private int blocked = 0;
     
-    TileMaster tileFac;
     
     public Player(int x, int y) {
         super(x, y, 15, 1);
@@ -24,7 +23,6 @@ public class Player extends CombatEntity {
         this.delayTicks = 4;
         
         // set references - not in entity list
-        tileFac = TileMaster.getInstance();
         newestInstance = this;
         Entity.remove(this);
     }
@@ -35,12 +33,11 @@ public class Player extends CombatEntity {
     
     @Override
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
-        gc.drawImage(tileFac.getTile("char", 0, 8), size *(x - offsetX), size *(y - offsetY));
+        gc.drawImage(Tiles.get("char", 0, 8), size *(x - offsetX), size *(y - offsetY));
     }
     
     @Override
     public void tick(int ticks) {
-        EventControl e = EventControl.getEvents();
         int newX = x, newY = y;
         boolean moved = false;
         
@@ -48,16 +45,16 @@ public class Player extends CombatEntity {
             blocked -= ticks;
         }
         
-        if (e.isLeft()) {
+        if (Events.isLeft()) {
             newX--;
             moved = true;
-        } else if (e.isRight()) {
+        } else if (Events.isRight()) {
             newX++;
             moved = true;
-        } else if (e.isUp()) {
+        } else if (Events.isUp()) {
             newY--;
             moved = true;
-        } else if (e.isDown()) {
+        } else if (Events.isDown()) {
             newY++;
             moved = true;
         }

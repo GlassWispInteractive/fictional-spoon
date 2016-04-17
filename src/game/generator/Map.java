@@ -1,8 +1,8 @@
-package generation;
+package game.generator;
 
-import static generation.Ground.ERROR;
-import static generation.Ground.ROOM;
-import static generation.Ground.WALL;
+import static game.generator.Ground.ERROR;
+import static game.generator.Ground.ROOM;
+import static game.generator.Ground.WALL;
 
 public class Map {
     private Cell[][] map;

@@ -1,4 +1,4 @@
-package engine;
+package core;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,34 +10,27 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 
-public class TileMaster {
-    private static final int MARGIN = 1;
-    private static final int WIDTH = 16;
-    private static final int HEIGHT = 16;
+public class Tiles {
+    public static final int MARGIN = 1;
+    public static final int WIDTH = 16;
+    public static final int HEIGHT = 16;
     
-    // delete in final version
-    private static TileMaster singleton;
+    private static HashMap<String, Image> sheets = new HashMap<>();
+    private static HashMap<String, Image[][]> tiles = new HashMap<>();
     
-    private HashMap<String, Image> sheets = new HashMap<>();
-    private HashMap<String, Image[][]> tiles = new HashMap<>();
-    
-    public static TileMaster getInstance() {
-        if (singleton == null) {
-            singleton = new TileMaster();
-        }
-        return singleton;
+    private Tiles() {
+    	
     }
     
-    private TileMaster() {
-        //
-        try {
-            Files.walk(Paths.get("src/resources/graphics")).forEach(filePath -> {
+    static {
+    	try {
+            Files.walk(Paths.get("res/tilesheets")).forEach(filePath -> {
                 if (Files.isRegularFile(filePath)) {
                     String[] s = filePath.toString().split("\\\\");
                     String name = s[s.length - 1];
                     name = name.substring(0, name.lastIndexOf("."));
                     
-                    sheets.put(name, new Image("" + filePath.toUri()));
+                    sheets.put(name, new Image(filePath.toUri().toString()));
                 }
             });
         } catch (IOException e) {
@@ -56,7 +49,8 @@ public class TileMaster {
         }
     }
     
-    public Image getTile(String key, int tileX, int tileY) {
+    
+    public static Image get(String key, int tileX, int tileY) {
         if (!sheets.containsKey(key)) {
             throw new AssertionError("image does not exist");
         }

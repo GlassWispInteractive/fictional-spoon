@@ -1,4 +1,4 @@
-package framework;
+package game.control;
 
 public abstract class ScreenDecorator extends Screen {
     protected Screen decoratedScreen;
@@ -12,12 +12,12 @@ public abstract class ScreenDecorator extends Screen {
     }
     
     @Override
-    protected void tick(int ticks) {
+    public void tick(int ticks) {
         decoratedScreen.tick(ticks);
     }
     
     @Override
-    protected void render() {
+    public void render() {
         decoratedScreen.render();
     }
 }

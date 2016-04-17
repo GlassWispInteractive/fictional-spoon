@@ -1,4 +1,4 @@
-package generation;
+package game.generator;
 
 public class Cell {
     private Ground ground;

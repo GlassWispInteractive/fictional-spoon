@@ -2,23 +2,21 @@ package game.entities;
 
 import java.util.ArrayList;
 
-import engine.TileMaster;
-import framework.GameControl;
+import core.Tiles;
 import game.combat.ComboAttack;
 import game.combat.Quest;
+import game.control.GameControl;
 import javafx.scene.canvas.GraphicsContext;
 
 public class Chest extends Entity {
     private static ArrayList<Chest> collection = new ArrayList<>();;
     
     private ComboAttack item;
-    TileMaster tileFac;
     
     private Chest(int x, int y, ComboAttack combo) {
         super(x, y);
         this.item = combo;
         
-        tileFac = TileMaster.getInstance();
     }
     
     /**
@@ -53,9 +51,9 @@ public class Chest extends Entity {
     public void render(GraphicsContext gc, int size, int offsetX, int offsetY) {
         
         if (item == null) {
-            gc.drawImage(tileFac.getTile("map", 15, 7), size *(x - offsetX), size *(y - offsetY));
+            gc.drawImage(Tiles.get("map", 15, 7), size *(x - offsetX), size *(y - offsetY));
         } else {
-            gc.drawImage(tileFac.getTile("map", 14, 6), size *(x - offsetX), size *(y - offsetY));
+            gc.drawImage(Tiles.get("map", 14, 6), size *(x - offsetX), size *(y - offsetY));
         }
     }
     

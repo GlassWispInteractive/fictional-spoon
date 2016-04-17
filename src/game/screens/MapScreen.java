@@ -1,15 +1,15 @@
-package screens;
+package game.screens;
 
-import engine.TileMaster;
-import framework.EventControl;
-import framework.GameControl;
-import framework.Global;
-import framework.Screen;
-import framework.ScreenControl;
+import core.Context;
+import core.Events;
+import core.Tiles;
+import game.control.GameControl;
+import game.control.Screen;
+import game.control.ScreenControl;
 import game.entities.Entity;
 import game.entities.Player;
-import generation.Ground;
-import generation.Map;
+import game.generator.Ground;
+import game.generator.Map;
 import javafx.scene.canvas.GraphicsContext;
 
 public class MapScreen extends Screen {
@@ -19,7 +19,6 @@ public class MapScreen extends Screen {
     
     // class components
     private Map map;
-    private TileMaster tileFac = TileMaster.getInstance();;
     
     // variables
     private int cameraX, cameraY, cameraSizeX, cameraSizeY;
@@ -32,17 +31,15 @@ public class MapScreen extends Screen {
         
         // set layout
         addCanvas("map", 0, 0, size * map.getN(), size * map.getM());
-        addCanvas("entities", 0, Global.PANEL_HEIGHT, Global.GAME_WIDTH, Global.GAME_HEIGHT);
+        addCanvas("entities", 0, Context.PANEL_HEIGHT, Context.GAME_WIDTH, Context.GAME_HEIGHT);
         
         // render the map prior every other rendering and keep it cached
         prerenderMap();
         
-        // load factories
-        tileFac = TileMaster.getInstance();
         
         // set view size and be sure to be smaller than the map
-        cameraSizeX = Math.min(Global.GAME_WIDTH / size, map.getN());
-        cameraSizeY = Math.min(Global.GAME_HEIGHT / size, map.getM());
+        cameraSizeX = Math.min(Context.GAME_WIDTH / size, map.getN());
+        cameraSizeY = Math.min(Context.GAME_HEIGHT / size, map.getM());
         
         // set view
         Entity player = Player.getNewest();
@@ -74,14 +71,14 @@ public class MapScreen extends Screen {
         // fac.smartAdd();
         // fac.smartDelete();
         
-        if (EventControl.getEvents().isC()) {
+        if (Events.isC()) {
             ScreenControl.getCtrl().setScreen("combo");
-            EventControl.getEvents().clear();
+            Events.clear();
         }
         
-        if (EventControl.getEvents().isQ()) {
+        if (Events.isQ()) {
             GameControl.getControl().alert("Quest: " + GameControl.getControl().getQuest());
-            EventControl.getEvents().clear();
+            Events.clear();
         }
     }
     
@@ -148,7 +145,7 @@ public class MapScreen extends Screen {
     @Override
     public void render() {
         // shift prerendered map
-        nodes.get("map").relocate(-16 * cameraX, Global.PANEL_HEIGHT - 16 * cameraY);
+        nodes.get("map").relocate(-16 * cameraX, Context.PANEL_HEIGHT - 16 * cameraY);
         
         // render entities
         renderEntities();
@@ -170,7 +167,7 @@ public class MapScreen extends Screen {
                     final int tile = 20 + 57 * 12 + map.getTileNumber(x, y);
                     
                     // draw tile image
-                    gc.drawImage(tileFac.getTile("map", tile % 57, tile / 57), x * size, y * size);
+                    gc.drawImage(Tiles.get("map", tile % 57, tile / 57), x * size, y * size);
                 }
             }
         }

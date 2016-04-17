@@ -3,7 +3,7 @@ package game.walk_strategies;
 import java.awt.Point;
 
 import game.entities.Direction;
-import generation.Ground;
+import game.generator.Ground;
 
 public class FloorWalk extends WalkStrategy {
     

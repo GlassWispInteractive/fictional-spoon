@@ -1,7 +1,8 @@
-package framework;
+package game.control;
 
 import java.util.HashMap;
 
+import core.Window;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 

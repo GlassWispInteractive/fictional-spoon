@@ -3,8 +3,8 @@ package game.entities;
 import java.awt.Point;
 import java.util.Random;
 
-import framework.GameControl;
-import generation.Map;
+import game.control.GameControl;
+import game.generator.Map;
 
 public enum Direction {
     NORTH(0, -1), EAST(1, 0), SOUTH(0, 1), WEST(-1, 0);

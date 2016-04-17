@@ -1,12 +1,13 @@
-package screens;
+package game.screens;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import framework.EventControl;
-import framework.Global;
-import framework.Screen;
-import framework.ScreenControl;
+import core.Context;
+import core.Events;
+import core.Images;
+import game.control.Screen;
+import game.control.ScreenControl;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -37,21 +38,19 @@ public class MenuScreen extends Screen {
         // init
         setList(new String[] { "Classic Mode", "Arcade Mode", "Credits", "Help", "Exit" });
         
-        logo = new Image("/resources/elem/logo.png");
+        logo = Images.get("logo");
     }
     
     @Override
     public void tick(int ticks) {
-        EventControl e = EventControl.getEvents();
-        
         // event handling
-        if (e.isUp())
+        if (Events.isUp())
             cur = (cur + list.size() - 1) % list.size();
             
-        if (e.isDown())
+        if (Events.isDown())
             cur = (cur + 1) % list.size();
             
-        if (e.isEnter()) {
+        if (Events.isEnter()) {
             switch (list.get(cur)) {
             case "Classic Mode":
                 ScreenControl.getCtrl().setScreen("game intro");
@@ -74,7 +73,7 @@ public class MenuScreen extends Screen {
         }
         
         // no double key activation
-        EventControl.getEvents().clear();
+        Events.clear();
     }
     
     @Override
@@ -90,7 +89,7 @@ public class MenuScreen extends Screen {
         gc.drawImage(logo, (w - logo.getWidth()) / 2, 80);
         
         // font type
-        gc.setFont(Global.DEFAULT_FONT);
+        gc.setFont(Context.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
         
@@ -98,13 +97,13 @@ public class MenuScreen extends Screen {
         
         for (int i = 0; i < list.size(); i++) {
             // render box
-            gc.setFill(Global.WHITE.deriveColor(0, 1, 1, 0.5));
-            gc.setStroke(Global.WHITE.brighter().deriveColor(0, 1, 1, 0.5));
+            gc.setFill(Context.WHITE.deriveColor(0, 1, 1, 0.5));
+            gc.setStroke(Context.WHITE.brighter().deriveColor(0, 1, 1, 0.5));
             gc.fillRoundRect((w - 200) / 2, 200 + 90 * (i + 1), 200, 60, 60, 200);
             gc.strokeRoundRect((w - 200) / 2, 200 + 90 * (i + 1), 200, 60, 60, 200);
             
             // render text on box
-            gc.setFill(i != cur ? Global.DARKRED : Global.DARKRED.brighter());
+            gc.setFill(i != cur ? Context.DARKRED : Context.DARKRED.brighter());
             gc.fillText(list.get(i), w / 2, 200 + 90 * (i + 1) + 30);
         }
         

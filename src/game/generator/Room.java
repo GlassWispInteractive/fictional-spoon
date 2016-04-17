@@ -1,4 +1,4 @@
-package generation;
+package game.generator;
 
 import java.util.ArrayList;
 import java.util.Collections;

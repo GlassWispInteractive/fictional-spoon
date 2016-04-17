@@ -1,4 +1,4 @@
-package screens;
+package game.screens;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,15 +7,15 @@ import java.util.Iterator;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 
-import framework.EventControl;
-import framework.GameControl;
-import framework.Global;
-import framework.Screen;
-import framework.ScreenControl;
+import core.Context;
+import core.Events;
 import game.combat.BasicAttack;
 import game.combat.CombatEntity;
 import game.combat.ComboAttack;
 import game.combat.Quest.Goal;
+import game.control.GameControl;
+import game.control.Screen;
+import game.control.ScreenControl;
 import game.entities.Monster;
 import game.entities.Player;
 import javafx.geometry.VPos;
@@ -56,11 +56,11 @@ public class CombatScreen extends Screen {
         enemyAction();
         
         // design
-        addCanvas("elems", 0, Global.WINDOW_HEIGHT * 0.65, Global.WINDOW_WIDTH, 300);
-        addCanvas("monster", 0, 0, Global.WINDOW_WIDTH, 300);
-        addCanvas("bar", 0, Global.WINDOW_HEIGHT * 0.4, Global.WINDOW_WIDTH, 100);
-        addCanvas("info", 0, Global.WINDOW_HEIGHT * 0.3, Global.WINDOW_WIDTH, 100);
-        addCanvas("combo", 0, Global.WINDOW_HEIGHT - 510, Global.WINDOW_WIDTH, 510);
+        addCanvas("elems", 0, Context.WINDOW_HEIGHT * 0.65, Context.WINDOW_WIDTH, 300);
+        addCanvas("monster", 0, 0, Context.WINDOW_WIDTH, 300);
+        addCanvas("bar", 0, Context.WINDOW_HEIGHT * 0.4, Context.WINDOW_WIDTH, 100);
+        addCanvas("info", 0, Context.WINDOW_HEIGHT * 0.3, Context.WINDOW_WIDTH, 100);
+        addCanvas("combo", 0, Context.WINDOW_HEIGHT - 510, Context.WINDOW_WIDTH, 510);
         
     }
     
@@ -69,40 +69,38 @@ public class CombatScreen extends Screen {
     }
     
     @Override
-    protected void tick(int ticks) {
+    public void tick(int ticks) {
         status = Math.min(1, status + ticks / 40.0);
-        
-        EventControl e = EventControl.getEvents();
         
         if (markTarget > enemies.size() - 1) {
             markTarget = enemies.size() - 1;
         }
         
         // arrow pressed
-        if (e.isLeft()) {
+        if (Events.isLeft()) {
             markTarget = (markTarget + 1) % enemies.size();
         }
-        if (e.isRight()) {
+        if (Events.isRight()) {
             markTarget = (markTarget + enemies.size() - 1) % enemies.size();
         }
         
         // check if a number pressed
-        if (e.isOne()) {
+        if (Events.isOne()) {
             usedAttack(0);
         }
         
-        if (e.isTwo()) {
+        if (Events.isTwo()) {
             usedAttack(1);
         }
         
-        if (e.isThree()) {
+        if (Events.isThree()) {
             usedAttack(2);
         }
         
-        if (e.isFour()) {
+        if (Events.isFour()) {
             usedAttack(3);
         }
-        EventControl.getEvents().clear();
+        Events.clear();
         
         // nothing pressed
         if (status == 1) {
@@ -222,7 +220,7 @@ public class CombatScreen extends Screen {
     public void render() {
         // start from clean screen
         GraphicsContext gc = gcs.get("main");
-        gc.clearRect(0, 0, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
+        gc.clearRect(0, 0, Context.WINDOW_WIDTH, Context.WINDOW_HEIGHT);
         
         renderElements();
         renderMonsters();
@@ -240,7 +238,7 @@ public class CombatScreen extends Screen {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         for (int i = 0; i < attackName.length; i++) {
-            gc.setFill(Global.WHITE);
+            gc.setFill(Context.WHITE);
             gc.fillText(attackName[i], 80 + i * 180, 25, 80);
             
             gc.drawImage(attackImg[i], 50 + i * 180, 50, attackImg[i].getWidth() / 3, attackImg[i].getHeight() / 3);
@@ -248,7 +246,7 @@ public class CombatScreen extends Screen {
             // gc.fillRect(50 + i*120, height * 0.65, 80, 80);
             
             if (markAttack >= 0) {
-                gc.setStroke(Global.WHITE);
+                gc.setStroke(Context.WHITE);
                 gc.setLineWidth(3);
                 gc.strokeRect(50 + markAttack * 180, 50, attackImg[markAttack].getWidth() / 3,
                         attackImg[markAttack].getHeight() / 3);
@@ -256,7 +254,7 @@ public class CombatScreen extends Screen {
         }
         
         // render the player name and status
-        gc.setFont(Global.DEFAULT_FONT);
+        gc.setFont(Context.DEFAULT_FONT);
         gc.setTextBaseline(VPos.BASELINE);
         gc.fillText(Player.getNewest().toString(), 50, 230);
     }
@@ -274,17 +272,17 @@ public class CombatScreen extends Screen {
             
             Image image = monster.getImage();
             
-            gc.setFill(Global.WHITE);
+            gc.setFill(Context.WHITE);
             gc.fillText("no name" + " " + monster.getLife() + " / " + monster.getMaxLife(),
-                    Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
+                    Context.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50 - 5, 130);
                     
-            gc.drawImage(image, Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
+            gc.drawImage(image, Context.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
             // gc.fillRect(Window.SIZE_X - 150 - i * 120, 50, 80, 80);
             
             if (markTarget % enemies.size() == i) {
-                gc.setStroke(Global.WHITE);
+                gc.setStroke(Context.WHITE);
                 gc.setLineWidth(4);
-                gc.strokeRect(Global.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
+                gc.strokeRect(Context.WINDOW_WIDTH - 180 - i * 180 - image.getWidth(), 50, 130, 130);
             }
         }
         
@@ -299,11 +297,11 @@ public class CombatScreen extends Screen {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // settings
-        final int magin = 110, width = Global.WINDOW_WIDTH - 2 * magin;
+        final int magin = 110, width = Context.WINDOW_WIDTH - 2 * magin;
         
         // big box
         gc.setLineWidth(3);
-        gc.setStroke(Global.WHITE.darker());
+        gc.setStroke(Context.WHITE.darker());
         gc.strokeRoundRect(magin - 10, 5, width + 20, 30, 30, 30);
         
         // draw the delimters
@@ -311,7 +309,7 @@ public class CombatScreen extends Screen {
         gc.strokeLine(magin + upperBound * width - 3, 5, magin + upperBound * width - 3, 35);
         
         // small box - the progress bar
-        gc.setFill(Global.ORANGE);
+        gc.setFill(Context.ORANGE);
         // +5 to be lower than outer rect
         // +2 to have the left border over the delimeter
         gc.fillRoundRect(magin, 10, status * width, 20, 20, 20);
@@ -327,15 +325,15 @@ public class CombatScreen extends Screen {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // font settings
-        gc.setFont(Global.DEFAULT_FONT);
+        gc.setFont(Context.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.BASELINE);
         
         // print out current success
-        gc.setFill(Global.ORANGE);
+        gc.setFill(Context.ORANGE);
         // gc.setLineWidth(1);
         
-        gc.fillText(info, Global.WINDOW_WIDTH / 2, 50);
+        gc.fillText(info, Context.WINDOW_WIDTH / 2, 50);
         
         // gc.strokeText(pointsText, 360, Window.SIZE_Y * 0.3);
         
@@ -350,7 +348,7 @@ public class CombatScreen extends Screen {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         
         // font settings
-        gc.setFont(Global.DEFAULT_FONT);
+        gc.setFont(Context.DEFAULT_FONT);
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.BASELINE);
         // gc.setLineWidth(1);
@@ -386,10 +384,10 @@ public class CombatScreen extends Screen {
             
             // only max 10 combos can be shown
             
-            gc.setStroke(Global.ORANGE);
+            gc.setStroke(Context.ORANGE);
             gc.strokeRect(columnX, rowY, padding + width, height);
             
-            gc.setFill(Global.ORANGE);
+            gc.setFill(Context.ORANGE);
             gc.fillText(comboNames.get(j).toString(), columnX + width / 2, rowY + height / 2 + textHeight / 4);
             
             rowY += height;

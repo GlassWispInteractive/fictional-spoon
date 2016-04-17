@@ -3,11 +3,11 @@ package game.walk_strategies;
 import java.awt.Point;
 import java.util.Random;
 
-import framework.GameControl;
+import game.control.GameControl;
 import game.entities.Direction;
 import game.entities.Entity;
 import game.entities.Player;
-import generation.Map;
+import game.generator.Map;
 
 public abstract class WalkStrategy {
     

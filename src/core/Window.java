@@ -1,16 +1,18 @@
-package framework;
+package core;
 
+import game.control.GameControl;
+import game.control.ScreenControl;
+import game.screens.ComboScreen;
+import game.screens.CreditsScreen;
+import game.screens.FinishScreen;
+import game.screens.HelpScreen;
+import game.screens.MenuScreen;
+import game.screens.SoulsDecorator;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import screens.ComboScreen;
-import screens.CreditsScreen;
-import screens.FinishScreen;
-import screens.HelpScreen;
-import screens.MenuScreen;
-import screens.SoulsDecorator;
 
 public class Window extends Application {
     public static boolean music = false;
@@ -32,7 +34,7 @@ public class Window extends Application {
     @Override
     public void start(Stage stage) {
         // stage settings
-        stage.setTitle(Global.TITLE);
+        stage.setTitle(Context.TITLE);
         stage.setResizable(false);
         stage.centerOnScreen();
         
@@ -43,11 +45,11 @@ public class Window extends Application {
         });
         
         stage.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
-            EventControl.getEvents().addCode(event);
+            Events.addCode(event);
         });
         
         stage.addEventHandler(KeyEvent.KEY_RELEASED, event -> {
-            EventControl.getEvents().removeCode(event);
+            Events.removeCode(event);
         });
         
         ScreenControl ctrl = ScreenControl.getCtrl();
@@ -80,7 +82,7 @@ public class Window extends Application {
                     stage.setScene(scene);
                 }
                 
-                if (EventControl.getEvents().isESC()) {
+                if (Events.isESC()) {
                     ctrl.setScreen("menu");
                 }
                 

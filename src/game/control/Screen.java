@@ -1,7 +1,8 @@
-package framework;
+package game.control;
 
 import java.util.HashMap;
 
+import core.Context;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -22,10 +23,10 @@ public abstract class Screen {
     protected Screen() {
         // init group and scene as root of this scene
         group = new Group();
-        scene = new Scene(group, Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, Global.DARKGRAY);
+        scene = new Scene(group, Context.WINDOW_WIDTH, Context.WINDOW_HEIGHT, Context.DARKGRAY);
         
         // create layers and extract their gc
-        Canvas canvas = new Canvas(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
+        Canvas canvas = new Canvas(Context.WINDOW_WIDTH, Context.WINDOW_HEIGHT);
         nodes = new HashMap<>();
         nodes.put("main", canvas);
         
@@ -69,8 +70,8 @@ public abstract class Screen {
         return scene;
     }
     
-    protected abstract void tick(int ticks);
+    public abstract void tick(int ticks);
     
-    protected abstract void render();
+    public abstract void render();
     
 }
